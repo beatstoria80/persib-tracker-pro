@@ -53,7 +53,7 @@ export function Header() {
               </span>
             </div>
             <p className={`text-[10px] font-medium tracking-wide ${isPro ? 'text-slate-400' : 'text-slate-500'}`}>
-              PT LIB & AFC Champions League Two
+              PT LIB • AFC • ASEAN Shopee Cup
             </p>
           </div>
         </div>

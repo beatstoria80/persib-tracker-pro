@@ -78,6 +78,7 @@ export function MatchCenter() {
     fixtures,
     liga1Standings,
     aclStandings,
+    shopeeCupStandings,
     players,
     setSelectedPlayer,
   } = useClubTracker();
@@ -103,12 +104,20 @@ export function MatchCenter() {
           </span>
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            {activeTournament === 'acl2' ? 'Juara Grup E' : 'Peringkat #4'}
+            {activeTournament === 'shopee_cup'
+              ? 'Puncak Grup B'
+              : activeTournament === 'acl2'
+              ? 'Juara Grup E'
+              : 'Peringkat #4'}
           </span>
         </div>
 
         <h1 className="text-3xl font-black uppercase tracking-tight text-slate-950 dark:text-white">
-          {activeTournament === 'acl2' ? 'ACL TWO' : 'LIGA 1'}
+          {activeTournament === 'shopee_cup'
+            ? 'SHOPEE CUP'
+            : activeTournament === 'acl2'
+            ? 'ACL TWO'
+            : 'LIGA 1'}
         </h1>
       </div>
 
@@ -119,7 +128,7 @@ export function MatchCenter() {
             setActiveTournament('liga1');
             setSelectedFixtureId('l1-p8');
           }}
-          className={`px-5 py-2.5 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 ${
+          className={`px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 ${
             activeTournament === 'liga1'
               ? isPro
                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
@@ -137,7 +146,7 @@ export function MatchCenter() {
             setActiveTournament('acl2');
             setSelectedFixtureId('acl2-26-md4-live');
           }}
-          className={`px-5 py-2.5 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 flex items-center gap-2 ${
+          className={`px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
             activeTournament === 'acl2'
               ? isPro
                 ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
@@ -147,8 +156,27 @@ export function MatchCenter() {
               : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
           }`}
         >
-          <span>ACL Two (Asia)</span>
+          <span>ACL Two</span>
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+        </button>
+
+        <button
+          onClick={() => {
+            setActiveTournament('shopee_cup');
+            setSelectedFixtureId('shopee-26-md1-ft');
+          }}
+          className={`px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
+            activeTournament === 'shopee_cup'
+              ? isPro
+                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
+                : 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md shadow-orange-600/25'
+              : isPro
+              ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
+              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
+          }`}
+        >
+          <span>Shopee Cup (ASEAN)</span>
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
         </button>
       </div>
 
@@ -407,12 +435,16 @@ export function MatchCenter() {
           <div className="pb-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <div>
               <span className="text-[10px] font-mono font-bold uppercase text-slate-400 block">
-                {activeTournament === 'acl2'
+                {activeTournament === 'shopee_cup'
+                  ? 'Grup B • ASEAN Club Championship (Shopee Cup) 2026/27'
+                  : activeTournament === 'acl2'
                   ? 'Grup E • AFC Champions League Two 2026/27'
                   : 'BRI Liga 1 • Musim 2026/2027'}
               </span>
               <h3 className="text-sm font-black tracking-tight mt-0.5">
-                {activeTournament === 'acl2'
+                {activeTournament === 'shopee_cup'
+                  ? 'PERSIB Puncak Klasemen Grup B (3 Poin • Comeback 3-1 di Markas Port FC)'
+                  : activeTournament === 'acl2'
                   ? 'PERSIB Juara Grup E (12 Poin • Lolos 16 Besar)'
                   : 'PERSIB Posisi #4 (16 Poin • Beda 2 Poin dari Puncak)'}
               </h3>
@@ -423,7 +455,7 @@ export function MatchCenter() {
           </div>
 
           <div className="overflow-x-auto no-scrollbar mt-3">
-            {activeTournament === 'acl2' ? (
+            {activeTournament === 'shopee_cup' || activeTournament === 'acl2' ? (
               <table className="w-full text-left text-xs whitespace-nowrap">
                 <thead>
                   <tr className="border-b border-slate-200 dark:border-slate-800 text-[10px] uppercase font-bold text-slate-400">
@@ -436,55 +468,57 @@ export function MatchCenter() {
                   </tr>
                 </thead>
                 <tbody>
-                  {aclStandings.map((team: GroupTeam, index: number) => (
-                    <tr
-                      key={team.name}
-                      className={`border-b transition-colors ${
-                        team.isPersib
-                          ? isPro
-                            ? 'bg-blue-600/15 border-blue-800/80 text-cyan-300 font-black'
-                            : 'bg-blue-50/80 border-blue-200 text-blue-950 font-black'
-                          : isPro
-                          ? 'border-slate-800/50 text-slate-300'
-                          : 'border-slate-100 text-slate-800'
-                      }`}
-                    >
-                      <td className="py-3 px-2 text-center">
-                        <span
-                          className={`inline-flex items-center justify-center w-5 h-5 rounded-full font-black text-[10px] ${
-                            index === 0
-                              ? 'bg-blue-600 text-white'
-                              : isPro
-                              ? 'bg-slate-800 text-slate-400'
-                              : 'bg-slate-100 text-slate-700'
-                          }`}
-                        >
-                          {index + 1}
-                        </span>
-                      </td>
-                      <td className="py-3 px-2 font-bold text-xs truncate max-w-[170px]">
-                        <div className="flex items-center gap-2">
-                          <ClubThumb name={team.name} logoUrl={team.logoUrl} />
-                          <span className="truncate">{team.name}</span>
-                          {team.isPersib && (
-                            <span className="ml-1 text-[8.5px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-white font-mono shrink-0">
-                              Juara Grup
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="py-3 px-1.5 text-center font-mono text-[11px]">{team.played}</td>
-                      <td className="py-3 px-1.5 text-center font-mono text-[11px] text-slate-400">
-                        {team.won}-{team.drawn}-{team.lost ?? 0}
-                      </td>
-                      <td className="py-3 px-1.5 text-center font-mono text-[11px] text-slate-400">
-                        {team.gf}:{team.ga}
-                      </td>
-                      <td className="py-3 px-2 text-center font-mono font-black text-sm text-blue-600 dark:text-cyan-400">
-                        {team.points}
-                      </td>
-                    </tr>
-                  ))}
+                  {(activeTournament === 'shopee_cup' ? shopeeCupStandings : aclStandings).map(
+                    (team: GroupTeam, index: number) => (
+                      <tr
+                        key={team.name}
+                        className={`border-b transition-colors ${
+                          team.isPersib
+                            ? isPro
+                              ? 'bg-blue-600/15 border-blue-800/80 text-cyan-300 font-black'
+                              : 'bg-blue-50/80 border-blue-200 text-blue-950 font-black'
+                            : isPro
+                            ? 'border-slate-800/50 text-slate-300'
+                            : 'border-slate-100 text-slate-800'
+                        }`}
+                      >
+                        <td className="py-3 px-2 text-center">
+                          <span
+                            className={`inline-flex items-center justify-center w-5 h-5 rounded-full font-black text-[10px] ${
+                              index === 0
+                                ? 'bg-blue-600 text-white'
+                                : isPro
+                                ? 'bg-slate-800 text-slate-400'
+                                : 'bg-slate-100 text-slate-700'
+                            }`}
+                          >
+                            {index + 1}
+                          </span>
+                        </td>
+                        <td className="py-3 px-2 font-bold text-xs truncate max-w-[170px]">
+                          <div className="flex items-center gap-2">
+                            <ClubThumb name={team.name} logoUrl={team.logoUrl} />
+                            <span className="truncate">{team.name}</span>
+                            {team.isPersib && (
+                              <span className="ml-1 text-[8.5px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-white font-mono shrink-0">
+                                {activeTournament === 'shopee_cup' ? 'Puncak Grup' : 'Juara Grup'}
+                              </span>
+                            )}
+                          </div>
+                        </td>
+                        <td className="py-3 px-1.5 text-center font-mono text-[11px]">{team.played}</td>
+                        <td className="py-3 px-1.5 text-center font-mono text-[11px] text-slate-400">
+                          {team.won}-{team.drawn}-{team.lost ?? 0}
+                        </td>
+                        <td className="py-3 px-1.5 text-center font-mono text-[11px] text-slate-400">
+                          {team.gf}:{team.ga}
+                        </td>
+                        <td className="py-3 px-2 text-center font-mono font-black text-sm text-blue-600 dark:text-cyan-400">
+                          {team.points}
+                        </td>
+                      </tr>
+                    )
+                  )}
                 </tbody>
               </table>
             ) : (

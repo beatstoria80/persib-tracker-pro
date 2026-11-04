@@ -13,6 +13,7 @@ import {
   OFFICIAL_SQUAD_2026_2027,
   BRI_LIGA_1_STANDINGS_2026_2027,
   ACL_GROUP_STANDINGS_2026_2027,
+  SHOPEE_CUP_STANDINGS_2026_2027,
   VERIFIED_FIXTURES_2026_2027,
   IGOR_TOLIC_TACTICAL_PLAYBOOK,
 } from '@/data/persib-data';
@@ -37,6 +38,7 @@ interface ClubTrackerContextType {
   fixtures: MatchFixture[];
   liga1Standings: LeagueStandingRow[];
   aclStandings: GroupTeam[];
+  shopeeCupStandings: GroupTeam[];
   updateMatchSimulator: (simulatedPersibWon: boolean, simulatedGoalDiff: number) => void;
   tacticalPlaybook: TacticalStep[];
   activeTacticalStep: number;
@@ -62,6 +64,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [fixtures] = useState<MatchFixture[]>(VERIFIED_FIXTURES_2026_2027);
   const [liga1Standings] = useState<LeagueStandingRow[]>(BRI_LIGA_1_STANDINGS_2026_2027);
   const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_STANDINGS_2026_2027);
+  const [shopeeCupStandings] = useState<GroupTeam[]>(SHOPEE_CUP_STANDINGS_2026_2027);
   const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
   const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
 
@@ -193,6 +196,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         fixtures,
         liga1Standings,
         aclStandings,
+        shopeeCupStandings,
         updateMatchSimulator,
         tacticalPlaybook: IGOR_TOLIC_TACTICAL_PLAYBOOK,
         activeTacticalStep,

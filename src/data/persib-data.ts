@@ -575,6 +575,68 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     },
   },
   {
+    id: 'berguinho-21',
+    name: 'Berguinho',
+    fullName: 'Bergson Gustavo Silveira da Silva',
+    number: 21,
+    position: 'MF',
+    category: 'senior',
+    squadRole: 'substitute',
+    nationality: 'Brazil',
+    age: 28,
+    marketValue: '€325K (Rp 5.65 M)',
+    contractUntil: '31 Mei 2027',
+    verifiedData: true,
+    fitness: {
+      status: 'fit',
+      percentage: 100,
+      notes: 'Gelandang serang lincah asal Brasil. Pencetak gol pembalik keadaan vs Port FC di Shopee Cup.',
+    },
+    stats: {
+      minutesPlayed: 450,
+      appearances: 8,
+      goals: 3,
+      assists: 3,
+      passAccuracy: 85.0,
+      interceptions: 8,
+      tackles: 12,
+      shotsOnTarget: 9,
+      rating: 8.3,
+      heatmapCoords: [{ x: 62, y: 55, intensity: 0.85 }],
+    },
+  },
+  {
+    id: 'menalo-20',
+    name: 'Luka Menalo',
+    fullName: 'Luka Menalo',
+    number: 20,
+    position: 'FW',
+    category: 'senior',
+    squadRole: 'substitute',
+    nationality: 'Bosnia & Herzegovina',
+    age: 29,
+    marketValue: '€500K (Rp 8.7 M)',
+    contractUntil: '31 Mei 2028',
+    verifiedData: true,
+    fitness: {
+      status: 'fit',
+      percentage: 100,
+      notes: 'Winger tajam Eropa. Penentu kemenangan dramatis di ACL Two (vs Melbourne) dan Shopee Cup (vs Port FC).',
+    },
+    stats: {
+      minutesPlayed: 540,
+      appearances: 9,
+      goals: 5,
+      assists: 2,
+      passAccuracy: 84.6,
+      interceptions: 10,
+      tackles: 14,
+      shotsOnTarget: 16,
+      rating: 8.6,
+      heatmapCoords: [{ x: 75, y: 78, intensity: 0.9 }],
+    },
+  },
+  {
     id: 'tyronne-10',
     name: 'Tyronne del Pino',
     fullName: 'Tyronne Gustavo del Pino Ramos',
@@ -880,15 +942,27 @@ export const CLUB_LOGOS: Record<string, string> = {
   'Jeonbuk Hyundai Motors (KOR)': 'https://img.a.transfermarkt.technology/wappen/head/4932.png',
   'Jeonbuk Hyundai Motors': 'https://img.a.transfermarkt.technology/wappen/head/4932.png',
   'Lion City Sailors (SGP)': 'https://img.a.transfermarkt.technology/wappen/head/5732.png',
+  'Lion City Sailors': 'https://img.a.transfermarkt.technology/wappen/head/5732.png',
   'Selangor FC (MAS)': 'https://img.a.transfermarkt.technology/wappen/head/1344.png',
   'Sanfrecce Hiroshima (JPN)': 'https://img.a.transfermarkt.technology/wappen/head/1058.png',
   'Sydney FC (AUS)': 'https://img.a.transfermarkt.technology/wappen/head/6561.png',
   'Pohang Steelers (KOR)': 'https://img.a.transfermarkt.technology/wappen/head/3577.png',
   'Port FC (THA)': 'https://img.a.transfermarkt.technology/wappen/head/10850.png',
+  'Port FC': 'https://img.a.transfermarkt.technology/wappen/head/10850.png',
   'Muangthong United (THA)': 'https://img.a.transfermarkt.technology/wappen/head/11549.png',
   'Zhejiang FC (CHN)': 'https://img.a.transfermarkt.technology/wappen/head/7879.png',
   'Dynamic Herb Cebu (PHI)': 'https://img.a.transfermarkt.technology/wappen/head/86641.png',
   'Eastern AA (HKG)': 'https://img.a.transfermarkt.technology/wappen/head/23382.png',
+
+  // ASEAN Club Championship (Shopee Cup) 2026/2027 (Grup B)
+  'Johor Darul Ta\'zim (MAS)': 'https://img.a.transfermarkt.technology/wappen/head/3899.png',
+  'Johor Darul Ta\'zim': 'https://img.a.transfermarkt.technology/wappen/head/3899.png',
+  'JDT': 'https://img.a.transfermarkt.technology/wappen/head/3899.png',
+  'Cong An Ha Noi (VIE)': 'https://img.a.transfermarkt.technology/wappen/head/92150.png',
+  'Cong An Ha Noi': 'https://img.a.transfermarkt.technology/wappen/head/92150.png',
+  'CAHN FC': 'https://img.a.transfermarkt.technology/wappen/head/92150.png',
+  'Shan United (MYA)': 'https://img.a.transfermarkt.technology/wappen/head/28623.png',
+  'Shan United': 'https://img.a.transfermarkt.technology/wappen/head/28623.png',
 };
 
 export function getClubLogo(teamName: string): string {
@@ -926,6 +1000,9 @@ export function getClubLogo(teamName: string): string {
   if (lower.includes('sydney')) return CLUB_LOGOS['Sydney FC (AUS)'];
   if (lower.includes('pohang')) return CLUB_LOGOS['Pohang Steelers (KOR)'];
   if (lower.includes('port')) return CLUB_LOGOS['Port FC (THA)'];
+  if (lower.includes('johor') || lower.includes('jdt')) return CLUB_LOGOS['Johor Darul Ta\'zim (MAS)'];
+  if (lower.includes('cong an') || lower.includes('ha noi') || lower.includes('cahn')) return CLUB_LOGOS['Cong An Ha Noi (VIE)'];
+  if (lower.includes('shan')) return CLUB_LOGOS['Shan United (MYA)'];
   if (lower.includes('muangthong')) return CLUB_LOGOS['Muangthong United (THA)'];
   if (lower.includes('zhejiang')) return CLUB_LOGOS['Zhejiang FC (CHN)'];
   if (lower.includes('cebu')) return CLUB_LOGOS['Dynamic Herb Cebu (PHI)'];
@@ -1085,6 +1162,81 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
       'Penentuan juara grup E AFC Champions League Two 2026/2027',
     ],
   },
+  // =========================================================================
+  // ASEAN CLUB CHAMPIONSHIP (SHOPEE CUP) 2026/2027 - GRUP B (DEBUT RESMI)
+  // =========================================================================
+  {
+    id: 'shopee-26-md1-ft',
+    tournament: 'Shopee Cup 2026/2027 (ASEAN)',
+    tournamentKey: 'shopee_cup',
+    roundOrWeek: 'Matchday 1 Grup B (Debut Fantastis Comeback)',
+    homeTeam: 'Port FC (THA)',
+    awayTeam: 'PERSIB Bandung (IDN)',
+    homeLogo: 'https://img.a.transfermarkt.technology/wappen/head/10850.png',
+    awayLogo: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
+    homeScore: 1,
+    awayScore: 3,
+    date: '24 September 2026',
+    time: 'Full Time (FT)',
+    venue: 'PAT Stadium, Bangkok, Thailand',
+    status: 'FINISHED',
+    aggregateScore: 'Port FC 1 - 3 PERSIB Bandung (Poin Penuh Debut ASEAN)',
+    highlights: [
+      'DEBUT BERSEJARAH: Penampilan perdana resmi PERSIB di ASEAN Club Championship (Shopee Cup)',
+      'EPIC COMEBACK 1-3: Sempat tertinggal 1-0 di babak pertama, Maung Bandung mengamuk di babak kedua',
+      'Menit 52\': Gol penyeimbang Mariano Peralta lewat sepakan mendatar memanfaatkan umpan cut-back',
+      'Menit 68\': Gol pembalik keadaan Berguinho menyundul umpan lambung presisi Beckham Putra',
+      'Menit 88\': Gol pengunci kemenangan Luka Menalo lewat aksi solo menusuk dari sayap kanan',
+      'Kemenangan telak 1-3 mengantar PERSIB Bandung langsung memuncaki Klasemen Sementara Grup B Shopee Cup!',
+    ],
+    events: [
+      { minute: "1'", type: 'chance', text: 'Kick-off babak pertama debut ASEAN Club Championship dimulai di PAT Stadium, Bangkok' },
+      { minute: "24'", type: 'goal', text: 'Gol! Port FC membuka keunggulan 1-0 memanfaatkan kemelut di kotak penalti' },
+      { minute: "41'", type: 'chance', text: 'Tembakan jarak jauh Thom Haye berhasil ditepis kiper Port FC' },
+      { minute: "45+2'", type: 'chance', text: 'Babak pertama berakhir 1-0 untuk keunggulan Port FC' },
+      { minute: "52'", type: 'goal', text: 'GOOOL! Mariano Peralta menyamakan skor 1-1 lewat sepakan first-time mendatar!' },
+      { minute: "68'", type: 'goal', text: 'GOOOL! Berguinho membawa Maung Bandung membalikkan keadaan menjadi 1-2!' },
+      { minute: "88'", type: 'goal', text: 'GOOOL! Luka Menalo mengunci kemenangan dramatis 1-3 lewat sontekan dingin!' },
+      { minute: "90+4'", type: 'chance', text: 'Peluit panjang berbunyi! Port FC 1 - 3 PERSIB Bandung (FT). 3 poin perdana di ASEAN!' },
+    ],
+  },
+  {
+    id: 'shopee-26-md2-upcoming',
+    tournament: 'Shopee Cup 2026/2027 (ASEAN)',
+    tournamentKey: 'shopee_cup',
+    roundOrWeek: 'Matchday 2 Grup B (Laga Kandang)',
+    homeTeam: 'PERSIB Bandung (IDN)',
+    awayTeam: 'Cong An Ha Noi (VIE)',
+    homeLogo: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
+    awayLogo: 'https://img.a.transfermarkt.technology/wappen/head/92150.png',
+    date: '10 Desember 2026',
+    time: '19:00 WIB',
+    venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
+    status: 'SCHEDULED',
+    highlights: [
+      'Laga kandang matchday ke-2 Shopee Cup menyambut raksasa V.League Vietnam Cong An Ha Noi',
+      'Target mengokohkan kepemimpinan di puncak klasemen Grup B',
+      'Live Siaran Langsung Nasional & OTT Resmi ASEAN',
+    ],
+  },
+  {
+    id: 'shopee-26-md3-upcoming',
+    tournament: 'Shopee Cup 2026/2027 (ASEAN)',
+    tournamentKey: 'shopee_cup',
+    roundOrWeek: 'Matchday 3 Grup B (Super Big Match ASEAN)',
+    homeTeam: 'Johor Darul Ta\'zim (MAS)',
+    awayTeam: 'PERSIB Bandung (IDN)',
+    homeLogo: 'https://img.a.transfermarkt.technology/wappen/head/3899.png',
+    awayLogo: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
+    date: '15 Januari 2027',
+    time: '20:00 WIB',
+    venue: 'Sultan Ibrahim Stadium, Iskandar Puteri, Johor',
+    status: 'SCHEDULED',
+    highlights: [
+      'Super Big Match Asia Tenggara: Duel raksasa Malaysia vs raksasa Indonesia',
+      'Pertarungan panas perebutan pemuncak klasemen akhir Grup B',
+    ],
+  },
 ];
 
 // =========================================================================
@@ -1095,6 +1247,79 @@ export const ACL_GROUP_STANDINGS_2026_2027: GroupTeam[] = [
   { name: 'Melbourne Victory (AUS)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/7006.png', played: 4, won: 1, drawn: 1, lost: 2, gf: 5, ga: 6, points: 4 },
   { name: 'Bangkok United (THA)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/25445.png', played: 4, won: 1, drawn: 1, lost: 2, gf: 4, ga: 6, points: 4 },
   { name: 'Kaya FC-Iloilo (PHI)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/15305.png', played: 4, won: 0, drawn: 2, lost: 2, gf: 2, ga: 6, points: 2 },
+];
+
+// =========================================================================
+// ASEAN CLUB CHAMPIONSHIP (SHOPEE CUP) 2026/2027 - KLASEMEN GRUP B RESMI
+// =========================================================================
+export const SHOPEE_CUP_STANDINGS_2026_2027: GroupTeam[] = [
+  {
+    name: 'PERSIB Bandung (IDN)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
+    played: 1,
+    won: 1,
+    drawn: 0,
+    lost: 0,
+    gf: 3,
+    ga: 1,
+    points: 3,
+    isPersib: true,
+  },
+  {
+    name: 'Johor Darul Ta\'zim (MAS)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/3899.png',
+    played: 1,
+    won: 1,
+    drawn: 0,
+    lost: 0,
+    gf: 2,
+    ga: 0,
+    points: 3,
+  },
+  {
+    name: 'Cong An Ha Noi (VIE)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/92150.png',
+    played: 1,
+    won: 0,
+    drawn: 1,
+    lost: 0,
+    gf: 1,
+    ga: 1,
+    points: 1,
+  },
+  {
+    name: 'Lion City Sailors (SGP)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/5732.png',
+    played: 1,
+    won: 0,
+    drawn: 1,
+    lost: 0,
+    gf: 1,
+    ga: 1,
+    points: 1,
+  },
+  {
+    name: 'Shan United (MYA)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/28623.png',
+    played: 1,
+    won: 0,
+    drawn: 0,
+    lost: 1,
+    gf: 0,
+    ga: 2,
+    points: 0,
+  },
+  {
+    name: 'Port FC (THA)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/10850.png',
+    played: 1,
+    won: 0,
+    drawn: 0,
+    lost: 1,
+    gf: 1,
+    ga: 3,
+    points: 0,
+  },
 ];
 
 // =========================================================================

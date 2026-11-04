@@ -80,7 +80,7 @@ export interface TacticalStep {
   playerPositions: TacticalPlayerPos[];
 }
 
-export type TournamentKey = 'liga1' | 'acl2' | 'piala_presiden';
+export type TournamentKey = 'liga1' | 'acl2' | 'piala_presiden' | 'shopee_cup';
 
 export interface MatchFixture {
   id: string;
