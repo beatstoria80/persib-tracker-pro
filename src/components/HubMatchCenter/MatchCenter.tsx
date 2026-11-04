@@ -4,6 +4,71 @@ import React, { useState } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { MapPin, ChevronRight } from 'lucide-react';
 import { MatchFixture, Player, LeagueStandingRow, GroupTeam } from '@/types/club';
+import { getClubLogo } from '@/data/persib-data';
+
+// Helper component for Match Hero Card Official Emblem
+function ClubBadge({
+  name,
+  logoUrl,
+  isPersib,
+  isPro,
+}: {
+  name: string;
+  logoUrl?: string;
+  isPersib?: boolean;
+  isPro?: boolean;
+}) {
+  const [imgError, setImgError] = useState(false);
+  const src = logoUrl || getClubLogo(name);
+
+  return (
+    <div
+      className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-sm tracking-wider shadow-md transition-transform hover:scale-105 p-2 ${
+        isPersib
+          ? 'bg-gradient-to-b from-blue-700 to-blue-900 text-white ring-2 ring-blue-500/40 shadow-blue-700/30'
+          : isPro
+          ? 'bg-slate-800 text-cyan-300 border border-slate-700'
+          : 'bg-white text-slate-800 border border-slate-200'
+      }`}
+    >
+      {!imgError && src ? (
+        <img
+          src={src}
+          alt={name}
+          className="w-10 h-10 object-contain drop-shadow select-none"
+          onError={() => setImgError(true)}
+          loading="lazy"
+        />
+      ) : (
+        <span>{name.substring(0, 3).toUpperCase()}</span>
+      )}
+    </div>
+  );
+}
+
+// Helper thumbnail for tables and pills
+function ClubThumb({ name, logoUrl }: { name: string; logoUrl?: string }) {
+  const [imgError, setImgError] = useState(false);
+  const src = logoUrl || getClubLogo(name);
+
+  if (imgError || !src) {
+    return (
+      <span className="w-5 h-5 rounded-md bg-slate-200 dark:bg-slate-800 text-[9px] font-mono font-bold flex items-center justify-center shrink-0">
+        {name.substring(0, 2).toUpperCase()}
+      </span>
+    );
+  }
+
+  return (
+    <img
+      src={src}
+      alt={name}
+      className="w-5 h-5 object-contain inline-block shrink-0 select-none"
+      onError={() => setImgError(true)}
+      loading="lazy"
+    />
+  );
+}
 
 export function MatchCenter() {
   const {
@@ -143,7 +208,7 @@ export function MatchCenter() {
                 <button
                   key={fix.id}
                   onClick={() => setSelectedFixtureId(fix.id)}
-                  className={`px-3 py-1.5 rounded-full text-[10px] font-bold transition-all shrink-0 border ${
+                  className={`px-3 py-1.5 rounded-full text-[10px] font-bold transition-all shrink-0 border flex items-center gap-1.5 ${
                     selectedFixtureId === fix.id
                       ? 'bg-slate-950 text-white dark:bg-white dark:text-slate-950 border-transparent shadow-xs'
                       : isPro
@@ -151,7 +216,10 @@ export function MatchCenter() {
                       : 'bg-white border-slate-200 text-slate-600'
                   }`}
                 >
-                  {fix.roundOrWeek}
+                  <ClubThumb name={fix.homeTeam} logoUrl={fix.homeLogo} />
+                  <span className="text-[9px] opacity-60">vs</span>
+                  <ClubThumb name={fix.awayTeam} logoUrl={fix.awayLogo} />
+                  <span>{fix.roundOrWeek}</span>
                 </button>
               ))}
             </div>
@@ -183,17 +251,12 @@ export function MatchCenter() {
               <div className="flex items-center justify-between">
                 {/* Home Team */}
                 <div className="flex flex-col items-center flex-1 text-center">
-                  <div
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-sm tracking-wider shadow-md transition-transform hover:scale-105 ${
-                      currentFixture.homeTeam.includes('PERSIB')
-                        ? 'bg-blue-700 text-white ring-2 ring-blue-500/40 shadow-blue-700/30'
-                        : isPro
-                        ? 'bg-slate-800 text-cyan-300 border border-slate-700'
-                        : 'bg-slate-100 text-slate-800 border border-slate-300'
-                    }`}
-                  >
-                    {currentFixture.homeTeam.substring(0, 3).toUpperCase()}
-                  </div>
+                  <ClubBadge
+                    name={currentFixture.homeTeam}
+                    logoUrl={currentFixture.homeLogo}
+                    isPersib={currentFixture.homeTeam.includes('PERSIB')}
+                    isPro={isPro}
+                  />
                   <h4 className="font-black text-xs mt-2.5 leading-snug line-clamp-1 max-w-[110px]">
                     {currentFixture.homeTeam}
                   </h4>
@@ -215,17 +278,12 @@ export function MatchCenter() {
 
                 {/* Away Team */}
                 <div className="flex flex-col items-center flex-1 text-center">
-                  <div
-                    className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-sm tracking-wider shadow-md transition-transform hover:scale-105 ${
-                      currentFixture.awayTeam.includes('PERSIB')
-                        ? 'bg-blue-700 text-white ring-2 ring-blue-500/40 shadow-blue-700/30'
-                        : isPro
-                        ? 'bg-slate-800 text-rose-300 border border-slate-700'
-                        : 'bg-rose-50 text-rose-800 border border-rose-200'
-                    }`}
-                  >
-                    {currentFixture.awayTeam.substring(0, 3).toUpperCase()}
-                  </div>
+                  <ClubBadge
+                    name={currentFixture.awayTeam}
+                    logoUrl={currentFixture.awayLogo}
+                    isPersib={currentFixture.awayTeam.includes('PERSIB')}
+                    isPro={isPro}
+                  />
                   <h4 className="font-black text-xs mt-2.5 leading-snug line-clamp-1 max-w-[110px]">
                     {currentFixture.awayTeam}
                   </h4>
@@ -404,13 +462,16 @@ export function MatchCenter() {
                           {index + 1}
                         </span>
                       </td>
-                      <td className="py-3 px-2 font-bold text-xs truncate max-w-[150px]">
-                        {team.name}
-                        {team.isPersib && (
-                          <span className="ml-1.5 text-[8.5px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-white font-mono">
-                            Juara Grup
-                          </span>
-                        )}
+                      <td className="py-3 px-2 font-bold text-xs truncate max-w-[170px]">
+                        <div className="flex items-center gap-2">
+                          <ClubThumb name={team.name} logoUrl={team.logoUrl} />
+                          <span className="truncate">{team.name}</span>
+                          {team.isPersib && (
+                            <span className="ml-1 text-[8.5px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-white font-mono shrink-0">
+                              Juara Grup
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="py-3 px-1.5 text-center font-mono text-[11px]">{team.played}</td>
                       <td className="py-3 px-1.5 text-center font-mono text-[11px] text-slate-400">
@@ -467,13 +528,16 @@ export function MatchCenter() {
                           {row.rank}
                         </span>
                       </td>
-                      <td className="py-2.5 px-2 font-bold text-xs truncate max-w-[130px]">
-                        {row.team}
-                        {row.isPersib && (
-                          <span className="ml-1 text-[8px] uppercase px-1 rounded bg-blue-700 text-white font-mono">
-                            Persib
-                          </span>
-                        )}
+                      <td className="py-2.5 px-2 font-bold text-xs truncate max-w-[160px]">
+                        <div className="flex items-center gap-2">
+                          <ClubThumb name={row.team} logoUrl={row.logoUrl} />
+                          <span className="truncate">{row.team}</span>
+                          {row.isPersib && (
+                            <span className="ml-1 text-[8px] uppercase px-1 rounded bg-blue-700 text-white font-mono shrink-0">
+                              Persib
+                            </span>
+                          )}
+                        </div>
                       </td>
                       <td className="py-2.5 px-1 text-center font-mono text-[11px]">{row.played}</td>
                       <td className="py-2.5 px-1 text-center font-mono text-[10px] text-slate-400">

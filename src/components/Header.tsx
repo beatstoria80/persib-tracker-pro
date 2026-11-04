@@ -22,13 +22,17 @@ export function Header() {
         <div className="flex items-center gap-3">
           <div className="relative">
             <div
-              className={`w-10 h-10 rounded-2xl flex items-center justify-center font-black tracking-wider text-xs shadow-sm transition-transform active:scale-95 ${
+              className={`w-10 h-10 rounded-2xl flex items-center justify-center p-1 font-black tracking-wider text-xs shadow-sm transition-transform active:scale-95 ${
                 isPro
-                  ? 'bg-gradient-to-br from-blue-600 to-blue-800 text-white shadow-blue-900/30'
-                  : 'bg-blue-700 text-white shadow-blue-700/20'
+                  ? 'bg-gradient-to-br from-blue-900/60 to-slate-900 border border-blue-500/30 text-white shadow-blue-900/30'
+                  : 'bg-white border border-slate-200 text-blue-700 shadow-sm'
               }`}
             >
-              1933
+              <img
+                src="https://img.a.transfermarkt.technology/wappen/head/14105.png"
+                alt="Persib 1933"
+                className="w-8 h-8 object-contain drop-shadow-sm select-none"
+              />
             </div>
             <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
           </div>

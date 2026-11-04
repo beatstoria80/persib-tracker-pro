@@ -89,6 +89,8 @@ export interface MatchFixture {
   roundOrWeek: string;
   homeTeam: string;
   awayTeam: string;
+  homeLogo?: string;
+  awayLogo?: string;
   homeScore?: number;
   awayScore?: number;
   date: string;
@@ -104,6 +106,7 @@ export interface MatchFixture {
 export interface LeagueStandingRow {
   rank: number;
   team: string;
+  logoUrl?: string;
   played: number;
   won: number;
   drawn: number;
@@ -118,6 +121,7 @@ export interface LeagueStandingRow {
 
 export interface GroupTeam {
   name: string;
+  logoUrl?: string;
   played: number;
   won: number;
   drawn: number;
