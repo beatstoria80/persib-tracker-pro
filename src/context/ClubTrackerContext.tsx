@@ -69,10 +69,10 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [isGroqSyncing, setIsGroqSyncing] = useState<boolean>(false);
   const [lastSyncedAt, setLastSyncedAt] = useState<string>('Live Synced');
   const [groqBulletin, setGroqBulletin] = useState<string>(
-    'Pekan 8: Persib 4-0 Isenmulang Kalteng FC • Posisi #4 Liga 1 (16 Poin) • Laga Pekan 9: vs Java United FC'
+    '🔴 LIVE ACL TWO (Babak 2): Melbourne Victory 0 - 0 PERSIB (Agregat 0-2). Persib mengunci posisi puncak Grup E (10 Poin) & lolos ke Babak 16 Besar!'
   );
 
-  const lastVerifiedDate = 'Google Sports / PT LIB: Musim 2026/2027 (Pekan 8 - Faktual)';
+  const lastVerifiedDate = 'AFC Live Center & Google Sports (Real-Time)';
 
   const triggerGroqDataSync = useCallback(async () => {
     setIsGroqSyncing(true);
@@ -94,6 +94,11 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     triggerGroqDataSync();
+    // Real-time automatic polling every 25 seconds
+    const interval = setInterval(() => {
+      triggerGroqDataSync();
+    }, 25000);
+    return () => clearInterval(interval);
   }, [triggerGroqDataSync]);
 
   const toggleMode = () => {

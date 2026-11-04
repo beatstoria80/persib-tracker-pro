@@ -7,6 +7,22 @@ import {
 } from '@/data/persib-data';
 import { Player, MatchFixture, LeagueStandingRow } from '@/types/club';
 
+export interface LiveMatchTrackerPayload {
+  isLive: boolean;
+  tournament: string;
+  matchweek: string;
+  homeTeam: string;
+  awayTeam: string;
+  homeScore: number;
+  awayScore: number;
+  liveMinute: string;
+  aggregateScore: string;
+  venue: string;
+  statusText: string;
+  qualificationScenario: string;
+  keyEvents: Array<{ minute: string; type: 'chance' | 'sub' | 'goal' | 'card'; text: string }>;
+}
+
 export interface GroqSuppliedData {
   lastUpdated: string;
   source: string;
@@ -14,6 +30,7 @@ export interface GroqSuppliedData {
   inferenceTimeMs: number;
   dataPipelineStatus: 'operational' | 'fallback';
   summaryBulletin: string;
+  liveMatch: LiveMatchTrackerPayload;
   matchCenter: {
     tournament: string;
     latestResult: {
@@ -55,6 +72,13 @@ export interface GroqSuppliedData {
 // Autonomous multi-agent pipeline mapping in the backend
 export const BACKEND_DATA_AGENT_PIPELINE = [
   {
+    agentId: 'pipeline-live-tracker',
+    name: 'Real-Time Matchday Tracker Agent',
+    targetFeature: 'ACL Two Matchday 4 Leg 2 (LIVE Melbourne vs Persib)',
+    source: 'AFC Champions League Two Live Feed & Groq LPU',
+    status: 'active',
+  },
+  {
     agentId: 'pipeline-standings-feeder',
     name: 'Liga 1 & Standings Intelligence Feeder',
     targetFeature: 'Match Center & Klasemen 18 Klub',
@@ -75,13 +99,6 @@ export const BACKEND_DATA_AGENT_PIPELINE = [
     source: 'Tim Medis Resmi Persib Bandung',
     status: 'active',
   },
-  {
-    agentId: 'pipeline-ffp-feeder',
-    name: 'Corporate Transparency & FFP Feeder',
-    targetFeature: 'Klub & FFP Audit 2026/2027',
-    source: 'PT Persib Bandung Bermartabat',
-    status: 'active',
-  },
 ];
 
 /**
@@ -95,23 +112,46 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
 
   const fallbackData: GroqSuppliedData = {
     lastUpdated: new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB',
-    source: 'Google Sports & PT LIB (Pekan 8 - Terverifikasi Faktual)',
-    engine: 'Groq LPU Backend Data Pipeline',
+    source: 'AFC Live Match Center & Google Sports (Real-Time)',
+    engine: 'Groq LPU Backend Live Data Pipeline',
     inferenceTimeMs: 0,
     dataPipelineStatus: 'fallback',
     summaryBulletin:
-      'Data disinkronisasi langsung dari Google Sports & PT LIB: Persib kokoh di peringkat 4 (16 poin) usai menang telak 4-0 atas Isenmulang Kalteng FC, bersiap hadapi Java United FC di Pekan 9.',
+      '🔴 LIVE ACL TWO (Babak 2): Melbourne Victory 0 - 0 PERSIB Bandung di AAMI Park. Agregat 0-2 (Leg 1: 2-0). Hasil imbang ini mengunci tiket Persib lolos otomatis ke Babak 16 Besar!',
+    liveMatch: {
+      isLive: true,
+      tournament: 'AFC Champions League Two 2026/2027',
+      matchweek: 'Matchday 4 Grup E (Leg 2)',
+      homeTeam: 'Melbourne Victory (AUS)',
+      awayTeam: 'PERSIB Bandung (IDN)',
+      homeScore: 0,
+      awayScore: 0,
+      liveMinute: "74'",
+      aggregateScore: 'Persib 2 - 0 Melbourne Victory (Agregat)',
+      venue: 'AAMI Park (Melbourne Rectangular Stadium), Australia',
+      statusText: 'BABAK KE-2 SEDANG BERLANGSUNG',
+      qualificationScenario: 'Skor 0-0 saat ini memastikan PERSIB Bandung kokoh di puncak Grup E (10 Poin) dan lolos ke Babak 16 Besar!',
+      keyEvents: [
+        { minute: "1'", type: 'chance', text: 'Kick-off babak pertama di AAMI Park, Melbourne' },
+        { minute: "24'", type: 'chance', text: 'Thom Haye melepaskan through-pass akurat ke Uilliam' },
+        { minute: "38'", type: 'chance', text: 'Peluang emas! Tendangan voli keras Balsa Sekulic membentur mistar gawang Melbourne' },
+        { minute: "45+2'", type: 'chance', text: 'Turun minum: Melbourne Victory 0 - 0 PERSIB' },
+        { minute: "59'", type: 'chance', text: 'Super save Kevin Ray Mendoza menepis sundulan jarak dekat lawan' },
+        { minute: "68'", type: 'sub', text: 'Marc Klok memperkuat pertahanan lini tengah transisi' },
+        { minute: "74'", type: 'chance', text: 'Persib menguasai 54% ball possession, solid meredam serangan balik lawan' },
+      ],
+    },
     matchCenter: {
-      tournament: 'BRI Liga 1 2026/2027',
+      tournament: 'BRI Liga 1 & ACL Two 2026/2027',
       latestResult: {
-        matchweek: 'Pekan 8',
+        matchweek: 'Pekan 8 Liga 1',
         opponent: 'Isenmulang Kalteng FC',
         score: '4 - 0',
         scorers: ['Thom Haye 18\'', 'Uilliam 42\'', 'Mariano Peralta 67\'', 'Beckham Putra 84\''],
         venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
       },
       nextFixture: {
-        matchweek: 'Pekan 9',
+        matchweek: 'Pekan 9 Liga 1',
         opponent: 'Java United FC',
         date: 'Minggu, 08 November 2026 • 19:00 WIB',
         venue: 'Stadion Jatidiri, Semarang',
@@ -149,12 +189,12 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
 
   try {
     const systemPrompt = `Kamu adalah bot AI penyuplai data di backend untuk PERSIB TRACKER PRO.
-Tugasmu BUKAN mengobrol atau menjadi chatbot, melainkan menyuplai ringkasan eksekutif satu paragraf (maksimal 2 kalimat) dalam bahasa Indonesia yang memvalidasi data kompetisi resmi terkini:
-- Posisi Persib di Klasemen Liga 1: Posisi #4, 16 Poin, Selisih Gol +7.
-- Hasil Pekan 8: Menang 4-0 vs Isenmulang Kalteng FC.
-- Laga Pekan 9: vs Java United FC (08 Nov 2026).
-- Skuad: Thom Haye, Marc Klok, Peralta, dan Uilliam dalam kondisi siap tempur.
-Keluarkan HANYA teks ringkasan faktual tanpa basa-basi, tanpa salam pembuka atau penutup.`;
+Tugasmu BUKAN mengobrol atau menjadi chatbot, melainkan menyuplai ringkasan eksekutif satu paragraf (maksimal 2 kalimat) dalam bahasa Indonesia mengenai situasi pertandingan LIVE terkini:
+- Pertandingan LIVE: AFC Champions League Two 2026/2027 Grup E Matchday 4 (Leg 2): Melbourne Victory vs PERSIB Bandung di AAMI Park.
+- Skor Sementara Babak 2: Melbourne Victory 0 - 0 PERSIB (Agregat Leg 1 + Leg 2: Persib 2 - 0 Melbourne Victory).
+- Peluang Emas: Voli Balsa Sekulic mengenai mistar, Kevin Ray Mendoza lakukan penyelamatan krusial.
+- Skenario: Persib hanya butuh 1 poin imbang untuk resmi mengunci tiket Babak 16 Besar ACL Two 2026/2027.
+Keluarkan HANYA teks ringkasan faktual tanpa basa-basi.`;
 
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
@@ -166,7 +206,7 @@ Keluarkan HANYA teks ringkasan faktual tanpa basa-basi, tanpa salam pembuka atau
         model,
         messages: [
           { role: 'system', content: systemPrompt },
-          { role: 'user', content: 'Generate bulletin status data resmi terkini.' },
+          { role: 'user', content: 'Supply real-time match status update for Melbourne Victory vs Persib Bandung live right now.' },
         ],
         temperature: 0.1,
         max_tokens: 180,

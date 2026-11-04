@@ -94,8 +94,11 @@ export interface MatchFixture {
   date: string;
   time: string;
   venue: string;
-  status: 'FINISHED' | 'SCHEDULED' | 'SIMULATION';
+  status: 'LIVE' | 'FINISHED' | 'SCHEDULED' | 'SIMULATION';
+  liveMinute?: string;
+  aggregateScore?: string;
   highlights?: string[];
+  events?: Array<{ minute: string; type: 'goal' | 'card' | 'sub' | 'chance'; text: string }>;
 }
 
 export interface LeagueStandingRow {
