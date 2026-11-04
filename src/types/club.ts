@@ -64,12 +64,20 @@ export interface MatchPassVector {
   type: 'key' | 'normal' | 'assist';
 }
 
+export interface TacticalPlayerPos {
+  id: string;
+  name: string;
+  number: number;
+  x: number;
+  y: number;
+}
+
 export interface TacticalStep {
   step: number;
   label: string;
   description: string;
   ballPos: { x: number; y: number };
-  playerPositions: Array<{ id: string; name: string; number: number; x: number; y: number }>;
+  playerPositions: TacticalPlayerPos[];
 }
 
 export type TournamentKey = 'liga1' | 'acl2' | 'piala_presiden';
@@ -139,6 +147,8 @@ export interface ManagementPerson {
   tenureStart: string;
   department: 'Direksi' | 'Kepelatihan' | 'Medis & Analitik';
 }
+
+export type ManagementMember = ManagementPerson;
 
 export interface FinancialSummary {
   season: string;

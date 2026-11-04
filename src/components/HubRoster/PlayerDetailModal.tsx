@@ -23,7 +23,7 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
         className={`w-full max-w-2xl rounded-3xl border overflow-hidden shadow-2xl transition-all ${
           isPro
             ? 'bg-[#0A1220] border-blue-800/80 text-slate-100 shadow-[0_0_50px_rgba(37,99,235,0.25)]'
-            : 'bg-white border-slate-200 text-slate-900'
+            : 'bg-white border-slate-300 text-slate-950'
         }`}
       >
         <div
@@ -36,7 +36,7 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
               className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl ${
                 isPro
                   ? 'bg-blue-600 text-amber-300 ring-2 ring-cyan-400'
-                  : 'bg-blue-700 text-white'
+                  : 'bg-blue-700 text-white shadow-md'
               }`}
             >
               #{player.number}
@@ -47,22 +47,24 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                 {player.verifiedData && (
                   <span
                     className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${
-                      isPro ? 'bg-cyan-950 text-cyan-300 border border-cyan-800' : 'bg-blue-100 text-blue-800'
+                      isPro ? 'bg-cyan-950 text-cyan-300 border border-cyan-800' : 'bg-blue-100 text-blue-900 border border-blue-300'
                     }`}
                   >
-                    <ShieldCheck className="w-3 h-3 text-cyan-400" /> Terverifikasi
+                    <ShieldCheck className="w-3 h-3 text-blue-600 dark:text-cyan-400" /> Terverifikasi
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400">
-                {player.fullName} • Posisi: <strong className="text-blue-500 font-bold">{player.position}</strong> • {player.nationality} ({player.age} thn)
+              <p className={`text-xs ${isPro ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
+                {player.fullName} • Posisi: <strong className="text-blue-600 font-bold">{player.position}</strong> • {player.nationality} ({player.age} thn)
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className="p-2 rounded-xl text-slate-400 hover:text-white hover:bg-slate-800 transition-colors"
+            className={`p-2 rounded-xl transition-colors ${
+              isPro ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-200'
+            }`}
           >
             <X className="w-5 h-5" />
           </button>
@@ -74,9 +76,11 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
               isPro ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50 border-slate-200'
             }`}
           >
-            <div className="text-xs font-bold uppercase text-slate-400 mb-2 flex items-center justify-between">
+            <div className={`text-xs font-bold uppercase mb-2 flex items-center justify-between ${
+              isPro ? 'text-slate-400' : 'text-slate-700'
+            }`}>
               <span>Status Kebugaran & Medis (Real-Time Dokter Tim)</span>
-              <span className="font-mono text-cyan-400">{player.fitness.percentage}% Optimal</span>
+              <span className="font-mono text-cyan-500 font-bold">{player.fitness.percentage}% Optimal</span>
             </div>
             <div className="mb-3">
               <FitnessTrackerBadge
@@ -86,7 +90,7 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                 isPro={isPro}
               />
             </div>
-            <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden mb-2">
+            <div className={`w-full h-2 rounded-full overflow-hidden mb-2 ${isPro ? 'bg-slate-800' : 'bg-slate-200'}`}>
               <div
                 style={{ width: `${player.fitness.percentage}%` }}
                 className={`h-full ${
@@ -99,10 +103,10 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
               />
             </div>
             {player.fitness.notes && (
-              <p className="text-xs text-slate-300 italic">{player.fitness.notes}</p>
+              <p className={`text-xs italic ${isPro ? 'text-slate-300' : 'text-slate-700'}`}>{player.fitness.notes}</p>
             )}
             {player.fitness.estimatedReturn && (
-              <p className="text-xs text-amber-400 mt-1 font-semibold">
+              <p className={`text-xs mt-1 font-semibold ${isPro ? 'text-amber-400' : 'text-amber-700'}`}>
                 Estimasi Siap Tanding: {player.fitness.estimatedReturn}
               </p>
             )}
@@ -113,14 +117,18 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
               isPro ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50 border-slate-200'
             }`}
           >
-            <div className="text-xs font-bold uppercase text-slate-400 mb-2 flex items-center justify-between">
+            <div className={`text-xs font-bold uppercase mb-2 flex items-center justify-between ${
+              isPro ? 'text-slate-400' : 'text-slate-700'
+            }`}>
               <span>Visual Heatmap Pergerakan Lapangan (Match Tracker)</span>
-              <span className="text-[10px] text-cyan-400">Zona Dominasi Posisi</span>
+              <span className={`text-[10px] font-bold ${isPro ? 'text-cyan-400' : 'text-blue-700'}`}>
+                Zona Dominasi Posisi
+              </span>
             </div>
 
             <div
               className={`w-full aspect-[16/9] rounded-xl relative overflow-hidden border p-2 ${
-                isPro ? 'bg-[#061826] border-blue-900/60' : 'bg-[#1b432a] border-emerald-900'
+                isPro ? 'bg-[#061826] border-blue-900/60' : 'bg-[#15803d] border-emerald-800'
               }`}
             >
               <svg className="w-full h-full opacity-60" viewBox="0 0 100 64" preserveAspectRatio="none">
@@ -144,7 +152,7 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                 />
               ))}
 
-              <div className="absolute bottom-2 right-3 text-[10px] font-mono text-cyan-300">
+              <div className="absolute bottom-2 right-3 text-[10px] font-mono font-bold text-white bg-black/40 px-2 py-0.5 rounded">
                 Arah Serang &rarr;
               </div>
             </div>
@@ -156,8 +164,10 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                 isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}
             >
-              <div className="text-[10px] uppercase text-slate-400">Akurasi Umpan</div>
-              <div className="text-lg font-mono font-black text-cyan-400 mt-0.5">
+              <div className={`text-[10px] uppercase font-bold ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
+                Akurasi Umpan
+              </div>
+              <div className={`text-lg font-mono font-black mt-0.5 ${isPro ? 'text-cyan-400' : 'text-blue-700'}`}>
                 {player.stats.passAccuracy}%
               </div>
             </div>
@@ -166,8 +176,10 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                 isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}
             >
-              <div className="text-[10px] uppercase text-slate-400">Intersep & Tekel</div>
-              <div className="text-lg font-mono font-black text-emerald-400 mt-0.5">
+              <div className={`text-[10px] uppercase font-bold ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
+                Intersep & Tekel
+              </div>
+              <div className="text-lg font-mono font-black text-emerald-600 dark:text-emerald-400 mt-0.5">
                 {player.stats.interceptions} / {player.stats.tackles}
               </div>
             </div>
@@ -176,8 +188,10 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                 isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}
             >
-              <div className="text-[10px] uppercase text-slate-400">Gol / Assist</div>
-              <div className="text-lg font-mono font-black text-amber-400 mt-0.5">
+              <div className={`text-[10px] uppercase font-bold ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
+                Gol / Assist
+              </div>
+              <div className={`text-lg font-mono font-black mt-0.5 ${isPro ? 'text-amber-400' : 'text-amber-600'}`}>
                 {player.stats.goals} / {player.stats.assists}
               </div>
             </div>
@@ -186,8 +200,10 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                 isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}
             >
-              <div className="text-[10px] uppercase text-slate-400">Match Rating</div>
-              <div className="text-lg font-mono font-black text-blue-400 mt-0.5">
+              <div className={`text-[10px] uppercase font-bold ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
+                Match Rating
+              </div>
+              <div className={`text-lg font-mono font-black mt-0.5 ${isPro ? 'text-blue-400' : 'text-blue-800'}`}>
                 ★ {player.stats.rating}
               </div>
             </div>
@@ -199,14 +215,19 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
             }`}
           >
             <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-blue-400" />
-              <span className="text-xs text-slate-400">Masa Kontrak:</span>
-              <strong className="text-xs text-slate-200 font-mono">{player.contractUntil}</strong>
+              <Calendar className="w-4 h-4 text-blue-600" />
+              <span className={`text-xs ${isPro ? 'text-slate-400' : 'text-slate-700'}`}>Masa Kontrak:</span>
+              // REFACTOR: Replaced hardcoded text-slate-200 with contrast-adaptive color
+              <strong className={`text-xs font-mono font-bold ${isPro ? 'text-slate-200' : 'text-slate-950'}`}>
+                {player.contractUntil}
+              </strong>
             </div>
             <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-emerald-400" />
-              <span className="text-xs text-slate-400">Nilai Pasar Resmi:</span>
-              <strong className="text-xs text-emerald-400 font-mono">{player.marketValue}</strong>
+              <DollarSign className="w-4 h-4 text-emerald-600" />
+              <span className={`text-xs ${isPro ? 'text-slate-400' : 'text-slate-700'}`}>Nilai Pasar Resmi:</span>
+              <strong className="text-xs text-emerald-600 dark:text-emerald-400 font-mono font-bold">
+                {player.marketValue}
+              </strong>
             </div>
           </div>
         </div>
