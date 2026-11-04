@@ -248,7 +248,7 @@ export function RosterDeepDive() {
               />
 
               <div className="flex items-center gap-2 font-mono">
-                <span className="text-slate-500">★ {player.stats.rating}</span>
+                <span className="text-slate-500 text-[10px]">G: {player.stats.goals} | A: {player.stats.assists}</span>
                 <span className="text-blue-600 font-bold flex items-center">
                   Detail <ChevronRight className="w-3.5 h-3.5" />
                 </span>

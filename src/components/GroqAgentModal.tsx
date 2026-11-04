@@ -96,9 +96,9 @@ export function GroqAgentModal({ isOpen, onClose }: GroqAgentModalProps) {
   ];
 
   return (
-    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-3 animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/80 backdrop-blur-sm p-0 sm:p-3">
       <div
-        className={`w-full max-w-[430px] rounded-t-[32px] sm:rounded-3xl border overflow-hidden shadow-2xl flex flex-col max-h-[92vh] transition-all ${
+        className={`w-full max-w-[430px] rounded-t-[32px] sm:rounded-3xl border overflow-hidden shadow-2xl flex flex-col max-h-[92vh] ${
           isPro
             ? 'bg-[#0A1220] border-blue-800/80 text-slate-100 shadow-[0_0_50px_rgba(37,99,235,0.3)]'
             : 'bg-white border-slate-300 text-slate-950'
@@ -117,7 +117,7 @@ export function GroqAgentModal({ isOpen, onClose }: GroqAgentModalProps) {
         >
           <div className="flex items-center gap-2.5">
             <div className="w-9 h-9 rounded-xl flex items-center justify-center bg-gradient-to-br from-amber-500 via-orange-600 to-rose-600 text-white shadow-md">
-              <Cpu className="w-5 h-5 animate-pulse" />
+              <Cpu className="w-5 h-5 text-white" />
             </div>
             <div>
               <div className="flex items-center gap-1.5">
@@ -336,3 +336,4 @@ export function GroqAgentModal({ isOpen, onClose }: GroqAgentModalProps) {
     </div>
   );
 }
+
