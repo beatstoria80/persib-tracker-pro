@@ -5,7 +5,7 @@ import { useClubTracker } from '@/context/ClubTrackerContext';
 import { PlayerCategory, Position, SquadRole, Player } from '@/types/club';
 import { PlayerDetailModal } from './PlayerDetailModal';
 import { FitnessTrackerBadge } from './FitnessTrackerBadge';
-import { Users, Filter, ShieldCheck, ChevronRight, Activity, Award } from 'lucide-react';
+import { Filter, ShieldCheck, ChevronRight, Activity, Award } from 'lucide-react';
 
 export function RosterDeepDive() {
   const { mode, players, selectedPlayer, setSelectedPlayer } = useClubTracker();

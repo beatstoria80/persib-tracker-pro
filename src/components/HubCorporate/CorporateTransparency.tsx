@@ -9,8 +9,6 @@ import {
   OFFICIAL_SQUAD_2026_2027,
 } from '@/data/persib-data';
 import {
-  Building2,
-  ShieldCheck,
   FileSpreadsheet,
   Droplets,
   SunMedium,

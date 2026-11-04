@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useClubTracker, ActiveHub } from '@/context/ClubTrackerContext';
-import { Trophy, Users, Building2, Flame } from 'lucide-react';
+import { Trophy, Users, Building2 } from 'lucide-react';
 
 export function MobileBottomNav() {
   const { mode, activeHub, setActiveHub } = useClubTracker();

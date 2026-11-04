@@ -1,11 +1,9 @@
 import {
   OFFICIAL_SQUAD_2026_2027,
   BRI_LIGA_1_STANDINGS_2026_2027,
-  VERIFIED_FIXTURES_2026_2027,
-  ACL_GROUP_STANDINGS_2026_2027,
   FINANCIAL_OVERVIEW_2026_2027,
 } from '@/data/persib-data';
-import { Player, MatchFixture, LeagueStandingRow } from '@/types/club';
+import { Player, LeagueStandingRow } from '@/types/club';
 
 export interface LiveMatchTrackerPayload {
   isLive: boolean;

@@ -93,13 +93,36 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   useEffect(() => {
-    triggerGroqDataSync();
-    // Real-time automatic polling every 25 seconds
-    const interval = setInterval(() => {
-      triggerGroqDataSync();
-    }, 25000);
-    return () => clearInterval(interval);
-  }, [triggerGroqDataSync]);
+    let isSubscribed = true;
+
+    const syncBackground = async () => {
+      try {
+        const res = await fetch('/api/groq-agent');
+        if (res.ok && isSubscribed) {
+          const json = await res.json();
+          if (json?.data?.summaryBulletin) {
+            setGroqBulletin(json.data.summaryBulletin);
+          }
+          setLastSyncedAt(json?.data?.lastUpdated || 'Baru Saja');
+        }
+      } catch (e) {
+        console.warn('Groq backend data sync error:', e);
+      }
+    };
+
+    // Trigger initial background fetch asynchronously
+    const timeout = setTimeout(() => {
+      syncBackground();
+    }, 100);
+
+    const interval = setInterval(syncBackground, 25000);
+
+    return () => {
+      isSubscribed = false;
+      clearTimeout(timeout);
+      clearInterval(interval);
+    };
+  }, []);
 
   const toggleMode = () => {
     setMode((prev: AppThemeState) => (prev === 'minimal' ? 'pro' : 'minimal'));
