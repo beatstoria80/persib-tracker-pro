@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { supplyLiveClubData, BACKEND_DATA_AGENT_PIPELINE } from '@/lib/groq';
 
+export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+
 /**
  * Backend AI Data Supplier Endpoint
  * Serves autonomous real-time verified club data to keep all frontend features up-to-date.
