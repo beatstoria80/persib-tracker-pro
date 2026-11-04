@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
-import { ShieldCheck, Zap, Sun } from 'lucide-react';
+import { ShieldCheck, Zap, Sun, Sparkles } from 'lucide-react';
 
 export function Header() {
-  const { mode, toggleMode } = useClubTracker();
+  const { mode, toggleMode, setIsGroqAgentOpen } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
@@ -66,11 +66,24 @@ export function Header() {
           </div>
         </div>
 
-        {/* Right: Mobile Mode Switcher (State A / State B) */}
-        <div>
+        {/* Right: Groq AI & Mode Switcher */}
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={() => setIsGroqAgentOpen(true)}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-extrabold tracking-wide transition-all border shadow-xs active:scale-95 ${
+              isPro
+                ? 'bg-amber-400/10 border-amber-400/40 text-amber-300 hover:bg-amber-400/20'
+                : 'bg-amber-50 border-amber-300 text-amber-900 hover:bg-amber-100'
+            }`}
+            title="Buka Maung AI • Groq LPU Sports Intelligence"
+          >
+            <Sparkles className="w-3.5 h-3.5 text-amber-500 fill-amber-400 animate-pulse" />
+            <span className="font-black text-[10px]">AI GROQ</span>
+          </button>
+
           <button
             onClick={toggleMode}
-            className={`flex items-center gap-1.5 px-2.5 py-1.5 rounded-xl text-[11px] font-extrabold tracking-wide transition-all border active:scale-95 ${
+            className={`flex items-center gap-1.5 px-2 py-1.5 rounded-xl text-[11px] font-extrabold tracking-wide transition-all border active:scale-95 ${
               isPro
                 ? 'bg-gradient-to-r from-amber-500/20 via-blue-600/20 to-cyan-500/20 border-cyan-400/50 text-cyan-200 shadow-[0_0_12px_rgba(6,182,212,0.3)]'
                 : 'bg-white border-2 border-blue-700 text-blue-900 shadow-sm hover:bg-blue-50'

@@ -44,6 +44,8 @@ interface ClubTrackerContextType {
   isTacticsPlaying: boolean;
   setIsTacticsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
   lastVerifiedDate: string;
+  isGroqAgentOpen: boolean;
+  setIsGroqAgentOpen: (open: boolean) => void;
 }
 
 const ClubTrackerContext = createContext<ClubTrackerContextType | undefined>(undefined);
@@ -61,6 +63,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_STANDINGS_2026_2027);
   const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
   const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
+  const [isGroqAgentOpen, setIsGroqAgentOpen] = useState<boolean>(false);
   // REFACTOR: Synchronized with live Google Search & PT LIB verified data (Pekan 8 Faktual)
   const lastVerifiedDate = 'Google Sports / PT LIB: Musim 2026/2027 (Pekan 8 - Faktual)';
 
@@ -147,6 +150,8 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         isTacticsPlaying,
         setIsTacticsPlaying,
         lastVerifiedDate,
+        isGroqAgentOpen,
+        setIsGroqAgentOpen,
       }}
     >
       <div

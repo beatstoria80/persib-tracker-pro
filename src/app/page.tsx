@@ -7,10 +7,11 @@ import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
-import { ShieldCheck, CheckCircle2, Smartphone } from 'lucide-react';
+import { GroqAgentModal } from '@/components/GroqAgentModal';
+import { ShieldCheck, CheckCircle2, Smartphone, Sparkles, Cpu } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, lastVerifiedDate } = useClubTracker();
+  const { mode, activeHub, lastVerifiedDate, isGroqAgentOpen, setIsGroqAgentOpen } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
@@ -79,6 +80,17 @@ export default function HomePage() {
             {activeHub === 'transparency' && <CorporateTransparency />}
           </div>
 
+          {/* Floating Maung AI Trigger Pill (Mobile) */}
+          <div className="fixed bottom-20 right-4 sm:right-auto sm:left-1/2 sm:translate-x-32 z-30">
+            <button
+              onClick={() => setIsGroqAgentOpen(true)}
+              className="flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-gradient-to-r from-amber-500 via-orange-600 to-rose-600 text-white font-black text-xs shadow-lg shadow-amber-500/30 hover:scale-105 active:scale-95 transition-all"
+            >
+              <Cpu className="w-4 h-4 animate-spin [animation-duration:4s]" />
+              <span>Maung AI</span>
+            </button>
+          </div>
+
           {/* Compact Mobile Footer */}
           <footer
             className={`mt-10 pt-4 border-t text-[10px] text-center transition-colors ${
@@ -95,6 +107,12 @@ export default function HomePage() {
 
         {/* Fixed Mobile Bottom Navigation Bar */}
         <MobileBottomNav />
+
+        {/* Groq AI Sports Intelligence Agent Modal & Graph Map */}
+        <GroqAgentModal
+          isOpen={isGroqAgentOpen}
+          onClose={() => setIsGroqAgentOpen(false)}
+        />
       </div>
     </div>
   );
