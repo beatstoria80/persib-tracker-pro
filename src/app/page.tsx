@@ -4,6 +4,7 @@ import React from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { Header } from '@/components/Header';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
+import { InstallPwaPrompt } from '@/components/InstallPwaPrompt';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
@@ -47,6 +48,9 @@ export default function HomePage() {
       >
         {/* Sleek Mobile Header */}
         <Header />
+
+        {/* 1-Tap PWA Install Card for Mobile Users */}
+        <InstallPwaPrompt />
 
         {/* Unified Minimal Live Status Banner */}
         <div className="px-4 sm:px-5 pt-2.5 pb-1">

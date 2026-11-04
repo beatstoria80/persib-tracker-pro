@@ -15,16 +15,29 @@ export const metadata: Metadata = {
   description:
     "Aplikasi pelacak seluruh elemen klub Persib Bandung terverifikasi secara mendalam dengan UI adaptif Minimalis & Pro Live Match Mode.",
   manifest: "/manifest.json",
+  applicationName: "PERSIB TRACKER",
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: "black-translucent",
+    title: "Persib Tracker",
+  },
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/icon-192.png", sizes: "192x192", type: "image/png" },
+      { url: "/icon-512.png", sizes: "512x512", type: "image/png" },
+    ],
+    apple: [
+      { url: "/icon-apple.png", sizes: "180x180", type: "image/png" },
+    ],
   },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#060B13",
+  themeColor: "#1D4ED8",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
+  userScalable: false,
 };
 
 export default function RootLayout({

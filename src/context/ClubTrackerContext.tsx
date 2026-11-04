@@ -132,22 +132,16 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   };
 
   useEffect(() => {
-    // Purge stale Service Workers and browser CacheStorage to prevent cache-locking
-    if (typeof window !== 'undefined') {
-      if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then((registrations) => {
-          for (const registration of registrations) {
-            registration.unregister();
-          }
+    // Register PWA Service Worker for standalone installability on any mobile phone
+    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
+      navigator.serviceWorker
+        .register('/sw.js')
+        .then((reg) => {
+          reg.update();
+        })
+        .catch((err) => {
+          console.warn('PWA ServiceWorker registration notice:', err);
         });
-      }
-      if ('caches' in window) {
-        caches.keys().then((names) => {
-          for (const name of names) {
-            caches.delete(name);
-          }
-        });
-      }
     }
   }, []);
 
