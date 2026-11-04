@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
-import { ShieldCheck, Zap, Sun, RefreshCw } from 'lucide-react';
+import { Zap, Sun, RefreshCw } from 'lucide-react';
 
 export function Header() {
   const { mode, toggleMode, isGroqSyncing, triggerGroqDataSync } = useClubTracker();
@@ -38,23 +38,9 @@ export function Header() {
           </div>
 
           <div>
-            <div className="flex items-center gap-1.5">
-              <span className="font-black text-sm tracking-tight uppercase">
-                PERSIB <span className={isPro ? 'text-cyan-400' : 'text-blue-700'}>TRACKER</span>
-              </span>
-              <span
-                className={`inline-flex items-center gap-0.5 text-[8.5px] font-extrabold uppercase px-1.5 py-0.5 rounded-full ${
-                  isPro
-                    ? 'bg-blue-950/80 text-cyan-300 border border-cyan-800/60'
-                    : 'bg-blue-50 text-blue-800 border border-blue-200'
-                }`}
-              >
-                <ShieldCheck className="w-2.5 h-2.5 text-blue-600 dark:text-cyan-400" /> Verified
-              </span>
-            </div>
-            <p className={`text-[10px] font-medium tracking-wide ${isPro ? 'text-slate-400' : 'text-slate-500'}`}>
-              PT LIB • AFC • ASEAN Shopee Cup
-            </p>
+            <h1 className="font-black text-sm tracking-tight uppercase leading-none">
+              PERSIB <span className={isPro ? 'text-cyan-400' : 'text-blue-700'}>TRACKER</span>
+            </h1>
           </div>
         </div>
 

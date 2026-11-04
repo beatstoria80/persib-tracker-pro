@@ -158,22 +158,22 @@ export function MatchCenter() {
   return (
     <div className="space-y-4">
       {/* 1. Header Info & Competition Pill Switcher */}
-      <div className="pt-1">
-        <div className="flex items-center justify-between mb-2.5">
+      <div className="pt-0.5">
+        <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-950 dark:text-white uppercase">
+            <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-950 dark:text-white uppercase">
               {activeTournament === 'shopee_cup'
                 ? 'Shopee Cup'
                 : activeTournament === 'acl2'
                 ? 'ACL Two'
                 : 'BRI Liga 1'}
             </h2>
-            <span className="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-md bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-cyan-300">
+            <span className="text-[9px] font-mono font-extrabold px-1.5 py-0.2 rounded bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-cyan-300">
               2026/27
             </span>
           </div>
 
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+          <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[9.5px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             {activeTournament === 'shopee_cup'
               ? 'Puncak Grup B'
@@ -183,24 +183,22 @@ export function MatchCenter() {
           </span>
         </div>
 
-        {/* Competition Selector Pills */}
-        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+        {/* Competition Selector (Responsive 3-Column Grid - Zero Text Clipping) */}
+        <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
           <button
             onClick={() => {
               setActiveTournament('liga1');
               setSelectedFixtureId('l1-p8');
             }}
-            className={`px-4 py-2 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 ${
+            className={`py-2 px-1 rounded-xl text-xs font-black tracking-tight transition-all text-center ${
               activeTournament === 'liga1'
                 ? isPro
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
-                : isPro
-                ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
-                : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-blue-700 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            BRI Liga 1
+            Liga 1
           </button>
 
           <button
@@ -208,18 +206,16 @@ export function MatchCenter() {
               setActiveTournament('acl2');
               setSelectedFixtureId('acl2-26-md4-live');
             }}
-            className={`px-4 py-2 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
+            className={`py-2 px-1 rounded-xl text-xs font-black tracking-tight transition-all text-center flex items-center justify-center gap-1 ${
               activeTournament === 'acl2'
                 ? isPro
-                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                  : 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
-                : isPro
-                ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
-                : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
+                  ? 'bg-blue-600 text-white shadow-md'
+                  : 'bg-blue-700 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            <span>ACL Two (Asia)</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+            <span>ACL Two</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
           </button>
 
           <button
@@ -227,25 +223,23 @@ export function MatchCenter() {
               setActiveTournament('shopee_cup');
               setSelectedFixtureId('shopee-26-md1-ft');
             }}
-            className={`px-4 py-2 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
+            className={`py-2 px-1 rounded-xl text-xs font-black tracking-tight transition-all text-center flex items-center justify-center gap-1 ${
               activeTournament === 'shopee_cup'
                 ? isPro
-                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
-                  : 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md shadow-orange-600/25'
-                : isPro
-                ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
-                : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-md'
+                  : 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-sm'
+                : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
             }`}
           >
-            <span>Shopee Cup (ASEAN)</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+            <span>Shopee Cup</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
           </button>
         </div>
       </div>
 
-      {/* 2. Structured Sub-Page Navigation Tabs */}
+      {/* 2. Structured Sub-Page Navigation Tabs (4-Column Balanced Grid) */}
       <div
-        className={`p-1.5 rounded-2xl border flex items-center justify-between text-xs font-bold ${
+        className={`p-1 rounded-2xl border grid grid-cols-4 gap-1 text-xs font-bold ${
           isPro
             ? 'bg-[#121620] border-slate-800 text-slate-400'
             : 'bg-white border-slate-200 text-slate-600 shadow-xs'
@@ -253,7 +247,7 @@ export function MatchCenter() {
       >
         <button
           onClick={() => setMatchViewTab('featured')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1.5 ${
+          className={`py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
             matchViewTab === 'featured'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -267,7 +261,7 @@ export function MatchCenter() {
 
         <button
           onClick={() => setMatchViewTab('schedule')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1.5 ${
+          className={`py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
             matchViewTab === 'schedule'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -281,7 +275,7 @@ export function MatchCenter() {
 
         <button
           onClick={() => setMatchViewTab('standings')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1.5 ${
+          className={`py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
             matchViewTab === 'standings'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -295,7 +289,7 @@ export function MatchCenter() {
 
         <button
           onClick={() => setMatchViewTab('lineup')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1.5 ${
+          className={`py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
             matchViewTab === 'lineup'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -601,51 +595,65 @@ export function MatchCenter() {
                   }`}
                 >
                   {/* Top Status & Date Pill */}
-                  <div className="flex items-center justify-between text-[10px] font-bold pb-2.5 mb-2.5 border-b border-slate-200 dark:border-slate-800">
+                  <div className="flex items-center justify-between text-[10px] font-bold pb-2.5 mb-2 border-b border-slate-200 dark:border-slate-800">
                     <span className="text-slate-400 font-mono font-semibold">{fix.roundOrWeek}</span>
                     <span
-                      className={`px-2 py-0.5 rounded-full font-mono font-extrabold text-[9px] ${
+                      className={`px-2.5 py-0.5 rounded-full font-mono font-black text-[9.5px] ${
                         isFinished
                           ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
                           : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
                       }`}
                     >
-                      {isFinished ? 'SELESAI (FT)' : 'AKAN DATANG'}
+                      {isFinished ? 'SELESAI (FT)' : `${fix.date.split(' ')[0]} ${fix.date.split(' ')[1]} • ${fix.time}`}
                     </span>
                   </div>
 
-                  {/* Teams & Score / Schedule */}
-                  <div className="flex items-center justify-between gap-2 py-1">
+                  {/* Teams & Score / Schedule (Mobile-First Sofascore Format - Zero Ellipsis) */}
+                  <div className="py-1.5 space-y-2.5">
                     {/* Home Club */}
-                    <div className="flex items-center gap-2.5 flex-1 min-w-0">
-                      <ClubThumb name={fix.homeTeam} logoUrl={fix.homeLogo} />
-                      <span className="font-black text-xs truncate leading-snug">
-                        {fix.homeTeam}
-                      </span>
-                    </div>
-
-                    {/* Middle Score / Time */}
-                    <div className="shrink-0 px-3 text-center">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                        <ClubThumb name={fix.homeTeam} logoUrl={fix.homeLogo} />
+                        <span
+                          className={`text-xs leading-tight ${
+                            fix.homeTeam.includes('PERSIB')
+                              ? 'font-black text-blue-600 dark:text-cyan-400'
+                              : 'font-bold text-slate-900 dark:text-slate-100'
+                          }`}
+                        >
+                          {fix.homeTeam}
+                        </span>
+                      </div>
                       {isFinished ? (
-                        <div className="font-mono font-black text-base tracking-tight text-blue-600 dark:text-cyan-400">
-                          {fix.homeScore} : {fix.awayScore}
-                        </div>
+                        <span className="font-mono font-black text-sm text-slate-950 dark:text-white shrink-0 pl-2">
+                          {fix.homeScore}
+                        </span>
                       ) : (
-                        <div className="text-center font-mono">
-                          <span className="block font-black text-xs">{fix.time}</span>
-                          <span className="block text-[9px] text-slate-400">
-                            {fix.date.split(' ')[0]} {fix.date.split(' ')[1]}
-                          </span>
-                        </div>
+                        <span className="font-mono text-xs text-slate-400 shrink-0 pl-2">-</span>
                       )}
                     </div>
 
                     {/* Away Club */}
-                    <div className="flex items-center justify-end gap-2.5 flex-1 min-w-0 text-right">
-                      <span className="font-black text-xs truncate leading-snug">
-                        {fix.awayTeam}
-                      </span>
-                      <ClubThumb name={fix.awayTeam} logoUrl={fix.awayLogo} />
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                        <ClubThumb name={fix.awayTeam} logoUrl={fix.awayLogo} />
+                        <span
+                          className={`text-xs leading-tight ${
+                            fix.awayTeam.includes('PERSIB')
+                              ? 'font-black text-blue-600 dark:text-cyan-400'
+                              : 'font-bold text-slate-900 dark:text-slate-100'
+                          }`}
+                        >
+                          {fix.awayTeam}
+                        </span>
+                      </div>
+                      {isFinished ? (
+                        <span className="font-mono font-black text-sm text-slate-950 dark:text-white shrink-0 pl-2">
+                          {fix.awayScore}
+                        </span>
+                      ) : (
+                        <span className="font-mono text-xs text-slate-400 shrink-0 pl-2">-</span>
+                      )}
                     </div>
                   </div>
 
