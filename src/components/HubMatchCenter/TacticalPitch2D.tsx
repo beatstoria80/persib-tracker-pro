@@ -26,7 +26,6 @@ export function TacticalPitch2D() {
           : 'bg-white border-slate-200 shadow-sm'
       }`}
     >
-      {/* Header with Verified Tag & View Controls */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 gap-3">
         <div className="flex items-center gap-2.5">
           <div
@@ -38,18 +37,17 @@ export function TacticalPitch2D() {
           </div>
           <div>
             <h3 className="text-base font-bold tracking-tight flex items-center gap-2">
-              Visual Animasi Taktik 2D & Spasial Lapangan
-              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-blue-600 text-white flex items-center gap-1">
-                <ShieldCheck className="w-3 h-3" /> Taktik Bojan Hodak
+              Visual Animasi Taktik 2D & Spasial Lapangan (2026/2027)
+              <span className="text-[10px] uppercase font-mono px-2 py-0.5 rounded-full bg-cyan-600 text-white flex items-center gap-1">
+                <ShieldCheck className="w-3 h-3" /> Head Coach Igor Tolic (4-2-3-1)
               </span>
             </h3>
             <p className="text-xs text-slate-400">
-              Simulasi transisi serangan resmi Persib Bandung: Build-up 3-2-4-1 hingga eksekusi gol
+              Simulasi transisi serangan vertikal: Poros ganda Thom Haye & Marc Klok ke Peralta & striker Uilliam
             </p>
           </div>
         </div>
 
-        {/* Perspective Switcher: Pure 2D Flat vs Spatial Perspective */}
         <div className="flex items-center gap-2">
           <div className="flex items-center gap-1 p-1 rounded-xl bg-slate-100 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800">
             <button
@@ -80,7 +78,6 @@ export function TacticalPitch2D() {
         </div>
       </div>
 
-      {/* Main Tactical Animation Arena */}
       <div className="my-5">
         <div
           className={`w-full aspect-[16/10] rounded-2xl relative overflow-hidden border p-3 select-none transition-transform duration-700 ${
@@ -93,7 +90,6 @@ export function TacticalPitch2D() {
               : 'bg-[#1b432a] border-emerald-900 shadow-inner'
           }`}
         >
-          {/* Pitch Markings SVG */}
           <svg className="w-full h-full" viewBox="0 0 100 64" preserveAspectRatio="none">
             <defs>
               <pattern id="tacticalGrid" width="10" height="64" patternUnits="userSpaceOnUse">
@@ -102,7 +98,6 @@ export function TacticalPitch2D() {
             </defs>
             <rect width="100" height="64" fill="url(#tacticalGrid)" />
 
-            {/* Field boundaries */}
             <rect
               x="2"
               y="2"
@@ -113,7 +108,6 @@ export function TacticalPitch2D() {
               strokeWidth="0.5"
               strokeOpacity="0.5"
             />
-            {/* Half line */}
             <line
               x1="50"
               y1="2"
@@ -134,7 +128,6 @@ export function TacticalPitch2D() {
             />
             <circle cx="50" cy="32" r="0.6" fill={isPro ? '#38bdf8' : '#ffffff'} />
 
-            {/* Penalty boxes */}
             <rect
               x="2"
               y="14"
@@ -157,15 +150,13 @@ export function TacticalPitch2D() {
             />
           </svg>
 
-          {/* Directional Overlay */}
           <div className="absolute top-3 left-4 text-[10px] font-mono text-slate-400">
-            Pertahanan Persib (Gawang Mendoza)
+            Pertahanan Persib (Gawang Adam Przybek #1)
           </div>
           <div className="absolute top-3 right-4 text-[10px] font-mono text-cyan-300 flex items-center gap-1">
             <span>Arah Serang &rarr; Gawang Lawan</span>
           </div>
 
-          {/* Animated Player Nodes */}
           {currentStepData.playerPositions.map((player) => (
             <div
               key={player.id}
@@ -178,9 +169,9 @@ export function TacticalPitch2D() {
             >
               <div
                 className={`w-7 h-7 rounded-full flex items-center justify-center font-black text-[10px] font-mono shadow-md ring-2 ${
-                  player.id === 'cf' || player.id === 'lw' || player.id === 'am'
+                  player.id === 'cf' || player.id === 'rw' || player.id === 'am'
                     ? 'bg-amber-400 text-slate-950 ring-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.5)]'
-                    : player.id === 'dm1' || player.id === 'dm2' || player.id === 'rw'
+                    : player.id === 'dm1' || player.id === 'dm2' || player.id === 'lw'
                     ? 'bg-cyan-400 text-slate-950 ring-cyan-300 shadow-[0_0_10px_rgba(34,211,238,0.4)]'
                     : 'bg-blue-600 text-white ring-blue-400'
                 }`}
@@ -193,7 +184,6 @@ export function TacticalPitch2D() {
             </div>
           ))}
 
-          {/* Animated Ball */}
           <div
             style={{
               left: `${currentStepData.ballPos.x}%`,
@@ -206,7 +196,6 @@ export function TacticalPitch2D() {
         </div>
       </div>
 
-      {/* Playback Controls & Tactical Phase Explanation */}
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 p-4 rounded-xl bg-slate-900/60 border border-slate-800">
         <div>
           <div className="flex items-center gap-2 mb-1">
@@ -214,7 +203,7 @@ export function TacticalPitch2D() {
               {currentStepData.label}
             </span>
             <span className="text-[10px] font-mono text-slate-400">
-              (Langkah {currentStepData.step} dari {tacticalPlaybook.length})
+              (Fase {currentStepData.step} dari {tacticalPlaybook.length})
             </span>
           </div>
           <p className="text-xs text-slate-300 leading-relaxed max-w-2xl">
@@ -222,7 +211,6 @@ export function TacticalPitch2D() {
           </p>
         </div>
 
-        {/* Step Buttons & Play/Pause */}
         <div className="flex items-center gap-2 shrink-0">
           <button
             onClick={() => setIsTacticsPlaying(!isTacticsPlaying)}

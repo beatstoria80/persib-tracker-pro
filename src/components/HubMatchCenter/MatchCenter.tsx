@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { TacticalPitch2D } from './TacticalPitch2D';
 import { ScenarioSimulator } from './ScenarioSimulator';
-import { Trophy, Calendar, CheckCircle2, Shield, MapPin, Users } from 'lucide-react';
+import { Trophy, Calendar, CheckCircle2, Shield, MapPin, Users, Award } from 'lucide-react';
 
 export function MatchCenter() {
   const {
@@ -20,7 +20,6 @@ export function MatchCenter() {
 
   const [matchViewTab, setMatchViewTab] = useState<'match_card' | 'lineup' | 'tactics' | 'standings'>('match_card');
 
-  // Filter fixtures by active tournament
   const currentFixture = fixtures.find((f) => f.tournamentKey === activeTournament) || fixtures[0];
 
   const startingXI = players.filter((p) => p.squadRole === 'starting');
@@ -38,19 +37,20 @@ export function MatchCenter() {
       >
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div>
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400">
-              Pusat Data Pertandingan Resmi
-            </span>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20 flex items-center gap-1">
+                <Award className="w-3 h-3" /> Musim Kompetisi 2026/2027 (Head Coach Igor Tolic)
+              </span>
+            </div>
             <h2 className="text-xl font-black tracking-tight flex items-center gap-2">
               <Trophy className="w-5 h-5 text-amber-400" />
-              Match Center & Turnamen Profesional
+              Match Center & Turnamen Resmi
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Pilih kompetisi domestik atau kontinental resmi: data faktual jadwal, hasil, dan klasemen
+              Pusat data laga BRI Liga 1 2026/2027 (Pekan 11) & AFC Champions League Two
             </p>
           </div>
 
-          {/* Tournament Switcher Tabs */}
           <div className="flex flex-wrap items-center gap-1.5 p-1 rounded-xl bg-slate-900/80 border border-slate-800">
             <button
               onClick={() => setActiveTournament('liga1')}
@@ -60,9 +60,9 @@ export function MatchCenter() {
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <span>🇮🇩 BRI Liga 1</span>
+              <span>🇮🇩 BRI Liga 1 2026/27</span>
               <span className="text-[9px] uppercase px-1 rounded bg-amber-400 text-slate-950 font-black">
-                Juara
+                Peringkat #1
               </span>
             </button>
 
@@ -74,18 +74,7 @@ export function MatchCenter() {
                   : 'text-slate-400 hover:text-white'
               }`}
             >
-              <span>🌏 ACL Two (Asia)</span>
-            </button>
-
-            <button
-              onClick={() => setActiveTournament('piala_presiden')}
-              className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-bold transition-all ${
-                activeTournament === 'piala_presiden'
-                  ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]'
-                  : 'text-slate-400 hover:text-white'
-              }`}
-            >
-              <span>🏆 Piala Presiden</span>
+              <span>🌏 ACL Two 2026/27</span>
             </button>
           </div>
         </div>
@@ -100,7 +89,7 @@ export function MatchCenter() {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            Laga Terpilih ({currentFixture.status === 'FINISHED' ? 'Hasil Resmi' : 'Jadwal'})
+            Laga Terpilih ({currentFixture.status === 'FINISHED' ? 'Hasil Resmi Pekan 11' : 'Jadwal'})
           </button>
           <button
             onClick={() => setMatchViewTab('lineup')}
@@ -110,7 +99,7 @@ export function MatchCenter() {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            Susunan Pemain Resmi (Starting XI & Cadangan)
+            Susunan Pemain 2026/2027 (Starting XI & Cadangan)
           </button>
           <button
             onClick={() => setMatchViewTab('tactics')}
@@ -120,7 +109,7 @@ export function MatchCenter() {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            Animasi 2D & Spasial Taktik
+            Animasi 2D & Spasial Taktik Igor Tolic
           </button>
           <button
             onClick={() => setMatchViewTab('standings')}
@@ -130,12 +119,12 @@ export function MatchCenter() {
                 : 'text-slate-400 hover:text-white'
             }`}
           >
-            Klasemen {activeTournament === 'liga1' ? 'BRI Liga 1' : 'Grup F ACL Two'}
+            Klasemen {activeTournament === 'liga1' ? 'BRI Liga 1 2026/2027' : 'ACL Two 2026/2027'}
           </button>
         </div>
       </div>
 
-      {/* Tab 1: Match Card (Factual Result or Official Schedule) */}
+      {/* Tab 1: Match Card */}
       {matchViewTab === 'match_card' && (
         <div
           className={`rounded-3xl border overflow-hidden relative transition-all duration-300 ${
@@ -170,7 +159,7 @@ export function MatchCenter() {
                       : 'bg-blue-950 text-cyan-300 border border-blue-800'
                   }`}
                 >
-                  {currentFixture.status === 'FINISHED' ? 'FULL TIME (RESMI)' : 'JADWAL RESMI'}
+                  {currentFixture.status === 'FINISHED' ? 'FULL TIME (RESMI PT LIB)' : 'JADWAL RESMI'}
                 </span>
                 <span className="text-xs text-slate-400 flex items-center gap-1">
                   <Calendar className="w-3.5 h-3.5" /> {currentFixture.date} • {currentFixture.time}
@@ -178,12 +167,11 @@ export function MatchCenter() {
               </div>
             </div>
 
-            {/* Score / Matchup */}
             <div className="grid grid-cols-1 md:grid-cols-3 items-center py-8 gap-6">
               <div className="flex items-center md:justify-end gap-4 text-left md:text-right">
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-black tracking-tight">{currentFixture.homeTeam}</h2>
-                  <div className="text-xs text-slate-400 mt-1">Bojan Hodak • Juara Bertahan</div>
+                  <div className="text-xs text-slate-400 mt-1">Igor Tolic • Formasi 4-2-3-1</div>
                 </div>
                 <div className="w-16 h-16 rounded-2xl flex items-center justify-center font-black text-2xl bg-blue-600 text-amber-300 ring-2 ring-blue-400 shadow-[0_0_25px_rgba(37,99,235,0.5)] shrink-0">
                   PSB
@@ -203,13 +191,13 @@ export function MatchCenter() {
                       </span>
                     </div>
                     <div className="mt-2 text-xs font-mono uppercase tracking-widest text-emerald-400 font-bold flex items-center gap-1">
-                      <CheckCircle2 className="w-3.5 h-3.5" /> Kemenangan Terverifikasi PT LIB
+                      <CheckCircle2 className="w-3.5 h-3.5" /> Kemenangan Pekan 11 (Unbeaten)
                     </div>
                   </>
                 ) : (
                   <>
                     <div className="text-2xl font-mono font-bold text-slate-300">VS</div>
-                    <div className="mt-2 text-xs font-mono text-cyan-400">Leg 2 Fase Grup ACL Two</div>
+                    <div className="mt-2 text-xs font-mono text-cyan-400">El Clasico Indonesia 2026/2027</div>
                   </>
                 )}
               </div>
@@ -220,26 +208,25 @@ export function MatchCenter() {
                 </div>
                 <div>
                   <h2 className="text-2xl sm:text-3xl font-black tracking-tight">{currentFixture.awayTeam}</h2>
-                  <div className="text-xs text-slate-400 mt-1">Lawan Resmi</div>
+                  <div className="text-xs text-slate-400 mt-1">Lawan Resmi PT LIB</div>
                 </div>
               </div>
             </div>
 
-            {/* Match Venue and Verified Highlights */}
             <div className="pt-4 border-t border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <div className="flex items-center gap-2 text-slate-400">
                 <MapPin className="w-4 h-4 text-cyan-400" />
                 <span>Venue: <strong className="text-slate-200">{currentFixture.venue}</strong></span>
               </div>
               <div className="text-slate-400 text-[11px]">
-                Data bersumber langsung dari match report PT Liga Indonesia Baru & AFC
+                Data resmi dari Match Commissioner PT LIB & AFC musim 2026/2027
               </div>
             </div>
 
             {currentFixture.highlights && currentFixture.highlights.length > 0 && (
               <div className="mt-4 p-3.5 rounded-xl bg-slate-900/70 border border-slate-800">
                 <span className="text-[10px] font-mono font-bold uppercase text-amber-400 mb-1 block">
-                  Sorotan & Peristiwa Penting Laga:
+                  Sorotan Resmi Laga:
                 </span>
                 <ul className="text-xs space-y-1 text-slate-300 list-disc list-inside">
                   {currentFixture.highlights.map((h, i) => (
@@ -252,29 +239,30 @@ export function MatchCenter() {
         </div>
       )}
 
-      {/* Tab 2: Lineup (Starting XI vs Substitutes) */}
+      {/* Tab 2: Lineup (Starting XI vs Substitutes 2026/2027) */}
       {matchViewTab === 'lineup' && (
         <div
           className={`rounded-2xl border p-5 sm:p-6 transition-all ${
             isPro ? 'bg-[#0A111E]/90 border-blue-900/50' : 'bg-white border-slate-200'
           }`}
         >
-          <div className="flex items-center justify-between pb-4 border-b border-slate-800 mb-5">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 mb-5 gap-2">
             <div>
-              <h3 className="text-base font-bold flex items-center gap-2">
-                <Users className="w-5 h-5 text-blue-500" />
-                Line-Up Resmi Persib Bandung (Musim 2024/2025)
-              </h3>
+              <div className="flex items-center gap-2">
+                <h3 className="text-base font-bold flex items-center gap-2">
+                  <Users className="w-5 h-5 text-blue-500" />
+                  Line-Up Resmi Persib Bandung (Musim 2026/2027)
+                </h3>
+              </div>
               <p className="text-xs text-slate-400">
-                Formasi 4-3-3 Head Coach Bojan Hodak: Starting XI Utama dan Pemain Pengganti (Substitutes)
+                Head Coach: <strong className="text-cyan-300">Igor Tolic</strong> • Strategic Advisor: <strong className="text-amber-300">Bojan Hodak</strong> • Formasi: 4-2-3-1
               </p>
             </div>
             <span className="text-xs font-mono font-bold text-cyan-300 bg-blue-950 px-2.5 py-1 rounded-lg border border-blue-800">
-              Formasi 4-3-3
+              Formasi 4-2-3-1 Igor Tolic
             </span>
           </div>
 
-          {/* Starting XI Section */}
           <div className="mb-6">
             <h4 className="text-xs font-mono font-bold uppercase text-amber-400 tracking-wider mb-3 flex items-center gap-1.5">
               <span className="w-2 h-2 rounded-full bg-amber-400"></span> 11 Pemain Pertama (Starting XI)
@@ -308,10 +296,9 @@ export function MatchCenter() {
             </div>
           </div>
 
-          {/* Substitutes Section */}
           <div>
             <h4 className="text-xs font-mono font-bold uppercase text-cyan-400 tracking-wider mb-3 flex items-center gap-1.5">
-              <span className="w-2 h-2 rounded-full bg-cyan-400"></span> Pemain Cadangan & Rekrutan Terbaru (Substitutes)
+              <span className="w-2 h-2 rounded-full bg-cyan-400"></span> Pemain Cadangan & Rotasi Resmi (Substitutes)
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
               {substitutes.map((player) => (
@@ -355,7 +342,7 @@ export function MatchCenter() {
       {/* Tab 3: 2D & Spatial Tactical Pitch */}
       {matchViewTab === 'tactics' && <TacticalPitch2D />}
 
-      {/* Tab 4: Standings (BRI Liga 1 Table & ACL Two Group F) */}
+      {/* Tab 4: Standings */}
       {matchViewTab === 'standings' && (
         <div className="space-y-6">
           {activeTournament === 'liga1' ? (
@@ -367,14 +354,14 @@ export function MatchCenter() {
               <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-800 gap-2">
                 <div>
                   <span className="text-xs font-mono font-bold uppercase text-amber-400">
-                    Klasemen Resmi Akhir Musim (Verifikasi PT LIB)
+                    Klasemen Resmi Sementara BRI Liga 1 2026/2027 (Pekan 11)
                   </span>
                   <h3 className="text-base font-black tracking-tight mt-0.5">
-                    BRI Liga 1 2024/2025: PERSIB Bandung Juara (Pekan 34)
+                    PERSIB Bandung Pemuncak Klasemen (27 Poin - Rekor Tak Terkalahkan)
                   </h3>
                 </div>
-                <span className="text-xs font-bold font-mono px-3 py-1 rounded-full bg-amber-400 text-slate-950">
-                  🏆 Juara Liga 1 (69 Poin)
+                <span className="text-xs font-bold font-mono px-3 py-1 rounded-full bg-cyan-500 text-slate-950">
+                  🔥 Unbeaten 11 Pekan
                 </span>
               </div>
 
@@ -422,7 +409,7 @@ export function MatchCenter() {
                           <span>{row.team}</span>
                           {row.isPersib && (
                             <span className="text-[10px] uppercase px-1.5 py-0.5 rounded bg-blue-600 text-white font-mono">
-                              Juara
+                              Pemuncak
                             </span>
                           )}
                         </td>

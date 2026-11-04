@@ -8,100 +8,90 @@ export function ScenarioSimulator() {
   const { mode } = useClubTracker();
   const isPro = mode === 'pro';
 
-  const [persibVsPort, setPersibVsPort] = useState<'WIN' | 'DRAW' | 'LOSS'>('WIN');
-  const [persibVsPortScore, setPersibVsPortScore] = useState<[number, number]>([2, 1]);
-  const [persibVsZhejiang, setPersibVsZhejiang] = useState<'WIN' | 'DRAW' | 'LOSS'>('WIN');
-  const [persibVsZhejiangScore, setPersibVsZhejiangScore] = useState<[number, number]>([2, 0]);
-  const [lionCityVsPort, setLionCityVsPort] = useState<'WIN' | 'DRAW' | 'LOSS'>('DRAW');
+  const [persibVsJeonbuk, setPersibVsJeonbuk] = useState<'WIN' | 'DRAW' | 'LOSS'>('WIN');
+  const [persibVsJeonbukScore, setPersibVsJeonbukScore] = useState<[number, number]>([2, 1]);
+  const [persibVsBangkok, setPersibVsBangkok] = useState<'WIN' | 'DRAW' | 'LOSS'>('WIN');
+  const [persibVsBangkokScore, setPersibVsBangkokScore] = useState<[number, number]>([2, 0]);
+  const [jeonbukVsSydney, setJeonbukVsSydney] = useState<'WIN' | 'DRAW' | 'LOSS'>('WIN');
 
   const calculateSimulatedTable = () => {
     const table = [
-      { name: 'PERSIB Bandung', played: 4, won: 1, drawn: 1, lost: 2, gf: 5, ga: 6, points: 4, isPersib: true },
-      { name: 'Port FC (THA)', played: 4, won: 3, drawn: 0, lost: 1, gf: 6, ga: 4, points: 9, isPersib: false },
-      { name: 'Lion City Sailors (SGP)', played: 4, won: 2, drawn: 1, lost: 1, gf: 7, ga: 5, points: 7, isPersib: false },
-      { name: 'Zhejiang FC (CHN)', played: 4, won: 1, drawn: 0, lost: 3, gf: 2, ga: 5, points: 3, isPersib: false },
+      { name: 'PERSIB Bandung', played: 3, won: 2, drawn: 1, lost: 0, gf: 6, ga: 2, points: 7, isPersib: true },
+      { name: 'Jeonbuk Hyundai (KOR)', played: 3, won: 2, drawn: 0, lost: 1, gf: 5, ga: 3, points: 6, isPersib: false },
+      { name: 'Bangkok United (THA)', played: 3, won: 1, drawn: 0, lost: 2, gf: 3, ga: 5, points: 3, isPersib: false },
+      { name: 'Sydney FC (AUS)', played: 3, won: 0, drawn: 1, lost: 2, gf: 2, ga: 6, points: 1, isPersib: false },
     ];
 
-    const p1PersibGF = persibVsPortScore[0];
-    const p1PortGF = persibVsPortScore[1];
     const persib = table.find((t) => t.isPersib)!;
-    const port = table.find((t) => t.name.includes('Port FC'))!;
-    const lcs = table.find((t) => t.name.includes('Lion City'))!;
-    const zhejiang = table.find((t) => t.name.includes('Zhejiang'))!;
+    const jeonbuk = table.find((t) => t.name.includes('Jeonbuk'))!;
+    const bangkok = table.find((t) => t.name.includes('Bangkok'))!;
+    const sydney = table.find((t) => t.name.includes('Sydney'))!;
 
+    // Match 1: Persib vs Jeonbuk
     persib.played += 1;
-    port.played += 1;
-    persib.gf += p1PersibGF;
-    persib.ga += p1PortGF;
-    port.gf += p1PortGF;
-    port.ga += p1PersibGF;
+    jeonbuk.played += 1;
+    persib.gf += persibVsJeonbukScore[0];
+    persib.ga += persibVsJeonbukScore[1];
+    jeonbuk.gf += persibVsJeonbukScore[1];
+    jeonbuk.ga += persibVsJeonbukScore[0];
 
-    if (p1PersibGF > p1PortGF) {
+    if (persibVsJeonbukScore[0] > persibVsJeonbukScore[1]) {
       persib.won += 1;
       persib.points += 3;
-      port.lost += 1;
-    } else if (p1PersibGF === p1PortGF) {
+      jeonbuk.lost += 1;
+    } else if (persibVsJeonbukScore[0] === persibVsJeonbukScore[1]) {
       persib.drawn += 1;
       persib.points += 1;
-      port.drawn += 1;
-      port.points += 1;
+      jeonbuk.drawn += 1;
+      jeonbuk.points += 1;
     } else {
       persib.lost += 1;
-      port.won += 1;
-      port.points += 3;
+      jeonbuk.won += 1;
+      jeonbuk.points += 3;
     }
 
-    const p2PersibGF = persibVsZhejiangScore[0];
-    const p2ZhejiangGF = persibVsZhejiangScore[1];
+    // Match 2: Persib vs Bangkok United
     persib.played += 1;
-    zhejiang.played += 1;
-    persib.gf += p2PersibGF;
-    persib.ga += p2ZhejiangGF;
-    zhejiang.gf += p2ZhejiangGF;
-    zhejiang.ga += p2PersibGF;
+    bangkok.played += 1;
+    persib.gf += persibVsBangkokScore[0];
+    bangkok.ga += persibVsBangkokScore[0];
+    persib.ga += persibVsBangkokScore[1];
+    bangkok.gf += persibVsBangkokScore[1];
 
-    if (p2PersibGF > p2ZhejiangGF) {
+    if (persibVsBangkokScore[0] > persibVsBangkokScore[1]) {
       persib.won += 1;
       persib.points += 3;
-      zhejiang.lost += 1;
-    } else if (p2PersibGF === p2ZhejiangGF) {
+      bangkok.lost += 1;
+    } else if (persibVsBangkokScore[0] === persibVsBangkokScore[1]) {
       persib.drawn += 1;
       persib.points += 1;
-      zhejiang.drawn += 1;
-      zhejiang.points += 1;
+      bangkok.drawn += 1;
+      bangkok.points += 1;
     } else {
       persib.lost += 1;
-      zhejiang.won += 1;
-      zhejiang.points += 3;
+      bangkok.won += 1;
+      bangkok.points += 3;
     }
 
-    lcs.played += 1;
-    port.played += 1;
-    if (lionCityVsPort === 'WIN') {
-      lcs.won += 1;
-      lcs.points += 3;
-      lcs.gf += 2;
-      lcs.ga += 1;
-      port.lost += 1;
-      port.gf += 1;
-      port.ga += 2;
-    } else if (lionCityVsPort === 'DRAW') {
-      lcs.drawn += 1;
-      lcs.points += 1;
-      lcs.gf += 1;
-      lcs.ga += 1;
-      port.drawn += 1;
-      port.points += 1;
-      port.gf += 1;
-      port.ga += 1;
+    // Match 3: Jeonbuk vs Sydney FC
+    jeonbuk.played += 1;
+    sydney.played += 1;
+    if (jeonbukVsSydney === 'WIN') {
+      jeonbuk.won += 1;
+      jeonbuk.points += 3;
+      jeonbuk.gf += 2;
+      jeonbuk.ga += 0;
+      sydney.lost += 1;
+      sydney.ga += 2;
+    } else if (jeonbukVsSydney === 'DRAW') {
+      jeonbuk.drawn += 1;
+      jeonbuk.points += 1;
+      sydney.drawn += 1;
+      sydney.points += 1;
     } else {
-      port.won += 1;
-      port.points += 3;
-      port.gf += 2;
-      port.ga += 1;
-      lcs.lost += 1;
-      lcs.gf += 1;
-      lcs.ga += 2;
+      sydney.won += 1;
+      sydney.points += 3;
+      jeonbuk.lost += 1;
     }
 
     return table.sort((a, b) => {
@@ -136,17 +126,17 @@ export function ScenarioSimulator() {
           </div>
           <div>
             <h3 className="text-base font-bold tracking-tight flex items-center gap-2">
-              ACL Two Scenario Simulator
+              ACL Two 2026/2027 Scenario Simulator
               <span
                 className={`text-[10px] uppercase font-mono px-2 py-0.5 rounded-full ${
                   isPro ? 'bg-blue-950 text-cyan-300 border border-cyan-800' : 'bg-slate-100 text-slate-700'
                 }`}
               >
-                Grup F Kalkulator
+                Kalkulator Fase Grup Asia
               </span>
             </h3>
             <p className="text-xs text-slate-400">
-              Simulasi otomatis peluang Persib Bandung lolos ke Babak 16 Besar ACL Two
+              Kalkulasi peluang Persib Bandung asuhan Igor Tolic lolos ke Babak Gugur 16 Besar Asia
             </p>
           </div>
         </div>
@@ -166,7 +156,7 @@ export function ScenarioSimulator() {
             <>
               <CheckCircle2 className="w-4 h-4 text-emerald-400" />
               <span>
-                POSISI #{persibRank}: LOLOS KE BABAK 16 BESAR ({persibRank === 1 ? 'JUARA GRUP' : 'RUNNER-UP'})
+                POSISI #{persibRank}: LOLOS KE 16 BESAR ({persibRank === 1 ? 'JUARA GRUP' : 'RUNNER-UP'})
               </span>
             </>
           ) : (
@@ -185,18 +175,18 @@ export function ScenarioSimulator() {
           }`}
         >
           <div className="flex items-center justify-between text-xs font-bold mb-2.5">
-            <span className="text-blue-500">Matchday 5 (Home)</span>
+            <span className="text-blue-500">Matchday 4 (Home)</span>
             <span className="text-slate-400">Si Jalak Harupat</span>
           </div>
-          <div className="text-sm font-semibold mb-2">PERSIB vs Port FC</div>
+          <div className="text-sm font-semibold mb-2">PERSIB vs Jeonbuk Motors</div>
           <div className="flex items-center gap-2 mb-3">
             <button
               onClick={() => {
-                setPersibVsPort('WIN');
-                setPersibVsPortScore([2, 1]);
+                setPersibVsJeonbuk('WIN');
+                setPersibVsJeonbukScore([2, 1]);
               }}
               className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                persibVsPort === 'WIN'
+                persibVsJeonbuk === 'WIN'
                   ? 'bg-blue-600 text-white shadow-sm'
                   : isPro
                   ? 'bg-slate-800 text-slate-400'
@@ -207,11 +197,11 @@ export function ScenarioSimulator() {
             </button>
             <button
               onClick={() => {
-                setPersibVsPort('DRAW');
-                setPersibVsPortScore([1, 1]);
+                setPersibVsJeonbuk('DRAW');
+                setPersibVsJeonbukScore([1, 1]);
               }}
               className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                persibVsPort === 'DRAW'
+                persibVsJeonbuk === 'DRAW'
                   ? 'bg-amber-600 text-white shadow-sm'
                   : isPro
                   ? 'bg-slate-800 text-slate-400'
@@ -222,11 +212,11 @@ export function ScenarioSimulator() {
             </button>
             <button
               onClick={() => {
-                setPersibVsPort('LOSS');
-                setPersibVsPortScore([0, 1]);
+                setPersibVsJeonbuk('LOSS');
+                setPersibVsJeonbukScore([0, 1]);
               }}
               className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                persibVsPort === 'LOSS'
+                persibVsJeonbuk === 'LOSS'
                   ? 'bg-rose-600 text-white shadow-sm'
                   : isPro
                   ? 'bg-slate-800 text-slate-400'
@@ -237,7 +227,7 @@ export function ScenarioSimulator() {
             </button>
           </div>
           <div className="text-[11px] text-slate-400">
-            Skor simulasi: <span className="font-mono font-bold text-blue-400">{persibVsPortScore[0]} - {persibVsPortScore[1]}</span>
+            Skor simulasi: <span className="font-mono font-bold text-blue-400">{persibVsJeonbukScore[0]} - {persibVsJeonbukScore[1]}</span>
           </div>
         </div>
 
@@ -247,18 +237,18 @@ export function ScenarioSimulator() {
           }`}
         >
           <div className="flex items-center justify-between text-xs font-bold mb-2.5">
-            <span className="text-blue-500">Matchday 6 (Away)</span>
-            <span className="text-slate-400">Huanglong Sports</span>
+            <span className="text-blue-500">Matchday 5 (Away)</span>
+            <span className="text-slate-400">Thammasat Stadium</span>
           </div>
-          <div className="text-sm font-semibold mb-2">Zhejiang FC vs PERSIB</div>
+          <div className="text-sm font-semibold mb-2">Bangkok United vs PERSIB</div>
           <div className="flex items-center gap-2 mb-3">
             <button
               onClick={() => {
-                setPersibVsZhejiang('WIN');
-                setPersibVsZhejiangScore([2, 0]);
+                setPersibVsBangkok('WIN');
+                setPersibVsBangkokScore([2, 0]);
               }}
               className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                persibVsZhejiang === 'WIN'
+                persibVsBangkok === 'WIN'
                   ? 'bg-blue-600 text-white shadow-sm'
                   : isPro
                   ? 'bg-slate-800 text-slate-400'
@@ -269,11 +259,11 @@ export function ScenarioSimulator() {
             </button>
             <button
               onClick={() => {
-                setPersibVsZhejiang('DRAW');
-                setPersibVsZhejiangScore([1, 1]);
+                setPersibVsBangkok('DRAW');
+                setPersibVsBangkokScore([1, 1]);
               }}
               className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                persibVsZhejiang === 'DRAW'
+                persibVsBangkok === 'DRAW'
                   ? 'bg-amber-600 text-white shadow-sm'
                   : isPro
                   ? 'bg-slate-800 text-slate-400'
@@ -284,11 +274,11 @@ export function ScenarioSimulator() {
             </button>
             <button
               onClick={() => {
-                setPersibVsZhejiang('LOSS');
-                setPersibVsZhejiangScore([0, 1]);
+                setPersibVsBangkok('LOSS');
+                setPersibVsBangkokScore([0, 1]);
               }}
               className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                persibVsZhejiang === 'LOSS'
+                persibVsBangkok === 'LOSS'
                   ? 'bg-rose-600 text-white shadow-sm'
                   : isPro
                   ? 'bg-slate-800 text-slate-400'
@@ -299,7 +289,7 @@ export function ScenarioSimulator() {
             </button>
           </div>
           <div className="text-[11px] text-slate-400">
-            Skor simulasi: <span className="font-mono font-bold text-blue-400">{persibVsZhejiangScore[0]} - {persibVsZhejiangScore[1]}</span>
+            Skor simulasi: <span className="font-mono font-bold text-blue-400">{persibVsBangkokScore[0]} - {persibVsBangkokScore[1]}</span>
           </div>
         </div>
 
@@ -309,27 +299,27 @@ export function ScenarioSimulator() {
           }`}
         >
           <div className="flex items-center justify-between text-xs font-bold mb-2.5">
-            <span className="text-purple-400">Hasil Rival Grup F</span>
-            <span className="text-slate-400">Jalan Besar Stadium</span>
+            <span className="text-purple-400">Laga Rival Grup</span>
+            <span className="text-slate-400">Jeonju World Cup Stadium</span>
           </div>
-          <div className="text-sm font-semibold mb-2">Lion City vs Port FC</div>
+          <div className="text-sm font-semibold mb-2">Jeonbuk vs Sydney FC</div>
           <div className="flex items-center gap-2 mb-3">
             <button
-              onClick={() => setLionCityVsPort('WIN')}
+              onClick={() => setJeonbukVsSydney('WIN')}
               className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                lionCityVsPort === 'WIN'
+                jeonbukVsSydney === 'WIN'
                   ? 'bg-purple-600 text-white shadow-sm'
                   : isPro
                   ? 'bg-slate-800 text-slate-400'
                   : 'bg-white text-slate-600 border'
               }`}
             >
-              LCS Menang
+              Jeonbuk Menang
             </button>
             <button
-              onClick={() => setLionCityVsPort('DRAW')}
+              onClick={() => setJeonbukVsSydney('DRAW')}
               className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                lionCityVsPort === 'DRAW'
+                jeonbukVsSydney === 'DRAW'
                   ? 'bg-amber-600 text-white shadow-sm'
                   : isPro
                   ? 'bg-slate-800 text-slate-400'
@@ -339,20 +329,20 @@ export function ScenarioSimulator() {
               Imbang
             </button>
             <button
-              onClick={() => setLionCityVsPort('LOSS')}
+              onClick={() => setJeonbukVsSydney('LOSS')}
               className={`flex-1 py-1.5 rounded-lg text-xs font-bold transition-all ${
-                lionCityVsPort === 'LOSS'
+                jeonbukVsSydney === 'LOSS'
                   ? 'bg-indigo-600 text-white shadow-sm'
                   : isPro
                   ? 'bg-slate-800 text-slate-400'
                   : 'bg-white text-slate-600 border'
               }`}
             >
-              Port Menang
+              Sydney Menang
             </button>
           </div>
           <div className="text-[11px] text-slate-400">
-            Dampak: Menentukan persaingan selisih gol & peringkat akhir
+            Dampak: Menentukan persaingan selisih gol peringkat 1 dan 2
           </div>
         </div>
       </div>

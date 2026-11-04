@@ -10,7 +10,7 @@ export function Header() {
   const isPro = mode === 'pro';
 
   const hubs: { id: ActiveHub; label: string; icon: React.ReactNode; badge?: string }[] = [
-    { id: 'match-center', label: 'Match Center', icon: <Trophy className="w-4 h-4" />, badge: 'Liga 1 Juara' },
+    { id: 'match-center', label: 'Match Center', icon: <Trophy className="w-4 h-4" />, badge: 'Pekan 11 #1' },
     { id: 'roster', label: 'Roster & Fitness', icon: <Users className="w-4 h-4" /> },
     { id: 'transparency', label: 'Corporate & Finance', icon: <Building2 className="w-4 h-4" />, badge: 'Verified' },
   ];

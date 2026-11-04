@@ -4,9 +4,9 @@ import React, { useState } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import {
   INFRASTRUCTURE_LIST,
-  MANAGEMENT_MEMBERS,
-  FINANCIAL_OVERVIEW,
-  OFFICIAL_SQUAD_2024_2025,
+  MANAGEMENT_MEMBERS_2026_2027,
+  FINANCIAL_OVERVIEW_2026_2027,
+  OFFICIAL_SQUAD_2026_2027,
 } from '@/data/persib-data';
 import {
   Building2,
@@ -14,6 +14,7 @@ import {
   FileSpreadsheet,
   Droplets,
   SunMedium,
+  Award,
 } from 'lucide-react';
 
 export function CorporateTransparency() {
@@ -33,12 +34,17 @@ export function CorporateTransparency() {
       >
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-400/10 px-2 py-0.5 rounded border border-amber-400/20 flex items-center gap-1">
+                <Award className="w-3 h-3 text-amber-400" /> Standar Klub Profesional Musim 2026/2027
+              </span>
+            </div>
             <h2 className="text-xl font-black tracking-tight flex items-center gap-2">
               <Building2 className="w-5 h-5 text-blue-500" />
               Corporate & Club Element Transparency
             </h2>
             <p className="text-xs text-slate-400 mt-0.5">
-              Standar klub profesional: Audit kondisi rumput stadion, staf kepelatihan resmi, dan Transfer Ledger FFP
+              Transparansi resmi PT PBB: Struktur kepelatihan baru Igor Tolic & Bojan Hodak, stadion GBLA/SJH, dan ledger kontrak FFP
             </p>
           </div>
 
@@ -50,7 +56,7 @@ export function CorporateTransparency() {
             }`}
           >
             <ShieldCheck className="w-4 h-4 text-cyan-400" />
-            <span>Audit AFC & PT LIB 2024/2025</span>
+            <span>Audit AFC & PT LIB 2026/2027</span>
           </div>
         </div>
 
@@ -70,20 +76,6 @@ export function CorporateTransparency() {
             Infrastruktur Stadion & Lapangan
           </button>
           <button
-            onClick={() => setActiveSection('ffp')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wide transition-all ${
-              activeSection === 'ffp'
-                ? isPro
-                  ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]'
-                  : 'bg-blue-700 text-white shadow-sm'
-                : isPro
-                ? 'bg-slate-900 text-slate-400 hover:text-white'
-                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-            }`}
-          >
-            Financial Fair Play & Transfer Ledger
-          </button>
-          <button
             onClick={() => setActiveSection('management')}
             className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wide transition-all ${
               activeSection === 'management'
@@ -95,11 +87,26 @@ export function CorporateTransparency() {
                 : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
             }`}
           >
-            Struktur Manajemen & Staf Ahli
+            Struktur Manajemen & Staf Kepelatihan Baru
+          </button>
+          <button
+            onClick={() => setActiveSection('ffp')}
+            className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wide transition-all ${
+              activeSection === 'ffp'
+                ? isPro
+                  ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]'
+                  : 'bg-blue-700 text-white shadow-sm'
+                : isPro
+                ? 'bg-slate-900 text-slate-400 hover:text-white'
+                : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+            }`}
+          >
+            Financial Fair Play & Transfer Ledger (2026/2027)
           </button>
         </div>
       </div>
 
+      {/* Section 1: Infrastructure */}
       {activeSection === 'infrastructure' && (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {INFRASTRUCTURE_LIST.map((infra) => (
@@ -125,9 +132,9 @@ export function CorporateTransparency() {
                 </span>
               </div>
 
-              <div className="mt-4 p-3 rounded-xl bg-slate-900/60 dark:bg-slate-900/60 border border-slate-800">
+              <div className="mt-4 p-3 rounded-xl bg-slate-900/60 border border-slate-800">
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className="text-slate-400">Kondisi Rumput & Lapangan</span>
+                  <span className="text-slate-400">Kondisi Lapangan & Rumput</span>
                   <span className="font-mono font-bold text-cyan-400">{infra.conditionScore}/100</span>
                 </div>
                 <div className="w-full h-2 rounded-full bg-slate-800 overflow-hidden">
@@ -149,14 +156,14 @@ export function CorporateTransparency() {
                   <span className="text-slate-400 flex items-center gap-1.5">
                     <SunMedium className="w-3.5 h-3.5 text-amber-400" /> Penerangan Lampu
                   </span>
-                  <span className="font-mono font-bold text-slate-200">{infra.lightingLux} Lux (FIFA Std)</span>
+                  <span className="font-mono font-bold text-slate-200">{infra.lightingLux} Lux (Standar FIFA)</span>
                 </div>
                 <div className="flex items-center justify-between py-1 border-b border-slate-800/40">
-                  <span className="text-slate-400">Spesies Rumput</span>
+                  <span className="text-slate-400">Tipe Rumput</span>
                   <span className="font-semibold text-slate-300">{infra.pitchType}</span>
                 </div>
                 <div className="flex items-center justify-between py-1">
-                  <span className="text-slate-400">Kapasitas Tribun</span>
+                  <span className="text-slate-400">Kapasitas Kursi Tunggal</span>
                   <span className="font-semibold text-slate-300">{infra.capacity}</span>
                 </div>
               </div>
@@ -169,6 +176,50 @@ export function CorporateTransparency() {
         </div>
       )}
 
+      {/* Section 2: Management & Coach Staff */}
+      {activeSection === 'management' && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {MANAGEMENT_MEMBERS_2026_2027.map((person, idx) => (
+            <div
+              key={idx}
+              className={`p-5 rounded-2xl border transition-all ${
+                person.role.includes('Head Coach')
+                  ? 'bg-blue-950/60 border-cyan-400/60 shadow-[0_0_20px_rgba(34,211,238,0.2)]'
+                  : person.role.includes('Strategic Advisor')
+                  ? 'bg-amber-950/40 border-amber-400/40 shadow-[0_0_20px_rgba(251,191,36,0.15)]'
+                  : isPro
+                  ? 'bg-[#0A1220]/90 border-blue-900/40 hover:border-blue-500/50'
+                  : 'bg-white border-slate-200'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded-full bg-blue-950 text-cyan-300 border border-blue-800">
+                  {person.department}
+                </span>
+                {person.role.includes('Head Coach') && (
+                  <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-cyan-400 text-slate-950">
+                    Pelatih Utama Baru
+                  </span>
+                )}
+                {person.role.includes('Strategic Advisor') && (
+                  <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-amber-400 text-slate-950">
+                    Advisor Manajemen
+                  </span>
+                )}
+              </div>
+              <h4 className="text-base font-extrabold">{person.name}</h4>
+              <p className="text-xs text-blue-400 font-semibold mt-0.5">{person.role}</p>
+              <div className="mt-4 pt-3 border-t border-slate-800/50 text-xs text-slate-400 space-y-1">
+                <div>Kewarganegaraan: <strong className="text-slate-200">{person.nationality}</strong></div>
+                {person.license && <div>Lisensi Kepelatihan: <strong className="text-amber-300">{person.license}</strong></div>}
+                <div>Periode Pengabdian: {person.tenureStart}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Section 3: FFP & Transfer Ledger */}
       {activeSection === 'ffp' && (
         <div className="space-y-6">
           <div
@@ -181,38 +232,38 @@ export function CorporateTransparency() {
             <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-800/70">
               <div>
                 <span className="text-xs font-mono font-bold uppercase text-amber-400">
-                  PT Persib Bandung Bermartabat (Financial Overview)
+                  Financial Fair Play (FFP) Audit Musim 2026/2027
                 </span>
                 <h3 className="text-xl font-black tracking-tight mt-0.5">
-                  Kepatuhan Financial Fair Play (FFP): {FINANCIAL_OVERVIEW.ffpComplianceScore}%
+                  Tingkat Kepatuhan Regulasi Keuangan: {FINANCIAL_OVERVIEW_2026_2027.ffpComplianceScore}%
                 </h3>
               </div>
               <div className="flex items-center gap-2">
                 <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-400 border border-emerald-500/40">
-                  Grade A Klub Mandiri
+                  Grade A+ Klub Finansial Mandiri
                 </span>
               </div>
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
               <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                <div className="text-xs text-slate-400">Total Nilai Pasar Squad Resmi</div>
+                <div className="text-xs text-slate-400">Total Nilai Pasar Skuad Resmi 2026/2027</div>
                 <div className="text-2xl font-black font-mono text-cyan-400 mt-1">
-                  {FINANCIAL_OVERVIEW.totalSquadValue}
+                  {FINANCIAL_OVERVIEW_2026_2027.totalSquadValue}
                 </div>
                 <div className="text-[10px] text-slate-400 mt-1">Terverifikasi Transfermarkt & AFC</div>
               </div>
               <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
                 <div className="text-xs text-slate-400">Wage-to-Revenue Ratio</div>
                 <div className="text-2xl font-black font-mono text-emerald-400 mt-1">
-                  {FINANCIAL_OVERVIEW.wageToRevenueRatio}
+                  {FINANCIAL_OVERVIEW_2026_2027.wageToRevenueRatio}
                 </div>
-                <div className="text-[10px] text-slate-400 mt-1">Batas aman FIFA/AFC: &lt; 70%</div>
+                <div className="text-[10px] text-slate-400 mt-1">Batas aman FIFA/LIB: &lt; 70%</div>
               </div>
               <div className="p-4 rounded-xl bg-slate-900/60 border border-slate-800">
-                <div className="text-xs text-slate-400">Auditor Finansial Independen</div>
-                <div className="text-sm font-bold text-slate-200 mt-1">{FINANCIAL_OVERVIEW.auditedBy}</div>
-                <div className="text-[10px] text-slate-400 mt-1">Audit Resmi Musim {FINANCIAL_OVERVIEW.season}</div>
+                <div className="text-xs text-slate-400">Auditor Independen Terakreditasi</div>
+                <div className="text-sm font-bold text-slate-200 mt-1">{FINANCIAL_OVERVIEW_2026_2027.auditedBy}</div>
+                <div className="text-[10px] text-slate-400 mt-1">Audit Resmi Musim {FINANCIAL_OVERVIEW_2026_2027.season}</div>
               </div>
             </div>
           </div>
@@ -225,9 +276,9 @@ export function CorporateTransparency() {
             <div className="flex items-center justify-between mb-4">
               <h4 className="text-sm font-bold uppercase tracking-wider flex items-center gap-2">
                 <FileSpreadsheet className="w-4 h-4 text-blue-400" />
-                Ledger Durasi Kontrak & Nilai Pasar Pemain (Tanpa Spekulasi)
+                Ledger Durasi Kontrak & Nilai Pasar Skuad 2026/2027 (Terverifikasi)
               </h4>
-              <span className="text-xs text-slate-400 font-mono">Status: Terverifikasi</span>
+              <span className="text-xs text-slate-400 font-mono">100% Anti-Rumor</span>
             </div>
 
             <div className="overflow-x-auto">
@@ -236,6 +287,7 @@ export function CorporateTransparency() {
                   <tr className="border-b border-slate-800 text-slate-400">
                     <th className="py-2.5 px-3"># No</th>
                     <th className="py-2.5 px-3">Nama Pemain</th>
+                    <th className="py-2.5 px-3">Peran Skuad</th>
                     <th className="py-2.5 px-3">Posisi</th>
                     <th className="py-2.5 px-3">Kewarganegaraan</th>
                     <th className="py-2.5 px-3">Sisa Durasi Kontrak</th>
@@ -243,13 +295,24 @@ export function CorporateTransparency() {
                   </tr>
                 </thead>
                 <tbody>
-                  {OFFICIAL_SQUAD_2024_2025.map((player) => (
+                  {OFFICIAL_SQUAD_2026_2027.map((player) => (
                     <tr
                       key={player.id}
                       className="border-b border-slate-800/40 hover:bg-slate-800/30 transition-colors"
                     >
                       <td className="py-2.5 px-3 font-mono font-bold text-blue-400">#{player.number}</td>
                       <td className="py-2.5 px-3 font-semibold">{player.name}</td>
+                      <td className="py-2.5 px-3">
+                        <span
+                          className={`text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded ${
+                            player.squadRole === 'starting'
+                              ? 'bg-amber-400/20 text-amber-300 border border-amber-400/30'
+                              : 'bg-slate-800 text-slate-300'
+                          }`}
+                        >
+                          {player.squadRole === 'starting' ? 'Starting XI' : 'Cadangan'}
+                        </span>
+                      </td>
                       <td className="py-2.5 px-3 font-mono text-cyan-300">{player.position}</td>
                       <td className="py-2.5 px-3 text-slate-300">{player.nationality}</td>
                       <td className="py-2.5 px-3 font-mono text-amber-300">{player.contractUntil}</td>
@@ -262,32 +325,6 @@ export function CorporateTransparency() {
               </table>
             </div>
           </div>
-        </div>
-      )}
-
-      {activeSection === 'management' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-          {MANAGEMENT_MEMBERS.map((person, idx) => (
-            <div
-              key={idx}
-              className={`p-5 rounded-2xl border transition-all ${
-                isPro
-                  ? 'bg-[#0A1220]/90 border-blue-900/40 hover:border-blue-500/50'
-                  : 'bg-white border-slate-200'
-              }`}
-            >
-              <div className="text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded-full inline-block mb-2 bg-blue-950 text-cyan-300 border border-blue-800">
-                {person.department}
-              </div>
-              <h4 className="text-base font-extrabold">{person.name}</h4>
-              <p className="text-xs text-blue-400 font-semibold mt-0.5">{person.role}</p>
-              <div className="mt-4 pt-3 border-t border-slate-800/50 text-xs text-slate-400 space-y-1">
-                <div>Asal: {person.nationality}</div>
-                {person.license && <div>Lisensi: {person.license}</div>}
-                <div>Masa Pengabdian: {person.tenureStart}</div>
-              </div>
-            </div>
-          ))}
         </div>
       )}
     </div>

@@ -10,11 +10,11 @@ import {
   TacticalStep,
 } from '@/types/club';
 import {
-  OFFICIAL_SQUAD_2024_2025,
-  BRI_LIGA_1_STANDINGS,
-  ACL_GROUP_F_STANDINGS,
-  VERIFIED_FIXTURES,
-  BOJAN_HODAK_TACTICAL_PLAYBOOK,
+  OFFICIAL_SQUAD_2026_2027,
+  BRI_LIGA_1_STANDINGS_2026_2027,
+  ACL_GROUP_STANDINGS_2026_2027,
+  VERIFIED_FIXTURES_2026_2027,
+  IGOR_TOLIC_TACTICAL_PLAYBOOK,
 } from '@/data/persib-data';
 
 export type AppThemeState = 'minimal' | 'pro';
@@ -53,20 +53,19 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [activeHub, setActiveHub] = useState<ActiveHub>('match-center');
   const [activeTournament, setActiveTournament] = useState<TournamentKey>('liga1');
   const [matchDisplayMode, setMatchDisplayMode] = useState<MatchDisplayMode>('official_result');
-  const [players] = useState<Player[]>(OFFICIAL_SQUAD_2024_2025);
+  const [players] = useState<Player[]>(OFFICIAL_SQUAD_2026_2027);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [fixtures] = useState<MatchFixture[]>(VERIFIED_FIXTURES);
-  const [liga1Standings] = useState<LeagueStandingRow[]>(BRI_LIGA_1_STANDINGS);
-  const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_F_STANDINGS);
+  const [fixtures] = useState<MatchFixture[]>(VERIFIED_FIXTURES_2026_2027);
+  const [liga1Standings] = useState<LeagueStandingRow[]>(BRI_LIGA_1_STANDINGS_2026_2027);
+  const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_STANDINGS_2026_2027);
   const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
   const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
-  const lastVerifiedDate = 'Update Resmi PT LIB & AFC: Musim 2024/2025 (Terverifikasi)';
+  const lastVerifiedDate = 'Update Resmi PT LIB & AFC: Musim 2026/2027 (Pekan 11 - Faktual)';
 
   const toggleMode = () => {
     setMode((prev: AppThemeState) => (prev === 'minimal' ? 'pro' : 'minimal'));
   };
 
-  // PWA Service Worker Registration
   useEffect(() => {
     if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
       navigator.serviceWorker
@@ -84,7 +83,6 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Tactical animation interval (only runs when user explicitly presses PLAY)
   useEffect(() => {
     if (!isTacticsPlaying) return;
 
@@ -96,7 +94,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   }, [isTacticsPlaying]);
 
   const updateMatchSimulator = (simulatedPersibWon: boolean, simulatedGoalDiff: number) => {
-    const updated = ACL_GROUP_F_STANDINGS.map((team: GroupTeam) => {
+    const updated = ACL_GROUP_STANDINGS_2026_2027.map((team: GroupTeam) => {
       if (team.isPersib) {
         const extraPoints = simulatedPersibWon ? 3 : 1;
         return {
@@ -141,7 +139,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         liga1Standings,
         aclStandings,
         updateMatchSimulator,
-        tacticalPlaybook: BOJAN_HODAK_TACTICAL_PLAYBOOK,
+        tacticalPlaybook: IGOR_TOLIC_TACTICAL_PLAYBOOK,
         activeTacticalStep,
         setActiveTacticalStep,
         isTacticsPlaying,
