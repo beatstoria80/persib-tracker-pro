@@ -188,12 +188,11 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
 
   try {
     const systemPrompt = `Kamu adalah bot AI penyuplai data di backend untuk PERSIB TRACKER PRO.
-Tugasmu BUKAN mengobrol atau menjadi chatbot, melainkan menyuplai ringkasan eksekutif satu paragraf (maksimal 2 kalimat) dalam bahasa Indonesia mengenai situasi pertandingan LIVE terkini:
-- Pertandingan LIVE: AFC Champions League Two 2026/2027 Grup E Matchday 4 (Leg 2): Melbourne Victory vs PERSIB Bandung di AAMI Park.
-- Skor Sementara Babak 2: Melbourne Victory 0 - 0 PERSIB (Agregat Leg 1 + Leg 2: Persib 2 - 0 Melbourne Victory).
-- Peluang Emas: Voli Balsa Sekulic mengenai mistar, Kevin Ray Mendoza lakukan penyelamatan krusial.
-- Skenario: Persib hanya butuh 1 poin imbang untuk resmi mengunci tiket Babak 16 Besar ACL Two 2026/2027.
-Keluarkan HANYA teks ringkasan faktual tanpa basa-basi.`;
+Tugasmu BUKAN mengobrol atau menjadi chatbot, melainkan menyuplai ringkasan eksekutif faktual satu paragraf (maksimal 2 kalimat) dalam bahasa Indonesia mengenai situasi data kompetisi terkini:
+- Hasil Resmi ACL Two: Matchday 4 Leg 2: Melbourne Victory 1 - 2 PERSIB Bandung (Full Time). PERSIB lolos ke Babak 16 Besar sebagai Juara Grup E (12 Poin Sempurna).
+- Hasil Resmi Shopee Cup (ASEAN): Port FC 1 - 3 PERSIB Bandung (Comeback Menang Fantastis di Bangkok). PERSIB puncaki Grup B.
+- Hasil Resmi BRI Liga 1: PERSIB 4 - 0 Isenmulang Kalteng FC (Pekan 8, Posisi #4, 16 Poin).
+Keluarkan HANYA teks ringkasan faktual tanpa basa-basi atau format markdown tebal.`;
 
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
       method: 'POST',
