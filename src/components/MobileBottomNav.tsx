@@ -11,96 +11,67 @@ export function MobileBottomNav() {
   const navItems: { id: ActiveHub; label: string; icon: React.ReactNode; badge?: string }[] = [
     {
       id: 'match-center',
-      label: 'Match Center',
+      label: 'Matches',
       icon: <Trophy className="w-5 h-5" />,
       badge: '#4',
     },
     {
       id: 'roster',
-      label: 'Skuad & Medis',
+      label: 'Roster',
       icon: <Users className="w-5 h-5" />,
     },
     {
       id: 'transparency',
-      label: 'Klub & FFP',
+      label: 'Club FFP',
       icon: <Building2 className="w-5 h-5" />,
-      badge: 'FFP',
+      badge: '94%',
     },
   ];
 
   return (
-    <nav
-      className={`fixed bottom-0 inset-x-0 max-w-[430px] mx-auto z-40 transition-all duration-300 border-t backdrop-blur-xl ${
-        isPro
-          ? 'bg-[#060B13]/95 border-blue-900/60 shadow-[0_-8px_30px_rgba(0,102,255,0.15)] text-slate-200'
-          : 'bg-white/95 border-slate-300 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] text-slate-800'
-      }`}
-      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 6px)' }}
+    <div className="fixed bottom-0 inset-x-0 max-w-[430px] mx-auto z-40 px-5 pointer-events-none"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)' }}
     >
-      <div className="grid grid-cols-3 h-16 items-center px-2">
+      <nav
+        className={`pointer-events-auto rounded-full p-1.5 flex items-center justify-around shadow-2xl backdrop-blur-xl border transition-all ${
+          isPro
+            ? 'bg-[#121620]/95 border-slate-700/80 shadow-[0_10px_35px_rgba(0,0,0,0.6)]'
+            : 'bg-white/95 border-slate-200/90 shadow-[0_10px_30px_rgba(0,0,0,0.12)]'
+        }`}
+      >
         {navItems.map((item) => {
           const isActive = activeHub === item.id;
           return (
             <button
               key={item.id}
               onClick={() => setActiveHub(item.id)}
-              className="relative flex flex-col items-center justify-center py-1 transition-all group active:scale-95"
+              className={`relative flex items-center gap-2 py-2.5 px-4 rounded-full transition-all duration-200 active:scale-95 ${
+                isActive
+                  ? isPro
+                    ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 font-black'
+                    : 'bg-blue-700 text-white shadow-md shadow-blue-700/25 font-black'
+                  : isPro
+                  ? 'text-slate-400 hover:text-white'
+                  : 'text-slate-500 hover:text-slate-900'
+              }`}
             >
-              {/* Active Indicator Bar */}
+              <span className="shrink-0">{item.icon}</span>
               {isActive && (
-                <div
-                  className={`absolute -top-1 w-8 h-1 rounded-full ${
-                    isPro ? 'bg-cyan-400 shadow-[0_0_10px_#22d3ee]' : 'bg-blue-700'
-                  }`}
-                />
+                <span className="text-xs tracking-tight uppercase font-extrabold pr-1">
+                  {item.label}
+                </span>
               )}
-
-              <div
-                className={`relative p-1.5 rounded-xl transition-all ${
-                  isActive
-                    ? isPro
-                      ? 'bg-blue-600/25 text-cyan-300 ring-1 ring-cyan-400/40'
-                      : 'bg-blue-50 text-blue-800 ring-1 ring-blue-300'
-                    : isPro
-                    ? 'text-slate-400 group-hover:text-slate-200'
-                    : 'text-slate-500 group-hover:text-slate-900'
-                }`}
-              >
-                {item.icon}
-
-                {item.badge && (
-                  <span
-                    className={`absolute -top-1 -right-1 text-[8px] font-mono font-black px-1 py-0.2 rounded-full uppercase tracking-tighter ${
-                      isActive
-                        ? 'bg-amber-400 text-slate-950'
-                        : isPro
-                        ? 'bg-blue-950 text-cyan-300 border border-blue-800'
-                        : 'bg-blue-100 text-blue-800'
-                    }`}
-                  >
-                    {item.badge}
-                  </span>
-                )}
-              </div>
-
-              <span
-                className={`text-[10px] font-bold tracking-tight mt-0.5 ${
-                  isActive
-                    ? isPro
-                      ? 'text-cyan-300 font-extrabold'
-                      : 'text-blue-800 font-black'
-                    : isPro
-                    ? 'text-slate-400'
-                    : 'text-slate-600'
-                }`}
-              >
-                {item.label}
-              </span>
+              {item.badge && !isActive && (
+                <span className={`text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded-full ${
+                  isPro ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'
+                }`}>
+                  {item.badge}
+                </span>
+              )}
             </button>
           );
         })}
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }
-

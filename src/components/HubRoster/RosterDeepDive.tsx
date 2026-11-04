@@ -5,7 +5,7 @@ import { useClubTracker } from '@/context/ClubTrackerContext';
 import { PlayerCategory, Position, SquadRole, Player } from '@/types/club';
 import { PlayerDetailModal } from './PlayerDetailModal';
 import { FitnessTrackerBadge } from './FitnessTrackerBadge';
-import { Filter, ShieldCheck, ChevronRight, Activity, Award } from 'lucide-react';
+import { ShieldCheck, ChevronRight, Activity } from 'lucide-react';
 
 export function RosterDeepDive() {
   const { mode, players, selectedPlayer, setSelectedPlayer } = useClubTracker();
@@ -29,207 +29,151 @@ export function RosterDeepDive() {
   ).length;
 
   return (
-    <div className="space-y-4">
-      {/* Category & Filters Header */}
-      <div
-        className={`rounded-2xl border p-3.5 transition-all duration-300 ${
-          isPro
-            ? 'bg-[#0A111E]/90 border-blue-900/50 shadow-sm'
-            : 'bg-white border-slate-300 shadow-sm'
-        }`}
-      >
-        <div className="flex items-center justify-between mb-2">
-          <span
-            className={`text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border flex items-center gap-1 ${
-              isPro
-                ? 'text-amber-400 bg-amber-400/10 border-amber-400/20'
-                : 'text-amber-700 bg-amber-50 border-amber-300'
-            }`}
-          >
-            <Award className="w-3 h-3" /> Skuad Resmi 2026/2027
+    <div className="space-y-5">
+      {/* 1. Header Typography */}
+      <div className="pt-1">
+        <div className="flex items-center justify-between mb-1">
+          <span className="text-[11px] font-mono tracking-widest text-slate-400 font-bold uppercase">
+            Official Roster & Medical
           </span>
-
-          <div
+          <button
             onClick={() => setFitnessFilter((prev) => (prev === 'ALL' ? 'CEDERA_ONLY' : 'ALL'))}
-            className={`cursor-pointer flex items-center gap-1 px-2 py-0.5 rounded-lg text-[10px] font-bold border transition-all ${
-              injuredCount > 0
-                ? fitnessFilter === 'CEDERA_ONLY'
-                  ? 'bg-rose-600 text-white border-rose-600'
-                  : 'bg-rose-50 text-rose-700 border-rose-200'
-                : 'bg-emerald-50 text-emerald-700 border-emerald-200'
+            className={`cursor-pointer inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${
+              fitnessFilter === 'CEDERA_ONLY'
+                ? 'bg-rose-600 text-white shadow-sm'
+                : 'bg-rose-500/10 text-rose-500 border border-rose-500/20'
             }`}
           >
-            <Activity className="w-3 h-3 text-rose-500" />
+            <Activity className="w-3 h-3" />
             <span>{injuredCount} Medis</span>
-          </div>
-        </div>
-
-        {/* Category Horizontal Scrollable Chips */}
-        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
-          <button
-            onClick={() => {
-              setActiveCategory('senior');
-              setRoleFilter('ALL');
-            }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold tracking-tight transition-all shrink-0 ${
-              activeCategory === 'senior'
-                ? isPro
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-blue-700 text-white shadow-sm'
-                : isPro
-                ? 'bg-slate-900 text-slate-400'
-                : 'bg-slate-100 text-slate-700'
-            }`}
-          >
-            Tim Senior
-          </button>
-
-          <button
-            onClick={() => {
-              setActiveCategory('academy');
-              setRoleFilter('ALL');
-            }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold tracking-tight transition-all shrink-0 ${
-              activeCategory === 'academy'
-                ? isPro
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-blue-700 text-white shadow-sm'
-                : isPro
-                ? 'bg-slate-900 text-slate-400'
-                : 'bg-slate-100 text-slate-700'
-            }`}
-          >
-            Akademi U-20
-          </button>
-
-          <button
-            onClick={() => {
-              setActiveCategory('women');
-              setRoleFilter('ALL');
-            }}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold tracking-tight transition-all shrink-0 ${
-              activeCategory === 'women'
-                ? isPro
-                  ? 'bg-blue-600 text-white shadow-sm'
-                  : 'bg-blue-700 text-white shadow-sm'
-                : isPro
-                ? 'bg-slate-900 text-slate-400'
-                : 'bg-slate-100 text-slate-700'
-            }`}
-          >
-            Persib Putri
           </button>
         </div>
 
-        {/* Sub-Filters: Starting XI vs Substitutes */}
-        {activeCategory === 'senior' && (
-          <div className="flex items-center gap-1.5 mt-2.5 pt-2.5 border-t border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar text-[11px]">
-            <button
-              onClick={() => setRoleFilter('ALL')}
-              className={`px-2 py-0.5 rounded-lg font-semibold shrink-0 ${
-                roleFilter === 'ALL'
-                  ? 'bg-blue-700 text-white font-bold'
-                  : isPro
-                  ? 'bg-slate-800 text-slate-400'
-                  : 'bg-slate-100 text-slate-700'
-              }`}
-            >
-              Semua
-            </button>
-            <button
-              onClick={() => setRoleFilter('starting')}
-              className={`px-2 py-0.5 rounded-lg font-semibold shrink-0 ${
-                roleFilter === 'starting'
-                  ? 'bg-amber-400 text-slate-950 font-bold'
-                  : isPro
-                  ? 'bg-slate-800 text-slate-400'
-                  : 'bg-slate-100 text-slate-700'
-              }`}
-            >
-              Starting XI
-            </button>
-            <button
-              onClick={() => setRoleFilter('substitute')}
-              className={`px-2 py-0.5 rounded-lg font-semibold shrink-0 ${
-                roleFilter === 'substitute'
-                  ? 'bg-blue-600 text-white font-bold'
-                  : isPro
-                  ? 'bg-slate-800 text-slate-400'
-                  : 'bg-slate-100 text-slate-700'
-              }`}
-            >
-              Cadangan
-            </button>
-          </div>
-        )}
+        <h1 className="text-3xl font-black uppercase tracking-tight text-slate-950 dark:text-white">
+          SQUAD 26/27
+        </h1>
+      </div>
 
-        {/* Position Filter Chips */}
-        <div className="flex items-center gap-1 mt-2 overflow-x-auto no-scrollbar">
-          <span className="text-[10px] text-slate-500 mr-1 flex items-center gap-0.5 shrink-0">
-            <Filter className="w-3 h-3" /> Pos:
-          </span>
-          {(['ALL', 'FW', 'MF', 'DF', 'GK'] as const).map((pos) => (
+      {/* 2. Category Pills Selector (Minimalist Horizontal Bar) */}
+      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+        {(
+          [
+            { id: 'senior', label: 'Senior Team' },
+            { id: 'academy', label: 'Akademi U-20' },
+            { id: 'women', label: 'Persib Putri' },
+          ] as const
+        ).map((cat) => (
+          <button
+            key={cat.id}
+            onClick={() => {
+              setActiveCategory(cat.id);
+              setRoleFilter('ALL');
+            }}
+            className={`px-4 py-2 rounded-full text-xs font-black tracking-tight transition-all shrink-0 ${
+              activeCategory === cat.id
+                ? isPro
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
+                : isPro
+                ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
+                : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
+            }`}
+          >
+            {cat.label}
+          </button>
+        ))}
+      </div>
+
+      {/* 3. Sub-Filters: Starting XI vs Cadangan & Posisi */}
+      {activeCategory === 'senior' && (
+        <div
+          className={`p-1.5 rounded-2xl border flex items-center justify-between text-xs font-bold ${
+            isPro
+              ? 'bg-[#121620] border-slate-800 text-slate-400'
+              : 'bg-white border-slate-200 text-slate-600 shadow-xs'
+          }`}
+        >
+          {(
+            [
+              { id: 'ALL', label: 'Semua Skuad' },
+              { id: 'starting', label: 'Starting XI' },
+              { id: 'substitute', label: 'Cadangan' },
+            ] as const
+          ).map((role) => (
             <button
-              key={pos}
-              onClick={() => setSelectedPosition(pos)}
-              className={`px-2 py-0.5 rounded-md text-[10px] font-mono font-bold transition-all shrink-0 ${
-                selectedPosition === pos
+              key={role.id}
+              onClick={() => setRoleFilter(role.id)}
+              className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center ${
+                roleFilter === role.id
                   ? isPro
-                    ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-400/40'
-                    : 'bg-blue-100 text-blue-900 border border-blue-400'
-                  : isPro
-                  ? 'text-slate-400'
-                  : 'text-slate-600 bg-slate-50'
+                    ? 'bg-slate-800 text-cyan-300 shadow-sm'
+                    : 'bg-blue-50 text-blue-900 shadow-xs'
+                  : 'hover:text-slate-900 dark:hover:text-white'
               }`}
             >
-              {pos}
+              {role.label}
             </button>
           ))}
         </div>
+      )}
+
+      {/* Position Quick Filter Chips */}
+      <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+        {(['ALL', 'GK', 'DF', 'MF', 'FW'] as const).map((pos) => (
+          <button
+            key={pos}
+            onClick={() => setSelectedPosition(pos)}
+            className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold transition-all shrink-0 border ${
+              selectedPosition === pos
+                ? 'bg-slate-950 text-white dark:bg-white dark:text-slate-950 border-transparent shadow-xs'
+                : isPro
+                ? 'bg-[#121620] border-slate-800 text-slate-400'
+                : 'bg-white border-slate-200 text-slate-600'
+            }`}
+          >
+            {pos === 'ALL' ? 'Semua Posisi' : pos}
+          </button>
+        ))}
       </div>
 
-      {/* Mobile Player Cards Stack (1-column touch-friendly list) */}
-      <div className="space-y-2.5">
+      {/* 4. Player Cards Stack (Rounded [28px], Spacious, High Visual Punch) */}
+      <div className="space-y-3">
         {filteredPlayers.map((player: Player) => (
           <div
             key={player.id}
             onClick={() => setSelectedPlayer(player)}
-            className={`rounded-2xl border p-3.5 cursor-pointer active:scale-[0.98] transition-all ${
+            className={`rounded-[28px] border p-4 cursor-pointer active:scale-[0.98] transition-all shadow-md ${
               isPro
-                ? 'bg-[#0A1220]/90 border-blue-900/40 hover:border-cyan-400/60 shadow-sm'
-                : 'bg-white border-slate-300 hover:border-blue-600 shadow-xs'
+                ? 'bg-[#121620] border-slate-800 hover:border-cyan-400/50 shadow-[0_4px_20px_rgba(0,0,0,0.3)]'
+                : 'bg-white border-slate-200 hover:border-blue-600 shadow-[0_4px_15px_rgba(0,0,0,0.04)]'
             }`}
           >
             <div className="flex items-start justify-between">
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-3.5">
                 <div
-                  className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-sm shrink-0 ${
+                  className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-sm shrink-0 shadow-sm ${
                     player.squadRole === 'starting'
-                      ? 'bg-blue-700 text-amber-300 ring-2 ring-blue-500 shadow-sm'
+                      ? 'bg-blue-700 text-white ring-2 ring-blue-500/40 shadow-blue-700/20'
                       : isPro
-                      ? 'bg-slate-800 text-cyan-300'
-                      : 'bg-slate-100 text-slate-800 border border-slate-300'
+                      ? 'bg-slate-800 text-slate-300'
+                      : 'bg-slate-100 text-slate-700 border border-slate-200'
                   }`}
                 >
                   #{player.number}
                 </div>
                 <div>
-                  <div className="flex items-center gap-1.5">
-                    <h4
-                      className={`font-black text-sm tracking-tight ${
-                        isPro ? 'text-slate-100' : 'text-slate-950'
-                      }`}
-                    >
+                  <div className="flex items-center gap-2">
+                    <h4 className="font-black text-sm tracking-tight text-slate-950 dark:text-white">
                       {player.name}
                     </h4>
                     {player.squadRole === 'starting' && (
-                      <span className="text-[8px] font-mono font-bold uppercase px-1 rounded bg-amber-400 text-slate-950">
+                      <span className="text-[8px] font-mono font-black uppercase px-1.5 py-0.2 rounded-md bg-amber-400 text-slate-950">
                         XI
                       </span>
                     )}
                   </div>
-                  <div className="text-[11px] text-slate-500 font-medium">
-                    {player.nationality} • <strong className="text-blue-600">{player.position}</strong> ({player.age} thn)
+                  <div className="text-[11px] text-slate-400 font-medium mt-0.5">
+                    {player.nationality} • <strong className="text-blue-600 dark:text-cyan-400">{player.position}</strong> ({player.age} thn)
                   </div>
                 </div>
               </div>
@@ -239,7 +183,7 @@ export function RosterDeepDive() {
               )}
             </div>
 
-            <div className="mt-3 pt-2.5 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between text-[11px]">
+            <div className="mt-3.5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
               <FitnessTrackerBadge
                 status={player.fitness.status}
                 percentage={player.fitness.percentage}
@@ -247,9 +191,9 @@ export function RosterDeepDive() {
                 isPro={isPro}
               />
 
-              <div className="flex items-center gap-2 font-mono">
-                <span className="text-slate-500 text-[10px]">G: {player.stats.goals} | A: {player.stats.assists}</span>
-                <span className="text-blue-600 font-bold flex items-center">
+              <div className="flex items-center gap-3 font-mono">
+                <span className="text-slate-400 text-[10.5px]">G: {player.stats.goals} | A: {player.stats.assists}</span>
+                <span className="text-blue-600 dark:text-cyan-400 font-black flex items-center text-xs">
                   Detail <ChevronRight className="w-3.5 h-3.5" />
                 </span>
               </div>
