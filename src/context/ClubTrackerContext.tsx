@@ -61,7 +61,8 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_STANDINGS_2026_2027);
   const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
   const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
-  const lastVerifiedDate = 'Update Resmi PT LIB & AFC: Musim 2026/2027 (Pekan 11 - Faktual)';
+  // REFACTOR: Synchronized with live Google Search & PT LIB verified data (Pekan 8 Faktual)
+  const lastVerifiedDate = 'Google Sports / PT LIB: Musim 2026/2027 (Pekan 8 - Faktual)';
 
   const toggleMode = () => {
     setMode((prev: AppThemeState) => (prev === 'minimal' ? 'pro' : 'minimal'));

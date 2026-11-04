@@ -13,7 +13,7 @@ export function MobileBottomNav() {
       id: 'match-center',
       label: 'Match Center',
       icon: <Trophy className="w-5 h-5" />,
-      badge: '#1',
+      badge: '#4',
     },
     {
       id: 'roster',
@@ -103,3 +103,4 @@ export function MobileBottomNav() {
     </nav>
   );
 }
+

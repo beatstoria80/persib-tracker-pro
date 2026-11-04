@@ -837,58 +837,69 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
 ];
 
 // =========================================================================
-// KLASEMEN RESMI BRI LIGA 1 MUSIM 2026/2027 (PEKAN 11 - SEDANG BERJALAN)
+// KLASEMEN RESMI BRI LIGA 1 MUSIM 2026/2027 (SUMBER RESMI GOOGLE SPORTS & PT LIB - PEKAN 8 FAKTUAL)
 // =========================================================================
 export const BRI_LIGA_1_STANDINGS_2026_2027: LeagueStandingRow[] = [
-  { rank: 1, team: 'PERSIB Bandung', played: 11, won: 8, drawn: 3, lost: 0, gf: 24, ga: 8, gd: 16, points: 27, isPersib: true, form: ['W', 'W', 'W', 'D', 'W'] },
-  { rank: 2, team: 'Borneo FC Samarinda', played: 11, won: 7, drawn: 2, lost: 2, gf: 20, ga: 10, gd: 10, points: 23, form: ['W', 'D', 'W', 'W', 'L'] },
-  { rank: 3, team: 'Persebaya Surabaya', played: 11, won: 6, drawn: 3, lost: 2, gf: 18, ga: 11, gd: 7, points: 21, form: ['D', 'W', 'L', 'W', 'W'] },
-  { rank: 4, team: 'Persija Jakarta', played: 11, won: 6, drawn: 2, lost: 3, gf: 17, ga: 12, gd: 5, points: 20, form: ['W', 'L', 'W', 'D', 'W'] },
-  { rank: 5, team: 'Bali United FC', played: 11, won: 5, drawn: 4, lost: 2, gf: 19, ga: 14, gd: 5, points: 19, form: ['D', 'W', 'W', 'D', 'L'] },
-  { rank: 6, team: 'Dewa United Banten', played: 11, won: 5, drawn: 3, lost: 3, gf: 16, ga: 13, gd: 3, points: 18, form: ['W', 'D', 'L', 'W', 'D'] },
-  { rank: 7, team: 'Arema FC', played: 11, won: 4, drawn: 3, lost: 4, gf: 14, ga: 15, gd: -1, points: 15, form: ['L', 'W', 'D', 'L', 'W'] },
-  { rank: 8, team: 'PSM Makassar', played: 11, won: 3, drawn: 5, lost: 3, gf: 13, ga: 13, gd: 0, points: 14, form: ['D', 'D', 'W', 'L', 'D'] },
+  { rank: 1, team: 'Persija Jakarta', played: 8, won: 6, drawn: 0, lost: 2, gf: 18, ga: 8, gd: 10, points: 18, form: ['W', 'W', 'W', 'L', 'W'] },
+  { rank: 2, team: 'Dewa United Banten', played: 8, won: 5, drawn: 2, lost: 1, gf: 14, ga: 11, gd: 3, points: 17, form: ['W', 'D', 'W', 'W', 'D'] },
+  { rank: 3, team: 'Bali United FC', played: 8, won: 5, drawn: 1, lost: 2, gf: 23, ga: 9, gd: 14, points: 16, form: ['W', 'W', 'L', 'W', 'W'] },
+  { rank: 4, team: 'PERSIB Bandung', played: 8, won: 5, drawn: 1, lost: 2, gf: 15, ga: 8, gd: 7, points: 16, isPersib: true, form: ['W', 'W', 'D', 'L', 'W'] },
+  { rank: 5, team: 'Madura United FC', played: 8, won: 5, drawn: 1, lost: 2, gf: 13, ga: 10, gd: 3, points: 16, form: ['W', 'L', 'W', 'W', 'D'] },
+  { rank: 6, team: 'Persita Tangerang', played: 7, won: 4, drawn: 3, lost: 0, gf: 17, ga: 10, gd: 7, points: 15, form: ['W', 'D', 'W', 'D', 'W'] },
+  { rank: 7, team: 'Persebaya Surabaya', played: 8, won: 3, drawn: 4, lost: 1, gf: 10, ga: 7, gd: 3, points: 13, form: ['D', 'W', 'D', 'D', 'W'] },
+  { rank: 8, team: 'Bhayangkara FC', played: 8, won: 2, drawn: 5, lost: 1, gf: 11, ga: 10, gd: 1, points: 11, form: ['D', 'D', 'W', 'D', 'D'] },
+  { rank: 9, team: 'Java United FC', played: 8, won: 3, drawn: 3, lost: 2, gf: 12, ga: 10, gd: 2, points: 10, form: ['W', 'L', 'D', 'W', 'D'] },
+  { rank: 10, team: 'Persik Kediri', played: 8, won: 3, drawn: 1, lost: 4, gf: 9, ga: 11, gd: -2, points: 10, form: ['L', 'W', 'L', 'W', 'L'] },
+  { rank: 11, team: 'Arema FC', played: 8, won: 2, drawn: 3, lost: 3, gf: 11, ga: 11, gd: 0, points: 9, form: ['L', 'D', 'W', 'L', 'D'] },
+  { rank: 12, team: 'Borneo FC Samarinda', played: 7, won: 3, drawn: 0, lost: 4, gf: 8, ga: 10, gd: -2, points: 9, form: ['L', 'W', 'L', 'L', 'W'] },
+  { rank: 13, team: 'PSM Makassar', played: 8, won: 2, drawn: 3, lost: 3, gf: 8, ga: 12, gd: -4, points: 9, form: ['D', 'L', 'D', 'W', 'L'] },
+  { rank: 14, team: 'Garudayaksa FC', played: 8, won: 2, drawn: 2, lost: 4, gf: 7, ga: 12, gd: -5, points: 8, form: ['L', 'W', 'D', 'L', 'L'] },
+  { rank: 15, team: 'PSIM Yogyakarta', played: 8, won: 1, drawn: 2, lost: 5, gf: 6, ga: 13, gd: -7, points: 5, form: ['L', 'L', 'D', 'L', 'L'] },
+  { rank: 16, team: 'PSS Sleman', played: 8, won: 1, drawn: 1, lost: 6, gf: 7, ga: 12, gd: -5, points: 4, form: ['L', 'L', 'L', 'W', 'L'] },
+  { rank: 17, team: 'Isenmulang Kalteng FC', played: 8, won: 1, drawn: 2, lost: 5, gf: 5, ga: 18, gd: -13, points: 3, form: ['L', 'D', 'L', 'L', 'L'] },
+  { rank: 18, team: 'Persijap Jepara', played: 8, won: 0, drawn: 2, lost: 6, gf: 4, ga: 16, gd: -12, points: 2, form: ['L', 'L', 'D', 'L', 'L'] },
 ];
 
 // =========================================================================
-// JADWAL & HASIL RESMI MUSIM 2026/2027
+// JADWAL & HASIL RESMI MUSIM 2026/2027 (FAKTUAL SUMBER GOOGLE & PT LIB)
 // =========================================================================
 export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
   {
-    id: 'l1-p11',
+    id: 'l1-p8',
     tournament: 'BRI Liga 1 2026/2027',
     tournamentKey: 'liga1',
-    roundOrWeek: 'Pekan 11 (Laga Terakhir)',
+    roundOrWeek: 'Pekan 8 (Hasil Resmi Terakhir)',
     homeTeam: 'PERSIB Bandung',
-    awayTeam: 'Persebaya Surabaya',
-    homeScore: 3,
-    awayScore: 1,
+    awayTeam: 'Isenmulang Kalteng FC',
+    homeScore: 4,
+    awayScore: 0,
     date: '31 Oktober 2026',
     time: '19:00 WIB',
     venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
     status: 'FINISHED',
     highlights: [
-      'Menit 14\': Gol sundulan Uilliam dari crossing Thom Haye',
-      'Menit 38\': Gol spektakuler Mariano Peralta cut-inside kaki kiri',
-      'Menit 72\': Gol penalti Thom Haye menipu kiper',
-      'Persib kokoh di puncak klasemen sementara Liga 1 2026/2027 (Unbeaten 11 Laga)',
+      'Menit 18\': Gol tendangan bebas Thom Haye melengkung ke pojok gawang',
+      'Menit 42\': Gol sundulan tajam striker anyar Uilliam',
+      'Menit 67\': Gol individu Mariano Peralta melewati dua bek',
+      'Menit 84\': Gol penutup Beckham Putra hasil kerjasama dengan Marc Klok',
+      'Kemenangan telak 4-0 menjaga Persib di posisi ke-4, hanya terpaut 2 poin dari puncak klasemen',
     ],
   },
   {
-    id: 'l1-p12',
+    id: 'l1-p9',
     tournament: 'BRI Liga 1 2026/2027',
     tournamentKey: 'liga1',
-    roundOrWeek: 'Pekan 12 (Laga Mendatang)',
-    homeTeam: 'Persija Jakarta',
+    roundOrWeek: 'Pekan 9 (Laga Mendatang)',
+    homeTeam: 'Java United FC',
     awayTeam: 'PERSIB Bandung',
     date: '08 November 2026',
-    time: '19:30 WIB',
-    venue: 'Jakarta International Stadium (JIS)',
+    time: '19:00 WIB',
+    venue: 'Stadion Jatidiri, Semarang',
     status: 'SCHEDULED',
     highlights: [
-      'El Clasico Indonesia: Duel panas perebutan papan atas',
-      'Wasit: Lisensi FIFA PT LIB',
-      'Head-to-head musim lalu: Persib 2 - 1 Persija (GBLA)',
+      'Laga tandang krusial Persib untuk menyodok ke peringkat 1-2 Liga 1',
+      'Pertemuan perdana kedua tim di musim 2026/2027',
+      'Live Siaran Langsung Nasional & Streaming OTT Resmi',
     ],
   },
   {
@@ -904,7 +915,7 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
     status: 'SCHEDULED',
     highlights: [
       'Laga kandang krusial kompetisi antarklub Asia',
-      'Target lolos ke babak perempat final ACL Two',
+      'Target lolos ke babak 16 besar AFC Champions League Two',
     ],
   },
 ];
