@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import {
   MapPin,
@@ -9,9 +9,14 @@ import {
   Calendar,
   BarChart2,
   Users,
+  Play,
+  Pause,
+  Activity,
+  Radio,
 } from 'lucide-react';
 import { MatchFixture, Player, LeagueStandingRow, GroupTeam } from '@/types/club';
-import { getClubLogo } from '@/data/persib-data';
+import { getClubLogo, getPlayerAvatar } from '@/data/persib-data';
+import { PlayerAvatar } from '@/components/PlayerAvatar';
 
 // Helper component for Match Hero Card Official Emblem
 function ClubBadge({
@@ -88,6 +93,11 @@ export function MatchCenter() {
     shopeeCupStandings,
     players,
     setSelectedPlayer,
+    tacticalPlaybook,
+    activeTacticalStep,
+    setActiveTacticalStep,
+    isTacticsPlaying,
+    setIsTacticsPlaying,
   } = useClubTracker();
   const isPro = mode === 'pro';
 
@@ -95,6 +105,42 @@ export function MatchCenter() {
   const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup'>('featured');
   const [selectedFixtureId, setSelectedFixtureId] = useState<string>('acl2-26-md4-live');
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
+
+  // Real-time seconds ticking (00:01 interval clock ticker for live simulation)
+  const [liveSeconds, setLiveSeconds] = useState(42);
+  const [liveMinute, setLiveMinute] = useState(88);
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setLiveSeconds((prev) => {
+        if (prev >= 59) {
+          setLiveMinute((m) => (m >= 95 ? 88 : m + 1));
+          return 0;
+        }
+        return prev + 1;
+      });
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  // Auto-play tactical transition loop
+  useEffect(() => {
+    if (!isTacticsPlaying) return;
+    const interval = setInterval(() => {
+      setActiveTacticalStep(activeTacticalStep >= 3 ? 1 : activeTacticalStep + 1);
+    }, 3500);
+    return () => clearInterval(interval);
+  }, [isTacticsPlaying, activeTacticalStep, setActiveTacticalStep]);
+
+  const currentTacticalPhase =
+    (tacticalPlaybook && tacticalPlaybook.find((s) => s.step === activeTacticalStep)) ||
+    (tacticalPlaybook && tacticalPlaybook[0]) || {
+      step: 1,
+      label: 'Fase 1: Double Pivot Build-up (Haye & Klok Maestro)',
+      description: 'Thom Haye turun menjemput bola di antara bek tengah Barba & Matricardi.',
+      ballPos: { x: 34, y: 50 },
+      playerPositions: [],
+    };
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
   const currentFixture: MatchFixture =
@@ -930,100 +976,308 @@ export function MatchCenter() {
         </div>
       )}
 
-      {/* 6. Sub-Page Tab 4: Tactics Lineup List (Taktik XI & Skuad) */}
+      {/* 6. Sub-Page Tab 4: Interactive 2D Visual Pitch & Lineup List (Taktik XI & Skuad) */}
       {matchViewTab === 'lineup' && (
-        <div
-          className={`rounded-[32px] border p-5 shadow-xl transition-all ${
-            isPro
-              ? 'bg-[#121620] border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.5)]'
-              : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
-          }`}
-        >
-          <div className="pb-3 border-b border-slate-200 dark:border-slate-800 mb-4">
-            <h3 className="text-sm font-black tracking-tight">Formasi Taktis 4-2-3-1</h3>
-            <p className="text-[11px] text-slate-400 mt-0.5">
-              Head Coach: <strong className="text-blue-600 dark:text-cyan-400">Igor Tolic</strong> • Starting XI & Rotasi
-            </p>
-          </div>
+        <div className="space-y-4">
+          {/* Card Formasi Visual Lapangan (Interactive 2D Football Pitch) */}
+          <div
+            className={`rounded-[32px] border p-4 sm:p-5 shadow-2xl transition-all overflow-hidden ${
+              isPro
+                ? 'bg-[#121620] border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.5)]'
+                : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
+            }`}
+          >
+            {/* Header Formasi & Live Clock Ticker */}
+            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
+              <div>
+                <div className="flex items-center gap-2">
+                  <h3 className="text-sm font-black tracking-tight text-slate-950 dark:text-white">
+                    Formasi Visual 4-2-3-1
+                  </h3>
+                  <span className="px-2 py-0.5 rounded-full bg-blue-700 text-white font-mono text-[9px] font-black uppercase">
+                    Igor Tolic
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Posisi spasial & pergerakan taktis real-time per detik
+                </p>
+              </div>
 
-          <div className="space-y-4">
-            <div>
-              <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-amber-500">
-                11 Pemain Pertama (Starting XI)
-              </h4>
-              <div className="space-y-2">
-                {startingXI.map((player: Player) => (
-                  <div
-                    key={player.id}
-                    onClick={() => setSelectedPlayer(player)}
-                    className={`flex items-center justify-between p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
-                      isPro
-                        ? 'bg-slate-900/80 border-slate-800 hover:border-cyan-400/50'
-                        : 'bg-slate-50 border-slate-200 hover:border-blue-600 shadow-xs'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <span className="w-8 h-8 rounded-xl bg-blue-700 text-white font-mono font-black text-xs flex items-center justify-center shrink-0">
-                        #{player.number}
-                      </span>
-                      <div>
-                        <div className="text-xs font-black">{player.name}</div>
-                        <div className="text-[10px] text-slate-400 font-medium">
-                          {player.position} • {player.nationality}
-                        </div>
-                      </div>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono text-emerald-500 font-bold">
-                        {player.fitness.percentage}% Fit
-                      </span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
-                    </div>
-                  </div>
-                ))}
+              {/* Live Match Clock Ticker (Ticking every second) */}
+              <div className="flex items-center gap-2">
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400">
+                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
+                  <Radio className="w-3 h-3 animate-pulse" />
+                  <span className="font-mono font-black text-xs">
+                    {liveMinute}:{String(liveSeconds).padStart(2, '0')}
+                  </span>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsTacticsPlaying((prev) => !prev)}
+                  className={`p-2 rounded-xl flex items-center justify-center transition-all ${
+                    isTacticsPlaying
+                      ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+                      : isPro
+                      ? 'bg-slate-800 text-cyan-300 hover:bg-slate-700'
+                      : 'bg-slate-100 text-blue-700 hover:bg-slate-200'
+                  }`}
+                  title={isTacticsPlaying ? 'Jeda Simulasi Taktik' : 'Putar Siklus Taktik Otomatis'}
+                >
+                  {isTacticsPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                </button>
               </div>
             </div>
 
-            <div>
-              <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-slate-400">
-                Pemain Pengganti & Rotasi (Substitutes)
-              </h4>
-              <div className="space-y-2">
-                {substitutes.map((player: Player) => (
+            {/* Tactical Phase Selector Tabs */}
+            <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 mb-3 text-center">
+              {[
+                { step: 1, label: 'Fase 1: Build-Up' },
+                { step: 2, label: 'Fase 2: Flank Overload' },
+                { step: 3, label: 'Fase 3: Box Finishing' },
+              ].map((phase) => (
+                <button
+                  key={phase.step}
+                  type="button"
+                  onClick={() => {
+                    setIsTacticsPlaying(false);
+                    setActiveTacticalStep(phase.step);
+                  }}
+                  className={`py-1.5 px-2 rounded-xl text-[10px] font-black transition-all ${
+                    activeTacticalStep === phase.step
+                      ? 'bg-blue-600 text-white shadow-sm'
+                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                  }`}
+                >
+                  {phase.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Tactical Phase Briefing Card */}
+            <div
+              className={`p-2.5 rounded-2xl border text-xs mb-3 transition-all ${
+                isPro
+                  ? 'bg-blue-950/20 border-blue-900/50 text-cyan-200'
+                  : 'bg-blue-50/70 border-blue-200 text-blue-950'
+              }`}
+            >
+              <div className="flex items-center gap-1.5 font-bold text-[11px] text-blue-600 dark:text-cyan-400">
+                <Activity className="w-3.5 h-3.5" />
+                <span>{currentTacticalPhase.label}</span>
+              </div>
+              <p className="text-[10px] mt-1 text-slate-600 dark:text-slate-300 leading-relaxed">
+                {currentTacticalPhase.description}
+              </p>
+            </div>
+
+            {/* 2D Green Football Pitch Canvas */}
+            <div className="relative w-full h-[450px] rounded-2xl bg-gradient-to-b from-emerald-950 via-emerald-800 to-emerald-950 border-2 border-emerald-500/50 overflow-hidden shadow-inner select-none">
+              {/* Pitch Grass Stripes */}
+              <div className="absolute inset-0 flex flex-col pointer-events-none opacity-20">
+                <div className="flex-1 bg-white/5" />
+                <div className="flex-1 bg-transparent" />
+                <div className="flex-1 bg-white/5" />
+                <div className="flex-1 bg-transparent" />
+                <div className="flex-1 bg-white/5" />
+                <div className="flex-1 bg-transparent" />
+              </div>
+
+              {/* Pitch White Markings */}
+              {/* Outer Inset Border */}
+              <div className="absolute inset-2 border border-white/30 rounded-xl pointer-events-none" />
+
+              {/* Halfway Line */}
+              <div className="absolute top-1/2 left-2 right-2 h-[1px] bg-white/30 pointer-events-none" />
+
+              {/* Center Circle */}
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border border-white/30 pointer-events-none flex items-center justify-center">
+                <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
+              </div>
+
+              {/* Top Penalty Area (Opponent Box) */}
+              <div className="absolute top-2 left-1/2 -translate-x-1/2 w-44 h-20 border-b border-x border-white/30 pointer-events-none">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-8 border-b border-x border-white/30" />
+              </div>
+
+              {/* Bottom Penalty Area (Persib Box) */}
+              <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-44 h-20 border-t border-x border-white/30 pointer-events-none">
+                <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-20 h-8 border-t border-x border-white/30" />
+              </div>
+
+              {/* Gliding Animated Football ⚽ */}
+              {currentTacticalPhase.ballPos && (
+                <div
+                  className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ease-out z-20 pointer-events-none"
+                  style={{
+                    bottom: `${currentTacticalPhase.ballPos.x}%`,
+                    left: `${currentTacticalPhase.ballPos.y}%`,
+                  }}
+                >
+                  <span className="inline-block text-base filter drop-shadow-md animate-bounce">
+                    ⚽
+                  </span>
+                </div>
+              )}
+
+              {/* 11 Starting Players Position Nodes with Verified Profile Photos */}
+              {currentTacticalPhase.playerPositions?.map((pos) => {
+                const fullPlayer = players.find(
+                  (p) => p.number === pos.number || p.name.toLowerCase().includes(pos.name.toLowerCase())
+                );
+
+                return (
                   <div
-                    key={player.id}
-                    onClick={() => setSelectedPlayer(player)}
-                    className={`flex items-center justify-between p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
-                      isPro
-                        ? 'bg-slate-900/40 border-slate-800/80 hover:border-slate-700'
-                        : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
-                    }`}
+                    key={pos.id}
+                    onClick={() => {
+                      if (fullPlayer) setSelectedPlayer(fullPlayer);
+                    }}
+                    className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer transition-all duration-700 ease-out group z-10 hover:z-30 active:scale-95"
+                    style={{
+                      bottom: `${pos.x}%`,
+                      left: `${pos.y}%`,
+                    }}
                   >
-                    <div className="flex items-center gap-3">
-                      <span
-                        className={`w-8 h-8 rounded-xl font-mono font-black text-xs flex items-center justify-center shrink-0 ${
-                          isPro
-                            ? 'bg-slate-800 text-slate-300'
-                            : 'bg-slate-100 text-slate-700'
-                        }`}
-                      >
-                        #{player.number}
+                    <div className="relative">
+                      {/* Round Player Avatar Node */}
+                      <div className="w-10 h-10 rounded-full ring-2 ring-white/95 shadow-xl overflow-hidden bg-gradient-to-br from-blue-700 to-slate-900 group-hover:scale-110 group-hover:ring-cyan-300 transition-all flex items-center justify-center">
+                        <img
+                          src={getPlayerAvatar(pos.name)}
+                          alt={pos.name}
+                          className="w-full h-full object-cover object-top select-none"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLElement).style.display = 'none';
+                          }}
+                          loading="lazy"
+                        />
+                        <span className="font-mono font-black text-[10px] text-white absolute">
+                          #{pos.number}
+                        </span>
+                      </div>
+
+                      {/* Number Badge */}
+                      <span className="absolute -bottom-1 -right-1 bg-blue-700 text-white font-mono text-[8px] font-black px-1 rounded-full border border-white shadow-xs">
+                        {pos.number}
                       </span>
-                      <div>
-                        <div className="text-xs font-bold">{player.name}</div>
-                        <div className="text-[10px] text-slate-400 font-medium">
-                          {player.position} • {player.nationality}
+                    </div>
+
+                    {/* Player Name Pill */}
+                    <span className="mt-1 px-1.5 py-0.5 rounded-md bg-black/80 backdrop-blur-xs text-[9px] font-bold text-white shadow-md whitespace-nowrap tracking-tight group-hover:bg-blue-700 transition-colors">
+                      {pos.name}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+
+            <div className="mt-2.5 text-center">
+              <span className="text-[10px] font-mono text-slate-600 dark:text-slate-400">
+                💡 Ketuk foto pemain di lapangan untuk melihat profil medis & statistik lengkap
+              </span>
+            </div>
+          </div>
+
+          {/* 11 Pemain Pertama (Starting XI) & Substitutes Card */}
+          <div
+            className={`rounded-[32px] border p-5 shadow-xl transition-all ${
+              isPro
+                ? 'bg-[#121620] border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.5)]'
+                : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
+            }`}
+          >
+            <div className="pb-3 border-b border-slate-200 dark:border-slate-800 mb-4">
+              <h3 className="text-sm font-black tracking-tight">Daftar Skuad & Rating Fisik</h3>
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                Head Coach: <strong className="text-blue-600 dark:text-cyan-400">Igor Tolic</strong> • Starting XI & Rotasi
+              </p>
+            </div>
+
+            <div className="space-y-4">
+              {/* Starting XI Section */}
+              <div>
+                <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-amber-500 flex items-center justify-between">
+                  <span>11 Pemain Pertama (Starting XI)</span>
+                  <span className="text-emerald-500 font-bold">100% Siap Tempur</span>
+                </h4>
+                <div className="space-y-2">
+                  {startingXI.map((player: Player) => (
+                    <div
+                      key={player.id}
+                      onClick={() => setSelectedPlayer(player)}
+                      className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
+                        isPro
+                          ? 'bg-slate-900/80 border-slate-800 hover:border-cyan-400/50'
+                          : 'bg-slate-50 border-slate-200 hover:border-blue-600 shadow-xs'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <PlayerAvatar
+                          name={player.name}
+                          number={player.number}
+                          avatarUrl={player.avatarUrl}
+                          size="md"
+                        />
+                        <div>
+                          <div className="text-xs font-black">{player.name}</div>
+                          <div className="text-[10px] text-slate-400 font-medium">
+                            <span className="font-mono font-bold text-blue-600 dark:text-cyan-400">
+                              {player.position}
+                            </span>{' '}
+                            • {player.nationality} • {player.marketValue}
+                          </div>
                         </div>
                       </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-mono text-emerald-500 font-bold">
+                          {player.fitness.percentage}% Fit
+                        </span>
+                        <ChevronRight className="w-4 h-4 text-slate-400" />
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono text-emerald-500 font-bold">
-                        {player.fitness.percentage}% Fit
-                      </span>
-                      <ChevronRight className="w-4 h-4 text-slate-400" />
+                  ))}
+                </div>
+              </div>
+
+              {/* Substitutes Section */}
+              <div>
+                <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-slate-400">
+                  Pemain Pengganti & Rotasi (Substitutes)
+                </h4>
+                <div className="space-y-2">
+                  {substitutes.map((player: Player) => (
+                    <div
+                      key={player.id}
+                      onClick={() => setSelectedPlayer(player)}
+                      className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
+                        isPro
+                          ? 'bg-slate-900/40 border-slate-800/80 hover:border-slate-700'
+                          : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
+                      }`}
+                    >
+                      <div className="flex items-center gap-3">
+                        <PlayerAvatar
+                          name={player.name}
+                          number={player.number}
+                          avatarUrl={player.avatarUrl}
+                          size="md"
+                        />
+                        <div>
+                          <div className="text-xs font-bold">{player.name}</div>
+                          <div className="text-[10px] text-slate-400 font-medium">
+                            <span className="font-mono font-bold text-slate-500">{player.position}</span> •{' '}
+                            {player.nationality}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <span className="text-[11px] font-mono text-emerald-500 font-bold">
+                          {player.fitness.percentage}% Fit
+                        </span>
+                        <ChevronRight className="w-4 h-4 text-slate-400" />
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
               </div>
             </div>
           </div>

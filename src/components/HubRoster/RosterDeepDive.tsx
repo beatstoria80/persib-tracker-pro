@@ -6,6 +6,7 @@ import { PlayerCategory, Position, SquadRole, Player } from '@/types/club';
 import { PlayerDetailModal } from './PlayerDetailModal';
 import { FitnessTrackerBadge } from './FitnessTrackerBadge';
 import { ShieldCheck, ChevronRight, Activity } from 'lucide-react';
+import { PlayerAvatar } from '@/components/PlayerAvatar';
 
 export function RosterDeepDive() {
   const { mode, players, selectedPlayer, setSelectedPlayer } = useClubTracker();
@@ -150,17 +151,12 @@ export function RosterDeepDive() {
           >
             <div className="flex items-start justify-between">
               <div className="flex items-center gap-3.5">
-                <div
-                  className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-sm shrink-0 shadow-sm ${
-                    player.squadRole === 'starting'
-                      ? 'bg-blue-700 text-white ring-2 ring-blue-500/40 shadow-blue-700/20'
-                      : isPro
-                      ? 'bg-slate-800 text-slate-300'
-                      : 'bg-slate-100 text-slate-700 border border-slate-200'
-                  }`}
-                >
-                  #{player.number}
-                </div>
+                <PlayerAvatar
+                  name={player.name}
+                  number={player.number}
+                  avatarUrl={player.avatarUrl}
+                  size="md"
+                />
                 <div>
                   <div className="flex items-center gap-2">
                     <h4 className="font-black text-sm tracking-tight text-slate-950 dark:text-white">

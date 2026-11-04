@@ -5,6 +5,7 @@ import { Player } from '@/types/club';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { X, ShieldCheck, Calendar, DollarSign, Activity, CheckCircle2, AlertCircle } from 'lucide-react';
 import { FitnessTrackerBadge } from './FitnessTrackerBadge';
+import { PlayerAvatar } from '@/components/PlayerAvatar';
 
 interface ModalProps {
   player: Player | null;
@@ -37,18 +38,13 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
             isPro ? 'border-slate-800 bg-slate-900/60' : 'border-slate-200 bg-slate-50'
           }`}
         >
-          <div className="flex items-center gap-2.5">
-            <div
-              className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-base shrink-0 ${
-                player.squadRole === 'starting'
-                  ? 'bg-blue-600 text-amber-300 ring-2 ring-cyan-400'
-                  : isPro
-                  ? 'bg-slate-800 text-cyan-300'
-                  : 'bg-blue-700 text-white shadow-sm'
-              }`}
-            >
-              #{player.number}
-            </div>
+          <div className="flex items-center gap-3">
+            <PlayerAvatar
+              name={player.name}
+              number={player.number}
+              avatarUrl={player.avatarUrl}
+              size="lg"
+            />
             <div>
               <div className="flex items-center gap-1.5">
                 <h3 className="text-base font-black tracking-tight">{player.name}</h3>
