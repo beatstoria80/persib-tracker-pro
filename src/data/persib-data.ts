@@ -906,32 +906,32 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
     id: 'acl2-26-md4-live',
     tournament: 'AFC Champions League Two 2026/2027',
     tournamentKey: 'acl2',
-    roundOrWeek: 'Matchday 4 Grup E (Leg 2) • SEDANG LIVE',
+    roundOrWeek: 'Matchday 4 Grup E (Leg 2 - Full Time)',
     homeTeam: 'Melbourne Victory (AUS)',
     awayTeam: 'PERSIB Bandung (IDN)',
-    homeScore: 0,
-    awayScore: 0,
-    date: '04 November 2026 (Hari Ini)',
-    time: 'Sedang Berlangsung (Babak 2)',
+    homeScore: 1,
+    awayScore: 2,
+    date: '04 November 2026',
+    time: 'Full Time (FT)',
     venue: 'AAMI Park (Melbourne Rectangular Stadium), Australia',
-    status: 'LIVE',
-    liveMinute: "74'",
-    aggregateScore: 'Persib 2 - 0 Melbourne Victory (Agregat Leg 1 + Leg 2)',
+    status: 'FINISHED',
+    aggregateScore: 'Persib 4 - 1 Melbourne Victory (Agregat Leg 1 [2-0] & Leg 2 [1-2])',
     highlights: [
-      '🔴 STATUS REAL-TIME: Babak ke-2 sedang berlangsung sengit di AAMI Park, Melbourne',
-      'Leg 1 (28 Okt 2026): Persib Bandung 2 - 0 Melbourne Victory (Brace Balsa Sekulic)',
-      'Menit 38\': Voli geledek Balsa Sekulic membentur mistar gawang Melbourne Victory',
-      'Menit 59\': Penyelamatan terbang krusial Kevin Ray Mendoza gagalkan peluang emas sundulan Melbourne',
-      'SKENARIO LOLOS: Hasil imbang (1 poin) sudah cukup mengunci tiket otomatis PERSIB ke Babak 16 Besar ACL Two 2026/2027!',
+      'FULL TIME: Kemenangan dramatis comeback 1-2 Persib Bandung di AAMI Park, Melbourne!',
+      'Menit 71\': Gol pembuka Melbourne Victory',
+      'Menit 85\': Gol penyama kedudukan krusial Luka Menalo membakar semangat Maung Bandung',
+      'Menit 90+2\': Gol penentu kemenangan dramatis Persib mengunci 3 poin penuh di Australia',
+      'REKOR SEMPURNA: 4 Laga, 4 Kemenangan (12 Poin). PERSIB Bandung resmi lolos ke Babak 16 Besar sebagai Juara Grup E!',
     ],
     events: [
       { minute: "1'", type: 'chance', text: 'Kick-off babak pertama dimulai di AAMI Park' },
-      { minute: "24'", type: 'chance', text: 'Thom Haye melepaskan umpan terobosan tajam kepada Uilliam' },
-      { minute: "38'", type: 'chance', text: 'Peluang emas! Tendangan voli Balsa Sekulic menghantam mistar gawang' },
-      { minute: "45+2'", type: 'chance', text: 'Peluit akhir babak pertama: Melbourne Victory 0 - 0 PERSIB' },
-      { minute: "59'", type: 'chance', text: 'Super save Kevin Ray Mendoza menepis tembakan jarak dekat' },
-      { minute: "68'", type: 'sub', text: 'Pergantian taktis: Marc Klok memperkuat transisi lini tengah' },
-      { minute: "74'", type: 'chance', text: 'Persib mempertahankan dominasi penguasaan bola (54%) di AAMI Park' },
+      { minute: "38'", type: 'chance', text: 'Peluang emas voli Balsa Sekulic membentur mistar gawang' },
+      { minute: "45+2'", type: 'chance', text: 'Babak pertama berakhir 0-0 dengan dominasi Persib' },
+      { minute: "59'", type: 'chance', text: 'Super save Kevin Ray Mendoza menepis sundulan lawan' },
+      { minute: "71'", type: 'goal', text: 'Gol! Melbourne Victory unggul 1-0 lewat skema serangan balik cepat' },
+      { minute: "85'", type: 'goal', text: 'GOOOL! Luka Menalo menyamakan kedudukan 1-1 lewat tembakan terukur!' },
+      { minute: "90+2'", type: 'goal', text: 'GOOOL KEMENANGAN! Persib membalikkan skor 1-2 di masa injury time!' },
+      { minute: "90+5'", type: 'chance', text: 'Peluit panjang berbunyi! Melbourne Victory 1 - 2 PERSIB Bandung (FT)' },
     ],
   },
   {
@@ -972,11 +972,11 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
 ];
 
 // =========================================================================
-// ACL TWO 2026/2027 GROUP STANDINGS (GRUP E - FAKTUAL REALTIME)
+// ACL TWO 2026/2027 GROUP STANDINGS (GRUP E - FAKTUAL HASIL MATCHDAY 4)
 // =========================================================================
 export const ACL_GROUP_STANDINGS_2026_2027: GroupTeam[] = [
-  { name: 'PERSIB Bandung (IDN)', played: 4, won: 3, drawn: 1, lost: 0, gf: 6, ga: 0, points: 10, isPersib: true },
-  { name: 'Melbourne Victory (AUS)', played: 4, won: 1, drawn: 2, lost: 1, gf: 4, ga: 4, points: 5 },
+  { name: 'PERSIB Bandung (IDN)', played: 4, won: 4, drawn: 0, lost: 0, gf: 8, ga: 1, points: 12, isPersib: true },
+  { name: 'Melbourne Victory (AUS)', played: 4, won: 1, drawn: 1, lost: 2, gf: 5, ga: 6, points: 4 },
   { name: 'Bangkok United (THA)', played: 4, won: 1, drawn: 1, lost: 2, gf: 4, ga: 6, points: 4 },
   { name: 'Kaya FC-Iloilo (PHI)', played: 4, won: 0, drawn: 2, lost: 2, gf: 2, ga: 6, points: 2 },
 ];

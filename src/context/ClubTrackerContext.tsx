@@ -69,7 +69,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [isGroqSyncing, setIsGroqSyncing] = useState<boolean>(false);
   const [lastSyncedAt, setLastSyncedAt] = useState<string>('Live Synced');
   const [groqBulletin, setGroqBulletin] = useState<string>(
-    '🔴 LIVE ACL TWO (Babak 2): Melbourne Victory 0 - 0 PERSIB (Agregat 0-2). Persib mengunci posisi puncak Grup E (10 Poin) & lolos ke Babak 16 Besar!'
+    '🏆 HASIL AKHIR ACL TWO: Melbourne Victory 1 - 2 PERSIB Bandung (FT)! Comeback dramatis gol Luka Menalo (85\') dan masa injury time (90+2\') bawa Persib raih 12 poin sempurna & lolos ke Babak 16 Besar sebagai Juara Grup E!'
   );
 
   const lastVerifiedDate = 'AFC Live Center & Google Sports (Real-Time)';

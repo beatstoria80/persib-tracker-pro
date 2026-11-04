@@ -51,7 +51,7 @@ export function MatchCenter() {
           <span className="text-[10px] font-bold text-blue-600 font-mono">
             {activeTournament === 'liga1'
               ? 'Posisi #4 (16 Poin)'
-              : 'Posisi #1 Grup E (10 Poin • Lolos 16 Besar)'}
+              : 'Posisi #1 Grup E (12 Poin • Lolos 16 Besar)'}
           </span>
         </div>
 
@@ -94,11 +94,8 @@ export function MatchCenter() {
                 : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-rose-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-rose-500"></span>
-            </span>
-            <span>ACL Two (LIVE)</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400" />
+            <span>ACL Two (Juara Grup)</span>
           </button>
         </div>
 
@@ -116,7 +113,7 @@ export function MatchCenter() {
                 : 'text-slate-600'
             }`}
           >
-            {activeTournament === 'acl2' ? 'Laga & Skor LIVE' : 'Laga & Jadwal'}
+            {activeTournament === 'acl2' ? 'Laga & Hasil Resmi' : 'Laga & Jadwal'}
           </button>
           <button
             onClick={() => setMatchViewTab('standings')}
