@@ -155,6 +155,8 @@ export function RosterDeepDive() {
                   name={player.name}
                   number={player.number}
                   avatarUrl={player.avatarUrl}
+                  position={player.position}
+                  isStarting={player.squadRole === 'starting'}
                   size="md"
                 />
                 <div>

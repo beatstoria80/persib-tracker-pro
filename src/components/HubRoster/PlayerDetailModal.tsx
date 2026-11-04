@@ -43,6 +43,8 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
               name={player.name}
               number={player.number}
               avatarUrl={player.avatarUrl}
+              position={player.position}
+              isStarting={player.squadRole === 'starting'}
               size="lg"
             />
             <div>

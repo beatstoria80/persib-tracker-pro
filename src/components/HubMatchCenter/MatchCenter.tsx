@@ -1215,6 +1215,8 @@ export function MatchCenter() {
                           name={player.name}
                           number={player.number}
                           avatarUrl={player.avatarUrl}
+                          position={player.position}
+                          isStarting={true}
                           size="md"
                         />
                         <div>
@@ -1259,6 +1261,8 @@ export function MatchCenter() {
                           name={player.name}
                           number={player.number}
                           avatarUrl={player.avatarUrl}
+                          position={player.position}
+                          isStarting={false}
                           size="md"
                         />
                         <div>
