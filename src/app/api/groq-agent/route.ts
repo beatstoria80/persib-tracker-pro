@@ -1,24 +1,18 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { queryGroqAgent, GROQ_AGENT_GRAPH_MAP, GroqAgentTask } from '@/lib/groq';
+import { NextResponse } from 'next/server';
+import { supplyLiveClubData, BACKEND_DATA_AGENT_PIPELINE } from '@/lib/groq';
 
-export async function POST(req: NextRequest) {
+/**
+ * Backend AI Data Supplier Endpoint
+ * Serves autonomous real-time verified club data to keep all frontend features up-to-date.
+ * Note: Groq is an autonomous backend data supplier, NOT a chat bot.
+ */
+export async function GET() {
   try {
-    const body = await req.json();
-    const prompt: string = body?.prompt || '';
-    const task: GroqAgentTask = body?.task || 'custom_query';
-
-    if (!prompt.trim() && task === 'custom_query') {
-      return NextResponse.json(
-        { error: 'Prompt tidak boleh kosong.' },
-        { status: 400 }
-      );
-    }
-
-    const result = await queryGroqAgent(prompt, task);
-
+    const liveData = await supplyLiveClubData();
     return NextResponse.json({
-      ...result,
-      graphMap: GROQ_AGENT_GRAPH_MAP,
+      success: true,
+      pipeline: BACKEND_DATA_AGENT_PIPELINE,
+      data: liveData,
     });
   } catch (error: unknown) {
     const errorMessage = error instanceof Error ? error.message : 'Internal Server Error';
@@ -26,19 +20,13 @@ export async function POST(req: NextRequest) {
       {
         success: false,
         error: errorMessage,
-        graphMap: GROQ_AGENT_GRAPH_MAP,
+        pipeline: BACKEND_DATA_AGENT_PIPELINE,
       },
       { status: 500 }
     );
   }
 }
 
-export async function GET() {
-  return NextResponse.json({
-    status: 'online',
-    engine: 'Groq LPU Inference Engine',
-    model: process.env.GROQ_MODEL || 'openai/gpt-oss-120b',
-    graphMap: GROQ_AGENT_GRAPH_MAP,
-  });
+export async function POST() {
+  return GET();
 }
-

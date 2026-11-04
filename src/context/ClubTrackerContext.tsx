@@ -1,6 +1,6 @@
 'use client';
 
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback } from 'react';
 import {
   Player,
   GroupTeam,
@@ -44,14 +44,15 @@ interface ClubTrackerContextType {
   isTacticsPlaying: boolean;
   setIsTacticsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
   lastVerifiedDate: string;
-  isGroqAgentOpen: boolean;
-  setIsGroqAgentOpen: (open: boolean) => void;
+  isGroqSyncing: boolean;
+  lastSyncedAt: string;
+  groqBulletin: string;
+  triggerGroqDataSync: () => Promise<void>;
 }
 
 const ClubTrackerContext = createContext<ClubTrackerContextType | undefined>(undefined);
 
 export function ClubTrackerProvider({ children }: { children: ReactNode }) {
-  // REFACTOR: Initialized default state to 'minimal' for Light Bright & High-Contrast visual mode as requested
   const [mode, setMode] = useState<AppThemeState>('minimal');
   const [activeHub, setActiveHub] = useState<ActiveHub>('match-center');
   const [activeTournament, setActiveTournament] = useState<TournamentKey>('liga1');
@@ -63,9 +64,37 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_STANDINGS_2026_2027);
   const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
   const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
-  const [isGroqAgentOpen, setIsGroqAgentOpen] = useState<boolean>(false);
-  // REFACTOR: Synchronized with live Google Search & PT LIB verified data (Pekan 8 Faktual)
+
+  // Autonomous Backend Groq AI Data Feeder State (Backend supplier, NOT chatbot)
+  const [isGroqSyncing, setIsGroqSyncing] = useState<boolean>(false);
+  const [lastSyncedAt, setLastSyncedAt] = useState<string>('Live Synced');
+  const [groqBulletin, setGroqBulletin] = useState<string>(
+    'Pekan 8: Persib 4-0 Isenmulang Kalteng FC • Posisi #4 Liga 1 (16 Poin) • Laga Pekan 9: vs Java United FC'
+  );
+
   const lastVerifiedDate = 'Google Sports / PT LIB: Musim 2026/2027 (Pekan 8 - Faktual)';
+
+  const triggerGroqDataSync = useCallback(async () => {
+    setIsGroqSyncing(true);
+    try {
+      const res = await fetch('/api/groq-agent');
+      if (res.ok) {
+        const json = await res.json();
+        if (json?.data?.summaryBulletin) {
+          setGroqBulletin(json.data.summaryBulletin);
+        }
+        setLastSyncedAt(json?.data?.lastUpdated || 'Baru Saja');
+      }
+    } catch (e) {
+      console.warn('Groq backend data sync fetch failed:', e);
+    } finally {
+      setIsGroqSyncing(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    triggerGroqDataSync();
+  }, [triggerGroqDataSync]);
 
   const toggleMode = () => {
     setMode((prev: AppThemeState) => (prev === 'minimal' ? 'pro' : 'minimal'));
@@ -87,16 +116,6 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         });
     }
   }, []);
-
-  useEffect(() => {
-    if (!isTacticsPlaying) return;
-
-    const interval = setInterval(() => {
-      setActiveTacticalStep((prev: number) => (prev < 3 ? prev + 1 : 1));
-    }, 2800);
-
-    return () => clearInterval(interval);
-  }, [isTacticsPlaying]);
 
   const updateMatchSimulator = (simulatedPersibWon: boolean, simulatedGoalDiff: number) => {
     const updated = ACL_GROUP_STANDINGS_2026_2027.map((team: GroupTeam) => {
@@ -150,15 +169,16 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         isTacticsPlaying,
         setIsTacticsPlaying,
         lastVerifiedDate,
-        isGroqAgentOpen,
-        setIsGroqAgentOpen,
+        isGroqSyncing,
+        lastSyncedAt,
+        groqBulletin,
+        triggerGroqDataSync,
       }}
     >
       <div
         className={`min-h-screen w-full transition-colors duration-500 font-sans ${
           mode === 'pro'
             ? 'bg-[#060B13] text-slate-100 selection:bg-blue-600 selection:text-white'
-            // REFACTOR: Enhanced light mode background to high-contrast ultra-bright canvas with deep slate-950 text
             : 'bg-[#F4F6F9] text-slate-950 selection:bg-blue-600 selection:text-white'
         }`}
       >

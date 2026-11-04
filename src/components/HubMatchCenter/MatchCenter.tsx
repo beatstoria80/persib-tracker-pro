@@ -62,17 +62,17 @@ export function MatchCenter() {
               setActiveTournament('liga1');
               setSelectedFixtureId('l1-p8');
             }}
-            className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-lg text-[11px] font-bold transition-colors ${
+            className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all ${
               activeTournament === 'liga1'
                 ? isPro
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-blue-700 text-white'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-blue-700 text-white shadow-sm'
                 : isPro
-                ? 'text-slate-400'
-                : 'text-slate-700'
+                ? 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <span>🇮🇩 BRI Liga 1</span>
+            <span>BRI Liga 1</span>
           </button>
 
           <button
@@ -80,17 +80,17 @@ export function MatchCenter() {
               setActiveTournament('acl2');
               setSelectedFixtureId('acl2-26-md4');
             }}
-            className={`flex items-center justify-center gap-1 py-1.5 px-1 rounded-lg text-[11px] font-bold transition-colors ${
+            className={`flex items-center justify-center gap-1.5 py-2 px-2 rounded-lg text-xs font-bold transition-all ${
               activeTournament === 'acl2'
                 ? isPro
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-blue-700 text-white'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-blue-700 text-white shadow-sm'
                 : isPro
-                ? 'text-slate-400'
-                : 'text-slate-700'
+                ? 'text-slate-400 hover:text-slate-200'
+                : 'text-slate-600 hover:text-slate-900'
             }`}
           >
-            <span>🌏 ACL Two</span>
+            <span>ACL Two</span>
           </button>
         </div>
 

@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
-import { ShieldCheck, Zap, Sun, Sparkles } from 'lucide-react';
+import { ShieldCheck, Zap, Sun, RefreshCw } from 'lucide-react';
 
 export function Header() {
-  const { mode, toggleMode, setIsGroqAgentOpen } = useClubTracker();
+  const { mode, toggleMode, isGroqSyncing, triggerGroqDataSync } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
@@ -30,7 +30,7 @@ export function Header() {
             >
               P1933
             </div>
-            {/* Clean solid status dot (No decorative ping/pulsing) */}
+            {/* Live Data Connection Indicator */}
             <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5 rounded-full bg-emerald-500 border border-white dark:border-slate-900" />
           </div>
 
@@ -58,19 +58,23 @@ export function Header() {
           </div>
         </div>
 
-        {/* Right: Groq AI & Mode Switcher (Clean, no decorative bounce/pulse) */}
+        {/* Right: Groq Backend Data Feeder Status & Light/Pro Theme Toggle */}
         <div className="flex items-center gap-1.5">
+          {/* Autonomous Groq Data Supplier Sync Trigger (Backend data supplier, NOT chatbot) */}
           <button
-            onClick={() => setIsGroqAgentOpen(true)}
-            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[11px] font-extrabold tracking-wide transition-colors border active:scale-95 ${
+            onClick={() => triggerGroqDataSync()}
+            disabled={isGroqSyncing}
+            className={`flex items-center gap-1 px-2.5 py-1.5 rounded-xl text-[10px] font-bold border transition-colors active:scale-95 ${
               isPro
-                ? 'bg-amber-400/10 border-amber-400/40 text-amber-300 hover:bg-amber-400/20'
-                : 'bg-amber-50 border-amber-300 text-amber-900 hover:bg-amber-100'
+                ? 'bg-blue-950/80 border-cyan-500/30 text-cyan-300 hover:bg-blue-900/60'
+                : 'bg-emerald-50 border-emerald-300 text-emerald-800 hover:bg-emerald-100'
             }`}
-            title="Buka Maung AI • Groq Sports Intelligence"
+            title="Groq AI Backend Data Feeder: Klik untuk refresh data terbaru dari backend"
           >
-            <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-            <span className="font-black text-[10px]">AI GROQ</span>
+            <RefreshCw className={`w-3 h-3 ${isGroqSyncing ? 'animate-spin text-blue-500' : 'text-emerald-500'}`} />
+            <span className="font-mono text-[10px]">
+              {isGroqSyncing ? 'Syncing...' : 'Groq Sync'}
+            </span>
           </button>
 
           <button

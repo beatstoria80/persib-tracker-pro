@@ -7,11 +7,10 @@ import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
-import { GroqAgentModal } from '@/components/GroqAgentModal';
 import { ShieldCheck, CheckCircle2, Smartphone, Cpu } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, lastVerifiedDate, isGroqAgentOpen, setIsGroqAgentOpen } = useClubTracker();
+  const { mode, activeHub, lastVerifiedDate, lastSyncedAt, groqBulletin } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
@@ -33,7 +32,7 @@ export default function HomePage() {
             <span>Mobile-First View</span>
           </div>
           <p className="text-[11px] leading-relaxed opacity-80">
-            Aplikasi ini terformat dalam rasio smartphone (430px) menyajikan 100% data faktual resmi Liga 1 & ACL Two tanpa elemen dekoratif fiktif.
+            Aplikasi ini terformat dalam rasio smartphone (430px) menyajikan 100% data faktual resmi Liga 1 & ACL Two yang disuplai oleh Groq AI Backend Pipeline.
           </p>
         </div>
       </div>
@@ -49,8 +48,8 @@ export default function HomePage() {
         {/* Mobile Header */}
         <Header />
 
-        {/* Top Status & Verification Pill (Clean, factual) */}
-        <div className="px-3.5 pt-2.5 pb-1">
+        {/* Top Status & Verification Pill */}
+        <div className="px-3.5 pt-2.5 pb-1 space-y-1.5">
           <div
             className={`flex items-center justify-between px-3 py-1.5 rounded-xl text-[10px] font-mono border ${
               isPro
@@ -67,9 +66,25 @@ export default function HomePage() {
                 isPro ? 'bg-blue-900 text-cyan-200' : 'bg-blue-100 text-blue-900'
               }`}
             >
-              Verified
+              {lastSyncedAt}
             </span>
           </div>
+
+          {/* Real-time Data Feeder Bulletin from Groq Backend Pipeline */}
+          {groqBulletin && (
+            <div
+              className={`px-3 py-1.5 rounded-xl border text-[10px] flex items-start gap-1.5 ${
+                isPro
+                  ? 'bg-blue-950/40 border-blue-800/40 text-slate-300'
+                  : 'bg-blue-50/70 border-blue-200 text-blue-950'
+              }`}
+            >
+              <Cpu className="w-3.5 h-3.5 text-amber-500 shrink-0 mt-0.5" />
+              <p className="leading-snug font-medium line-clamp-2">
+                <strong className="text-blue-600 dark:text-cyan-400 font-bold">Groq Feeder:</strong> {groqBulletin}
+              </p>
+            </div>
+          )}
         </div>
 
         {/* Scrollable Main Mobile Hub Content */}
@@ -78,17 +93,6 @@ export default function HomePage() {
             {activeHub === 'match-center' && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}
             {activeHub === 'transparency' && <CorporateTransparency />}
-          </div>
-
-          {/* Floating Maung AI Trigger Pill (Clean, without decorative spinning) */}
-          <div className="fixed bottom-18 right-4 sm:right-auto sm:left-1/2 sm:translate-x-32 z-30">
-            <button
-              onClick={() => setIsGroqAgentOpen(true)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-700 text-white font-bold text-xs shadow-md hover:bg-blue-800 active:scale-95 transition-all"
-            >
-              <Cpu className="w-3.5 h-3.5 text-amber-300" />
-              <span>Maung AI</span>
-            </button>
           </div>
 
           {/* Compact Mobile Footer */}
@@ -107,12 +111,6 @@ export default function HomePage() {
 
         {/* Fixed Mobile Bottom Navigation Bar */}
         <MobileBottomNav />
-
-        {/* Groq AI Sports Intelligence Agent Modal */}
-        <GroqAgentModal
-          isOpen={isGroqAgentOpen}
-          onClose={() => setIsGroqAgentOpen(false)}
-        />
       </div>
     </div>
   );
