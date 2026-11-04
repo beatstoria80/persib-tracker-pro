@@ -7,7 +7,7 @@ import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
-import { ShieldCheck, CheckCircle2, Smartphone, Cpu } from 'lucide-react';
+import { ShieldCheck, Smartphone, Cpu } from 'lucide-react';
 
 export default function HomePage() {
   const { mode, activeHub, lastVerifiedDate, lastSyncedAt, groqBulletin } = useClubTracker();
@@ -48,22 +48,27 @@ export default function HomePage() {
         {/* Sleek Mobile Header */}
         <Header />
 
-        {/* Top Status & Live Groq Feeder Bulletin */}
-        <div className="px-5 pt-3 pb-1 space-y-2">
+        {/* Streamlined Live Intelligence Status Bar */}
+        <div className="px-5 pt-2 pb-0.5 space-y-1.5">
           <div
-            className={`flex items-center justify-between px-3.5 py-1.5 rounded-full text-[10px] font-mono border ${
+            className={`flex items-center justify-between px-3 py-1.5 rounded-xl border text-[10px] ${
               isPro
-                ? 'bg-slate-900/90 border-slate-800 text-slate-300'
-                : 'bg-white border-slate-200 text-slate-700 shadow-xs'
+                ? 'bg-[#121620]/90 border-slate-800 text-slate-300'
+                : 'bg-white border-slate-200/90 text-slate-700 shadow-xs'
             }`}
           >
-            <div className="flex items-center gap-1.5 truncate">
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
-              <span className="truncate">{lastVerifiedDate}</span>
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+              </span>
+              <span className="truncate font-semibold text-[9.5px]">
+                {lastVerifiedDate}
+              </span>
             </div>
             <span
-              className={`shrink-0 font-bold uppercase px-2 py-0.5 rounded-full text-[9px] ${
-                isPro ? 'bg-blue-900/80 text-cyan-300' : 'bg-blue-100 text-blue-900'
+              className={`shrink-0 font-mono font-black px-2 py-0.5 rounded-md text-[8.5px] ${
+                isPro ? 'bg-blue-950 text-cyan-300 border border-blue-800/60' : 'bg-blue-50 text-blue-900 border border-blue-200'
               }`}
             >
               {lastSyncedAt}
@@ -73,22 +78,23 @@ export default function HomePage() {
           {/* Real-Time Live Intelligence Bulletin */}
           {groqBulletin && (
             <div
-              className={`px-3.5 py-2 rounded-2xl border text-[11px] flex items-start gap-2 ${
+              className={`px-3 py-1.5 rounded-xl border text-[10.5px] flex items-center gap-2 ${
                 isPro
-                  ? 'bg-blue-950/30 border-blue-900/50 text-slate-300'
-                  : 'bg-blue-50/80 border-blue-200 text-blue-950 shadow-xs'
+                  ? 'bg-blue-950/20 border-blue-900/40 text-slate-300'
+                  : 'bg-blue-50/70 border-blue-200 text-blue-950'
               }`}
             >
-              <Cpu className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-              <p className="leading-snug font-medium line-clamp-2">
-                <strong className="text-blue-600 dark:text-cyan-400 font-extrabold">Groq Feeder:</strong> {groqBulletin}
+              <Cpu className="w-3.5 h-3.5 text-amber-500 shrink-0" />
+              <p className="leading-tight font-medium truncate">
+                <strong className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">Live:</strong>
+                {groqBulletin}
               </p>
             </div>
           )}
         </div>
 
         {/* Scrollable Main Mobile Hub Content with Generous Whitespace */}
-        <main className="flex-1 px-5 py-3 pb-32">
+        <main className="flex-1 px-5 py-3 pb-36">
           <div>
             {activeHub === 'match-center' && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}

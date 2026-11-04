@@ -2,7 +2,14 @@
 
 import React, { useState } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
-import { MapPin, ChevronRight } from 'lucide-react';
+import {
+  MapPin,
+  ChevronRight,
+  Trophy,
+  Calendar,
+  BarChart2,
+  Users,
+} from 'lucide-react';
 import { MatchFixture, Player, LeagueStandingRow, GroupTeam } from '@/types/club';
 import { getClubLogo } from '@/data/persib-data';
 
@@ -23,7 +30,7 @@ function ClubBadge({
 
   return (
     <div
-      className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-sm tracking-wider shadow-md transition-transform hover:scale-105 p-2 ${
+      className={`w-14 h-14 rounded-2xl flex items-center justify-center font-black text-sm tracking-wider shadow-md transition-transform hover:scale-105 p-2 shrink-0 ${
         isPersib
           ? 'bg-gradient-to-b from-blue-700 to-blue-900 text-white ring-2 ring-blue-500/40 shadow-blue-700/30'
           : isPro
@@ -46,7 +53,7 @@ function ClubBadge({
   );
 }
 
-// Helper thumbnail for tables and pills
+// Helper thumbnail for tables, pills, and schedule lists
 function ClubThumb({ name, logoUrl }: { name: string; logoUrl?: string }) {
   const [imgError, setImgError] = useState(false);
   const src = logoUrl || getClubLogo(name);
@@ -84,26 +91,44 @@ export function MatchCenter() {
   } = useClubTracker();
   const isPro = mode === 'pro';
 
-  const [matchViewTab, setMatchViewTab] = useState<'match_card' | 'standings' | 'lineup'>('match_card');
+  // Sub-Page Navigation Tabs: Laga (featured), Jadwal (schedule), Klasemen (standings), Taktik (lineup)
+  const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup'>('featured');
   const [selectedFixtureId, setSelectedFixtureId] = useState<string>('acl2-26-md4-live');
+  const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
   const currentFixture: MatchFixture =
     tournamentFixtures.find((f: MatchFixture) => f.id === selectedFixtureId) || tournamentFixtures[0] || fixtures[0];
 
+  const filteredSchedule = tournamentFixtures.filter((fix) => {
+    if (scheduleFilter === 'upcoming') return fix.status === 'SCHEDULED' || fix.status === 'LIVE';
+    if (scheduleFilter === 'finished') return fix.status === 'FINISHED';
+    return true;
+  });
+
   const startingXI: Player[] = players.filter((p: Player) => p.squadRole === 'starting');
   const substitutes: Player[] = players.filter((p: Player) => p.squadRole === 'substitute');
 
   return (
-    <div className="space-y-5">
-      {/* 1. Explore & Title Section (Inspired by Dribbble Reference) */}
+    <div className="space-y-4">
+      {/* 1. Header Info & Competition Pill Switcher */}
       <div className="pt-1">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-[11px] font-mono tracking-widest text-slate-400 font-bold uppercase">
-            Official Competition Hub
-          </span>
+        <div className="flex items-center justify-between mb-2.5">
+          <div className="flex items-center gap-2">
+            <h2 className="text-lg sm:text-xl font-black tracking-tight text-slate-950 dark:text-white uppercase">
+              {activeTournament === 'shopee_cup'
+                ? 'Shopee Cup'
+                : activeTournament === 'acl2'
+                ? 'ACL Two'
+                : 'BRI Liga 1'}
+            </h2>
+            <span className="text-[10px] font-mono font-extrabold px-2 py-0.5 rounded-md bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-cyan-300">
+              2026/27
+            </span>
+          </div>
+
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
             {activeTournament === 'shopee_cup'
               ? 'Puncak Grup B'
               : activeTournament === 'acl2'
@@ -112,75 +137,67 @@ export function MatchCenter() {
           </span>
         </div>
 
-        <h1 className="text-3xl font-black uppercase tracking-tight text-slate-950 dark:text-white">
-          {activeTournament === 'shopee_cup'
-            ? 'SHOPEE CUP'
-            : activeTournament === 'acl2'
-            ? 'ACL TWO'
-            : 'LIGA 1'}
-        </h1>
+        {/* Competition Selector Pills */}
+        <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
+          <button
+            onClick={() => {
+              setActiveTournament('liga1');
+              setSelectedFixtureId('l1-p8');
+            }}
+            className={`px-4 py-2 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 ${
+              activeTournament === 'liga1'
+                ? isPro
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
+                : isPro
+                ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
+                : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
+            }`}
+          >
+            BRI Liga 1
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTournament('acl2');
+              setSelectedFixtureId('acl2-26-md4-live');
+            }}
+            className={`px-4 py-2 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
+              activeTournament === 'acl2'
+                ? isPro
+                  ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
+                  : 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
+                : isPro
+                ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
+                : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
+            }`}
+          >
+            <span>ACL Two (Asia)</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
+          </button>
+
+          <button
+            onClick={() => {
+              setActiveTournament('shopee_cup');
+              setSelectedFixtureId('shopee-26-md1-ft');
+            }}
+            className={`px-4 py-2 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
+              activeTournament === 'shopee_cup'
+                ? isPro
+                  ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
+                  : 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md shadow-orange-600/25'
+                : isPro
+                ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
+                : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
+            }`}
+          >
+            <span>Shopee Cup (ASEAN)</span>
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
+          </button>
+        </div>
       </div>
 
-      {/* 2. Horizontal League Pill Filter Chips */}
-      <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-0.5">
-        <button
-          onClick={() => {
-            setActiveTournament('liga1');
-            setSelectedFixtureId('l1-p8');
-          }}
-          className={`px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 ${
-            activeTournament === 'liga1'
-              ? isPro
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                : 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
-              : isPro
-              ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
-              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
-          }`}
-        >
-          BRI Liga 1
-        </button>
-
-        <button
-          onClick={() => {
-            setActiveTournament('acl2');
-            setSelectedFixtureId('acl2-26-md4-live');
-          }}
-          className={`px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
-            activeTournament === 'acl2'
-              ? isPro
-                ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
-                : 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
-              : isPro
-              ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
-              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
-          }`}
-        >
-          <span>ACL Two</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400" />
-        </button>
-
-        <button
-          onClick={() => {
-            setActiveTournament('shopee_cup');
-            setSelectedFixtureId('shopee-26-md1-ft');
-          }}
-          className={`px-4 py-2.5 rounded-full text-xs font-black tracking-tight transition-all duration-200 shrink-0 flex items-center gap-1.5 ${
-            activeTournament === 'shopee_cup'
-              ? isPro
-                ? 'bg-gradient-to-r from-orange-500 to-amber-500 text-white shadow-lg shadow-orange-500/30'
-                : 'bg-gradient-to-r from-orange-600 to-amber-600 text-white shadow-md shadow-orange-600/25'
-              : isPro
-              ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
-              : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
-          }`}
-        >
-          <span>Shopee Cup (ASEAN)</span>
-          <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />
-        </button>
-      </div>
-
-      {/* 3. Sub-Navigation Tabs with Minimal Whitespace */}
+      {/* 2. Structured Sub-Page Navigation Tabs */}
       <div
         className={`p-1.5 rounded-2xl border flex items-center justify-between text-xs font-bold ${
           isPro
@@ -189,20 +206,36 @@ export function MatchCenter() {
         }`}
       >
         <button
-          onClick={() => setMatchViewTab('match_card')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center ${
-            matchViewTab === 'match_card'
+          onClick={() => setMatchViewTab('featured')}
+          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1.5 ${
+            matchViewTab === 'featured'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
                 : 'bg-blue-50 text-blue-900 shadow-xs'
               : 'hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          Matches
+          <Trophy className="w-3.5 h-3.5" />
+          <span>Laga</span>
         </button>
+
+        <button
+          onClick={() => setMatchViewTab('schedule')}
+          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1.5 ${
+            matchViewTab === 'schedule'
+              ? isPro
+                ? 'bg-slate-800 text-cyan-300 shadow-sm'
+                : 'bg-blue-50 text-blue-900 shadow-xs'
+              : 'hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Calendar className="w-3.5 h-3.5" />
+          <span>Jadwal</span>
+        </button>
+
         <button
           onClick={() => setMatchViewTab('standings')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center ${
+          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1.5 ${
             matchViewTab === 'standings'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -210,11 +243,13 @@ export function MatchCenter() {
               : 'hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          Standings
+          <BarChart2 className="w-3.5 h-3.5" />
+          <span>Klasemen</span>
         </button>
+
         <button
           onClick={() => setMatchViewTab('lineup')}
-          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center ${
+          className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1.5 ${
             matchViewTab === 'lineup'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -222,12 +257,13 @@ export function MatchCenter() {
               : 'hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          Tactics XI
+          <Users className="w-3.5 h-3.5" />
+          <span>Taktik</span>
         </button>
       </div>
 
-      {/* 4. Tab 1: Bi-Tone Dual Surface Match Card (Signature Dribbble Style) */}
-      {matchViewTab === 'match_card' && (
+      {/* 3. Sub-Page Tab 1: Featured Match Detail (Bi-Tone Hero Card) */}
+      {matchViewTab === 'featured' && (
         <div className="space-y-4">
           {/* Multi-match selector pills if tournament has multiple matches */}
           {tournamentFixtures.length > 1 && (
@@ -247,7 +283,7 @@ export function MatchCenter() {
                   <ClubThumb name={fix.homeTeam} logoUrl={fix.homeLogo} />
                   <span className="text-[9px] opacity-60">vs</span>
                   <ClubThumb name={fix.awayTeam} logoUrl={fix.awayLogo} />
-                  <span>{fix.roundOrWeek}</span>
+                  <span>{fix.roundOrWeek.split('(')[0].trim()}</span>
                 </button>
               ))}
             </div>
@@ -276,23 +312,23 @@ export function MatchCenter() {
                 </span>
               </div>
 
-              <div className="flex items-center justify-between">
+              <div className="flex items-center justify-between gap-1">
                 {/* Home Team */}
-                <div className="flex flex-col items-center flex-1 text-center">
+                <div className="flex flex-col items-center flex-1 text-center min-w-0 px-1">
                   <ClubBadge
                     name={currentFixture.homeTeam}
                     logoUrl={currentFixture.homeLogo}
                     isPersib={currentFixture.homeTeam.includes('PERSIB')}
                     isPro={isPro}
                   />
-                  <h4 className="font-black text-xs mt-2.5 leading-snug line-clamp-1 max-w-[110px]">
+                  <h4 className="font-black text-xs sm:text-sm mt-2.5 leading-snug break-words">
                     {currentFixture.homeTeam}
                   </h4>
-                  <span className="text-[9.5px] text-slate-400 font-medium mt-0.5">Home</span>
+                  <span className="text-[10px] text-slate-400 font-semibold mt-0.5">Tuan Rumah</span>
                 </div>
 
                 {/* Center: Circular VS Pill */}
-                <div className="flex flex-col items-center px-3">
+                <div className="flex flex-col items-center px-2 shrink-0">
                   <div
                     className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-xs shadow-md border ${
                       isPro
@@ -302,20 +338,23 @@ export function MatchCenter() {
                   >
                     VS
                   </div>
+                  <span className="text-[9px] font-mono font-bold text-slate-400 mt-1 uppercase">
+                    {currentFixture.status === 'FINISHED' ? 'Full Time' : currentFixture.time}
+                  </span>
                 </div>
 
                 {/* Away Team */}
-                <div className="flex flex-col items-center flex-1 text-center">
+                <div className="flex flex-col items-center flex-1 text-center min-w-0 px-1">
                   <ClubBadge
                     name={currentFixture.awayTeam}
                     logoUrl={currentFixture.awayLogo}
                     isPersib={currentFixture.awayTeam.includes('PERSIB')}
                     isPro={isPro}
                   />
-                  <h4 className="font-black text-xs mt-2.5 leading-snug line-clamp-1 max-w-[110px]">
+                  <h4 className="font-black text-xs sm:text-sm mt-2.5 leading-snug break-words">
                     {currentFixture.awayTeam}
                   </h4>
-                  <span className="text-[9.5px] text-slate-400 font-medium mt-0.5">Away</span>
+                  <span className="text-[10px] text-slate-400 font-semibold mt-0.5">Tim Tamu</span>
                 </div>
               </div>
             </div>
@@ -330,87 +369,101 @@ export function MatchCenter() {
             >
               <div className="flex items-center justify-between pb-3.5 border-b border-slate-200 dark:border-slate-800/80">
                 <div>
-                  <div className="text-[10px] text-slate-400 uppercase font-mono font-bold">Score / Schedule</div>
-                  <div className="flex items-baseline gap-2 mt-0.5">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                    {currentFixture.status === 'FINISHED' ? 'Skor Akhir' : 'Jadwal Kick-off'}
+                  </span>
+                  <div className="text-2xl font-black font-mono tracking-tight mt-0.5">
                     {currentFixture.status === 'FINISHED' ? (
-                      <span className="text-3xl font-black font-mono tracking-tight text-blue-600 dark:text-cyan-400">
+                      <span className="text-blue-600 dark:text-cyan-400">
                         {currentFixture.homeScore} : {currentFixture.awayScore}
                       </span>
                     ) : (
-                      <span className="text-xl font-black font-mono tracking-tight text-blue-700 dark:text-cyan-300">
-                        {currentFixture.time}
-                      </span>
+                      <span>{currentFixture.time}</span>
                     )}
-                    <span className="text-xs font-bold text-slate-500 font-mono">
-                      {currentFixture.status === 'FINISHED' ? 'FT' : currentFixture.date}
-                    </span>
                   </div>
                 </div>
 
                 <div className="text-right">
-                  <div className="text-[10px] text-slate-400 uppercase font-mono font-bold flex items-center gap-1 justify-end">
-                    <MapPin className="w-3 h-3 text-blue-600" /> Venue
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                    {currentFixture.status === 'FINISHED' ? 'Status Laga' : 'Tanggal Pertandingan'}
+                  </span>
+                  <div className="text-xs font-bold mt-1">
+                    {currentFixture.status === 'FINISHED' ? (
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold text-[10px]">
+                        FT (Selesai)
+                      </span>
+                    ) : (
+                      <span className="font-mono text-slate-700 dark:text-slate-200">
+                        {currentFixture.date}
+                      </span>
+                    )}
                   </div>
-                  <p className="text-xs font-bold mt-0.5 truncate max-w-[140px]">
-                    {currentFixture.venue}
-                  </p>
                 </div>
               </div>
 
-              {/* Aggregate Score Ribbon if applicable */}
+              {/* Venue Row */}
+              <div className="flex items-center gap-2 pt-3 text-xs text-slate-400">
+                <MapPin className="w-3.5 h-3.5 text-blue-500 shrink-0" />
+                <span className="truncate">{currentFixture.venue}</span>
+              </div>
+
+              {/* Aggregate Score Pill if exists */}
               {currentFixture.aggregateScore && (
                 <div
-                  className={`mt-3.5 p-2.5 rounded-2xl text-center text-xs font-bold font-mono border ${
+                  className={`mt-3 p-2.5 rounded-2xl text-[11px] font-bold text-center border ${
                     isPro
-                      ? 'bg-blue-950/60 border-blue-800/60 text-cyan-300'
-                      : 'bg-blue-100/70 border-blue-200 text-blue-950'
+                      ? 'bg-blue-950/40 border-blue-900/50 text-cyan-300'
+                      : 'bg-blue-50 border-blue-200 text-blue-950'
                   }`}
                 >
                   🏆 {currentFixture.aggregateScore}
                 </div>
               )}
 
-              {/* Key Events Timeline (Minimalist Stepper) */}
+              {/* Match Events Timeline */}
               {currentFixture.events && currentFixture.events.length > 0 && (
-                <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800/60">
+                <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800">
                   <div className="flex items-center justify-between mb-2.5">
-                    <span className="text-[10px] font-mono uppercase font-bold text-slate-400">
-                      Match Highlights & Goals
+                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                      Timeline Kejadian Laga (Real-time Events)
                     </span>
-                    <span className="text-[9px] font-bold text-emerald-500 font-mono">100% Real-Time</span>
+                    <span className="text-[9px] font-mono text-emerald-500 font-extrabold">Verified FT</span>
                   </div>
+
                   <div className="space-y-2">
                     {currentFixture.events.map((ev, idx) => (
-                      <div key={idx} className="flex items-start gap-2.5 text-xs">
-                        <span
-                          className={`font-mono font-black text-[10px] px-2 py-0.5 rounded-md shrink-0 ${
-                            ev.type === 'goal'
-                              ? 'bg-emerald-500 text-white'
-                              : isPro
-                              ? 'bg-slate-800 text-slate-300'
-                              : 'bg-slate-200 text-slate-700'
-                          }`}
-                        >
+                      <div
+                        key={idx}
+                        className={`flex items-start gap-2.5 text-xs p-2 rounded-xl transition-all ${
+                          ev.type === 'goal'
+                            ? isPro
+                              ? 'bg-blue-900/30 text-cyan-200 border border-blue-700/40 font-bold'
+                              : 'bg-blue-50 text-blue-950 border border-blue-200 font-bold'
+                            : isPro
+                            ? 'text-slate-400 hover:text-slate-200'
+                            : 'text-slate-600 hover:text-slate-900'
+                        }`}
+                      >
+                        <span className="font-mono font-black text-[11px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 shrink-0">
                           {ev.minute}
                         </span>
-                        <span className={`text-[11.5px] leading-snug ${ev.type === 'goal' ? 'font-black text-blue-600 dark:text-cyan-300' : 'text-slate-600 dark:text-slate-300'}`}>
-                          {ev.text}
-                        </span>
+                        <span className="flex-1 leading-snug">{ev.text}</span>
+                        {ev.type === 'goal' && <span className="text-base shrink-0">⚽</span>}
                       </div>
                     ))}
                   </div>
                 </div>
               )}
 
-              {/* Highlights List */}
+              {/* Match Highlights / Key Notes */}
               {currentFixture.highlights && currentFixture.highlights.length > 0 && (
-                <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800/60">
-                  <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block mb-1.5">
-                    Laporan Taktis Pertandingan:
+                <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800">
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block mb-2">
+                    Catatan Penting Laga (Highlights)
                   </span>
-                  <ul className="space-y-1 text-xs text-slate-600 dark:text-slate-300">
+                  <ul className="space-y-1.5 text-xs text-slate-400">
                     {currentFixture.highlights.map((h: string, i: number) => (
-                      <li key={i} className="flex items-start gap-1.5 leading-snug">
+                      <li key={i} className="flex items-start gap-2 leading-relaxed">
                         <span className="text-blue-500 font-bold shrink-0">•</span>
                         <span>{h}</span>
                       </li>
@@ -423,57 +476,406 @@ export function MatchCenter() {
         </div>
       )}
 
-      {/* 5. Tab 2: Standings Table (Minimalist & Roomy) */}
-      {matchViewTab === 'standings' && (
-        <div
-          className={`rounded-[32px] border p-5 shadow-xl transition-all ${
-            isPro
-              ? 'bg-[#121620] border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.5)]'
-              : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
-          }`}
-        >
-          <div className="pb-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+      {/* 4. Sub-Page Tab 2: Dedicated Schedule & Calendar of Matches (Jadwal Pertandingan Lengkap) */}
+      {matchViewTab === 'schedule' && (
+        <div className="space-y-3.5">
+          {/* Header & Filter Controls */}
+          <div className="flex items-center justify-between pb-1">
             <div>
-              <span className="text-[10px] font-mono font-bold uppercase text-slate-400 block">
-                {activeTournament === 'shopee_cup'
-                  ? 'Grup B • ASEAN Club Championship (Shopee Cup) 2026/27'
-                  : activeTournament === 'acl2'
-                  ? 'Grup E • AFC Champions League Two 2026/27'
-                  : 'BRI Liga 1 • Musim 2026/2027'}
-              </span>
-              <h3 className="text-sm font-black tracking-tight mt-0.5">
-                {activeTournament === 'shopee_cup'
-                  ? 'PERSIB Puncak Klasemen Grup B (3 Poin • Comeback 3-1 di Markas Port FC)'
-                  : activeTournament === 'acl2'
-                  ? 'PERSIB Juara Grup E (12 Poin • Lolos 16 Besar)'
-                  : 'PERSIB Posisi #4 (16 Poin • Beda 2 Poin dari Puncak)'}
-              </h3>
+              <h3 className="text-sm font-black tracking-tight">Kalender & Jadwal Laga</h3>
+              <p className="text-[11px] text-slate-400">
+                Pertandingan yang telah dilalui & jadwal yang akan dihadapi
+              </p>
             </div>
-            <span className="text-[9px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300">
-              Verified
-            </span>
+            <div className="flex items-center gap-1">
+              <button
+                onClick={() => setScheduleFilter('all')}
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                  scheduleFilter === 'all'
+                    ? isPro
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-blue-700 text-white'
+                    : isPro
+                    ? 'bg-slate-800 text-slate-400'
+                    : 'bg-slate-100 text-slate-600'
+                }`}
+              >
+                Semua
+              </button>
+              <button
+                onClick={() => setScheduleFilter('upcoming')}
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                  scheduleFilter === 'upcoming'
+                    ? isPro
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-blue-700 text-white'
+                    : isPro
+                    ? 'bg-slate-800 text-slate-400'
+                    : 'bg-slate-100 text-slate-600'
+                }`}
+              >
+                Mendatang
+              </button>
+              <button
+                onClick={() => setScheduleFilter('finished')}
+                className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
+                  scheduleFilter === 'finished'
+                    ? isPro
+                      ? 'bg-blue-600 text-white'
+                      : 'bg-blue-700 text-white'
+                    : isPro
+                    ? 'bg-slate-800 text-slate-400'
+                    : 'bg-slate-100 text-slate-600'
+                }`}
+              >
+                Hasil
+              </button>
+            </div>
           </div>
 
-          <div className="overflow-x-auto no-scrollbar mt-3">
-            {activeTournament === 'shopee_cup' || activeTournament === 'acl2' ? (
-              <table className="w-full text-left text-xs whitespace-nowrap">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-800 text-[10px] uppercase font-bold text-slate-400">
-                    <th className="py-2.5 px-2 text-center">#</th>
-                    <th className="py-2.5 px-2">Klub</th>
-                    <th className="py-2.5 px-1.5 text-center">Main</th>
-                    <th className="py-2.5 px-1.5 text-center">M-S-K</th>
-                    <th className="py-2.5 px-1.5 text-center">Gol</th>
-                    <th className="py-2.5 px-2 text-center font-black">Poin</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(activeTournament === 'shopee_cup' ? shopeeCupStandings : aclStandings).map(
-                    (team: GroupTeam, index: number) => (
+          {/* List of Match Cards */}
+          <div className="space-y-3">
+            {filteredSchedule.map((fix: MatchFixture) => {
+              const isFinished = fix.status === 'FINISHED';
+              return (
+                <div
+                  key={fix.id}
+                  onClick={() => {
+                    setSelectedFixtureId(fix.id);
+                    setMatchViewTab('featured');
+                  }}
+                  className={`p-4 rounded-3xl border transition-all cursor-pointer active:scale-[0.99] ${
+                    selectedFixtureId === fix.id
+                      ? isPro
+                        ? 'bg-[#181D2A] border-cyan-500/50 ring-1 ring-cyan-500/30'
+                        : 'bg-blue-50/70 border-blue-400 ring-1 ring-blue-300'
+                      : isPro
+                      ? 'bg-[#121620] border-slate-800 hover:border-slate-700'
+                      : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
+                  }`}
+                >
+                  {/* Top Status & Date Pill */}
+                  <div className="flex items-center justify-between text-[10px] font-bold pb-2.5 mb-2.5 border-b border-slate-200 dark:border-slate-800">
+                    <span className="text-slate-400 font-mono font-semibold">{fix.roundOrWeek}</span>
+                    <span
+                      className={`px-2 py-0.5 rounded-full font-mono font-extrabold text-[9px] ${
+                        isFinished
+                          ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300'
+                          : 'bg-amber-100 text-amber-800 dark:bg-amber-950 dark:text-amber-300'
+                      }`}
+                    >
+                      {isFinished ? 'SELESAI (FT)' : 'AKAN DATANG'}
+                    </span>
+                  </div>
+
+                  {/* Teams & Score / Schedule */}
+                  <div className="flex items-center justify-between gap-2 py-1">
+                    {/* Home Club */}
+                    <div className="flex items-center gap-2.5 flex-1 min-w-0">
+                      <ClubThumb name={fix.homeTeam} logoUrl={fix.homeLogo} />
+                      <span className="font-black text-xs truncate leading-snug">
+                        {fix.homeTeam}
+                      </span>
+                    </div>
+
+                    {/* Middle Score / Time */}
+                    <div className="shrink-0 px-3 text-center">
+                      {isFinished ? (
+                        <div className="font-mono font-black text-base tracking-tight text-blue-600 dark:text-cyan-400">
+                          {fix.homeScore} : {fix.awayScore}
+                        </div>
+                      ) : (
+                        <div className="text-center font-mono">
+                          <span className="block font-black text-xs">{fix.time}</span>
+                          <span className="block text-[9px] text-slate-400">
+                            {fix.date.split(' ')[0]} {fix.date.split(' ')[1]}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* Away Club */}
+                    <div className="flex items-center justify-end gap-2.5 flex-1 min-w-0 text-right">
+                      <span className="font-black text-xs truncate leading-snug">
+                        {fix.awayTeam}
+                      </span>
+                      <ClubThumb name={fix.awayTeam} logoUrl={fix.awayLogo} />
+                    </div>
+                  </div>
+
+                  {/* Venue and Action */}
+                  <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[10.5px]">
+                    <div className="flex items-center gap-1.5 text-slate-400 truncate">
+                      <MapPin className="w-3.5 h-3.5 shrink-0 text-blue-500" />
+                      <span className="truncate">{fix.venue}</span>
+                    </div>
+                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold shrink-0 ml-2 flex items-center gap-0.5">
+                      Lihat Detail <ChevronRight className="w-3 h-3" />
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* 5. Sub-Page Tab 3: Dedicated Group Cards & Standings (Klasemen Group Card Lengkap) */}
+      {matchViewTab === 'standings' && (
+        <div className="space-y-4">
+          {/* Visual High-Impact Group Card */}
+          {activeTournament === 'acl2' && (
+            <div
+              className={`p-5 rounded-3xl border shadow-lg ${
+                isPro
+                  ? 'bg-gradient-to-br from-blue-900/40 via-[#121620] to-[#0E1118] border-blue-800/50'
+                  : 'bg-gradient-to-br from-blue-50 via-white to-blue-50/30 border-blue-200'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-mono uppercase font-bold text-blue-600 dark:text-cyan-300">
+                  Grup E • Klasemen Sementara
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider">
+                  Juara Grup E • Lolos 16 Besar
+                </span>
+              </div>
+              <div className="flex items-end justify-between mt-1">
+                <div>
+                  <h4 className="text-xl font-black tracking-tight text-slate-950 dark:text-white">
+                    PERSIB Bandung
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
+                    Rekor Sempurna 100% Menang (4 Laga, 12 Poin)
+                  </p>
+                </div>
+                <div className="text-right font-mono">
+                  <span className="text-3xl font-black text-blue-600 dark:text-cyan-400">12</span>
+                  <span className="text-[10px] text-slate-400 block -mt-1 font-bold">Poin</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-2 mt-4 pt-3.5 border-t border-slate-200 dark:border-blue-900/40 text-center text-[10px]">
+                <div>
+                  <span className="block text-slate-400 font-medium">Main</span>
+                  <span className="font-mono font-bold text-xs">4 Laga</span>
+                </div>
+                <div>
+                  <span className="block text-slate-400 font-medium">Gol (GF:GA)</span>
+                  <span className="font-mono font-bold text-xs">8 : 1</span>
+                </div>
+                <div>
+                  <span className="block text-slate-400 font-medium">Selisih Gol</span>
+                  <span className="font-mono font-bold text-emerald-500 text-xs">+7</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTournament === 'shopee_cup' && (
+            <div
+              className={`p-5 rounded-3xl border shadow-lg ${
+                isPro
+                  ? 'bg-gradient-to-br from-orange-950/40 via-[#121620] to-[#0E1118] border-orange-800/50'
+                  : 'bg-gradient-to-br from-orange-50 via-white to-amber-50/30 border-orange-200'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-mono uppercase font-bold text-orange-600 dark:text-orange-400">
+                  Grup B • Shopee Cup ASEAN
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-orange-600 text-white text-[9px] font-black uppercase tracking-wider">
+                  Puncak Klasemen Grup B
+                </span>
+              </div>
+              <div className="flex items-end justify-between mt-1">
+                <div>
+                  <h4 className="text-xl font-black tracking-tight text-slate-950 dark:text-white">
+                    PERSIB Bandung
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
+                    Debut Kemenangan Comeback 3-1 di Markas Port FC
+                  </p>
+                </div>
+                <div className="text-right font-mono">
+                  <span className="text-3xl font-black text-orange-600 dark:text-orange-400">3</span>
+                  <span className="text-[10px] text-slate-400 block -mt-1 font-bold">Poin</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-2 mt-4 pt-3.5 border-t border-slate-200 dark:border-orange-900/40 text-center text-[10px]">
+                <div>
+                  <span className="block text-slate-400 font-medium">Main</span>
+                  <span className="font-mono font-bold text-xs">1 Laga</span>
+                </div>
+                <div>
+                  <span className="block text-slate-400 font-medium">Gol (GF:GA)</span>
+                  <span className="font-mono font-bold text-xs">3 : 1</span>
+                </div>
+                <div>
+                  <span className="block text-slate-400 font-medium">Selisih Gol</span>
+                  <span className="font-mono font-bold text-emerald-500 text-xs">+2</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {activeTournament === 'liga1' && (
+            <div
+              className={`p-5 rounded-3xl border shadow-lg ${
+                isPro
+                  ? 'bg-gradient-to-br from-blue-900/30 via-[#121620] to-[#0E1118] border-slate-800'
+                  : 'bg-gradient-to-br from-slate-50 via-white to-blue-50/20 border-slate-200'
+              }`}
+            >
+              <div className="flex items-center justify-between mb-2">
+                <span className="text-[10px] font-mono uppercase font-bold text-blue-600 dark:text-blue-400">
+                  BRI Liga 1 • Pekan 8 Faktual
+                </span>
+                <span className="px-2.5 py-0.5 rounded-full bg-blue-700 text-white text-[9px] font-black uppercase tracking-wider">
+                  Posisi #4 (Championship Zone)
+                </span>
+              </div>
+              <div className="flex items-end justify-between mt-1">
+                <div>
+                  <h4 className="text-xl font-black tracking-tight text-slate-950 dark:text-white">
+                    PERSIB Bandung
+                  </h4>
+                  <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
+                    Hanya terpaut 2 poin dari puncak klasemen (18 Poin)
+                  </p>
+                </div>
+                <div className="text-right font-mono">
+                  <span className="text-3xl font-black text-blue-600 dark:text-cyan-400">16</span>
+                  <span className="text-[10px] text-slate-400 block -mt-1 font-bold">Poin</span>
+                </div>
+              </div>
+              <div className="grid grid-cols-3 gap-2 mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800 text-center text-[10px]">
+                <div>
+                  <span className="block text-slate-400 font-medium">Rekor Laga</span>
+                  <span className="font-mono font-bold text-xs">5M - 1S - 2K</span>
+                </div>
+                <div>
+                  <span className="block text-slate-400 font-medium">Gol (GF:GA)</span>
+                  <span className="font-mono font-bold text-xs">15 : 8</span>
+                </div>
+                <div>
+                  <span className="block text-slate-400 font-medium">Selisih Gol</span>
+                  <span className="font-mono font-bold text-emerald-500 text-xs">+7</span>
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* Standings Table Container */}
+          <div
+            className={`rounded-[32px] border p-5 shadow-xl transition-all ${
+              isPro
+                ? 'bg-[#121620] border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.5)]'
+                : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
+            }`}
+          >
+            <div className="pb-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+              <div>
+                <span className="text-[10px] font-mono font-bold uppercase text-slate-400 block">
+                  Tabel Klasemen Lengkap
+                </span>
+                <h3 className="text-sm font-black tracking-tight mt-0.5">
+                  {activeTournament === 'shopee_cup'
+                    ? 'ASEAN Club Championship 2026/27'
+                    : activeTournament === 'acl2'
+                    ? 'AFC Champions League Two 2026/27'
+                    : '18 Klub BRI Liga 1 2026/2027'}
+                </h3>
+              </div>
+              <span className="text-[9px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300">
+                Verified PT LIB & AFC
+              </span>
+            </div>
+
+            <div className="overflow-x-auto no-scrollbar mt-3">
+              {activeTournament === 'shopee_cup' || activeTournament === 'acl2' ? (
+                <table className="w-full text-left text-xs whitespace-nowrap">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                      <th className="py-2.5 px-2 text-center">#</th>
+                      <th className="py-2.5 px-2">Klub</th>
+                      <th className="py-2.5 px-1.5 text-center">Main</th>
+                      <th className="py-2.5 px-1.5 text-center">M-S-K</th>
+                      <th className="py-2.5 px-1.5 text-center">Gol</th>
+                      <th className="py-2.5 px-2 text-center font-black">Poin</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {(activeTournament === 'shopee_cup' ? shopeeCupStandings : aclStandings).map(
+                      (team: GroupTeam, index: number) => (
+                        <tr
+                          key={team.name}
+                          className={`border-b transition-colors ${
+                            team.isPersib
+                              ? isPro
+                                ? 'bg-blue-600/15 border-blue-800/80 text-cyan-300 font-black'
+                                : 'bg-blue-50/80 border-blue-200 text-blue-950 font-black'
+                              : isPro
+                              ? 'border-slate-800/50 text-slate-300'
+                              : 'border-slate-100 text-slate-800'
+                          }`}
+                        >
+                          <td className="py-3 px-2 text-center">
+                            <span
+                              className={`inline-flex items-center justify-center w-5 h-5 rounded-full font-black text-[10px] ${
+                                index === 0
+                                  ? 'bg-blue-600 text-white'
+                                  : isPro
+                                  ? 'bg-slate-800 text-slate-400'
+                                  : 'bg-slate-100 text-slate-700'
+                              }`}
+                            >
+                              {index + 1}
+                            </span>
+                          </td>
+                          <td className="py-3 px-2 font-bold text-xs truncate max-w-[170px]">
+                            <div className="flex items-center gap-2">
+                              <ClubThumb name={team.name} logoUrl={team.logoUrl} />
+                              <span className="truncate">{team.name}</span>
+                              {team.isPersib && (
+                                <span className="ml-1 text-[8.5px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-white font-mono shrink-0">
+                                  {activeTournament === 'shopee_cup' ? 'Puncak Grup' : 'Juara Grup'}
+                                </span>
+                              )}
+                            </div>
+                          </td>
+                          <td className="py-3 px-1.5 text-center font-mono text-[11px]">{team.played}</td>
+                          <td className="py-3 px-1.5 text-center font-mono text-[11px] text-slate-400">
+                            {team.won}-{team.drawn}-{team.lost ?? 0}
+                          </td>
+                          <td className="py-3 px-1.5 text-center font-mono text-[11px] text-slate-400">
+                            {team.gf}:{team.ga}
+                          </td>
+                          <td className="py-3 px-2 text-center font-mono font-black text-sm text-blue-600 dark:text-cyan-400">
+                            {team.points}
+                          </td>
+                        </tr>
+                      )
+                    )}
+                  </tbody>
+                </table>
+              ) : (
+                <table className="w-full text-left text-xs whitespace-nowrap">
+                  <thead>
+                    <tr className="border-b border-slate-200 dark:border-slate-800 text-[10px] uppercase font-bold text-slate-400">
+                      <th className="py-2.5 px-2 text-center">#</th>
+                      <th className="py-2.5 px-2">Klub</th>
+                      <th className="py-2.5 px-1 text-center">M</th>
+                      <th className="py-2.5 px-1 text-center">M-S-K</th>
+                      <th className="py-2.5 px-1 text-center">SG</th>
+                      <th className="py-2.5 px-2 text-center font-black">Poin</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {liga1Standings.map((row: LeagueStandingRow) => (
                       <tr
-                        key={team.name}
+                        key={row.team}
                         className={`border-b transition-colors ${
-                          team.isPersib
+                          row.isPersib
                             ? isPro
                               ? 'bg-blue-600/15 border-blue-800/80 text-cyan-300 font-black'
                               : 'bg-blue-50/80 border-blue-200 text-blue-950 font-black'
@@ -482,117 +884,53 @@ export function MatchCenter() {
                             : 'border-slate-100 text-slate-800'
                         }`}
                       >
-                        <td className="py-3 px-2 text-center">
+                        <td className="py-2.5 px-2 text-center">
                           <span
                             className={`inline-flex items-center justify-center w-5 h-5 rounded-full font-black text-[10px] ${
-                              index === 0
+                              row.isPersib
                                 ? 'bg-blue-600 text-white'
+                                : row.rank <= 3
+                                ? 'bg-amber-400 text-slate-950'
                                 : isPro
                                 ? 'bg-slate-800 text-slate-400'
                                 : 'bg-slate-100 text-slate-700'
                             }`}
                           >
-                            {index + 1}
+                            {row.rank}
                           </span>
                         </td>
-                        <td className="py-3 px-2 font-bold text-xs truncate max-w-[170px]">
+                        <td className="py-2.5 px-2 font-bold text-xs truncate max-w-[160px]">
                           <div className="flex items-center gap-2">
-                            <ClubThumb name={team.name} logoUrl={team.logoUrl} />
-                            <span className="truncate">{team.name}</span>
-                            {team.isPersib && (
-                              <span className="ml-1 text-[8.5px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-white font-mono shrink-0">
-                                {activeTournament === 'shopee_cup' ? 'Puncak Grup' : 'Juara Grup'}
+                            <ClubThumb name={row.team} logoUrl={row.logoUrl} />
+                            <span className="truncate">{row.team}</span>
+                            {row.isPersib && (
+                              <span className="ml-1 text-[8px] uppercase px-1 rounded bg-blue-700 text-white font-mono shrink-0">
+                                Persib
                               </span>
                             )}
                           </div>
                         </td>
-                        <td className="py-3 px-1.5 text-center font-mono text-[11px]">{team.played}</td>
-                        <td className="py-3 px-1.5 text-center font-mono text-[11px] text-slate-400">
-                          {team.won}-{team.drawn}-{team.lost ?? 0}
+                        <td className="py-2.5 px-1 text-center font-mono text-[11px]">{row.played}</td>
+                        <td className="py-2.5 px-1 text-center font-mono text-[10px] text-slate-400">
+                          {row.won}-{row.drawn}-{row.lost}
                         </td>
-                        <td className="py-3 px-1.5 text-center font-mono text-[11px] text-slate-400">
-                          {team.gf}:{team.ga}
+                        <td className="py-2.5 px-1 text-center font-mono text-[11px] text-slate-400">
+                          {row.gd > 0 ? `+${row.gd}` : row.gd}
                         </td>
-                        <td className="py-3 px-2 text-center font-mono font-black text-sm text-blue-600 dark:text-cyan-400">
-                          {team.points}
+                        <td className="py-2.5 px-2 text-center font-mono font-black text-sm text-blue-600 dark:text-cyan-400">
+                          {row.points}
                         </td>
                       </tr>
-                    )
-                  )}
-                </tbody>
-              </table>
-            ) : (
-              <table className="w-full text-left text-xs whitespace-nowrap">
-                <thead>
-                  <tr className="border-b border-slate-200 dark:border-slate-800 text-[10px] uppercase font-bold text-slate-400">
-                    <th className="py-2.5 px-2 text-center">#</th>
-                    <th className="py-2.5 px-2">Klub</th>
-                    <th className="py-2.5 px-1 text-center">M</th>
-                    <th className="py-2.5 px-1 text-center">M-S-K</th>
-                    <th className="py-2.5 px-1 text-center">SG</th>
-                    <th className="py-2.5 px-2 text-center font-black">Poin</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {liga1Standings.map((row: LeagueStandingRow) => (
-                    <tr
-                      key={row.team}
-                      className={`border-b transition-colors ${
-                        row.isPersib
-                          ? isPro
-                            ? 'bg-blue-600/15 border-blue-800/80 text-cyan-300 font-black'
-                            : 'bg-blue-50/80 border-blue-200 text-blue-950 font-black'
-                          : isPro
-                          ? 'border-slate-800/50 text-slate-300'
-                          : 'border-slate-100 text-slate-800'
-                      }`}
-                    >
-                      <td className="py-2.5 px-2 text-center">
-                        <span
-                          className={`inline-flex items-center justify-center w-5 h-5 rounded-full font-black text-[10px] ${
-                            row.isPersib
-                              ? 'bg-blue-600 text-white'
-                              : row.rank <= 3
-                              ? 'bg-amber-400 text-slate-950'
-                              : isPro
-                              ? 'bg-slate-800 text-slate-400'
-                              : 'bg-slate-100 text-slate-700'
-                          }`}
-                        >
-                          {row.rank}
-                        </span>
-                      </td>
-                      <td className="py-2.5 px-2 font-bold text-xs truncate max-w-[160px]">
-                        <div className="flex items-center gap-2">
-                          <ClubThumb name={row.team} logoUrl={row.logoUrl} />
-                          <span className="truncate">{row.team}</span>
-                          {row.isPersib && (
-                            <span className="ml-1 text-[8px] uppercase px-1 rounded bg-blue-700 text-white font-mono shrink-0">
-                              Persib
-                            </span>
-                          )}
-                        </div>
-                      </td>
-                      <td className="py-2.5 px-1 text-center font-mono text-[11px]">{row.played}</td>
-                      <td className="py-2.5 px-1 text-center font-mono text-[10px] text-slate-400">
-                        {row.won}-{row.drawn}-{row.lost}
-                      </td>
-                      <td className="py-2.5 px-1 text-center font-mono text-[11px] text-slate-400">
-                        {row.gd > 0 ? `+${row.gd}` : row.gd}
-                      </td>
-                      <td className="py-2.5 px-2 text-center font-mono font-black text-sm text-blue-600 dark:text-cyan-400">
-                        {row.points}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
           </div>
         </div>
       )}
 
-      {/* 6. Tab 3: Tactics Lineup List */}
+      {/* 6. Sub-Page Tab 4: Tactics Lineup List (Taktik XI & Skuad) */}
       {matchViewTab === 'lineup' && (
         <div
           className={`rounded-[32px] border p-5 shadow-xl transition-all ${
@@ -604,7 +942,7 @@ export function MatchCenter() {
           <div className="pb-3 border-b border-slate-200 dark:border-slate-800 mb-4">
             <h3 className="text-sm font-black tracking-tight">Formasi Taktis 4-2-3-1</h3>
             <p className="text-[11px] text-slate-400 mt-0.5">
-              Head Coach: <strong className="text-blue-600 dark:text-cyan-400">Igor Tolic</strong> • Starting XI & Substitutes
+              Head Coach: <strong className="text-blue-600 dark:text-cyan-400">Igor Tolic</strong> • Starting XI & Rotasi
             </p>
           </div>
 
@@ -646,9 +984,9 @@ export function MatchCenter() {
               </div>
             </div>
 
-            <div className="pt-2">
-              <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-blue-500">
-                Skuad Cadangan & Rotasi
+            <div>
+              <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-slate-400">
+                Pemain Pengganti & Rotasi (Substitutes)
               </h4>
               <div className="space-y-2">
                 {substitutes.map((player: Player) => (
@@ -657,28 +995,30 @@ export function MatchCenter() {
                     onClick={() => setSelectedPlayer(player)}
                     className={`flex items-center justify-between p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
                       isPro
-                        ? 'bg-slate-900/40 border-slate-800/60 hover:border-cyan-400/50'
-                        : 'bg-white border-slate-200 hover:border-blue-600'
+                        ? 'bg-slate-900/40 border-slate-800/80 hover:border-slate-700'
+                        : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
                     }`}
                   >
                     <div className="flex items-center gap-3">
                       <span
                         className={`w-8 h-8 rounded-xl font-mono font-black text-xs flex items-center justify-center shrink-0 ${
-                          isPro ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-700'
+                          isPro
+                            ? 'bg-slate-800 text-slate-300'
+                            : 'bg-slate-100 text-slate-700'
                         }`}
                       >
                         #{player.number}
                       </span>
                       <div>
-                        <div className="text-xs font-black">{player.name}</div>
+                        <div className="text-xs font-bold">{player.name}</div>
                         <div className="text-[10px] text-slate-400 font-medium">
                           {player.position} • {player.nationality}
                         </div>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
-                      <span className="text-[11px] font-mono text-slate-400 font-bold">
-                        {player.fitness.percentage}%
+                      <span className="text-[11px] font-mono text-emerald-500 font-bold">
+                        {player.fitness.percentage}% Fit
                       </span>
                       <ChevronRight className="w-4 h-4 text-slate-400" />
                     </div>
