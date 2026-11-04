@@ -40,7 +40,8 @@ export default function HomePage() {
               <Sparkles className="w-3 h-3 text-amber-400" />
               {isPro
                 ? 'State B Aktif (Neon Blue & Glowing Gold • Matchday View)'
-                : 'State A Aktif (Ultra-Minimalist Day-to-Day • Focus on Clean Data)'}
+                // REFACTOR: Updated State A description to Light Bright & High Contrast
+                : 'State A Aktif (Light Bright & High Contrast • White Canvas & Deep Royal Blue)'}
             </span>
           </div>
 

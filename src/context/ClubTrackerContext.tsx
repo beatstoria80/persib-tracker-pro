@@ -49,7 +49,8 @@ interface ClubTrackerContextType {
 const ClubTrackerContext = createContext<ClubTrackerContextType | undefined>(undefined);
 
 export function ClubTrackerProvider({ children }: { children: ReactNode }) {
-  const [mode, setMode] = useState<AppThemeState>('pro');
+  // REFACTOR: Initialized default state to 'minimal' for Light Bright & High-Contrast visual mode as requested
+  const [mode, setMode] = useState<AppThemeState>('minimal');
   const [activeHub, setActiveHub] = useState<ActiveHub>('match-center');
   const [activeTournament, setActiveTournament] = useState<TournamentKey>('liga1');
   const [matchDisplayMode, setMatchDisplayMode] = useState<MatchDisplayMode>('official_result');
@@ -151,7 +152,8 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         className={`min-h-screen w-full transition-colors duration-500 font-sans ${
           mode === 'pro'
             ? 'bg-[#060B13] text-slate-100 selection:bg-blue-600 selection:text-white'
-            : 'bg-[#F8FAFC] text-slate-900 selection:bg-blue-100 selection:text-blue-900'
+            // REFACTOR: Enhanced light mode background to high-contrast ultra-bright canvas with deep slate-950 text
+            : 'bg-[#F4F6F9] text-slate-950 selection:bg-blue-600 selection:text-white'
         }`}
       >
         {children}

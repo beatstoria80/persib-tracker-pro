@@ -104,20 +104,21 @@ export function Header() {
               className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold tracking-wide transition-all duration-300 border ${
                 isPro
                   ? 'bg-gradient-to-r from-amber-500/20 via-blue-600/20 to-cyan-500/20 border-cyan-400/50 text-cyan-200 hover:border-cyan-300 shadow-[0_0_15px_rgba(6,182,212,0.25)]'
-                  : 'bg-white border-slate-300 text-slate-700 hover:border-blue-400 shadow-sm'
+                  // REFACTOR: Upgraded light mode switcher styling to crisp white with royal blue high-contrast ring
+                  : 'bg-white border-blue-600 text-blue-900 shadow-md ring-2 ring-blue-500/10 hover:bg-blue-50'
               }`}
             >
               {isPro ? (
                 <>
                   <Zap className="w-4 h-4 text-amber-400 fill-amber-400 animate-bounce" />
                   <span className="hidden sm:inline">STATE B:</span>
-                  <span className="text-amber-300 font-extrabold uppercase">PRO LIVE</span>
+                  <span className="text-amber-300 font-extrabold uppercase">PRO DARK</span>
                 </>
               ) : (
                 <>
                   <Sparkles className="w-4 h-4 text-blue-600" />
                   <span className="hidden sm:inline">STATE A:</span>
-                  <span className="text-blue-700 font-bold uppercase">MINIMAL DAY</span>
+                  <span className="text-blue-700 font-extrabold uppercase">LIGHT BRIGHT</span>
                 </>
               )}
             </button>
