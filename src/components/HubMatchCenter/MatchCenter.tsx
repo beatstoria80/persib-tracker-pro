@@ -1140,11 +1140,11 @@ export function MatchCenter() {
                   >
                     <div className="relative">
                       {/* Round Player Avatar Node */}
-                      <div className="w-10 h-10 rounded-full ring-2 ring-white/95 shadow-xl overflow-hidden bg-gradient-to-br from-blue-700 to-slate-900 group-hover:scale-110 group-hover:ring-cyan-300 transition-all flex items-center justify-center">
+                      <div className="w-10 h-10 rounded-full ring-2 ring-white/95 shadow-xl overflow-hidden bg-gradient-to-br from-blue-700 to-slate-900 group-hover:scale-110 group-hover:ring-cyan-300 transition-all flex items-center justify-center p-0.5">
                         <img
                           src={getPlayerAvatar(pos.name)}
                           alt={pos.name}
-                          className="w-full h-full object-cover object-top select-none"
+                          className="w-full h-full object-contain select-none scale-[0.88] origin-bottom"
                           onError={(e) => {
                             (e.currentTarget as HTMLElement).style.display = 'none';
                           }}

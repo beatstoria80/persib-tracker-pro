@@ -55,17 +55,17 @@ export function PlayerAvatar({
       } ${className}`}
     >
       {!imgError && src ? (
-        <>
+        <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
           <img
             src={src}
             alt={name}
-            className="w-full h-full object-cover object-top select-none transition-all duration-300"
+            className="w-full h-full object-contain select-none transition-all duration-300 scale-[0.88] origin-bottom drop-shadow-sm"
             onError={() => setImgError(true)}
             loading="lazy"
           />
-          {/* Subtle bottom vignette to ensure number readability */}
-          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-black/70 to-transparent pointer-events-none" />
-        </>
+          {/* Subtle bottom vignette to ensure number readability without cutting off the face */}
+          <div className="absolute inset-x-0 bottom-0 h-1/4 bg-gradient-to-t from-black/60 to-transparent pointer-events-none" />
+        </div>
       ) : (
         <div className="flex flex-col items-center justify-center w-full h-full bg-gradient-to-br from-blue-800 to-slate-950 text-white font-mono">
           <span>{number ? `#${number}` : name.substring(0, 2).toUpperCase()}</span>

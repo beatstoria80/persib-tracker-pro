@@ -513,6 +513,41 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     },
   },
   {
+    id: 'ragnar-17',
+    name: 'Ragnar Oratmangoen',
+    fullName: 'Ragnar Anthonius Maria Oratmangoen',
+    number: 17,
+    position: 'FW',
+    category: 'senior',
+    squadRole: 'substitute',
+    nationality: 'Indonesia (Naturalisasi)',
+    age: 28,
+    marketValue: '€500K (Rp 8.69 M)',
+    contractUntil: '31 Mei 2028',
+    verifiedData: true,
+    avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/410854-1789636282.png',
+    fitness: {
+      status: 'fit',
+      percentage: 100,
+      notes: 'Bintang Timnas Indonesia ("Wak Haji"). Winger modern eksplosif dengan olah bola lincah dan insting gol tajam.',
+    },
+    stats: {
+      minutesPlayed: 720,
+      appearances: 9,
+      goals: 4,
+      assists: 4,
+      passAccuracy: 86.8,
+      interceptions: 15,
+      tackles: 19,
+      shotsOnTarget: 17,
+      rating: 8.5,
+      heatmapCoords: [
+        { x: 74, y: 22, intensity: 0.9 },
+        { x: 82, y: 35, intensity: 0.85 },
+      ],
+    },
+  },
+  {
     id: 'irianto-53',
     name: 'Rachmat Irianto',
     fullName: 'Rachmat Irianto',
@@ -924,6 +959,8 @@ export const PLAYER_AVATARS: Record<string, string> = {
   'tyronne-10': 'https://img.a.transfermarkt.technology/portrait/header/172127-1758705693.jpg',
   'rezaldi-56': 'https://img.a.transfermarkt.technology/portrait/header/506162-1737431083.png',
   'dds-99': 'https://img.a.transfermarkt.technology/portrait/header/190933-1663140488.png',
+  'ragnar-17': 'https://img.a.transfermarkt.technology/portrait/header/410854-1789636282.png',
+  'ragnar-77': 'https://img.a.transfermarkt.technology/portrait/header/410854-1789636282.png',
   'fitrah-98': 'https://img.a.transfermarkt.technology/portrait/header/1221253-1737430465.png',
   'ferdiansyah-37': 'https://img.a.transfermarkt.technology/portrait/header/933097-1737431859.png',
   'adzikry-71': 'https://img.a.transfermarkt.technology/portrait/header/1020476-1709536830.png',
@@ -963,6 +1000,7 @@ export function getPlayerAvatar(idOrName: string): string {
   if (lower.includes('henhen')) return PLAYER_AVATARS['henhen-12'];
   if (lower.includes('tyronne')) return PLAYER_AVATARS['tyronne-10'];
   if (lower.includes('rezaldi')) return PLAYER_AVATARS['rezaldi-56'];
+  if (lower.includes('ragnar') || lower.includes('oratmangoen')) return PLAYER_AVATARS['ragnar-17'];
   if (lower.includes('da silva') || lower.includes('dds')) return PLAYER_AVATARS['dds-99'];
 
   return 'https://img.a.transfermarkt.technology/portrait/header/187515-1718870104.png';
