@@ -18,51 +18,57 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
   const isPro = mode === 'pro';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/75 backdrop-blur-sm animate-in fade-in duration-200">
+    <div className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/75 backdrop-blur-sm p-0 sm:p-3 animate-in fade-in duration-200">
       <div
-        className={`w-full max-w-2xl rounded-3xl border overflow-hidden shadow-2xl transition-all ${
+        className={`w-full max-w-[430px] rounded-t-[32px] sm:rounded-3xl border overflow-hidden shadow-2xl flex flex-col max-h-[90vh] transition-all ${
           isPro
             ? 'bg-[#0A1220] border-blue-800/80 text-slate-100 shadow-[0_0_50px_rgba(37,99,235,0.25)]'
             : 'bg-white border-slate-300 text-slate-950'
         }`}
       >
+        {/* Mobile Drag Indicator */}
+        <div className="pt-2 sm:hidden flex justify-center">
+          <div className="w-10 h-1 rounded-full bg-slate-300 dark:bg-slate-700" />
+        </div>
+
+        {/* Modal Header */}
         <div
-          className={`flex items-center justify-between p-6 border-b ${
+          className={`flex items-center justify-between p-4 border-b ${
             isPro ? 'border-slate-800 bg-slate-900/60' : 'border-slate-200 bg-slate-50'
           }`}
         >
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <div
-              className={`w-12 h-12 rounded-2xl flex items-center justify-center font-black text-xl ${
+              className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-base shrink-0 ${
                 isPro
                   ? 'bg-blue-600 text-amber-300 ring-2 ring-cyan-400'
-                  : 'bg-blue-700 text-white shadow-md'
+                  : 'bg-blue-700 text-white shadow-sm'
               }`}
             >
               #{player.number}
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h3 className="text-xl font-black tracking-tight">{player.name}</h3>
+              <div className="flex items-center gap-1.5">
+                <h3 className="text-base font-black tracking-tight">{player.name}</h3>
                 {player.verifiedData && (
                   <span
-                    className={`inline-flex items-center gap-1 text-[10px] uppercase font-bold px-2 py-0.5 rounded-full ${
-                      isPro ? 'bg-cyan-950 text-cyan-300 border border-cyan-800' : 'bg-blue-100 text-blue-900 border border-blue-300'
+                    className={`inline-flex items-center gap-0.5 text-[8px] uppercase font-bold px-1.5 py-0.2 rounded-full ${
+                      isPro ? 'bg-cyan-950 text-cyan-300 border border-cyan-800' : 'bg-blue-100 text-blue-900'
                     }`}
                   >
-                    <ShieldCheck className="w-3 h-3 text-blue-600 dark:text-cyan-400" /> Terverifikasi
+                    <ShieldCheck className="w-2.5 h-2.5 text-blue-600 dark:text-cyan-400" /> Terverifikasi
                   </span>
                 )}
               </div>
-              <p className={`text-xs ${isPro ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                {player.fullName} • Posisi: <strong className="text-blue-600 font-bold">{player.position}</strong> • {player.nationality} ({player.age} thn)
+              <p className="text-[11px] text-slate-500 font-medium">
+                {player.fullName} • <strong className="text-blue-600 font-bold">{player.position}</strong> ({player.age} thn)
               </p>
             </div>
           </div>
 
           <button
             onClick={onClose}
-            className={`p-2 rounded-xl transition-colors ${
+            className={`p-1.5 rounded-xl transition-colors ${
               isPro ? 'text-slate-400 hover:text-white hover:bg-slate-800' : 'text-slate-600 hover:text-slate-950 hover:bg-slate-200'
             }`}
           >
@@ -70,19 +76,21 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
           </button>
         </div>
 
-        <div className="p-6 space-y-6 max-h-[80vh] overflow-y-auto">
+        {/* Modal Scrollable Body */}
+        <div className="p-4 space-y-4 overflow-y-auto no-scrollbar flex-1 pb-6">
+          {/* Medical Fitness Card */}
           <div
-            className={`p-4 rounded-2xl border ${
+            className={`p-3.5 rounded-2xl border ${
               isPro ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50 border-slate-200'
             }`}
           >
-            <div className={`text-xs font-bold uppercase mb-2 flex items-center justify-between ${
+            <div className={`text-[10px] font-bold uppercase mb-2 flex items-center justify-between ${
               isPro ? 'text-slate-400' : 'text-slate-700'
             }`}>
-              <span>Status Kebugaran & Medis (Real-Time Dokter Tim)</span>
+              <span>Kondisi Medis & Kebugaran</span>
               <span className="font-mono text-cyan-500 font-bold">{player.fitness.percentage}% Optimal</span>
             </div>
-            <div className="mb-3">
+            <div className="mb-2">
               <FitnessTrackerBadge
                 status={player.fitness.status}
                 percentage={player.fitness.percentage}
@@ -90,7 +98,7 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                 isPro={isPro}
               />
             </div>
-            <div className={`w-full h-2 rounded-full overflow-hidden mb-2 ${isPro ? 'bg-slate-800' : 'bg-slate-200'}`}>
+            <div className={`w-full h-1.5 rounded-full overflow-hidden mb-1.5 ${isPro ? 'bg-slate-800' : 'bg-slate-200'}`}>
               <div
                 style={{ width: `${player.fitness.percentage}%` }}
                 className={`h-full ${
@@ -103,31 +111,27 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
               />
             </div>
             {player.fitness.notes && (
-              <p className={`text-xs italic ${isPro ? 'text-slate-300' : 'text-slate-700'}`}>{player.fitness.notes}</p>
-            )}
-            {player.fitness.estimatedReturn && (
-              <p className={`text-xs mt-1 font-semibold ${isPro ? 'text-amber-400' : 'text-amber-700'}`}>
-                Estimasi Siap Tanding: {player.fitness.estimatedReturn}
-              </p>
+              <p className={`text-[11px] italic ${isPro ? 'text-slate-300' : 'text-slate-700'}`}>{player.fitness.notes}</p>
             )}
           </div>
 
+          {/* Spatial Heatmap */}
           <div
-            className={`p-4 rounded-2xl border ${
+            className={`p-3.5 rounded-2xl border ${
               isPro ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50 border-slate-200'
             }`}
           >
-            <div className={`text-xs font-bold uppercase mb-2 flex items-center justify-between ${
+            <div className={`text-[10px] font-bold uppercase mb-2 flex items-center justify-between ${
               isPro ? 'text-slate-400' : 'text-slate-700'
             }`}>
-              <span>Visual Heatmap Pergerakan Lapangan (Match Tracker)</span>
-              <span className={`text-[10px] font-bold ${isPro ? 'text-cyan-400' : 'text-blue-700'}`}>
+              <span>Heatmap Pergerakan Lapangan</span>
+              <span className={`text-[9px] font-bold ${isPro ? 'text-cyan-400' : 'text-blue-700'}`}>
                 Zona Dominasi Posisi
               </span>
             </div>
 
             <div
-              className={`w-full aspect-[16/9] rounded-xl relative overflow-hidden border p-2 ${
+              className={`w-full aspect-[16/10] rounded-xl relative overflow-hidden border p-2 ${
                 isPro ? 'bg-[#061826] border-blue-900/60' : 'bg-[#15803d] border-emerald-800'
               }`}
             >
@@ -148,83 +152,73 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                     opacity: pt.intensity,
                     transform: 'translate(-50%, -50%)',
                   }}
-                  className="absolute w-20 h-20 rounded-full bg-gradient-to-r from-amber-500/80 via-rose-500/70 to-blue-500/40 blur-md pointer-events-none"
+                  className="absolute w-16 h-16 rounded-full bg-gradient-to-r from-amber-500/80 via-rose-500/70 to-blue-500/40 blur-md pointer-events-none"
                 />
               ))}
 
-              <div className="absolute bottom-2 right-3 text-[10px] font-mono font-bold text-white bg-black/40 px-2 py-0.5 rounded">
+              <div className="absolute bottom-2 right-2 text-[9px] font-mono font-bold text-white bg-black/40 px-1.5 py-0.2 rounded">
                 Arah Serang &rarr;
               </div>
             </div>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {/* Quick Stats Grid */}
+          <div className="grid grid-cols-4 gap-2 text-center">
             <div
-              className={`p-3 rounded-xl border text-center ${
+              className={`p-2 rounded-xl border ${
                 isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}
             >
-              <div className={`text-[10px] uppercase font-bold ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
-                Akurasi Umpan
-              </div>
-              <div className={`text-lg font-mono font-black mt-0.5 ${isPro ? 'text-cyan-400' : 'text-blue-700'}`}>
+              <div className="text-[9px] uppercase font-bold text-slate-500">Umpan</div>
+              <div className={`text-sm font-mono font-black mt-0.5 ${isPro ? 'text-cyan-400' : 'text-blue-700'}`}>
                 {player.stats.passAccuracy}%
               </div>
             </div>
             <div
-              className={`p-3 rounded-xl border text-center ${
+              className={`p-2 rounded-xl border ${
                 isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}
             >
-              <div className={`text-[10px] uppercase font-bold ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
-                Intersep & Tekel
-              </div>
-              <div className="text-lg font-mono font-black text-emerald-600 dark:text-emerald-400 mt-0.5">
-                {player.stats.interceptions} / {player.stats.tackles}
+              <div className="text-[9px] uppercase font-bold text-slate-500">Tekel</div>
+              <div className="text-sm font-mono font-black text-emerald-600 dark:text-emerald-400 mt-0.5">
+                {player.stats.tackles}
               </div>
             </div>
             <div
-              className={`p-3 rounded-xl border text-center ${
+              className={`p-2 rounded-xl border ${
                 isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}
             >
-              <div className={`text-[10px] uppercase font-bold ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
-                Gol / Assist
-              </div>
-              <div className={`text-lg font-mono font-black mt-0.5 ${isPro ? 'text-amber-400' : 'text-amber-600'}`}>
-                {player.stats.goals} / {player.stats.assists}
+              <div className="text-[9px] uppercase font-bold text-slate-500">Gol/Ast</div>
+              <div className={`text-sm font-mono font-black mt-0.5 ${isPro ? 'text-amber-400' : 'text-amber-600'}`}>
+                {player.stats.goals}/{player.stats.assists}
               </div>
             </div>
             <div
-              className={`p-3 rounded-xl border text-center ${
+              className={`p-2 rounded-xl border ${
                 isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
               }`}
             >
-              <div className={`text-[10px] uppercase font-bold ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
-                Match Rating
-              </div>
-              <div className={`text-lg font-mono font-black mt-0.5 ${isPro ? 'text-blue-400' : 'text-blue-800'}`}>
+              <div className="text-[9px] uppercase font-bold text-slate-500">Rating</div>
+              <div className={`text-sm font-mono font-black mt-0.5 ${isPro ? 'text-blue-400' : 'text-blue-800'}`}>
                 ★ {player.stats.rating}
               </div>
             </div>
           </div>
 
+          {/* Contract & Market Value */}
           <div
-            className={`p-4 rounded-2xl border flex flex-col sm:flex-row items-center justify-between gap-3 ${
+            className={`p-3 rounded-2xl border flex items-center justify-between text-xs ${
               isPro ? 'bg-blue-950/30 border-blue-800/40' : 'bg-blue-50 border-blue-200'
             }`}
           >
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-blue-600" />
-              <span className={`text-xs ${isPro ? 'text-slate-400' : 'text-slate-700'}`}>Masa Kontrak:</span>
-              // REFACTOR: Replaced hardcoded text-slate-200 with contrast-adaptive color
-              <strong className={`text-xs font-mono font-bold ${isPro ? 'text-slate-200' : 'text-slate-950'}`}>
-                {player.contractUntil}
-              </strong>
+            <div className="flex items-center gap-1.5">
+              <Calendar className="w-3.5 h-3.5 text-blue-600" />
+              <span className="text-[11px] text-slate-500">Kontrak:</span>
+              <strong className="font-mono text-[11px]">{player.contractUntil}</strong>
             </div>
-            <div className="flex items-center gap-2">
-              <DollarSign className="w-4 h-4 text-emerald-600" />
-              <span className={`text-xs ${isPro ? 'text-slate-400' : 'text-slate-700'}`}>Nilai Pasar Resmi:</span>
+            <div className="flex items-center gap-1.5">
+              <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
               <strong className="text-xs text-emerald-600 dark:text-emerald-400 font-mono font-bold">
                 {player.marketValue}
               </strong>

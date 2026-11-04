@@ -11,4 +11,16 @@ body {
   font-family: var(--font-plus-jakarta), Arial, Helvetica, sans-serif;
   margin: 0;
   padding: 0;
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+/* Hide scrollbar for mobile clean look */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }

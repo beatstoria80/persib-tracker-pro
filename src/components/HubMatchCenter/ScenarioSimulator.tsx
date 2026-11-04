@@ -109,10 +109,10 @@ export function ScenarioSimulator() {
 
   return (
     <div
-      className={`rounded-2xl border p-5 sm:p-6 transition-all duration-300 ${
+      className={`rounded-2xl border p-3.5 sm:p-5 transition-all duration-300 ${
         isPro
-          ? 'bg-[#0A111E]/90 border-blue-900/50 shadow-[0_4px_25px_rgba(0,102,255,0.08)]'
-          : 'bg-white border-slate-200 shadow-sm'
+          ? 'bg-[#0A111E]/90 border-blue-900/50 shadow-sm'
+          : 'bg-white border-slate-300 shadow-sm'
       }`}
     >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-200 dark:border-slate-800 gap-3">
@@ -347,8 +347,8 @@ export function ScenarioSimulator() {
         </div>
       </div>
 
-      <div className="overflow-x-auto">
-        <table className="w-full text-left text-xs">
+      <div className="overflow-x-auto no-scrollbar">
+        <table className="w-full text-left text-xs whitespace-nowrap">
           <thead>
             <tr
               className={`border-b ${

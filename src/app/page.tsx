@@ -3,92 +3,99 @@
 import React from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { Header } from '@/components/Header';
+import { MobileBottomNav } from '@/components/MobileBottomNav';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
-import { ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
+import { ShieldCheck, CheckCircle2, Smartphone } from 'lucide-react';
 
 export default function HomePage() {
   const { mode, activeHub, lastVerifiedDate } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
-    <div className="flex flex-col min-h-screen">
-      <Header />
-
-      <main className="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
-          <div className="flex items-center gap-2">
-            <span
-              className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full font-mono font-semibold ${
-                isPro
-                  ? 'bg-blue-950/70 border border-cyan-500/30 text-cyan-300'
-                  : 'bg-white border border-slate-200 text-slate-700 shadow-sm'
-              }`}
-            >
-              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
-              <span>{lastVerifiedDate}</span>
-            </span>
-
-            <span
-              className={`hidden md:inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold ${
-                isPro
-                  ? 'bg-amber-400/10 text-amber-300 border border-amber-400/20'
-                  : 'bg-blue-50 text-blue-700 border border-blue-200'
-              }`}
-            >
-              <Sparkles className="w-3 h-3 text-amber-400" />
-              {isPro
-                ? 'State B Aktif (Neon Blue & Glowing Gold • Matchday View)'
-                // REFACTOR: Updated State A description to Light Bright & High Contrast
-                : 'State A Aktif (Light Bright & High Contrast • White Canvas & Deep Royal Blue)'}
-            </span>
+    // Outer Container: On desktop, provides ambient stadium backdrop; on mobile, takes 100% full screen
+    <div
+      className={`min-h-screen w-full flex justify-center items-start transition-colors duration-500 ${
+        isPro ? 'bg-[#03060c]' : 'bg-[#e2e8f0]'
+      }`}
+    >
+      {/* Desktop Helper Backdrop Note (hidden on mobile) */}
+      <div className="hidden xl:flex fixed left-10 top-12 flex-col gap-2 max-w-xs text-xs pointer-events-none">
+        <div
+          className={`p-4 rounded-2xl border ${
+            isPro ? 'bg-[#08101e]/80 border-blue-900/50 text-slate-300' : 'bg-white/90 border-slate-300 text-slate-800 shadow-md'
+          }`}
+        >
+          <div className="flex items-center gap-2 font-bold mb-1">
+            <Smartphone className="w-4 h-4 text-blue-600" />
+            <span>Mobile-Only Layout Active</span>
           </div>
-
-          <div className="text-slate-400 text-[11px] font-medium flex items-center gap-2">
-            <span>Standar Klub Profesional • Tanpa Rumor Spekulatif</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
-          </div>
+          <p className="text-[11px] leading-relaxed opacity-80">
+            Aplikasi ini dikunci secara ketat dalam layout smartphone (430px) untuk interaksi sentuh optimal dan standar aplikasi klub resmi.
+          </p>
         </div>
+      </div>
 
-        <div className="transition-all duration-300">
-          {activeHub === 'match-center' && <MatchCenter />}
-          {activeHub === 'roster' && <RosterDeepDive />}
-          {activeHub === 'transparency' && <CorporateTransparency />}
-        </div>
-      </main>
-
-      <footer
-        className={`mt-16 border-t py-8 text-xs transition-colors duration-300 ${
+      {/* Mobile Device Container (Edge-to-edge on mobile, sleek phone frame on desktop) */}
+      <div
+        className={`w-full max-w-[430px] min-h-screen flex flex-col relative transition-all duration-300 sm:my-4 sm:rounded-[36px] sm:shadow-[0_20px_70px_rgba(0,0,0,0.35)] sm:border sm:overflow-hidden ${
           isPro
-            ? 'bg-[#04080F] border-slate-800 text-slate-400'
-            : 'bg-white border-slate-200 text-slate-600'
+            ? 'bg-[#060B13] text-slate-100 sm:border-blue-900/50'
+            : 'bg-[#F8FAFC] text-slate-950 sm:border-slate-300'
         }`}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
-            <div className="w-7 h-7 rounded-lg bg-blue-700 text-white font-black flex items-center justify-center text-xs">
-              P
-            </div>
-            <div>
-              <span className="font-bold text-slate-200">Persib Tracker Intelligence Engine</span>
-              <p className="text-[11px] text-slate-400">
-                Official Club Intelligence • PT Persib Bandung Bermartabat (PBB)
-              </p>
-            </div>
-          </div>
+        {/* Mobile Header */}
+        <Header />
 
-          <div className="flex flex-wrap items-center gap-4 text-[11px]">
-            <span className="flex items-center gap-1 text-cyan-400">
-              <ShieldCheck className="w-3.5 h-3.5" /> 100% Data Faktual & Terverifikasi
+        {/* Top Status & Verification Pill */}
+        <div className="px-3.5 pt-3 pb-1">
+          <div
+            className={`flex items-center justify-between px-3 py-1.5 rounded-xl text-[10px] font-mono border ${
+              isPro
+                ? 'bg-blue-950/70 border-cyan-500/30 text-cyan-300'
+                : 'bg-white border-slate-300 text-slate-800 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center gap-1.5 truncate">
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 shrink-0" />
+              <span className="truncate">{lastVerifiedDate}</span>
+            </div>
+            <span
+              className={`shrink-0 font-bold uppercase px-1.5 py-0.2 rounded ${
+                isPro ? 'bg-amber-400/20 text-amber-300' : 'bg-blue-50 text-blue-800'
+              }`}
+            >
+              {isPro ? 'PRO MODE' : 'LIGHT'}
             </span>
-            <span>•</span>
-            <span>PWA Offline-Ready</span>
-            <span>•</span>
-            <span>Animasi Taktik 2D & Spasial</span>
           </div>
         </div>
-      </footer>
+
+        {/* Scrollable Main Mobile Hub Content */}
+        <main className="flex-1 px-3.5 py-3 pb-28">
+          <div className="transition-all duration-300">
+            {activeHub === 'match-center' && <MatchCenter />}
+            {activeHub === 'roster' && <RosterDeepDive />}
+            {activeHub === 'transparency' && <CorporateTransparency />}
+          </div>
+
+          {/* Compact Mobile Footer */}
+          <footer
+            className={`mt-10 pt-4 border-t text-[10px] text-center transition-colors ${
+              isPro ? 'border-slate-800 text-slate-400' : 'border-slate-300 text-slate-600'
+            }`}
+          >
+            <div className="flex items-center justify-center gap-1.5 font-bold mb-1">
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
+              <span>PERSIB TRACKER • PT Persib Bandung Bermartabat</span>
+            </div>
+            <p className="opacity-75">100% Data Faktual & Terverifikasi Musim 2026/2027</p>
+          </footer>
+        </main>
+
+        {/* Fixed Mobile Bottom Navigation Bar */}
+        <MobileBottomNav />
+      </div>
     </div>
   );
 }

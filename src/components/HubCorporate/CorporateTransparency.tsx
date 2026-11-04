@@ -16,7 +16,6 @@ import {
   SunMedium,
   Award,
 } from 'lucide-react';
-// REFACTOR: Strictly imported types
 import { InfrastructureItem, ManagementMember, Player } from '@/types/club';
 
 export function CorporateTransparency() {
@@ -26,126 +25,105 @@ export function CorporateTransparency() {
   const [activeSection, setActiveSection] = useState<'infrastructure' | 'management' | 'ffp'>('infrastructure');
 
   return (
-    <div className="space-y-6">
-      {/* REFACTOR: Container high-contrast card styling in State A */}
+    <div className="space-y-4">
+      {/* Mobile Transparency Header Card */}
       <div
-        className={`rounded-2xl border p-5 sm:p-6 transition-all duration-300 ${
+        className={`rounded-2xl border p-3.5 transition-all duration-300 ${
           isPro
-            ? 'bg-[#0A111E]/90 border-blue-900/50 shadow-[0_4px_25px_rgba(0,102,255,0.08)]'
+            ? 'bg-[#0A111E]/90 border-blue-900/50 shadow-sm'
             : 'bg-white border-slate-300 shadow-sm'
         }`}
       >
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div>
-            <div className="flex items-center gap-2 mb-1">
-              <span
-                className={`text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border flex items-center gap-1 ${
-                  isPro
-                    ? 'text-amber-400 bg-amber-400/10 border-amber-400/20'
-                    : 'text-amber-700 bg-amber-50 border-amber-300'
-                }`}
-              >
-                <Award className="w-3 h-3 text-amber-500" /> Standar Klub Profesional Musim 2026/2027
-              </span>
-            </div>
-            <h2
-              className={`text-xl font-black tracking-tight flex items-center gap-2 ${
-                isPro ? 'text-slate-100' : 'text-slate-950'
-              }`}
-            >
-              <Building2 className="w-5 h-5 text-blue-600" />
-              Corporate & Club Element Transparency
-            </h2>
-            <p className={`text-xs mt-0.5 ${isPro ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-              Transparansi resmi PT PBB: Struktur kepelatihan baru Igor Tolic & Bojan Hodak, stadion GBLA/SJH, dan ledger kontrak FFP
-            </p>
-          </div>
+        <div className="flex items-center justify-between mb-2">
+          <span
+            className={`text-[9px] font-mono font-bold uppercase tracking-wider px-2 py-0.5 rounded border flex items-center gap-1 ${
+              isPro
+                ? 'text-amber-400 bg-amber-400/10 border-amber-400/20'
+                : 'text-amber-700 bg-amber-50 border-amber-300'
+            }`}
+          >
+            <Award className="w-3 h-3 text-amber-500" /> Transparansi Klub 2026/27
+          </span>
 
-          <div
-            className={`flex items-center gap-2 px-3 py-1.5 rounded-xl text-xs font-mono font-bold border ${
+          <span
+            className={`text-[10px] font-mono font-bold px-2 py-0.5 rounded-full border ${
               isPro
                 ? 'bg-blue-950/80 border-blue-800 text-cyan-300'
                 : 'bg-blue-50 border-blue-300 text-blue-900'
             }`}
           >
-            <ShieldCheck className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
-            <span>Audit AFC & PT LIB 2026/2027</span>
-          </div>
+            Verified PT PBB
+          </span>
         </div>
 
-        <div
-          className={`flex flex-wrap items-center gap-2 mt-5 pt-4 border-t ${
-            isPro ? 'border-slate-800' : 'border-slate-200'
-          }`}
-        >
+        {/* Horizontal Scrollable Section Tabs */}
+        <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-1">
           <button
             onClick={() => setActiveSection('infrastructure')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wide transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold tracking-tight transition-all shrink-0 ${
               activeSection === 'infrastructure'
                 ? isPro
-                  ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]'
-                  : 'bg-blue-700 text-white shadow-md'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-blue-700 text-white shadow-sm'
                 : isPro
-                ? 'bg-slate-900 text-slate-400 hover:text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-slate-900 text-slate-400'
+                : 'bg-slate-100 text-slate-700'
             }`}
           >
-            Infrastruktur Stadion & Lapangan
+            Stadion & Fasilitas
           </button>
           <button
             onClick={() => setActiveSection('management')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wide transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold tracking-tight transition-all shrink-0 ${
               activeSection === 'management'
                 ? isPro
-                  ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]'
-                  : 'bg-blue-700 text-white shadow-md'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-blue-700 text-white shadow-sm'
                 : isPro
-                ? 'bg-slate-900 text-slate-400 hover:text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-slate-900 text-slate-400'
+                : 'bg-slate-100 text-slate-700'
             }`}
           >
-            Struktur Manajemen & Staf Kepelatihan Baru
+            Staf & Pelatih
           </button>
           <button
             onClick={() => setActiveSection('ffp')}
-            className={`px-4 py-2 rounded-xl text-xs font-bold tracking-wide transition-all ${
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold tracking-tight transition-all shrink-0 ${
               activeSection === 'ffp'
                 ? isPro
-                  ? 'bg-blue-600 text-white shadow-[0_0_15px_rgba(37,99,235,0.4)]'
-                  : 'bg-blue-700 text-white shadow-md'
+                  ? 'bg-blue-600 text-white shadow-sm'
+                  : 'bg-blue-700 text-white shadow-sm'
                 : isPro
-                ? 'bg-slate-900 text-slate-400 hover:text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-slate-900 text-slate-400'
+                : 'bg-slate-100 text-slate-700'
             }`}
           >
-            Financial Fair Play & Transfer Ledger (2026/2027)
+            FFP & Ledger Kontrak
           </button>
         </div>
       </div>
 
       {/* Section 1: Infrastructure */}
       {activeSection === 'infrastructure' && (
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div className="space-y-3">
           {INFRASTRUCTURE_LIST.map((infra: InfrastructureItem) => (
             <div
               key={infra.id}
-              className={`rounded-2xl border p-5 transition-all duration-300 ${
+              className={`rounded-2xl border p-4 transition-all duration-300 ${
                 isPro
-                  ? 'bg-[#0A1220]/90 border-blue-900/40 hover:border-cyan-400/50 shadow-md'
-                  : 'bg-white border-slate-300 shadow-sm hover:border-blue-500'
+                  ? 'bg-[#0A1220]/90 border-blue-900/40 shadow-sm'
+                  : 'bg-white border-slate-300 shadow-sm'
               }`}
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className={`text-base font-extrabold tracking-tight ${isPro ? 'text-slate-100' : 'text-slate-950'}`}>
+                  <h3 className={`text-sm font-extrabold tracking-tight ${isPro ? 'text-slate-100' : 'text-slate-950'}`}>
                     {infra.name}
                   </h3>
-                  <div className={`text-xs mt-0.5 ${isPro ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                    {infra.location}
-                  </div>
+                  <div className="text-[11px] text-slate-500 mt-0.5">{infra.location}</div>
                 </div>
                 <span
-                  className={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-full border ${
+                  className={`text-[9px] uppercase font-bold px-2 py-0.5 rounded-full border ${
                     isPro
                       ? 'bg-emerald-950 text-emerald-300 border-emerald-800'
                       : 'bg-emerald-50 text-emerald-800 border-emerald-300'
@@ -155,21 +133,19 @@ export function CorporateTransparency() {
                 </span>
               </div>
 
-              {/* REFACTOR: Pitch condition progress box contrast fix */}
+              {/* Pitch Condition Bar */}
               <div
-                className={`mt-4 p-3 rounded-xl border ${
+                className={`mt-3 p-2.5 rounded-xl border ${
                   isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}
               >
                 <div className="flex items-center justify-between text-xs mb-1">
-                  <span className={isPro ? 'text-slate-400' : 'text-slate-700 font-medium'}>
-                    Kondisi Lapangan & Rumput
-                  </span>
-                  <span className={`font-mono font-bold ${isPro ? 'text-cyan-400' : 'text-blue-700'}`}>
+                  <span className="text-slate-500 text-[11px]">Kondisi Lapangan</span>
+                  <span className={`font-mono font-bold text-xs ${isPro ? 'text-cyan-400' : 'text-blue-700'}`}>
                     {infra.conditionScore}/100
                   </span>
                 </div>
-                <div className={`w-full h-2 rounded-full overflow-hidden ${isPro ? 'bg-slate-800' : 'bg-slate-200'}`}>
+                <div className={`w-full h-1.5 rounded-full overflow-hidden ${isPro ? 'bg-slate-800' : 'bg-slate-200'}`}>
                   <div
                     style={{ width: `${infra.conditionScore}%` }}
                     className="h-full bg-gradient-to-r from-blue-600 to-emerald-500"
@@ -177,85 +153,52 @@ export function CorporateTransparency() {
                 </div>
               </div>
 
-              <div className="space-y-2 mt-4 text-xs">
-                <div
-                  className={`flex items-center justify-between py-1 border-b ${
-                    isPro ? 'border-slate-800/40' : 'border-slate-200'
-                  }`}
-                >
-                  <span className={`flex items-center gap-1.5 ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
-                    <Droplets className="w-3.5 h-3.5 text-blue-500" /> Kapasitas Drainase
+              <div className="space-y-1.5 mt-3 text-[11px]">
+                <div className="flex items-center justify-between py-1 border-b border-slate-200 dark:border-slate-800/40">
+                  <span className="text-slate-500 flex items-center gap-1">
+                    <Droplets className="w-3 h-3 text-blue-500" /> Drainase:
                   </span>
-                  <span className={`font-mono font-bold ${isPro ? 'text-slate-200' : 'text-slate-950'}`}>
-                    {infra.drainageRate}
-                  </span>
+                  <strong className="font-mono">{infra.drainageRate}</strong>
                 </div>
-                <div
-                  className={`flex items-center justify-between py-1 border-b ${
-                    isPro ? 'border-slate-800/40' : 'border-slate-200'
-                  }`}
-                >
-                  <span className={`flex items-center gap-1.5 ${isPro ? 'text-slate-400' : 'text-slate-600'}`}>
-                    <SunMedium className="w-3.5 h-3.5 text-amber-500" /> Penerangan Lampu
+                <div className="flex items-center justify-between py-1 border-b border-slate-200 dark:border-slate-800/40">
+                  <span className="text-slate-500 flex items-center gap-1">
+                    <SunMedium className="w-3 h-3 text-amber-500" /> Lampu:
                   </span>
-                  <span className={`font-mono font-bold ${isPro ? 'text-slate-200' : 'text-slate-950'}`}>
-                    {infra.lightingLux} Lux (Standar FIFA)
-                  </span>
-                </div>
-                <div
-                  className={`flex items-center justify-between py-1 border-b ${
-                    isPro ? 'border-slate-800/40' : 'border-slate-200'
-                  }`}
-                >
-                  <span className={isPro ? 'text-slate-400' : 'text-slate-600'}>Tipe Rumput</span>
-                  <span className={`font-semibold ${isPro ? 'text-slate-300' : 'text-slate-900'}`}>
-                    {infra.pitchType}
-                  </span>
+                  <strong className="font-mono">{infra.lightingLux} Lux (FIFA)</strong>
                 </div>
                 <div className="flex items-center justify-between py-1">
-                  <span className={isPro ? 'text-slate-400' : 'text-slate-600'}>Kapasitas Kursi Tunggal</span>
-                  <span className={`font-semibold ${isPro ? 'text-slate-300' : 'text-slate-900'}`}>
-                    {infra.capacity}
-                  </span>
+                  <span className="text-slate-500">Kapasitas Kursi:</span>
+                  <strong className="font-semibold">{infra.capacity}</strong>
                 </div>
-              </div>
-
-              <div
-                className={`mt-4 pt-3 border-t text-[11px] italic ${
-                  isPro ? 'border-slate-800/50 text-slate-400' : 'border-slate-200 text-slate-600 font-medium'
-                }`}
-              >
-                {infra.notes}
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Section 2: Management & Coach Staff */}
+      {/* Section 2: Management & Coaching */}
       {activeSection === 'management' && (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="space-y-2.5">
           {MANAGEMENT_MEMBERS_2026_2027.map((person: ManagementMember, idx: number) => (
             <div
               key={idx}
-              // REFACTOR: Distinct styling for Head Coach and Strategic Advisor in light and pro modes
-              className={`p-5 rounded-2xl border transition-all ${
+              className={`p-3.5 rounded-2xl border transition-all ${
                 person.role.includes('Head Coach')
                   ? isPro
-                    ? 'bg-blue-950/60 border-cyan-400/60 shadow-[0_0_20px_rgba(34,211,238,0.2)]'
-                    : 'bg-blue-50 border-2 border-blue-600 text-blue-950 shadow-md'
+                    ? 'bg-blue-950/60 border-cyan-400/60 shadow-sm'
+                    : 'bg-blue-50 border-2 border-blue-600 text-blue-950 shadow-sm'
                   : person.role.includes('Strategic Advisor')
                   ? isPro
-                    ? 'bg-amber-950/40 border-amber-400/40 shadow-[0_0_20px_rgba(251,191,36,0.15)]'
-                    : 'bg-amber-50 border-2 border-amber-500 text-amber-950 shadow-md'
+                    ? 'bg-amber-950/40 border-amber-400/40 shadow-sm'
+                    : 'bg-amber-50 border-2 border-amber-500 text-amber-950 shadow-sm'
                   : isPro
-                  ? 'bg-[#0A1220]/90 border-blue-900/40 hover:border-blue-500/50'
-                  : 'bg-white border-slate-300 shadow-sm'
+                  ? 'bg-[#0A1220]/90 border-blue-900/40'
+                  : 'bg-white border-slate-300 shadow-xs'
               }`}
             >
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-center justify-between mb-1.5">
                 <span
-                  className={`text-[10px] uppercase font-mono font-bold px-2 py-0.5 rounded-full border ${
+                  className={`text-[9px] uppercase font-mono font-bold px-2 py-0.5 rounded-full border ${
                     isPro
                       ? 'bg-blue-950 text-cyan-300 border-blue-800'
                       : 'bg-slate-100 text-slate-800 border-slate-300'
@@ -264,155 +207,96 @@ export function CorporateTransparency() {
                   {person.department}
                 </span>
                 {person.role.includes('Head Coach') && (
-                  <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-blue-700 text-white">
-                    Pelatih Utama Baru
+                  <span className="text-[8px] font-mono font-bold uppercase px-1.5 py-0.2 rounded bg-blue-700 text-white">
+                    Head Coach
                   </span>
                 )}
                 {person.role.includes('Strategic Advisor') && (
-                  <span className="text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded bg-amber-400 text-slate-950">
-                    Advisor Manajemen
+                  <span className="text-[8px] font-mono font-bold uppercase px-1.5 py-0.2 rounded bg-amber-400 text-slate-950">
+                    Strategic Advisor
                   </span>
                 )}
               </div>
-              <h4 className={`text-base font-extrabold ${isPro ? 'text-slate-100' : 'text-slate-950'}`}>
-                {person.name}
-              </h4>
-              <p className={`text-xs font-bold mt-0.5 ${isPro ? 'text-blue-400' : 'text-blue-700'}`}>
-                {person.role}
-              </p>
-              <div
-                className={`mt-4 pt-3 border-t text-xs space-y-1 ${
-                  isPro ? 'border-slate-800/50 text-slate-400' : 'border-slate-200 text-slate-700'
-                }`}
-              >
-                <div>
-                  Kewarganegaraan: <strong className={isPro ? 'text-slate-200' : 'text-slate-950 font-bold'}>{person.nationality}</strong>
-                </div>
-                {person.license && (
-                  <div>
-                    Lisensi Kepelatihan: <strong className={isPro ? 'text-amber-300' : 'text-amber-700 font-bold'}>{person.license}</strong>
-                  </div>
-                )}
-                <div>Periode Pengabdian: {person.tenureStart}</div>
+              <h4 className="text-sm font-black">{person.name}</h4>
+              <p className="text-xs font-bold text-blue-600 mt-0.5">{person.role}</p>
+              <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800/50 text-[11px] text-slate-500 space-y-0.5">
+                <div>Kewarganegaraan: <strong className="text-slate-700 dark:text-slate-300">{person.nationality}</strong></div>
+                {person.license && <div>Lisensi: <strong className="text-amber-600 dark:text-amber-300">{person.license}</strong></div>}
               </div>
             </div>
           ))}
         </div>
       )}
 
-      {/* Section 3: FFP & Transfer Ledger */}
+      {/* Section 3: FFP & Ledger */}
       {activeSection === 'ffp' && (
-        <div className="space-y-6">
+        <div className="space-y-4">
           <div
-            className={`p-6 rounded-2xl border ${
+            className={`p-4 rounded-2xl border ${
               isPro
-                ? 'bg-gradient-to-br from-[#0c1a2e] to-[#07101d] border-blue-900/60 shadow-[0_0_30px_rgba(37,99,235,0.15)]'
+                ? 'bg-gradient-to-br from-[#0c1a2e] to-[#07101d] border-blue-900/60 shadow-sm'
                 : 'bg-white border-slate-300 shadow-sm text-slate-950'
             }`}
           >
-            <div
-              className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b ${
-                isPro ? 'border-slate-800/70' : 'border-slate-200'
-              }`}
-            >
-              <div>
-                <span
-                  className={`text-xs font-mono font-bold uppercase ${
-                    isPro ? 'text-amber-400' : 'text-amber-700'
-                  }`}
-                >
-                  Financial Fair Play (FFP) Audit Musim 2026/2027
-                </span>
-                <h3 className="text-xl font-black tracking-tight mt-0.5">
-                  Tingkat Kepatuhan Regulasi Keuangan: {FINANCIAL_OVERVIEW_2026_2027.ffpComplianceScore}%
-                </h3>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="px-3 py-1 rounded-full text-xs font-bold bg-emerald-500/20 text-emerald-600 dark:text-emerald-400 border border-emerald-500/40">
-                  Grade A+ Klub Finansial Mandiri
-                </span>
-              </div>
+            <div className="pb-3 border-b border-slate-200 dark:border-slate-800">
+              <span className="text-[10px] font-mono font-bold uppercase text-amber-500">
+                FFP Audit Musim 2026/2027
+              </span>
+              <h3 className="text-sm font-black tracking-tight mt-0.5">
+                Kepatuhan Finansial: {FINANCIAL_OVERVIEW_2026_2027.ffpComplianceScore}% (Grade A+)
+              </h3>
             </div>
 
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-5">
+            <div className="grid grid-cols-2 gap-2 mt-3 text-xs">
               <div
-                className={`p-4 rounded-xl border ${
+                className={`p-2.5 rounded-xl border ${
                   isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}
               >
-                <div className={`text-xs ${isPro ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                  Total Nilai Pasar Skuad Resmi 2026/2027
-                </div>
-                <div className={`text-2xl font-black font-mono mt-1 ${isPro ? 'text-cyan-400' : 'text-blue-700'}`}>
+                <div className="text-[10px] text-slate-500 font-medium">Nilai Pasar Skuad</div>
+                <div className="text-sm font-black font-mono text-blue-600 dark:text-cyan-400 mt-0.5">
                   {FINANCIAL_OVERVIEW_2026_2027.totalSquadValue}
                 </div>
-                <div className={`text-[10px] mt-1 ${isPro ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Terverifikasi Transfermarkt & AFC
-                </div>
               </div>
               <div
-                className={`p-4 rounded-xl border ${
+                className={`p-2.5 rounded-xl border ${
                   isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
                 }`}
               >
-                <div className={`text-xs ${isPro ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                  Wage-to-Revenue Ratio
-                </div>
-                <div className="text-2xl font-black font-mono text-emerald-600 dark:text-emerald-400 mt-1">
+                <div className="text-[10px] text-slate-500 font-medium">Wage/Revenue</div>
+                <div className="text-sm font-black font-mono text-emerald-600 dark:text-emerald-400 mt-0.5">
                   {FINANCIAL_OVERVIEW_2026_2027.wageToRevenueRatio}
-                </div>
-                <div className={`text-[10px] mt-1 ${isPro ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Batas aman FIFA/LIB: &lt; 70%
-                </div>
-              </div>
-              <div
-                className={`p-4 rounded-xl border ${
-                  isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-slate-50 border-slate-200'
-                }`}
-              >
-                <div className={`text-xs ${isPro ? 'text-slate-400' : 'text-slate-600 font-medium'}`}>
-                  Auditor Independen Terakreditasi
-                </div>
-                <div className={`text-sm font-bold mt-1 ${isPro ? 'text-slate-200' : 'text-slate-950'}`}>
-                  {FINANCIAL_OVERVIEW_2026_2027.auditedBy}
-                </div>
-                <div className={`text-[10px] mt-1 ${isPro ? 'text-slate-400' : 'text-slate-500'}`}>
-                  Audit Resmi Musim {FINANCIAL_OVERVIEW_2026_2027.season}
                 </div>
               </div>
             </div>
           </div>
 
+          {/* Contract Ledger Mobile Table */}
           <div
-            className={`rounded-2xl border p-5 ${
+            className={`rounded-2xl border p-3.5 ${
               isPro ? 'bg-[#0A111E]/90 border-blue-900/50' : 'bg-white border-slate-300 shadow-sm'
             }`}
           >
-            <div className="flex items-center justify-between mb-4">
-              <h4 className="text-sm font-bold uppercase tracking-wider flex items-center gap-2">
-                <FileSpreadsheet className="w-4 h-4 text-blue-600" />
-                Ledger Durasi Kontrak & Nilai Pasar Skuad 2026/2027 (Terverifikasi)
+            <div className="flex items-center justify-between mb-3">
+              <h4 className="text-xs font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <FileSpreadsheet className="w-3.5 h-3.5 text-blue-600" />
+                Ledger Durasi Kontrak 2026/27
               </h4>
-              <span className={`text-xs font-mono ${isPro ? 'text-slate-400' : 'text-slate-600 font-bold'}`}>
-                100% Anti-Rumor
-              </span>
+              <span className="text-[10px] font-mono text-slate-500 font-bold">Resmi</span>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs">
+            <div className="overflow-x-auto no-scrollbar">
+              <table className="w-full text-left text-xs whitespace-nowrap">
                 <thead>
                   <tr
                     className={`border-b font-bold ${
-                      isPro ? 'border-slate-800 text-slate-400 bg-slate-900/40' : 'border-slate-300 text-slate-700 bg-slate-50'
+                      isPro ? 'border-slate-800 text-slate-400' : 'border-slate-300 text-slate-700 bg-slate-50'
                     }`}
                   >
-                    <th className="py-2.5 px-3"># No</th>
-                    <th className="py-2.5 px-3">Nama Pemain</th>
-                    <th className="py-2.5 px-3">Peran Skuad</th>
-                    <th className="py-2.5 px-3">Posisi</th>
-                    <th className="py-2.5 px-3">Kewarganegaraan</th>
-                    <th className="py-2.5 px-3">Sisa Durasi Kontrak</th>
-                    <th className="py-2.5 px-3 text-right">Nilai Pasar Resmi</th>
+                    <th className="py-2 px-2">#</th>
+                    <th className="py-2 px-2">Pemain</th>
+                    <th className="py-2 px-2">Kontrak</th>
+                    <th className="py-2 px-2 text-right">Nilai Pasar</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -421,35 +305,16 @@ export function CorporateTransparency() {
                       key={player.id}
                       className={`border-b transition-colors ${
                         isPro
-                          ? 'border-slate-800/40 hover:bg-slate-800/30 text-slate-300'
-                          : 'border-slate-200 hover:bg-slate-50 text-slate-800'
+                          ? 'border-slate-800/40 text-slate-300'
+                          : 'border-slate-200 text-slate-800'
                       }`}
                     >
-                      <td className="py-2.5 px-3 font-mono font-bold text-blue-600">#{player.number}</td>
-                      <td className={`py-2.5 px-3 font-bold ${isPro ? 'text-slate-200' : 'text-slate-950'}`}>
-                        {player.name}
-                      </td>
-                      <td className="py-2.5 px-3">
-                        <span
-                          className={`text-[9px] font-mono font-bold uppercase px-1.5 py-0.5 rounded ${
-                            player.squadRole === 'starting'
-                              ? 'bg-amber-400 text-slate-950'
-                              : isPro
-                              ? 'bg-slate-800 text-slate-300'
-                              : 'bg-slate-200 text-slate-700'
-                          }`}
-                        >
-                          {player.squadRole === 'starting' ? 'Starting XI' : 'Cadangan'}
-                        </span>
-                      </td>
-                      <td className={`py-2.5 px-3 font-mono font-bold ${isPro ? 'text-cyan-300' : 'text-blue-700'}`}>
-                        {player.position}
-                      </td>
-                      <td className="py-2.5 px-3">{player.nationality}</td>
-                      <td className={`py-2.5 px-3 font-mono font-bold ${isPro ? 'text-amber-300' : 'text-amber-700'}`}>
+                      <td className="py-2 px-2 font-mono font-bold text-blue-600">#{player.number}</td>
+                      <td className="py-2 px-2 font-bold text-[11px] truncate max-w-[130px]">{player.name}</td>
+                      <td className="py-2 px-2 font-mono text-[11px] text-amber-600 dark:text-amber-300">
                         {player.contractUntil}
                       </td>
-                      <td className="py-2.5 px-3 text-right font-mono font-bold text-emerald-600 dark:text-emerald-400">
+                      <td className="py-2 px-2 text-right font-mono font-bold text-emerald-600 dark:text-emerald-400 text-[11px]">
                         {player.marketValue}
                       </td>
                     </tr>
