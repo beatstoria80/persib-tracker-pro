@@ -6,7 +6,7 @@ import {
   INFRASTRUCTURE_LIST,
   MANAGEMENT_MEMBERS,
   FINANCIAL_OVERVIEW,
-  INITIAL_PLAYERS,
+  OFFICIAL_SQUAD_2024_2025,
 } from '@/data/persib-data';
 import {
   Building2,
@@ -243,7 +243,7 @@ export function CorporateTransparency() {
                   </tr>
                 </thead>
                 <tbody>
-                  {INITIAL_PLAYERS.map((player) => (
+                  {OFFICIAL_SQUAD_2024_2025.map((player) => (
                     <tr
                       key={player.id}
                       className="border-b border-slate-800/40 hover:bg-slate-800/30 transition-colors"

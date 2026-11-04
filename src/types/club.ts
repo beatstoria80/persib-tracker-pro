@@ -1,5 +1,7 @@
 export type PlayerCategory = 'senior' | 'academy' | 'women';
 
+export type SquadRole = 'starting' | 'substitute' | 'reserve';
+
 export type Position = 'GK' | 'DF' | 'MF' | 'FW';
 
 export type FitnessStatus = 'fit' | 'latihan_terpisah' | 'cedera';
@@ -9,7 +11,7 @@ export interface PlayerStats {
   appearances: number;
   goals: number;
   assists: number;
-  passAccuracy: number; // percentage
+  passAccuracy: number;
   interceptions: number;
   tackles: number;
   shotsOnTarget: number;
@@ -24,14 +26,15 @@ export interface Player {
   number: number;
   position: Position;
   category: PlayerCategory;
+  squadRole: SquadRole;
   nationality: string;
   age: number;
-  marketValue: string; // e.g., "€400K" / "Rp 6.95 M"
-  contractUntil: string; // e.g., "31 Mei 2026"
+  marketValue: string;
+  contractUntil: string;
   verifiedData: boolean;
   fitness: {
     status: FitnessStatus;
-    percentage: number; // 0 - 100%
+    percentage: number;
     injuryType?: string;
     estimatedReturn?: string;
     notes?: string;
@@ -45,8 +48,8 @@ export interface MatchShot {
   minute: number;
   player: string;
   team: 'persib' | 'opponent';
-  x: number; // 0-100 percentage of pitch
-  y: number; // 0-100 percentage of pitch
+  x: number;
+  y: number;
   outcome: 'goal' | 'saved' | 'blocked' | 'off_target';
   xG: number;
 }
@@ -56,30 +59,50 @@ export interface MatchPassVector {
   fromY: number;
   toX: number;
   toY: number;
+  fromPlayer: string;
+  toPlayer: string;
   type: 'key' | 'normal' | 'assist';
 }
 
-export interface LiveMatchData {
+export interface TacticalStep {
+  step: number;
+  label: string;
+  description: string;
+  ballPos: { x: number; y: number };
+  playerPositions: Array<{ id: string; name: string; number: number; x: number; y: number }>;
+}
+
+export type TournamentKey = 'liga1' | 'acl2' | 'piala_presiden';
+
+export interface MatchFixture {
   id: string;
-  tournament: 'ACL Two' | 'BRI Liga 1';
-  stage: string;
+  tournament: string;
+  tournamentKey: TournamentKey;
+  roundOrWeek: string;
   homeTeam: string;
   awayTeam: string;
-  homeScore: number;
-  awayScore: number;
-  currentMinute: number;
-  status: 'LIVE' | 'SCHEDULED' | 'FINISHED';
+  homeScore?: number;
+  awayScore?: number;
+  date: string;
+  time: string;
   venue: string;
-  formation: {
-    home: string; // e.g. "4-3-3"
-    away: string;
-  };
-  tacticsNote: string;
-  shots: MatchShot[];
-  passVectors: MatchPassVector[];
-  possession: [number, number]; // [home, away]
-  passAccuracy: [number, number];
-  shotsOnGoal: [number, number];
+  status: 'FINISHED' | 'SCHEDULED' | 'SIMULATION';
+  highlights?: string[];
+}
+
+export interface LeagueStandingRow {
+  rank: number;
+  team: string;
+  played: number;
+  won: number;
+  drawn: number;
+  lost: number;
+  gf: number;
+  ga: number;
+  gd: number;
+  points: number;
+  isPersib?: boolean;
+  form: Array<'W' | 'D' | 'L'>;
 }
 
 export interface GroupTeam {
@@ -100,9 +123,9 @@ export interface InfrastructureItem {
   location: string;
   capacity: string;
   pitchType: string;
-  conditionScore: number; // 0 - 100
-  drainageRate: string; // e.g. "85 mm/jam"
-  lightingLux: number; // e.g. 1800 Lux
+  conditionScore: number;
+  drainageRate: string;
+  lightingLux: number;
   status: 'Ready' | 'Maintenance' | 'Refurbishment';
   lastInspection: string;
   notes: string;
@@ -119,10 +142,9 @@ export interface ManagementPerson {
 
 export interface FinancialSummary {
   season: string;
-  totalSquadValue: string; // e.g. "Rp 94.5 M"
-  ffpComplianceScore: number; // 94%
-  wageToRevenueRatio: string; // "52% (Safe < 70%)"
+  totalSquadValue: string;
+  ffpComplianceScore: number;
+  wageToRevenueRatio: string;
   auditedBy: string;
   verifiedSource: string;
 }
-

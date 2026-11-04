@@ -6,10 +6,10 @@ import { Header } from '@/components/Header';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
-import { ShieldCheck, Sparkles, Radio } from 'lucide-react';
+import { ShieldCheck, Sparkles, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, lastUpdateTimestamp } = useClubTracker();
+  const { mode, activeHub, lastVerifiedDate } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
@@ -26,8 +26,8 @@ export default function HomePage() {
                   : 'bg-white border border-slate-200 text-slate-700 shadow-sm'
               }`}
             >
-              <Radio className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-              <span>Real-Time Sync Terakhir: {lastUpdateTimestamp}</span>
+              <CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" />
+              <span>{lastVerifiedDate}</span>
             </span>
 
             <span
@@ -45,7 +45,7 @@ export default function HomePage() {
           </div>
 
           <div className="text-slate-400 text-[11px] font-medium flex items-center gap-2">
-            <span>Powered by Verified PT LIB & AFC Data Feeds</span>
+            <span>Standar Klub Profesional • Tanpa Rumor Spekulatif</span>
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500"></span>
           </div>
         </div>
@@ -79,12 +79,12 @@ export default function HomePage() {
 
           <div className="flex flex-wrap items-center gap-4 text-[11px]">
             <span className="flex items-center gap-1 text-cyan-400">
-              <ShieldCheck className="w-3.5 h-3.5" /> 100% Anti-Rumor / Data Terverifikasi
+              <ShieldCheck className="w-3.5 h-3.5" /> 100% Data Faktual & Terverifikasi
             </span>
             <span>•</span>
             <span>PWA Offline-Ready</span>
             <span>•</span>
-            <span>Framer Motion Adaptive Engine</span>
+            <span>Animasi Taktik 2D & Spasial</span>
           </div>
         </div>
       </footer>

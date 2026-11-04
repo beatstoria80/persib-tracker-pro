@@ -1,11 +1,25 @@
 'use client';
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { Player, LiveMatchData, GroupTeam } from '@/types/club';
-import { INITIAL_PLAYERS, LIVE_MATCH_MOCK, ACL_GROUP_F_STANDINGS } from '@/data/persib-data';
+import {
+  Player,
+  GroupTeam,
+  TournamentKey,
+  MatchFixture,
+  LeagueStandingRow,
+  TacticalStep,
+} from '@/types/club';
+import {
+  OFFICIAL_SQUAD_2024_2025,
+  BRI_LIGA_1_STANDINGS,
+  ACL_GROUP_F_STANDINGS,
+  VERIFIED_FIXTURES,
+  BOJAN_HODAK_TACTICAL_PLAYBOOK,
+} from '@/data/persib-data';
 
 export type AppThemeState = 'minimal' | 'pro';
-export type ActiveHub = 'roster' | 'match-center' | 'transparency';
+export type ActiveHub = 'match-center' | 'roster' | 'transparency';
+export type MatchDisplayMode = 'official_result' | 'upcoming_schedule' | 'tactical_simulation';
 
 interface ClubTrackerContextType {
   mode: AppThemeState;
@@ -13,15 +27,23 @@ interface ClubTrackerContextType {
   toggleMode: () => void;
   activeHub: ActiveHub;
   setActiveHub: (hub: ActiveHub) => void;
+  activeTournament: TournamentKey;
+  setActiveTournament: (t: TournamentKey) => void;
+  matchDisplayMode: MatchDisplayMode;
+  setMatchDisplayMode: (m: MatchDisplayMode) => void;
   players: Player[];
   selectedPlayer: Player | null;
   setSelectedPlayer: (player: Player | null) => void;
-  liveMatch: LiveMatchData;
+  fixtures: MatchFixture[];
+  liga1Standings: LeagueStandingRow[];
   aclStandings: GroupTeam[];
   updateMatchSimulator: (simulatedPersibWon: boolean, simulatedGoalDiff: number) => void;
-  isStreaming: boolean;
-  toggleStreaming: () => void;
-  lastUpdateTimestamp: string;
+  tacticalPlaybook: TacticalStep[];
+  activeTacticalStep: number;
+  setActiveTacticalStep: (step: number) => void;
+  isTacticsPlaying: boolean;
+  setIsTacticsPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+  lastVerifiedDate: string;
 }
 
 const ClubTrackerContext = createContext<ClubTrackerContextType | undefined>(undefined);
@@ -29,19 +51,19 @@ const ClubTrackerContext = createContext<ClubTrackerContextType | undefined>(und
 export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<AppThemeState>('pro');
   const [activeHub, setActiveHub] = useState<ActiveHub>('match-center');
-  const [players] = useState<Player[]>(INITIAL_PLAYERS);
+  const [activeTournament, setActiveTournament] = useState<TournamentKey>('liga1');
+  const [matchDisplayMode, setMatchDisplayMode] = useState<MatchDisplayMode>('official_result');
+  const [players] = useState<Player[]>(OFFICIAL_SQUAD_2024_2025);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [liveMatch, setLiveMatch] = useState<LiveMatchData>(LIVE_MATCH_MOCK);
+  const [fixtures] = useState<MatchFixture[]>(VERIFIED_FIXTURES);
+  const [liga1Standings] = useState<LeagueStandingRow[]>(BRI_LIGA_1_STANDINGS);
   const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_F_STANDINGS);
-  const [isStreaming, setIsStreaming] = useState<boolean>(true);
-  const [lastUpdateTimestamp, setLastUpdateTimestamp] = useState<string>('Live (1 Detik Lalu)');
+  const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
+  const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
+  const lastVerifiedDate = 'Update Resmi PT LIB & AFC: Musim 2024/2025 (Terverifikasi)';
 
   const toggleMode = () => {
     setMode((prev: AppThemeState) => (prev === 'minimal' ? 'pro' : 'minimal'));
-  };
-
-  const toggleStreaming = () => {
-    setIsStreaming((prev: boolean) => !prev);
   };
 
   // PWA Service Worker Registration
@@ -62,27 +84,16 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
     }
   }, []);
 
-  // Real-time ticker simulation
+  // Tactical animation interval (only runs when user explicitly presses PLAY)
   useEffect(() => {
-    if (!isStreaming) return;
+    if (!isTacticsPlaying) return;
 
     const interval = setInterval(() => {
-      setLiveMatch((prev: LiveMatchData) => {
-        const nextMin = prev.currentMinute < 90 ? prev.currentMinute + 1 : 1;
-        return {
-          ...prev,
-          currentMinute: nextMin,
-          possession: [
-            Math.min(65, Math.max(48, prev.possession[0] + (Math.random() > 0.5 ? 1 : -1))),
-            100 - Math.min(65, Math.max(48, prev.possession[0] + (Math.random() > 0.5 ? 1 : -1))),
-          ],
-        };
-      });
-      setLastUpdateTimestamp(new Date().toLocaleTimeString('id-ID', { hour12: false }));
-    }, 4000);
+      setActiveTacticalStep((prev: number) => (prev < 3 ? prev + 1 : 1));
+    }, 2800);
 
     return () => clearInterval(interval);
-  }, [isStreaming]);
+  }, [isTacticsPlaying]);
 
   const updateMatchSimulator = (simulatedPersibWon: boolean, simulatedGoalDiff: number) => {
     const updated = ACL_GROUP_F_STANDINGS.map((team: GroupTeam) => {
@@ -119,15 +130,23 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         toggleMode,
         activeHub,
         setActiveHub,
+        activeTournament,
+        setActiveTournament,
+        matchDisplayMode,
+        setMatchDisplayMode,
         players,
         selectedPlayer,
         setSelectedPlayer,
-        liveMatch,
+        fixtures,
+        liga1Standings,
         aclStandings,
         updateMatchSimulator,
-        isStreaming,
-        toggleStreaming,
-        lastUpdateTimestamp,
+        tacticalPlaybook: BOJAN_HODAK_TACTICAL_PLAYBOOK,
+        activeTacticalStep,
+        setActiveTacticalStep,
+        isTacticsPlaying,
+        setIsTacticsPlaying,
+        lastVerifiedDate,
       }}
     >
       <div

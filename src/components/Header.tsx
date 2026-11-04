@@ -2,15 +2,15 @@
 
 import React from 'react';
 import { useClubTracker, ActiveHub } from '@/context/ClubTrackerContext';
-import { ShieldCheck, Activity, Radio, Users, Building2, Zap, Sparkles } from 'lucide-react';
+import { ShieldCheck, Trophy, Users, Building2, Zap, Sparkles } from 'lucide-react';
 
 export function Header() {
-  const { mode, toggleMode, activeHub, setActiveHub, isStreaming, toggleStreaming } = useClubTracker();
+  const { mode, toggleMode, activeHub, setActiveHub } = useClubTracker();
 
   const isPro = mode === 'pro';
 
   const hubs: { id: ActiveHub; label: string; icon: React.ReactNode; badge?: string }[] = [
-    { id: 'match-center', label: 'Match Center', icon: <Activity className="w-4 h-4" />, badge: 'LIVE 78\'' },
+    { id: 'match-center', label: 'Match Center', icon: <Trophy className="w-4 h-4" />, badge: 'Liga 1 Juara' },
     { id: 'roster', label: 'Roster & Fitness', icon: <Users className="w-4 h-4" /> },
     { id: 'transparency', label: 'Corporate & Finance', icon: <Building2 className="w-4 h-4" />, badge: 'Verified' },
   ];
@@ -58,7 +58,7 @@ export function Header() {
                 </span>
               </div>
               <p className="text-xs text-slate-400 font-medium hidden sm:block">
-                Real-Time Sports Intelligence • ACL Two & Liga 1
+                Real-Time Sports Intelligence • BRI Liga 1 & ACL Two
               </p>
             </div>
           </div>
@@ -85,11 +85,7 @@ export function Header() {
                   {hub.badge && (
                     <span
                       className={`text-[9px] uppercase px-1.5 py-0.5 rounded-md font-bold tracking-wider ${
-                        hub.badge.includes('LIVE')
-                          ? isPro
-                            ? 'bg-rose-500 text-white animate-pulse'
-                            : 'bg-rose-600 text-white'
-                          : isPro
+                        isPro
                           ? 'bg-amber-400/20 text-amber-300'
                           : 'bg-blue-50 text-blue-700 border border-blue-200'
                       }`}
@@ -103,21 +99,6 @@ export function Header() {
           </nav>
 
           <div className="flex items-center gap-2.5">
-            <button
-              onClick={toggleStreaming}
-              title="WebSocket Sync Status"
-              className={`hidden lg:flex items-center gap-2 px-2.5 py-1.5 rounded-lg border text-xs font-mono transition-all ${
-                isStreaming
-                  ? isPro
-                    ? 'border-emerald-500/40 bg-emerald-950/30 text-emerald-300'
-                    : 'border-emerald-200 bg-emerald-50 text-emerald-800'
-                  : 'border-slate-300 bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
-              }`}
-            >
-              <Radio className={`w-3.5 h-3.5 ${isStreaming ? 'animate-pulse text-emerald-400' : 'text-slate-400'}`} />
-              <span>{isStreaming ? 'WS Active' : 'WS Paused'}</span>
-            </button>
-
             <button
               onClick={toggleMode}
               className={`relative flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold tracking-wide transition-all duration-300 border ${
