@@ -12,7 +12,6 @@ import {
   Play,
   Pause,
   Activity,
-  Radio,
 } from 'lucide-react';
 import { MatchFixture, Player, LeagueStandingRow, GroupTeam, TacticalPlayerPos } from '@/types/club';
 import { getClubLogo, getPlayerAvatar } from '@/data/persib-data';
@@ -161,23 +160,6 @@ export function MatchCenter() {
   const [selectedFixtureId, setSelectedFixtureId] = useState<string>('acl2-26-md4-live');
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
   const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'stats' | 'highlights'>('events');
-
-  // Real-time seconds ticking (00:01 interval clock ticker for live simulation)
-  const [liveSeconds, setLiveSeconds] = useState(42);
-  const [liveMinute, setLiveMinute] = useState(88);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setLiveSeconds((prev) => {
-        if (prev >= 59) {
-          setLiveMinute((m) => (m >= 95 ? 88 : m + 1));
-          return 0;
-        }
-        return prev + 1;
-      });
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
 
   // Auto-play tactical transition loop
   useEffect(() => {
@@ -1293,7 +1275,7 @@ export function MatchCenter() {
                 : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
             }`}
           >
-            {/* Header Formasi & Live Clock Ticker */}
+            {/* Header Formasi & UI UX Timer & Play Controls */}
             <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 flex-wrap">
@@ -1309,28 +1291,45 @@ export function MatchCenter() {
                 </p>
               </div>
 
-              {/* Live Match Clock Ticker (Ticking every second) */}
+              {/* UI/UX Timer & Play Controller */}
               <div className="flex items-center gap-1.5 shrink-0">
-                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400">
-                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping inline-block" />
-                  <Radio className="w-2.5 h-2.5 animate-pulse" />
-                  <span className="font-mono font-black text-[11px] sm:text-xs">
-                    {liveMinute}:{String(liveSeconds).padStart(2, '0')}
+                {/* Tactical Phase Telemetry Timer */}
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">
+                  <span
+                    className={`w-1.5 h-1.5 rounded-full ${
+                      isTacticsPlaying ? 'bg-emerald-500 animate-ping' : 'bg-slate-400'
+                    }`}
+                  />
+                  <span>Fase {activeTacticalStep}/3</span>
+                  <span className="text-[8.5px] px-1 py-0.2 rounded font-black bg-blue-600/15 text-blue-600 dark:text-cyan-400">
+                    {isTacticsPlaying ? 'AUTO' : 'MANUAL'}
                   </span>
                 </div>
+
+                {/* Tactile Play / Jeda Action Button */}
                 <button
                   type="button"
                   onClick={() => setIsTacticsPlaying((prev) => !prev)}
-                  className={`p-1.5 sm:p-2 rounded-xl flex items-center justify-center transition-all ${
+                  className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black shadow-xs transition-all active:scale-95 ${
                     isTacticsPlaying
-                      ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
+                      ? 'bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-amber-500/20'
                       : isPro
-                      ? 'bg-slate-800 text-cyan-300 hover:bg-slate-700'
-                      : 'bg-slate-100 text-blue-700 hover:bg-slate-200'
+                      ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'
+                      : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/20'
                   }`}
                   title={isTacticsPlaying ? 'Jeda Simulasi Taktik' : 'Putar Siklus Taktik Otomatis'}
                 >
-                  {isTacticsPlaying ? <Pause className="w-3.5 h-3.5" /> : <Play className="w-3.5 h-3.5" />}
+                  {isTacticsPlaying ? (
+                    <>
+                      <Pause className="w-3 h-3 fill-current" />
+                      <span className="text-[10px]">Jeda</span>
+                    </>
+                  ) : (
+                    <>
+                      <Play className="w-3 h-3 fill-current" />
+                      <span className="text-[10px]">Play</span>
+                    </>
+                  )}
                 </button>
               </div>
             </div>
