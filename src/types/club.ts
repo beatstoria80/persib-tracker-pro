@@ -82,6 +82,27 @@ export interface TacticalStep {
 
 export type TournamentKey = 'liga1' | 'acl2' | 'piala_presiden' | 'shopee_cup';
 
+export interface MatchEventItem {
+  minute: string;
+  type: 'goal' | 'yellow_card' | 'red_card' | 'sub' | 'chance';
+  team: 'home' | 'away';
+  player: string;
+  assistBy?: string;
+  detail?: string;
+}
+
+export interface MatchStatsSummary {
+  possession: [number, number]; // [home, away] %
+  shotsOnTarget: [number, number];
+  totalShots: [number, number];
+  passAccuracy: [number, number]; // %
+  corners: [number, number];
+  fouls: [number, number];
+  yellowCards: [number, number];
+  redCards: [number, number];
+  saves: [number, number];
+}
+
 export interface MatchFixture {
   id: string;
   tournament: string;
@@ -101,6 +122,8 @@ export interface MatchFixture {
   aggregateScore?: string;
   highlights?: string[];
   events?: Array<{ minute: string; type: 'goal' | 'card' | 'sub' | 'chance'; text: string }>;
+  detailedEvents?: MatchEventItem[];
+  statsSummary?: MatchStatsSummary;
 }
 
 export interface LeagueStandingRow {

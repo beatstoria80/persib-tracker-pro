@@ -105,6 +105,7 @@ export function MatchCenter() {
   const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup'>('featured');
   const [selectedFixtureId, setSelectedFixtureId] = useState<string>('acl2-26-md4-live');
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
+  const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'stats' | 'highlights'>('events');
 
   // Real-time seconds ticking (00:01 interval clock ticker for live simulation)
   const [liveSeconds, setLiveSeconds] = useState(42);
@@ -460,57 +461,299 @@ export function MatchCenter() {
                 </div>
               )}
 
-              {/* Match Events Timeline */}
-              {currentFixture.events && currentFixture.events.length > 0 && (
-                <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800">
-                  <div className="flex items-center justify-between mb-2.5">
-                    <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
-                      Timeline Kejadian Laga (Real-time Events)
-                    </span>
-                    <span className="text-[9px] font-mono text-emerald-500 font-extrabold">Verified FT</span>
-                  </div>
+              {/* Match Intelligence Navigation Switcher (Events vs Stats vs Highlights) */}
+              <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800">
+                <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center mb-3">
+                  <button
+                    onClick={() => setHeroDetailTab('events')}
+                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                      heroDetailTab === 'events'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>⚽ Gol & Kartu</span>
+                  </button>
+                  <button
+                    onClick={() => setHeroDetailTab('stats')}
+                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                      heroDetailTab === 'stats'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>📊 Statistik</span>
+                  </button>
+                  <button
+                    onClick={() => setHeroDetailTab('highlights')}
+                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                      heroDetailTab === 'highlights'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>💡 Catatan</span>
+                  </button>
+                </div>
 
+                {/* Tab 1: Detailed Match Events (Gol, Assist, Kartu Merah, Kartu Kuning) */}
+                {heroDetailTab === 'events' && (
                   <div className="space-y-2">
-                    {currentFixture.events.map((ev, idx) => (
-                      <div
-                        key={idx}
-                        className={`flex items-start gap-2.5 text-xs p-2 rounded-xl transition-all ${
-                          ev.type === 'goal'
-                            ? isPro
-                              ? 'bg-blue-900/30 text-cyan-200 border border-blue-700/40 font-bold'
-                              : 'bg-blue-50 text-blue-950 border border-blue-200 font-bold'
-                            : isPro
-                            ? 'text-slate-400 hover:text-slate-200'
-                            : 'text-slate-600 hover:text-slate-900'
-                        }`}
-                      >
-                        <span className="font-mono font-black text-[11px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 shrink-0">
-                          {ev.minute}
-                        </span>
-                        <span className="flex-1 leading-snug">{ev.text}</span>
-                        {ev.type === 'goal' && <span className="text-base shrink-0">⚽</span>}
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              )}
+                    {currentFixture.detailedEvents && currentFixture.detailedEvents.length > 0 ? (
+                      currentFixture.detailedEvents.map((ev, idx) => {
+                        const matchedPlayer = players.find(
+                          (p) =>
+                            ev.player.toLowerCase().includes(p.name.toLowerCase()) ||
+                            p.name.toLowerCase().includes(ev.player.toLowerCase())
+                        );
 
-              {/* Match Highlights / Key Notes */}
-              {currentFixture.highlights && currentFixture.highlights.length > 0 && (
-                <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800">
-                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400 block mb-2">
-                    Catatan Penting Laga (Highlights)
-                  </span>
-                  <ul className="space-y-1.5 text-xs text-slate-400">
-                    {currentFixture.highlights.map((h: string, i: number) => (
-                      <li key={i} className="flex items-start gap-2 leading-relaxed">
-                        <span className="text-blue-500 font-bold shrink-0">•</span>
-                        <span>{h}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              )}
+                        return (
+                          <div
+                            key={idx}
+                            onClick={() => {
+                              if (matchedPlayer) setSelectedPlayer(matchedPlayer);
+                            }}
+                            className={`p-2.5 rounded-2xl border flex items-start gap-2.5 transition-all ${
+                              matchedPlayer ? 'cursor-pointer active:scale-[0.99]' : ''
+                            } ${
+                              ev.type === 'goal'
+                                ? isPro
+                                  ? 'bg-blue-950/40 border-blue-800/80 text-white hover:border-cyan-400/50'
+                                  : 'bg-blue-50/80 border-blue-200 text-blue-950 hover:border-blue-400'
+                                : ev.type === 'red_card'
+                                ? isPro
+                                  ? 'bg-red-950/30 border-red-800/60 text-red-200'
+                                  : 'bg-red-50 border-red-200 text-red-950'
+                                : ev.type === 'yellow_card'
+                                ? isPro
+                                  ? 'bg-amber-950/20 border-amber-800/50 text-amber-200'
+                                  : 'bg-amber-50/70 border-amber-200 text-amber-950'
+                                : isPro
+                                ? 'bg-slate-900/40 border-slate-800 text-slate-300'
+                                : 'bg-slate-50 border-slate-200 text-slate-800'
+                            }`}
+                          >
+                            {/* Minute Badge */}
+                            <span className="font-mono font-black text-[10px] px-2 py-0.5 rounded-lg bg-slate-200 dark:bg-slate-800 shrink-0 text-slate-800 dark:text-slate-200">
+                              {ev.minute}
+                            </span>
+
+                            {/* Event Icon */}
+                            <span className="text-base shrink-0 leading-none mt-0.5">
+                              {ev.type === 'goal' && '⚽'}
+                              {ev.type === 'yellow_card' && '🟨'}
+                              {ev.type === 'red_card' && '🟥'}
+                              {ev.type === 'sub' && '🔁'}
+                            </span>
+
+                            {/* Event Description & Player Info */}
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="font-black text-xs leading-tight">
+                                  {ev.player}
+                                </span>
+                                {ev.type === 'goal' && (
+                                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-emerald-500 text-white font-bold uppercase">
+                                    GOL
+                                  </span>
+                                )}
+                                {ev.type === 'red_card' && (
+                                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-red-600 text-white font-bold uppercase">
+                                    KARTU MERAH
+                                  </span>
+                                )}
+                                {ev.type === 'yellow_card' && (
+                                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-amber-500 text-slate-950 font-bold uppercase">
+                                    KARTU KUNING
+                                  </span>
+                                )}
+                              </div>
+
+                              {ev.assistBy && (
+                                <div className="text-[10px] text-blue-600 dark:text-cyan-400 font-bold mt-0.5 flex items-center gap-1">
+                                  <span>👟 Assist:</span>
+                                  <span className="underline decoration-blue-400/50">{ev.assistBy}</span>
+                                </div>
+                              )}
+
+                              {ev.detail && (
+                                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                                  {ev.detail}
+                                </p>
+                              )}
+                            </div>
+                          </div>
+                        );
+                      })
+                    ) : currentFixture.events && currentFixture.events.length > 0 ? (
+                      currentFixture.events.map((ev, idx) => (
+                        <div
+                          key={idx}
+                          className="flex items-start gap-2.5 text-xs p-2 rounded-xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800"
+                        >
+                          <span className="font-mono font-black text-[11px] px-1.5 py-0.5 rounded bg-slate-200 dark:bg-slate-800 shrink-0">
+                            {ev.minute}
+                          </span>
+                          <span className="flex-1 leading-snug">{ev.text}</span>
+                          {ev.type === 'goal' && <span className="text-base shrink-0">⚽</span>}
+                        </div>
+                      ))
+                    ) : (
+                      <div className="py-6 text-center text-xs text-slate-400">
+                        Pertandingan belum dimulai. Timeline real-time akan aktif saat kick-off.
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Tab 2: Detailed Match Statistics Box Score (Sofascore Dual-Bar Comparison) */}
+                {heroDetailTab === 'stats' && (
+                  <div className="space-y-3">
+                    {currentFixture.statsSummary ? (
+                      <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                        {/* Club Headers */}
+                        <div className="flex items-center justify-between text-xs font-black pb-2 border-b border-slate-200 dark:border-slate-800">
+                          <span className="text-blue-600 dark:text-cyan-400 truncate max-w-[45%]">
+                            {currentFixture.homeTeam}
+                          </span>
+                          <span className="text-slate-400 text-[10px] font-mono">VS</span>
+                          <span className="text-slate-800 dark:text-slate-200 truncate max-w-[45%] text-right">
+                            {currentFixture.awayTeam}
+                          </span>
+                        </div>
+
+                        {/* Stat Item Rows */}
+                        {[
+                          {
+                            label: 'Penguasaan Bola',
+                            home: `${currentFixture.statsSummary.possession[0]}%`,
+                            away: `${currentFixture.statsSummary.possession[1]}%`,
+                            valHome: currentFixture.statsSummary.possession[0],
+                            valAway: currentFixture.statsSummary.possession[1],
+                          },
+                          {
+                            label: 'Total Tembakan',
+                            home: currentFixture.statsSummary.totalShots[0],
+                            away: currentFixture.statsSummary.totalShots[1],
+                            valHome: currentFixture.statsSummary.totalShots[0],
+                            valAway: currentFixture.statsSummary.totalShots[1],
+                          },
+                          {
+                            label: 'Tembakan ke Gawang',
+                            home: currentFixture.statsSummary.shotsOnTarget[0],
+                            away: currentFixture.statsSummary.shotsOnTarget[1],
+                            valHome: currentFixture.statsSummary.shotsOnTarget[0],
+                            valAway: currentFixture.statsSummary.shotsOnTarget[1],
+                          },
+                          {
+                            label: 'Akurasi Operan',
+                            home: `${currentFixture.statsSummary.passAccuracy[0]}%`,
+                            away: `${currentFixture.statsSummary.passAccuracy[1]}%`,
+                            valHome: currentFixture.statsSummary.passAccuracy[0],
+                            valAway: currentFixture.statsSummary.passAccuracy[1],
+                          },
+                          {
+                            label: 'Tendangan Sudut',
+                            home: currentFixture.statsSummary.corners[0],
+                            away: currentFixture.statsSummary.corners[1],
+                            valHome: currentFixture.statsSummary.corners[0],
+                            valAway: currentFixture.statsSummary.corners[1],
+                          },
+                          {
+                            label: 'Pelanggaran',
+                            home: currentFixture.statsSummary.fouls[0],
+                            away: currentFixture.statsSummary.fouls[1],
+                            valHome: currentFixture.statsSummary.fouls[0],
+                            valAway: currentFixture.statsSummary.fouls[1],
+                          },
+                          {
+                            label: 'Kartu Kuning',
+                            home: `${currentFixture.statsSummary.yellowCards[0]} 🟨`,
+                            away: `${currentFixture.statsSummary.yellowCards[1]} 🟨`,
+                            valHome: currentFixture.statsSummary.yellowCards[0],
+                            valAway: currentFixture.statsSummary.yellowCards[1],
+                          },
+                          {
+                            label: 'Kartu Merah',
+                            home: `${currentFixture.statsSummary.redCards[0]} 🟥`,
+                            away: `${currentFixture.statsSummary.redCards[1]} 🟥`,
+                            valHome: currentFixture.statsSummary.redCards[0],
+                            valAway: currentFixture.statsSummary.redCards[1],
+                          },
+                          {
+                            label: 'Penyelamatan Kiper',
+                            home: currentFixture.statsSummary.saves[0],
+                            away: currentFixture.statsSummary.saves[1],
+                            valHome: currentFixture.statsSummary.saves[0],
+                            valAway: currentFixture.statsSummary.saves[1],
+                          },
+                        ].map((stat, i) => {
+                          const total = (Number(stat.valHome) || 0) + (Number(stat.valAway) || 0) || 1;
+                          const pctHome = Math.round(((Number(stat.valHome) || 0) / total) * 100);
+
+                          return (
+                            <div key={i} className="space-y-1">
+                              <div className="flex items-center justify-between text-[11px] font-bold">
+                                <span className="font-mono text-blue-600 dark:text-cyan-400">
+                                  {stat.home}
+                                </span>
+                                <span className="text-[10px] text-slate-500 dark:text-slate-400 font-semibold uppercase">
+                                  {stat.label}
+                                </span>
+                                <span className="font-mono text-slate-700 dark:text-slate-300">
+                                  {stat.away}
+                                </span>
+                              </div>
+                              {/* Comparative Visual Bar */}
+                              <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden flex">
+                                <div
+                                  className="h-full bg-blue-600 rounded-l-full transition-all duration-500"
+                                  style={{ width: `${pctHome}%` }}
+                                />
+                                <div
+                                  className="h-full bg-slate-400 dark:bg-slate-600 rounded-r-full transition-all duration-500"
+                                  style={{ width: `${100 - pctHome}%` }}
+                                />
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    ) : (
+                      <div className="py-6 text-center text-xs text-slate-400">
+                        Statistik pertandingan akan otomatis tercatat saat pertandingan berlangsung.
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Tab 3: Tactical Highlights & Knowledge Notes */}
+                {heroDetailTab === 'highlights' && (
+                  <div className="space-y-2">
+                    {currentFixture.highlights && currentFixture.highlights.length > 0 ? (
+                      <ul className="space-y-2 text-xs">
+                        {currentFixture.highlights.map((h: string, i: number) => (
+                          <li
+                            key={i}
+                            className={`flex items-start gap-2.5 p-2.5 rounded-xl border leading-relaxed ${
+                              isPro
+                                ? 'bg-slate-900/40 border-slate-800 text-slate-300'
+                                : 'bg-slate-50 border-slate-200 text-slate-800'
+                            }`}
+                          >
+                            <span className="text-blue-500 font-bold shrink-0 mt-0.5">•</span>
+                            <span>{h}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="py-6 text-center text-xs text-slate-400">
+                        Belum ada catatan taktikal untuk laga ini.
+                      </div>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
