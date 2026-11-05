@@ -14,7 +14,7 @@ import {
   Activity,
   Radio,
 } from 'lucide-react';
-import { MatchFixture, Player, LeagueStandingRow, GroupTeam } from '@/types/club';
+import { MatchFixture, Player, LeagueStandingRow, GroupTeam, TacticalPlayerPos } from '@/types/club';
 import { getClubLogo, getPlayerAvatar } from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
 
@@ -79,6 +79,61 @@ function ClubThumb({ name, logoUrl }: { name: string; logoUrl?: string }) {
       onError={() => setImgError(true)}
       loading="lazy"
     />
+  );
+}
+
+// Helper component for Tactical Pitch Player Node with isolated state
+function TacticalPlayerNode({
+  pos,
+  fullPlayer,
+  onSelectPlayer,
+}: {
+  pos: TacticalPlayerPos;
+  fullPlayer?: Player;
+  onSelectPlayer: (player: Player) => void;
+}) {
+  const [hasError, setHasError] = useState(false);
+
+  return (
+    <div
+      onClick={() => {
+        if (fullPlayer) onSelectPlayer(fullPlayer);
+      }}
+      className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer transition-all duration-700 ease-out group z-10 hover:z-30 active:scale-95"
+      style={{
+        bottom: `${pos.x}%`,
+        left: `${pos.y}%`,
+      }}
+    >
+      <div className="relative">
+        {/* Round Player Avatar Node - Clean Photo WITHOUT any text covering the face */}
+        <div className="w-10 h-10 rounded-full ring-2 ring-white/95 dark:ring-slate-700 shadow-xl overflow-hidden bg-slate-900 group-hover:scale-110 group-hover:ring-cyan-300 transition-all flex items-center justify-center p-0.5">
+          {!hasError ? (
+            <img
+              src={getPlayerAvatar(pos.name)}
+              alt={pos.name}
+              className="w-full h-full object-contain select-none scale-[0.88] origin-bottom"
+              onError={() => setHasError(true)}
+              loading="lazy"
+            />
+          ) : (
+            <span className="font-mono font-black text-[10px] text-white">
+              #{pos.number}
+            </span>
+          )}
+        </div>
+
+        {/* Number Badge - Positioned outside on the bottom-right corner */}
+        <span className="absolute -bottom-1 -right-1 bg-blue-700 text-white font-mono text-[8.5px] font-black px-1.5 py-0.2 rounded-full border border-white dark:border-slate-800 shadow-sm leading-tight">
+          {pos.number}
+        </span>
+      </div>
+
+      {/* Player Name Pill */}
+      <span className="mt-1 px-1.5 py-0.5 rounded-md bg-black/80 backdrop-blur-xs text-[9px] font-bold text-white shadow-md whitespace-nowrap tracking-tight group-hover:bg-blue-700 transition-colors">
+        {pos.name}
+      </span>
+    </div>
   );
 }
 
@@ -1378,48 +1433,12 @@ export function MatchCenter() {
                 );
 
                 return (
-                  <div
+                  <TacticalPlayerNode
                     key={pos.id}
-                    onClick={() => {
-                      if (fullPlayer) setSelectedPlayer(fullPlayer);
-                    }}
-                    className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer transition-all duration-700 ease-out group z-10 hover:z-30 active:scale-95"
-                    style={{
-                      bottom: `${pos.x}%`,
-                      left: `${pos.y}%`,
-                    }}
-                  >
-                    <div className="relative">
-                      {/* Round Player Avatar Node - Clean Photo WITHOUT any text covering the face */}
-                      <div className="w-10 h-10 rounded-full ring-2 ring-white/95 dark:ring-slate-700 shadow-xl overflow-hidden bg-slate-900 group-hover:scale-110 group-hover:ring-cyan-300 transition-all flex items-center justify-center p-0.5">
-                        <img
-                          src={getPlayerAvatar(pos.name)}
-                          alt={pos.name}
-                          className="w-full h-full object-contain select-none scale-[0.88] origin-bottom"
-                          onError={(e) => {
-                            (e.currentTarget as HTMLElement).style.display = 'none';
-                            const fallback = e.currentTarget.parentElement?.querySelector('.player-fallback-num') as HTMLElement;
-                            if (fallback) fallback.style.display = 'block';
-                          }}
-                          loading="lazy"
-                        />
-                        {/* Fallback ONLY shown when image fails to load */}
-                        <span className="player-fallback-num hidden font-mono font-black text-[10px] text-white">
-                          #{pos.number}
-                        </span>
-                      </div>
-
-                      {/* Number Badge - Positioned outside on the bottom-right corner */}
-                      <span className="absolute -bottom-1 -right-1 bg-blue-700 text-white font-mono text-[8.5px] font-black px-1.5 py-0.2 rounded-full border border-white dark:border-slate-800 shadow-sm leading-tight">
-                        {pos.number}
-                      </span>
-                    </div>
-
-                    {/* Player Name Pill */}
-                    <span className="mt-1 px-1.5 py-0.5 rounded-md bg-black/80 backdrop-blur-xs text-[9px] font-bold text-white shadow-md whitespace-nowrap tracking-tight group-hover:bg-blue-700 transition-colors">
-                      {pos.name}
-                    </span>
-                  </div>
+                    pos={pos}
+                    fullPlayer={fullPlayer}
+                    onSelectPlayer={setSelectedPlayer}
+                  />
                 );
               })}
             </div>
