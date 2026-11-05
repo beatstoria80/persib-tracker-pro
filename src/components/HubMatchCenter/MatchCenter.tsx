@@ -9,8 +9,6 @@ import {
   Calendar,
   BarChart2,
   Users,
-  Play,
-  Pause,
   Activity,
 } from 'lucide-react';
 import { MatchFixture, Player, LeagueStandingRow, GroupTeam, TacticalPlayerPos } from '@/types/club';
@@ -1275,7 +1273,7 @@ export function MatchCenter() {
                 : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
             }`}
           >
-            {/* Header Formasi & UI UX Timer & Play Controls */}
+            {/* Header Formasi & Telemetry */}
             <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 flex-wrap">
@@ -1291,46 +1289,10 @@ export function MatchCenter() {
                 </p>
               </div>
 
-              {/* UI/UX Timer & Play Controller */}
-              <div className="flex items-center gap-1.5 shrink-0">
-                {/* Tactical Phase Telemetry Timer */}
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold">
-                  <span
-                    className={`w-1.5 h-1.5 rounded-full ${
-                      isTacticsPlaying ? 'bg-emerald-500 animate-ping' : 'bg-slate-400'
-                    }`}
-                  />
-                  <span>Fase {activeTacticalStep}/3</span>
-                  <span className="text-[8.5px] px-1 py-0.2 rounded font-black bg-blue-600/15 text-blue-600 dark:text-cyan-400">
-                    {isTacticsPlaying ? 'AUTO' : 'MANUAL'}
-                  </span>
-                </div>
-
-                {/* Tactile Play / Jeda Action Button */}
-                <button
-                  type="button"
-                  onClick={() => setIsTacticsPlaying((prev) => !prev)}
-                  className={`flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-black shadow-xs transition-all active:scale-95 ${
-                    isTacticsPlaying
-                      ? 'bg-amber-500 text-slate-950 hover:bg-amber-400 shadow-amber-500/20'
-                      : isPro
-                      ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/20'
-                      : 'bg-blue-600 hover:bg-blue-700 text-white shadow-blue-600/20'
-                  }`}
-                  title={isTacticsPlaying ? 'Jeda Simulasi Taktik' : 'Putar Siklus Taktik Otomatis'}
-                >
-                  {isTacticsPlaying ? (
-                    <>
-                      <Pause className="w-3 h-3 fill-current" />
-                      <span className="text-[10px]">Jeda</span>
-                    </>
-                  ) : (
-                    <>
-                      <Play className="w-3 h-3 fill-current" />
-                      <span className="text-[10px]">Play</span>
-                    </>
-                  )}
-                </button>
+              {/* Tactical Phase Telemetry Badge */}
+              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold shrink-0">
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400" />
+                <span>Fase {activeTacticalStep}/3</span>
               </div>
             </div>
 
