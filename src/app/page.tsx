@@ -68,7 +68,8 @@ export default function HomePage() {
               </span>
               <p className="truncate text-[11px] font-bold">
                 <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">ACL Two:</span>
-                Melbourne Victory 1 - 2 PERSIB (FT)
+                <span className="hidden sm:inline">Melbourne Victory</span>
+                <span className="sm:hidden">Melb. Victory</span> 1 - 2 PERSIB (FT)
               </p>
             </div>
             <span

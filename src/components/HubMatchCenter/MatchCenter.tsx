@@ -1239,34 +1239,34 @@ export function MatchCenter() {
             }`}
           >
             {/* Header Formasi & Live Clock Ticker */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
-              <div>
-                <div className="flex items-center gap-2">
-                  <h3 className="text-sm font-black tracking-tight text-slate-950 dark:text-white">
+            <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5 flex-wrap">
+                  <h3 className="text-xs sm:text-sm font-black tracking-tight text-slate-950 dark:text-white whitespace-nowrap">
                     Formasi Visual 4-2-3-1
                   </h3>
-                  <span className="px-2 py-0.5 rounded-full bg-blue-700 text-white font-mono text-[9px] font-black uppercase">
+                  <span className="px-2 py-0.5 rounded-full bg-blue-600/15 border border-blue-600/30 text-blue-700 dark:text-cyan-300 font-mono text-[9px] font-black uppercase whitespace-nowrap">
                     Igor Tolic
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                <p className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
                   Posisi spasial & pergerakan taktis real-time per detik
                 </p>
               </div>
 
               {/* Live Match Clock Ticker (Ticking every second) */}
-              <div className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400">
-                  <span className="w-2 h-2 rounded-full bg-red-500 animate-ping inline-block" />
-                  <Radio className="w-3 h-3 animate-pulse" />
-                  <span className="font-mono font-black text-xs">
+              <div className="flex items-center gap-1.5 shrink-0">
+                <div className="flex items-center gap-1 px-2 py-1 rounded-full bg-red-500/10 border border-red-500/30 text-red-600 dark:text-red-400">
+                  <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping inline-block" />
+                  <Radio className="w-2.5 h-2.5 animate-pulse" />
+                  <span className="font-mono font-black text-[11px] sm:text-xs">
                     {liveMinute}:{String(liveSeconds).padStart(2, '0')}
                   </span>
                 </div>
                 <button
                   type="button"
                   onClick={() => setIsTacticsPlaying((prev) => !prev)}
-                  className={`p-2 rounded-xl flex items-center justify-center transition-all ${
+                  className={`p-1.5 sm:p-2 rounded-xl flex items-center justify-center transition-all ${
                     isTacticsPlaying
                       ? 'bg-amber-500 text-slate-950 shadow-md font-bold'
                       : isPro
@@ -1390,24 +1390,27 @@ export function MatchCenter() {
                     }}
                   >
                     <div className="relative">
-                      {/* Round Player Avatar Node */}
-                      <div className="w-10 h-10 rounded-full ring-2 ring-white/95 shadow-xl overflow-hidden bg-gradient-to-br from-blue-700 to-slate-900 group-hover:scale-110 group-hover:ring-cyan-300 transition-all flex items-center justify-center p-0.5">
+                      {/* Round Player Avatar Node - Clean Photo WITHOUT any text covering the face */}
+                      <div className="w-10 h-10 rounded-full ring-2 ring-white/95 dark:ring-slate-700 shadow-xl overflow-hidden bg-slate-900 group-hover:scale-110 group-hover:ring-cyan-300 transition-all flex items-center justify-center p-0.5">
                         <img
                           src={getPlayerAvatar(pos.name)}
                           alt={pos.name}
                           className="w-full h-full object-contain select-none scale-[0.88] origin-bottom"
                           onError={(e) => {
                             (e.currentTarget as HTMLElement).style.display = 'none';
+                            const fallback = e.currentTarget.parentElement?.querySelector('.player-fallback-num') as HTMLElement;
+                            if (fallback) fallback.style.display = 'block';
                           }}
                           loading="lazy"
                         />
-                        <span className="font-mono font-black text-[10px] text-white absolute">
+                        {/* Fallback ONLY shown when image fails to load */}
+                        <span className="player-fallback-num hidden font-mono font-black text-[10px] text-white">
                           #{pos.number}
                         </span>
                       </div>
 
-                      {/* Number Badge */}
-                      <span className="absolute -bottom-1 -right-1 bg-blue-700 text-white font-mono text-[8px] font-black px-1 rounded-full border border-white shadow-xs">
+                      {/* Number Badge - Positioned outside on the bottom-right corner */}
+                      <span className="absolute -bottom-1 -right-1 bg-blue-700 text-white font-mono text-[8.5px] font-black px-1.5 py-0.2 rounded-full border border-white dark:border-slate-800 shadow-sm leading-tight">
                         {pos.number}
                       </span>
                     </div>
