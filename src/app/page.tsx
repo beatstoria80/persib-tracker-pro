@@ -40,7 +40,7 @@ export default function HomePage() {
 
       {/* Mobile Device Canvas */}
       <div
-        className={`w-full max-w-[430px] min-h-screen flex flex-col relative transition-colors duration-200 sm:my-3 sm:rounded-[40px] sm:border overflow-hidden ${
+        className={`w-full max-w-[430px] min-h-screen flex flex-col relative transition-colors duration-200 sm:my-3 sm:rounded-[40px] sm:border overflow-x-clip ${
           isPro
             ? 'bg-[#0E1118] text-white sm:border-slate-800 shadow-2xl'
             : 'bg-[#F8FAFC] text-slate-950 sm:border-slate-200 shadow-xl'

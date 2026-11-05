@@ -10,10 +10,10 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-colors duration-200 border-b ${
+      className={`sticky top-0 z-50 w-full transition-colors duration-200 border-b ${
         isPro
-          ? 'bg-[#0E1118]/90 border-slate-800/80 text-white backdrop-blur-md'
-          : 'bg-white/90 border-slate-200/80 text-slate-950 backdrop-blur-md'
+          ? 'bg-[#0E1118]/95 border-slate-800/80 text-white backdrop-blur-md shadow-xs'
+          : 'bg-white/95 border-slate-200/80 text-slate-950 backdrop-blur-md shadow-xs'
       }`}
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >
@@ -37,30 +37,40 @@ export function Header() {
             <span className="absolute -bottom-0.5 -right-0.5 flex h-2.5 w-2.5 rounded-full bg-emerald-500 ring-2 ring-white dark:ring-slate-900" />
           </div>
 
-          <div>
-            <h1 className="font-black text-sm tracking-tight uppercase leading-none">
-              PERSIB <span className={isPro ? 'text-cyan-400' : 'text-blue-700'}>TRACKER</span>
+          {/* PERSIB (Font Besar) + TRACKER (Font Kecil di Bawah) */}
+          <div className="flex flex-col justify-center">
+            <h1 className="font-black text-base sm:text-lg tracking-tight uppercase leading-none text-slate-950 dark:text-white">
+              PERSIB
             </h1>
+            <span
+              className={`font-black text-[9px] sm:text-[10px] tracking-widest uppercase leading-none mt-1 ${
+                isPro ? 'text-cyan-400' : 'text-blue-700'
+              }`}
+            >
+              TRACKER
+            </span>
           </div>
         </div>
 
         {/* Right: Modern Pill Actions */}
         <div className="flex items-center gap-2">
-          {/* Real-time Groq Backend Sync Action */}
+          {/* Refresh Action: Hanya Icon UI Refresh (Teks Groq Dihilangkan) */}
           <button
             onClick={() => triggerGroqDataSync()}
             disabled={isGroqSyncing}
-            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-[10px] font-bold transition-all active:scale-95 ${
+            className={`flex items-center justify-center w-8 h-8 rounded-full transition-all active:scale-95 ${
               isPro
                 ? 'bg-slate-900 border border-slate-700/80 text-cyan-300 hover:bg-slate-800'
                 : 'bg-slate-100 hover:bg-slate-200 text-slate-800 border border-slate-200'
             }`}
-            title="Sinkronkan data real-time dengan Groq LPU"
+            title="Sinkronkan data real-time"
+            aria-label="Refresh Data"
           >
-            <RefreshCw className={`w-3 h-3 ${isGroqSyncing ? 'animate-spin text-blue-500' : 'text-emerald-500'}`} />
-            <span className="font-mono text-[10px] font-extrabold">
-              {isGroqSyncing ? 'Syncing...' : 'Groq'}
-            </span>
+            <RefreshCw
+              className={`w-3.5 h-3.5 transition-transform ${
+                isGroqSyncing ? 'animate-spin text-blue-500' : 'text-emerald-500'
+              }`}
+            />
           </button>
 
           {/* Theme State Switcher */}
@@ -72,6 +82,7 @@ export function Header() {
                 : 'bg-slate-100 hover:bg-slate-200 border border-slate-200 text-slate-800'
             }`}
             title="Ganti Mode Tampilan (Light / Dark Pro)"
+            aria-label="Toggle Theme"
           >
             {isPro ? (
               <Zap className="w-4 h-4 fill-amber-400 text-amber-400" />
