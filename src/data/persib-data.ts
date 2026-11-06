@@ -1274,11 +1274,15 @@ export const CLUB_LOGOS: Record<string, string> = {
   'Melbourne Victory (AUS)': 'https://img.a.transfermarkt.technology/wappen/head/7006.png',
   'Melbourne Victory': 'https://img.a.transfermarkt.technology/wappen/head/7006.png',
   'Melbourne FC': 'https://img.a.transfermarkt.technology/wappen/head/7006.png',
+  'FC Seoul (KOR)': 'https://img.a.transfermarkt.technology/wappen/head/6500.png',
+  'FC Seoul': 'https://img.a.transfermarkt.technology/wappen/head/6500.png',
+  'The Cong-Viettel FC (VIE)': 'https://img.a.transfermarkt.technology/wappen/head/57443.png',
+  'The Cong-Viettel FC': 'https://img.a.transfermarkt.technology/wappen/head/57443.png',
+  'The Cong-Viettel': 'https://img.a.transfermarkt.technology/wappen/head/57443.png',
+  'Viettel FC': 'https://img.a.transfermarkt.technology/wappen/head/57443.png',
   'Bangkok United (THA)': 'https://img.a.transfermarkt.technology/wappen/head/25445.png',
-  'True Bangkok United': 'https://img.a.transfermarkt.technology/wappen/head/25445.png',
   'Bangkok United': 'https://img.a.transfermarkt.technology/wappen/head/25445.png',
   'Kaya FC-Iloilo (PHI)': 'https://img.a.transfermarkt.technology/wappen/head/15305.png',
-  'Kaya FC-Iloilo': 'https://img.a.transfermarkt.technology/wappen/head/15305.png',
   'Kaya FC': 'https://img.a.transfermarkt.technology/wappen/head/15305.png',
   'Jeonbuk Hyundai Motors (KOR)': 'https://img.a.transfermarkt.technology/wappen/head/4932.png',
   'Jeonbuk Hyundai Motors': 'https://img.a.transfermarkt.technology/wappen/head/4932.png',
@@ -1314,6 +1318,8 @@ export function getClubLogo(teamName: string): string {
   if (lower.includes('persib')) return CLUB_LOGOS['PERSIB Bandung'];
   if (lower.includes('persija')) return CLUB_LOGOS['Persija Jakarta'];
   if (lower.includes('melbourne')) return CLUB_LOGOS['Melbourne Victory'];
+  if (lower.includes('seoul')) return CLUB_LOGOS['FC Seoul (KOR)'];
+  if (lower.includes('viettel') || lower.includes('cong')) return CLUB_LOGOS['The Cong-Viettel FC (VIE)'];
   if (lower.includes('bangkok')) return CLUB_LOGOS['Bangkok United (THA)'];
   if (lower.includes('kaya')) return CLUB_LOGOS['Kaya FC-Iloilo (PHI)'];
   if (lower.includes('jeonbuk')) return CLUB_LOGOS['Jeonbuk Hyundai Motors (KOR)'];
@@ -1567,18 +1573,18 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
     id: 'acl2-26-md5',
     tournament: 'AFC Champions League Two 2026/2027',
     tournamentKey: 'acl2',
-    roundOrWeek: 'Matchday 5 Grup E (Laga Mendatang)',
+    roundOrWeek: 'Matchday 5 Grup E (Laga Kandang)',
     homeTeam: 'PERSIB Bandung',
-    awayTeam: 'Bangkok United (THA)',
+    awayTeam: 'FC Seoul (KOR)',
     homeLogo: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
-    awayLogo: 'https://img.a.transfermarkt.technology/wappen/head/25445.png',
+    awayLogo: 'https://img.a.transfermarkt.technology/wappen/head/6500.png',
     date: '25 November 2026',
     time: '19:00 WIB',
-    venue: 'Stadion Si Jalak Harupat, Bandung',
+    venue: 'Stadion Gelora Bandung Lautan Api (GBLA) / Si Jalak Harupat',
     status: 'SCHEDULED',
     highlights: [
-      'Laga kandang krusial kompetisi antarklub Asia',
-      'Penentuan juara grup E AFC Champions League Two 2026/2027',
+      'Big Match Asia Timur: Duel raksasa K-League Korea Selatan FC Seoul di Bandung',
+      'Pertarungan mempertahankan rekor 100% kemenangan di Grup E ACL Two',
     ],
   },
   {
@@ -1586,17 +1592,17 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
     tournament: 'AFC Champions League Two 2026/2027',
     tournamentKey: 'acl2',
     roundOrWeek: 'Matchday 6 Grup E (Laga Tandang)',
-    homeTeam: 'Kaya FC-Iloilo (PHI)',
+    homeTeam: 'The Cong-Viettel FC (VIE)',
     awayTeam: 'PERSIB Bandung (IDN)',
-    homeLogo: 'https://img.a.transfermarkt.technology/wappen/head/15305.png',
+    homeLogo: 'https://img.a.transfermarkt.technology/wappen/head/57443.png',
     awayLogo: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
     date: '10 Desember 2026',
     time: '19:00 WIB',
-    venue: 'Rizal Memorial Stadium, Manila, Filipina',
+    venue: 'Hang Day Stadium / My Dinh National Stadium, Hanoi, Vietnam',
     status: 'SCHEDULED',
     highlights: [
-      'Laga penutup babak penyisihan Grup E AFC Champions League Two',
-      'Penyegelan rekor tak terkalahkan Maung Bandung di Asia',
+      'Laga penutup babak penyisihan Grup E AFC Champions League Two di Vietnam',
+      'Penyegelan status juara grup tak terkalahkan bagi Maung Bandung',
     ],
   },
   // =========================================================================
@@ -1701,9 +1707,9 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
 // =========================================================================
 export const ACL_GROUP_STANDINGS_2026_2027: GroupTeam[] = [
   { name: 'PERSIB Bandung (IDN)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14105.png', played: 4, won: 4, drawn: 0, lost: 0, gf: 8, ga: 1, points: 12, isPersib: true },
+  { name: 'FC Seoul (KOR)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/6500.png', played: 4, won: 2, drawn: 0, lost: 2, gf: 6, ga: 4, points: 6 },
   { name: 'Melbourne Victory (AUS)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/7006.png', played: 4, won: 1, drawn: 1, lost: 2, gf: 5, ga: 6, points: 4 },
-  { name: 'Bangkok United (THA)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/25445.png', played: 4, won: 1, drawn: 1, lost: 2, gf: 4, ga: 6, points: 4 },
-  { name: 'Kaya FC-Iloilo (PHI)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/15305.png', played: 4, won: 0, drawn: 2, lost: 2, gf: 2, ga: 6, points: 2 },
+  { name: 'The Cong-Viettel FC (VIE)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/57443.png', played: 4, won: 0, drawn: 1, lost: 3, gf: 2, ga: 10, points: 1 },
 ];
 
 // =========================================================================
