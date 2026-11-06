@@ -1105,7 +1105,7 @@ export function MatchCenter() {
                 : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
             }`}
           >
-            <div className="pb-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
+            <div className="pb-3 border-b border-slate-200 dark:border-slate-800">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase text-slate-400 block">
                   Tabel Klasemen Lengkap
@@ -1118,9 +1118,6 @@ export function MatchCenter() {
                     : '18 Klub BRI Liga 1 2026/2027'}
                 </h3>
               </div>
-              <span className="text-[9px] font-mono font-bold px-2.5 py-1 rounded-full bg-emerald-50 text-emerald-800 border border-emerald-300 dark:bg-emerald-950 dark:text-emerald-300">
-                Verified PT LIB & AFC
-              </span>
             </div>
 
             <div className="overflow-x-auto no-scrollbar mt-3">
