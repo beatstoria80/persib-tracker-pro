@@ -190,6 +190,7 @@ export function MatchCenter() {
 
   const startingXI: Player[] = players.filter((p: Player) => p.squadRole === 'starting');
   const substitutes: Player[] = players.filter((p: Player) => p.squadRole === 'substitute');
+  const persibStanding = liga1Standings.find((r) => r.isPersib || r.team.toLowerCase().includes('persib'));
 
   return (
     <div className="space-y-4">
@@ -215,7 +216,7 @@ export function MatchCenter() {
               ? 'Puncak Grup B'
               : activeTournament === 'acl2'
               ? 'Juara Grup E'
-              : 'Peringkat #4'}
+              : `Peringkat #${persibStanding?.rank || 3}`}
           </span>
         </div>
 
@@ -224,7 +225,7 @@ export function MatchCenter() {
           <button
             onClick={() => {
               setActiveTournament('liga1');
-              setSelectedFixtureId('l1-p8');
+              setSelectedFixtureId('l1-p10');
             }}
             className={`py-2 px-1 rounded-xl text-xs font-black tracking-tight transition-all text-center ${
               activeTournament === 'liga1'
@@ -1050,7 +1051,7 @@ export function MatchCenter() {
             </div>
           )}
 
-          {activeTournament === 'liga1' && (
+          {activeTournament === 'liga1' && persibStanding && (
             <div
               className={`p-5 rounded-3xl border shadow-lg ${
                 isPro
@@ -1060,10 +1061,10 @@ export function MatchCenter() {
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[10px] font-mono uppercase font-bold text-blue-600 dark:text-blue-400">
-                  BRI Liga 1 • Pekan 8 Faktual
+                  BRI Liga 1 • Pekan {persibStanding.played} Terkini
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full bg-blue-700 text-white text-[9px] font-black uppercase tracking-wider">
-                  Posisi #4 (Championship Zone)
+                  Peringkat #{persibStanding.rank} • Unbeaten
                 </span>
               </div>
               <div className="flex items-end justify-between mt-1">
@@ -1072,26 +1073,28 @@ export function MatchCenter() {
                     PERSIB Bandung
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
-                    Hanya terpaut 2 poin dari puncak klasemen (18 Poin)
+                    Hanya terpaut 1 poin dari pemuncak klasemen (21 Poin) • Rekor Belum Terkalahkan
                   </p>
                 </div>
                 <div className="text-right font-mono">
-                  <span className="text-3xl font-black text-blue-600 dark:text-cyan-400">16</span>
+                  <span className="text-3xl font-black text-blue-600 dark:text-cyan-400">{persibStanding.points}</span>
                   <span className="text-[10px] text-slate-400 block -mt-1 font-bold">Poin</span>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800 text-center text-[10px]">
                 <div>
                   <span className="block text-slate-400 font-medium">Rekor Laga</span>
-                  <span className="font-mono font-bold text-xs">5M - 1S - 2K</span>
+                  <span className="font-mono font-bold text-xs">{persibStanding.won}M - {persibStanding.drawn}S - {persibStanding.lost}K</span>
                 </div>
                 <div>
                   <span className="block text-slate-400 font-medium">Gol (GF:GA)</span>
-                  <span className="font-mono font-bold text-xs">15 : 8</span>
+                  <span className="font-mono font-bold text-xs">{persibStanding.gf} : {persibStanding.ga}</span>
                 </div>
                 <div>
                   <span className="block text-slate-400 font-medium">Selisih Gol</span>
-                  <span className="font-mono font-bold text-emerald-500 text-xs">+7</span>
+                  <span className="font-mono font-bold text-emerald-500 text-xs">
+                    {persibStanding.gd > 0 ? `+${persibStanding.gd}` : persibStanding.gd}
+                  </span>
                 </div>
               </div>
             </div>
