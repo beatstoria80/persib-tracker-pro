@@ -188,3 +188,50 @@ export interface FinancialSummary {
   auditedBy: string;
   verifiedSource: string;
 }
+
+export interface ClubTacticalStrength {
+  title: string;
+  rating: number; // 1-100
+  description: string;
+}
+
+export interface ClubKeyPlayer {
+  name: string;
+  position: string;
+  number: number;
+  marketValue: string;
+  avatarUrl?: string;
+  keyStat: string;
+}
+
+export interface ClubAnalysisProfile {
+  id: string;
+  name: string;
+  shortName: string;
+  nickname: string;
+  logoUrl: string;
+  city: string;
+  foundedYear: number;
+  stadium: string;
+  stadiumCapacity: string;
+  headCoach: string;
+  headCoachNationality: string;
+  preferredFormation: string;
+  squadMarketValue: string;
+  tacticalStyle: string;
+  attackRating: number;
+  defenseRating: number;
+  tacticalFlexibility: number;
+  strengths: ClubTacticalStrength[];
+  weaknesses: string[];
+  keyPlayers: ClubKeyPlayer[];
+  headToHeadVsPersib: {
+    lastMeetingScore: string;
+    lastMeetingDate: string;
+    totalWinsVsPersib: number;
+    drawsVsPersib: number;
+    lossesVsPersib: number;
+    scoutingReport: string;
+  };
+  verifiedBy: string;
+}

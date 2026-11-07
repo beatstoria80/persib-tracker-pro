@@ -12,8 +12,9 @@ import {
   Activity,
 } from 'lucide-react';
 import { MatchFixture, Player, LeagueStandingRow, GroupTeam, TacticalPlayerPos } from '@/types/club';
-import { getClubLogo, getPlayerAvatar } from '@/data/persib-data';
+import { getClubLogo, getPlayerAvatar, getClubProfile } from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
+import { ClubIntelligenceView } from './ClubIntelligenceView';
 
 // Helper component for Match Hero Card Official Emblem
 function ClubBadge({
@@ -158,6 +159,7 @@ export function MatchCenter() {
   const [selectedFixtureId, setSelectedFixtureId] = useState<string>('l1-p8');
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
   const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'stats' | 'highlights'>('events');
+  const [selectedClubForIntel, setSelectedClubForIntel] = useState<string | null>(null);
 
   // Auto-play tactical transition loop
   useEffect(() => {
@@ -311,7 +313,10 @@ export function MatchCenter() {
         </button>
 
         <button
-          onClick={() => setMatchViewTab('standings')}
+          onClick={() => {
+            setMatchViewTab('standings');
+            setSelectedClubForIntel(null);
+          }}
           className={`py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
             matchViewTab === 'standings'
               ? isPro
@@ -955,8 +960,18 @@ export function MatchCenter() {
 
       {/* 5. Sub-Page Tab 3: Dedicated Group Cards & Standings (Klasemen Group Card Lengkap) */}
       {matchViewTab === 'standings' && (
-        <div className="space-y-4">
-          {/* Visual High-Impact Group Card */}
+        selectedClubForIntel ? (
+          <ClubIntelligenceView
+            profile={getClubProfile(
+              selectedClubForIntel,
+              liga1Standings.find((r: LeagueStandingRow) => r.team === selectedClubForIntel)
+            )}
+            standingRow={liga1Standings.find((r: LeagueStandingRow) => r.team === selectedClubForIntel)}
+            onBack={() => setSelectedClubForIntel(null)}
+          />
+        ) : (
+          <div className="space-y-4">
+            {/* Visual High-Impact Group Card */}
           {activeTournament === 'acl2' && (
             <div
               className={`p-5 rounded-3xl border shadow-lg ${
@@ -1108,7 +1123,7 @@ export function MatchCenter() {
                 : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
             }`}
           >
-            <div className="pb-3 border-b border-slate-200 dark:border-slate-800">
+            <div className="pb-3 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between">
               <div>
                 <span className="text-[10px] font-mono font-bold uppercase text-slate-400 block">
                   Tabel Klasemen Lengkap
@@ -1121,6 +1136,9 @@ export function MatchCenter() {
                     : '18 Klub BRI Liga 1 2026/2027'}
                 </h3>
               </div>
+              <span className="inline-flex items-center gap-1 text-[9px] font-bold text-blue-600 dark:text-cyan-400 bg-blue-500/10 px-2.5 py-1 rounded-full border border-blue-500/20">
+                <Users className="w-3 h-3" /> Ketuk Klub: Profil & Scouting
+              </span>
             </div>
 
             <div className="overflow-x-auto no-scrollbar mt-3">
@@ -1141,7 +1159,8 @@ export function MatchCenter() {
                       (team: GroupTeam, index: number) => (
                         <tr
                           key={team.name}
-                          className={`border-b transition-colors ${
+                          onClick={() => setSelectedClubForIntel(team.name)}
+                          className={`border-b transition-colors cursor-pointer hover:bg-blue-500/10 active:scale-[0.99] select-none group ${
                             team.isPersib
                               ? isPro
                                 ? 'bg-blue-600/15 border-blue-800/80 text-cyan-300 font-black'
@@ -1167,7 +1186,9 @@ export function MatchCenter() {
                           <td className="py-3 px-2 font-bold text-xs truncate max-w-[170px]">
                             <div className="flex items-center gap-2">
                               <ClubThumb name={team.name} logoUrl={team.logoUrl} />
-                              <span className="truncate">{team.name}</span>
+                              <span className="truncate group-hover:text-blue-500 dark:group-hover:text-cyan-300 transition-colors">
+                                {team.name}
+                              </span>
                               {team.isPersib && (
                                 <span className="ml-1 text-[8.5px] uppercase px-1.5 py-0.5 rounded-full bg-emerald-500 text-white font-mono shrink-0">
                                   {activeTournament === 'shopee_cup' ? 'Puncak Grup' : 'Juara Grup'}
@@ -1206,7 +1227,8 @@ export function MatchCenter() {
                     {liga1Standings.map((row: LeagueStandingRow) => (
                       <tr
                         key={row.team}
-                        className={`border-b transition-colors ${
+                        onClick={() => setSelectedClubForIntel(row.team)}
+                        className={`border-b transition-colors cursor-pointer hover:bg-blue-500/10 active:scale-[0.99] select-none group ${
                           row.isPersib
                             ? isPro
                               ? 'bg-blue-600/15 border-blue-800/80 text-cyan-300 font-black'
@@ -1234,7 +1256,9 @@ export function MatchCenter() {
                         <td className="py-2.5 px-2 font-bold text-xs truncate max-w-[160px]">
                           <div className="flex items-center gap-2">
                             <ClubThumb name={row.team} logoUrl={row.logoUrl} />
-                            <span className="truncate">{row.team}</span>
+                            <span className="truncate group-hover:text-blue-500 dark:group-hover:text-cyan-300 transition-colors">
+                              {row.team}
+                            </span>
                             {row.isPersib && (
                               <span className="ml-1 text-[8px] uppercase px-1 rounded bg-blue-700 text-white font-mono shrink-0">
                                 Persib
@@ -1260,7 +1284,8 @@ export function MatchCenter() {
             </div>
           </div>
         </div>
-      )}
+      )
+    )}
 
       {/* 6. Sub-Page Tab 4: Interactive 2D Visual Pitch & Lineup List (Taktik XI & Skuad) */}
       {matchViewTab === 'lineup' && (
