@@ -155,7 +155,7 @@ export function MatchCenter() {
 
   // Sub-Page Navigation Tabs: Laga (featured), Jadwal (schedule), Klasemen (standings), Taktik (lineup)
   const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup'>('featured');
-  const [selectedFixtureId, setSelectedFixtureId] = useState<string>('acl2-26-md4-live');
+  const [selectedFixtureId, setSelectedFixtureId] = useState<string>('l1-p10');
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
   const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'stats' | 'highlights'>('events');
 

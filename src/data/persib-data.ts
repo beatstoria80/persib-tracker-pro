@@ -1417,6 +1417,15 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
       'Hasil imbang 1-1 mempertahankan rekor UNBEATEN (tak terkalahkan) Persib Bandung di BRI Liga 1',
       'Persib mantap di Peringkat 3 dengan 20 poin, hanya terpaut 1 poin dari Borneo FC dan Persebaya',
     ],
+    events: [
+      { minute: "1'", type: 'chance', text: 'Kick-off babak pertama Persib Bandung vs Semen Padang dimulai' },
+      { minute: "34'", type: 'chance', text: 'Peluang emas! Sepakan Tyronne del Pino membentur mistar gawang' },
+      { minute: "45+2'", type: 'chance', text: 'Babak pertama berakhir 0-0' },
+      { minute: "52'", type: 'goal', text: 'GOOOL! Ciro Alves mencetak gol pembuka 1-0 lewat tembakan first-time!' },
+      { minute: "52'", type: 'goal', text: 'Gol balasan Semen Padang menyamakan skor 1-1 lewat Gala Pagamo' },
+      { minute: "88'", type: 'chance', text: 'Peluang sundulan David da Silva tipis di samping tiang gawang' },
+      { minute: "90+4'", type: 'chance', text: 'Peluit panjang berbunyi! PERSIB Bandung 1 - 1 Semen Padang FC' },
+    ],
     detailedEvents: [
       { minute: "12'", type: 'yellow_card', team: 'away', player: 'Tin Martic', detail: 'Pelanggaran Keras terhadap Marc Klok' },
       { minute: "34'", type: 'chance', team: 'home', player: 'Tyronne del Pino', detail: 'Tembakan Menukik Membentur Mistar' },

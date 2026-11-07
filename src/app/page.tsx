@@ -11,7 +11,7 @@ import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransp
 import { ShieldCheck, Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, lastSyncedAt, syncFeedback } = useClubTracker();
+  const { mode, activeHub, activeTournament, lastSyncedAt, syncFeedback } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
@@ -75,9 +75,23 @@ export default function HomePage() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <p className="truncate text-[11px] font-bold">
-                <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">ACL Two:</span>
-                <span className="hidden sm:inline">Melbourne Victory</span>
-                <span className="sm:hidden">Melb. Victory</span> 1 - 2 PERSIB (FT)
+                {activeTournament === 'liga1' ? (
+                  <>
+                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">BRI Liga 1:</span>
+                    <span>PERSIB 1 - 1 Semen Padang (FT) • Peringkat #3</span>
+                  </>
+                ) : activeTournament === 'acl2' ? (
+                  <>
+                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">ACL Two:</span>
+                    <span className="hidden sm:inline">Melbourne Victory</span>
+                    <span className="sm:hidden">Melb. Victory</span> 1 - 2 PERSIB (FT)
+                  </>
+                ) : (
+                  <>
+                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">Shopee Cup:</span>
+                    <span>Port FC 1 - 3 PERSIB (FT)</span>
+                  </>
+                )}
               </p>
             </div>
             <span
