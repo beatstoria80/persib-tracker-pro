@@ -155,7 +155,7 @@ export function MatchCenter() {
 
   // Sub-Page Navigation Tabs: Laga (featured), Jadwal (schedule), Klasemen (standings), Taktik (lineup)
   const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup'>('featured');
-  const [selectedFixtureId, setSelectedFixtureId] = useState<string>('l1-p10');
+  const [selectedFixtureId, setSelectedFixtureId] = useState<string>('l1-p8');
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
   const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'stats' | 'highlights'>('events');
 
@@ -225,7 +225,7 @@ export function MatchCenter() {
           <button
             onClick={() => {
               setActiveTournament('liga1');
-              setSelectedFixtureId('l1-p10');
+              setSelectedFixtureId('l1-p8');
             }}
             className={`py-2 px-1 rounded-xl text-xs font-black tracking-tight transition-all text-center ${
               activeTournament === 'liga1'
@@ -1061,10 +1061,10 @@ export function MatchCenter() {
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[10px] font-mono uppercase font-bold text-blue-600 dark:text-blue-400">
-                  BRI Liga 1 • Pekan {persibStanding.played} Terkini
+                  Super League 2026/27 • Pekan {persibStanding.played} Terkini
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full bg-blue-700 text-white text-[9px] font-black uppercase tracking-wider">
-                  Peringkat #{persibStanding.rank} • Unbeaten
+                  Peringkat #{persibStanding.rank} (Championship Zone)
                 </span>
               </div>
               <div className="flex items-end justify-between mt-1">
@@ -1073,7 +1073,7 @@ export function MatchCenter() {
                     PERSIB Bandung
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
-                    Hanya terpaut 1 poin dari pemuncak klasemen (21 Poin) • Rekor Belum Terkalahkan
+                    Hanya terpaut 4 poin dari pemuncak klasemen (Dewa United 20 Poin)
                   </p>
                 </div>
                 <div className="text-right font-mono">

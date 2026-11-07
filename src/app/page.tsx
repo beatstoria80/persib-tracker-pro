@@ -77,8 +77,8 @@ export default function HomePage() {
               <p className="truncate text-[11px] font-bold">
                 {activeTournament === 'liga1' ? (
                   <>
-                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">BRI Liga 1:</span>
-                    <span>PERSIB 1 - 1 Semen Padang (FT) • Peringkat #3</span>
+                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">Super League:</span>
+                    <span>PERSIB 4 - 0 Isenmulang (FT) • Peringkat #5</span>
                   </>
                 ) : activeTournament === 'acl2' ? (
                   <>

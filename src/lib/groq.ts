@@ -150,23 +150,23 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     matchCenter: {
       tournament: 'BRI Liga 1 & ACL Two 2026/2027',
       latestResult: {
-        matchweek: 'Pekan 10 Liga 1',
-        opponent: 'Semen Padang FC',
-        score: '1 - 1',
-        scorers: ['Ciro Alves 52\'', 'Gala Pagamo 52\''],
-        venue: 'Stadion Si Jalak Harupat, Bandung',
+        matchweek: 'Pekan 8 Super League',
+        opponent: 'Isenmulang Kalteng FC',
+        score: '4 - 0',
+        scorers: ['Thom Haye 18\'', 'Uilliam 42\'', 'Mariano Peralta 67\'', 'Beckham Putra 84\''],
+        venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
       },
       nextFixture: {
-        matchweek: 'Pekan 11 Liga 1',
-        opponent: 'Borneo FC Samarinda',
-        date: 'Jumat, 22 November 2026 • 19:00 WIB',
-        venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
+        matchweek: 'Pekan 9 Super League',
+        opponent: 'Java United',
+        date: 'Minggu, 08 November 2026 • 19:00 WIB',
+        venue: 'Stadion Jatidiri, Semarang',
       },
     },
     leagueStandings: {
-      persibRank: 3,
-      persibPoints: 20,
-      persibGD: 10,
+      persibRank: 5,
+      persibPoints: 16,
+      persibGD: 7,
       topClubs: BRI_LIGA_1_STANDINGS_2026_2027.slice(0, 5),
       allClubs: BRI_LIGA_1_STANDINGS_2026_2027,
     },
@@ -202,7 +202,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
 Tugasmu BUKAN mengobrol atau menjadi chatbot, melainkan menyuplai ringkasan eksekutif faktual satu paragraf (maksimal 2 kalimat) dalam bahasa Indonesia mengenai situasi data kompetisi terkini:
 - Hasil Resmi ACL Two: Matchday 4 Leg 2: Melbourne Victory 1 - 2 PERSIB Bandung (Full Time). PERSIB lolos ke Babak 16 Besar sebagai Juara Grup E (12 Poin Sempurna) di atas FC Seoul (KOR), Melbourne Victory (AUS), dan The Cong-Viettel (VIE).
 - Hasil Resmi Shopee Cup (ASEAN): Port FC 1 - 3 PERSIB Bandung (Comeback Menang Fantastis di Bangkok). PERSIB puncaki Grup B.
-- Hasil Resmi BRI Liga 1: PERSIB 1 - 1 Semen Padang FC (Pekan 10, Posisi #3, 20 Poin, Rekor Belum Terkalahkan/Unbeaten). Laga berikutnya: Super Big Match vs Borneo FC (#1) di GBLA.
+- Hasil Resmi Super League 2026/2027: PERSIB 4 - 0 Isenmulang Kalteng FC (Pekan 8, Posisi #5, 16 Poin). Laga berikutnya: Pekan 9 vs Java United di Semarang.
 Keluarkan HANYA teks ringkasan faktual tanpa basa-basi atau format markdown tebal.`;
 
     const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
