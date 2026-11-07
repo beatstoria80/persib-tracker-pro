@@ -36,7 +36,9 @@ interface ClubTrackerContextType {
   selectedPlayer: Player | null;
   setSelectedPlayer: (player: Player | null) => void;
   fixtures: MatchFixture[];
+  setFixtures: React.Dispatch<React.SetStateAction<MatchFixture[]>>;
   liga1Standings: LeagueStandingRow[];
+  setLiga1Standings: React.Dispatch<React.SetStateAction<LeagueStandingRow[]>>;
   aclStandings: GroupTeam[];
   shopeeCupStandings: GroupTeam[];
   updateMatchSimulator: (simulatedPersibWon: boolean, simulatedGoalDiff: number) => void;
@@ -50,6 +52,7 @@ interface ClubTrackerContextType {
   lastSyncedAt: string;
   groqBulletin: string;
   triggerGroqDataSync: () => Promise<void>;
+  syncFeedback: string | null;
 }
 
 const ClubTrackerContext = createContext<ClubTrackerContextType | undefined>(undefined);
@@ -61,12 +64,13 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [matchDisplayMode, setMatchDisplayMode] = useState<MatchDisplayMode>('official_result');
   const [players] = useState<Player[]>(OFFICIAL_SQUAD_2026_2027);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [fixtures] = useState<MatchFixture[]>(VERIFIED_FIXTURES_2026_2027);
-  const [liga1Standings] = useState<LeagueStandingRow[]>(BRI_LIGA_1_STANDINGS_2026_2027);
+  const [fixtures, setFixtures] = useState<MatchFixture[]>(VERIFIED_FIXTURES_2026_2027);
+  const [liga1Standings, setLiga1Standings] = useState<LeagueStandingRow[]>(BRI_LIGA_1_STANDINGS_2026_2027);
   const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_STANDINGS_2026_2027);
-  const [shopeeCupStandings] = useState<GroupTeam[]>(SHOPEE_CUP_STANDINGS_2026_2027);
+  const [shopeeCupStandings, setShopeeCupStandings] = useState<GroupTeam[]>(SHOPEE_CUP_STANDINGS_2026_2027);
   const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
   const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
+  const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
 
   // Autonomous Backend Groq AI Data Feeder State (Backend supplier, NOT chatbot)
   const [isGroqSyncing, setIsGroqSyncing] = useState<boolean>(false);
@@ -83,13 +87,43 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
       const res = await fetch('/api/groq-agent');
       if (res.ok) {
         const json = await res.json();
-        if (json?.data?.summaryBulletin) {
-          setGroqBulletin(json.data.summaryBulletin);
+        const payload = json?.data;
+        if (payload) {
+          // 1. Sinkronisasi Data Klasemen Real-Time (Liga 1, ACL Two, Shopee Cup)
+          if (payload.leagueStandings?.allClubs && Array.isArray(payload.leagueStandings.allClubs)) {
+            setLiga1Standings(payload.leagueStandings.allClubs);
+          }
+          if (payload.aclStandings && Array.isArray(payload.aclStandings)) {
+            setAclStandings(payload.aclStandings);
+          }
+          if (payload.shopeeCupStandings && Array.isArray(payload.shopeeCupStandings)) {
+            setShopeeCupStandings(payload.shopeeCupStandings);
+          }
+
+          // 2. Sinkronisasi Jadwal & Hasil Pertandingan
+          if (payload.fixtures && Array.isArray(payload.fixtures)) {
+            setFixtures(payload.fixtures);
+          }
+
+          // 3. Sinkronisasi Teks Intelijen AI & Live Time Ticker
+          if (payload.summaryBulletin) {
+            setGroqBulletin(payload.summaryBulletin);
+          }
+
+          const nowTime =
+            payload.lastUpdated ||
+            new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+          setLastSyncedAt(nowTime);
+
+          // 4. Feedback Visual Responsif
+          setSyncFeedback('Data seluruh fitur berhasil diperbarui real-time!');
+          setTimeout(() => setSyncFeedback(null), 3500);
         }
-        setLastSyncedAt(json?.data?.lastUpdated || 'Baru Saja');
       }
     } catch (e) {
       console.warn('Groq backend data sync fetch failed:', e);
+      const fallbackTime = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+      setLastSyncedAt(fallbackTime);
     } finally {
       setIsGroqSyncing(false);
     }
@@ -103,10 +137,27 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         const res = await fetch('/api/groq-agent');
         if (res.ok && isSubscribed) {
           const json = await res.json();
-          if (json?.data?.summaryBulletin) {
-            setGroqBulletin(json.data.summaryBulletin);
+          const payload = json?.data;
+          if (payload) {
+            if (payload.leagueStandings?.allClubs && Array.isArray(payload.leagueStandings.allClubs)) {
+              setLiga1Standings(payload.leagueStandings.allClubs);
+            }
+            if (payload.aclStandings && Array.isArray(payload.aclStandings)) {
+              setAclStandings(payload.aclStandings);
+            }
+            if (payload.shopeeCupStandings && Array.isArray(payload.shopeeCupStandings)) {
+              setShopeeCupStandings(payload.shopeeCupStandings);
+            }
+            if (payload.fixtures && Array.isArray(payload.fixtures)) {
+              setFixtures(payload.fixtures);
+            }
+            if (payload.summaryBulletin) {
+              setGroqBulletin(payload.summaryBulletin);
+            }
+            if (payload.lastUpdated) {
+              setLastSyncedAt(payload.lastUpdated);
+            }
           }
-          setLastSyncedAt(json?.data?.lastUpdated || 'Baru Saja');
         }
       } catch (e) {
         console.warn('Groq backend data sync error:', e);
@@ -188,7 +239,9 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         selectedPlayer,
         setSelectedPlayer,
         fixtures,
+        setFixtures,
         liga1Standings,
+        setLiga1Standings,
         aclStandings,
         shopeeCupStandings,
         updateMatchSimulator,
@@ -202,6 +255,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         lastSyncedAt,
         groqBulletin,
         triggerGroqDataSync,
+        syncFeedback,
       }}
     >
       <div

@@ -1,9 +1,12 @@
 import {
   OFFICIAL_SQUAD_2026_2027,
   BRI_LIGA_1_STANDINGS_2026_2027,
+  VERIFIED_FIXTURES_2026_2027,
+  ACL_GROUP_STANDINGS_2026_2027,
+  SHOPEE_CUP_STANDINGS_2026_2027,
   FINANCIAL_OVERVIEW_2026_2027,
 } from '@/data/persib-data';
-import { Player, LeagueStandingRow } from '@/types/club';
+import { Player, LeagueStandingRow, MatchFixture, GroupTeam } from '@/types/club';
 
 export interface LiveMatchTrackerPayload {
   isLive: boolean;
@@ -50,7 +53,11 @@ export interface GroqSuppliedData {
     persibPoints: number;
     persibGD: number;
     topClubs: LeagueStandingRow[];
+    allClubs: LeagueStandingRow[];
   };
+  fixtures: MatchFixture[];
+  aclStandings: GroupTeam[];
+  shopeeCupStandings: GroupTeam[];
   squadMedical: {
     fitPlayersCount: number;
     injuredPlayersCount: number;
@@ -161,7 +168,11 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       persibPoints: 20,
       persibGD: 10,
       topClubs: BRI_LIGA_1_STANDINGS_2026_2027.slice(0, 5),
+      allClubs: BRI_LIGA_1_STANDINGS_2026_2027,
     },
+    fixtures: VERIFIED_FIXTURES_2026_2027,
+    aclStandings: ACL_GROUP_STANDINGS_2026_2027,
+    shopeeCupStandings: SHOPEE_CUP_STANDINGS_2026_2027,
     squadMedical: {
       fitPlayersCount: OFFICIAL_SQUAD_2026_2027.filter((p: Player) => p.fitness.status === 'fit').length,
       injuredPlayersCount: OFFICIAL_SQUAD_2026_2027.filter((p: Player) => p.fitness.status !== 'fit').length,

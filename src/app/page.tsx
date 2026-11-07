@@ -8,10 +8,10 @@ import { InstallPwaPrompt } from '@/components/InstallPwaPrompt';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
-import { ShieldCheck, Smartphone } from 'lucide-react';
+import { ShieldCheck, Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, lastSyncedAt } = useClubTracker();
+  const { mode, activeHub, lastSyncedAt, syncFeedback } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
@@ -48,6 +48,14 @@ export default function HomePage() {
       >
         {/* Sleek Mobile Header */}
         <Header />
+
+        {/* Real-Time Live Sync Notification Toast */}
+        {syncFeedback && (
+          <div className="fixed top-18 left-1/2 -translate-x-1/2 z-50 px-3.5 py-1.5 rounded-full bg-emerald-600/95 text-white text-[10px] font-bold shadow-lg flex items-center gap-1.5 backdrop-blur-md border border-emerald-400/40 transition-all animate-bounce">
+            <CheckCircle2 className="w-3.5 h-3.5 shrink-0" />
+            <span>{syncFeedback}</span>
+          </div>
+        )}
 
         {/* 1-Tap PWA Install Card for Mobile Users */}
         <InstallPwaPrompt />
