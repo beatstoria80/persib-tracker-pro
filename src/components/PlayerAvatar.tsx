@@ -27,8 +27,8 @@ export function PlayerAvatar({
 
   // Fallback cascade: direct Transfermarkt/Custom -> Weserv Image Proxy -> UI Avatars high-res
   const getSrc = () => {
-    if (retryStage === 0) return rawSrc;
-    if (retryStage === 1 && rawSrc) {
+    if (retryStage === 0 && rawSrc) return rawSrc;
+    if (retryStage <= 1 && rawSrc) {
       const cleanUrl = rawSrc.replace(/^https?:\/\//, '');
       return `https://images.weserv.nl/?url=${encodeURIComponent(cleanUrl)}&w=200&h=200&fit=cover`;
     }
