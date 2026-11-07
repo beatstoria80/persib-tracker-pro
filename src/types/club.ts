@@ -216,6 +216,8 @@ export interface ClubAnalysisProfile {
   stadiumCapacity: string;
   headCoach: string;
   headCoachNationality: string;
+  headCoachPhotoUrl?: string;
+  squadPhotoUrl?: string;
   preferredFormation: string;
   squadMarketValue: string;
   tacticalStyle: string;

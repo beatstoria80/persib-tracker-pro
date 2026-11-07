@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { ClubAnalysisProfile, LeagueStandingRow } from '@/types/club';
+import { PlayerAvatar } from '@/components/PlayerAvatar';
 import {
   ArrowLeft,
   ShieldCheck,
@@ -15,6 +16,7 @@ import {
   Flame,
   Swords,
   Crosshair,
+  Camera,
 } from 'lucide-react';
 
 interface ClubIntelligenceViewProps {
@@ -323,26 +325,68 @@ export function ClubIntelligenceView({
         </div>
       )}
 
-      {/* TAB 2: KEY PLAYERS */}
+      {/* TAB 2: KEY PLAYERS & SQUAD PROFILE */}
       {activeTab === 'players' && (
-        <div className="space-y-3">
-          <div className="px-1 text-xs text-slate-500">
-            Daftar pemain kunci lawan yang paling diwaspadai oleh tim analis dan pelatih:
+        <div className="space-y-3.5">
+          {/* Official Squad Photo Profile Banner */}
+          <div className="relative rounded-3xl overflow-hidden border border-slate-200 dark:border-slate-800 shadow-lg group">
+            <img
+              src={
+                profile.squadPhotoUrl ||
+                'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80'
+              }
+              alt={`Foto Skuad Resmi ${profile.name}`}
+              referrerPolicy="no-referrer"
+              crossOrigin="anonymous"
+              className="w-full h-40 object-cover select-none transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/40 to-transparent flex items-end p-4">
+              <div className="flex items-end justify-between w-full">
+                <div>
+                  <span className="inline-flex items-center gap-1 text-[9px] font-mono uppercase font-black text-cyan-300 px-2.5 py-0.5 rounded-full bg-blue-950/80 border border-blue-400/40 backdrop-blur-sm">
+                    <Camera className="w-2.5 h-2.5" /> Foto Profil Skuad 2026/2027
+                  </span>
+                  <h3 className="text-base font-black text-white mt-1 drop-shadow-md">
+                    Skuad Resmi {profile.name}
+                  </h3>
+                  <p className="text-[10px] text-slate-300 font-medium">
+                    Formasi Utama: <strong className="text-cyan-300">{profile.preferredFormation}</strong>
+                  </p>
+                </div>
+                <div className="text-right">
+                  <span className="text-[9px] font-mono text-slate-300 block font-bold uppercase">Nilai Pasar</span>
+                  <span className="text-xs font-mono font-black text-emerald-400 drop-shadow">
+                    {profile.squadMarketValue}
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="px-1 text-xs text-slate-500 flex items-center justify-between">
+            <span>Pemain Kunci & Pilar Utama Skuad:</span>
+            <span className="text-[10px] font-mono text-blue-600 dark:text-cyan-400 font-bold">
+              {profile.keyPlayers.length} Pemain Kunci
+            </span>
           </div>
 
           {profile.keyPlayers.map((player, idx) => (
             <div
               key={idx}
-              className={`p-4 rounded-3xl border flex items-center justify-between gap-3 ${
+              className={`p-3.5 rounded-3xl border flex items-center justify-between gap-3 transition-all ${
                 isPro
                   ? 'bg-[#121620] border-slate-800 hover:border-slate-700'
                   : 'bg-white border-slate-200 hover:border-blue-300 shadow-xs'
               }`}
             >
               <div className="flex items-center gap-3 min-w-0">
-                <div className="w-11 h-11 rounded-2xl bg-blue-600/10 text-blue-600 dark:text-cyan-400 border border-blue-500/20 font-mono font-black text-sm flex items-center justify-center shrink-0">
-                  #{player.number}
-                </div>
+                <PlayerAvatar
+                  name={player.name}
+                  number={player.number}
+                  avatarUrl={player.avatarUrl}
+                  position={player.position}
+                  size="md"
+                />
                 <div className="min-w-0">
                   <div className="flex items-center gap-1.5">
                     <h4 className="text-xs font-black truncate text-slate-950 dark:text-white">
