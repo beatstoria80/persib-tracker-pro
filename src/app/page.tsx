@@ -11,8 +11,10 @@ import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransp
 import { ShieldCheck, Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, activeTournament, lastSyncedAt, syncFeedback, groqBulletin } = useClubTracker();
+  const { mode, activeHub, activeTournament, lastSyncedAt, syncFeedback, groqBulletin, fixtures } = useClubTracker();
   const isPro = mode === 'pro';
+
+  const currentTournFixture = fixtures.find((f) => f.tournamentKey === activeTournament) || fixtures[0];
 
   return (
     // Outer Container: Crisp framing with modern negative space
@@ -75,23 +77,14 @@ export default function HomePage() {
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
               </span>
               <p className="truncate text-[11px] font-bold">
-                {activeTournament === 'liga1' ? (
-                  <>
-                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">Super League:</span>
-                    <span>PERSIB 4 - 0 Isenmulang (FT) • Peringkat #5</span>
-                  </>
-                ) : activeTournament === 'acl2' ? (
-                  <>
-                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">ACL Two:</span>
-                    <span className="hidden sm:inline">Melbourne Victory</span>
-                    <span className="sm:hidden">Melb. Victory</span> 1 - 2 PERSIB (FT)
-                  </>
-                ) : (
-                  <>
-                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">Shopee Cup:</span>
-                    <span>Port FC 1 - 3 PERSIB (FT)</span>
-                  </>
-                )}
+                <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">
+                  {activeTournament === 'liga1' ? 'Super League:' : activeTournament === 'acl2' ? 'ACL Two:' : 'Shopee Cup:'}
+                </span>
+                <span>
+                  {currentTournFixture
+                    ? `${currentTournFixture.homeTeam} ${currentTournFixture.homeScore ?? 0} - ${currentTournFixture.awayScore ?? 0} ${currentTournFixture.awayTeam} (${currentTournFixture.status === 'FINISHED' ? 'FT' : currentTournFixture.status === 'LIVE' ? 'LIVE' : currentTournFixture.time})`
+                    : 'Memuat data kompetisi real-time...'}
+                </span>
               </p>
             </div>
             <span
