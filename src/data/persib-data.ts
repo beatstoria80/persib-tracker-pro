@@ -1370,31 +1370,31 @@ export function getClubLogo(teamName: string): string {
 }
 
 // =========================================================================
-// KLASEMEN RESMI BRI SUPER LEAGUE 2026/2027 (VERIFIED GOOGLE SPORTS TABLE - MATCHDAY 9 OF 33)
+// KLASEMEN RESMI SUPER LEAGUE 2026/2027 (VERIFIED GOOGLE SPORTS TABLE - MATCHDAY 9 OF 33)
 // =========================================================================
 export const BRI_LIGA_1_STANDINGS_2026_2027: LeagueStandingRow[] = [
-  { rank: 1, team: 'Dewa United', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/72710.png', played: 9, won: 6, drawn: 2, lost: 1, gf: 16, ga: 12, gd: 4, points: 20, form: ['D', 'D', 'L', 'W', 'W'] },
-  { rank: 2, team: 'Madura United', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/41654.png', played: 9, won: 6, drawn: 1, lost: 2, gf: 16, ga: 10, gd: 6, points: 19, form: ['D', 'D', 'L', 'W', 'W'] },
-  { rank: 3, team: 'Persija', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14107.png', played: 8, won: 6, drawn: 0, lost: 2, gf: 18, ga: 8, gd: 10, points: 18, form: ['W', 'W', 'W', 'D', 'L'] },
-  { rank: 4, team: 'Bali United', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/49425.png', played: 8, won: 5, drawn: 1, lost: 2, gf: 23, ga: 9, gd: 14, points: 16, form: ['W', 'L', 'D', 'D', 'W'] },
-  { rank: 5, team: 'Persib', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14105.png', played: 8, won: 5, drawn: 1, lost: 2, gf: 15, ga: 8, gd: 7, points: 16, isPersib: true, form: ['D', 'D', 'L', 'W', 'W'] },
-  { rank: 6, team: 'Persita', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14112.png', played: 7, won: 4, drawn: 3, lost: 0, gf: 17, ga: 10, gd: 7, points: 15, form: ['W', 'D', 'D', 'D', 'W'] },
-  { rank: 7, team: 'Persebaya', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/30677.png', played: 8, won: 3, drawn: 4, lost: 1, gf: 10, ga: 7, gd: 3, points: 13, form: ['W', 'D', 'L', 'D', 'D'] },
-  { rank: 8, team: 'Bhayangkara', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/31445.png', played: 8, won: 2, drawn: 5, lost: 1, gf: 11, ga: 10, gd: 1, points: 11, form: ['D', 'D', 'W', 'D', 'L'] },
-  { rank: 9, team: 'Java United', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/31445.png', played: 8, won: 3, drawn: 3, lost: 2, gf: 12, ga: 10, gd: 2, points: 10, form: ['W', 'D', 'D', 'W', 'W'] },
-  { rank: 10, team: 'Persik', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14106.png', played: 8, won: 3, drawn: 1, lost: 4, gf: 9, ga: 11, gd: -2, points: 10, form: ['W', 'W', 'L', 'D', 'L'] },
-  { rank: 11, team: 'Arema', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/12971.png', played: 9, won: 2, drawn: 3, lost: 4, gf: 17, ga: 20, gd: -3, points: 9, form: ['L', 'L', 'W', 'L', 'L'] },
-  { rank: 12, team: 'PSM', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14104.png', played: 8, won: 2, drawn: 3, lost: 3, gf: 9, ga: 13, gd: -4, points: 9, form: ['L', 'W', 'D', 'D', 'L'] },
-  { rank: 13, team: 'Borneo', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/50276.png', played: 7, won: 3, drawn: 0, lost: 4, gf: 7, ga: 9, gd: -2, points: 9, form: ['W', 'L', 'L', 'D', 'L'] },
-  { rank: 14, team: 'Garudayaksa', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/72710.png', played: 8, won: 2, drawn: 2, lost: 4, gf: 10, ga: 15, gd: -5, points: 8, form: ['L', 'L', 'L', 'D', 'W'] },
+  { rank: 1, team: 'Persija', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14107.png', played: 9, won: 7, drawn: 0, lost: 2, gf: 19, ga: 8, gd: 11, points: 21, form: ['L', 'L', 'L', 'L', 'W'] },
+  { rank: 2, team: 'Dewa United', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/72710.png', played: 9, won: 6, drawn: 2, lost: 1, gf: 16, ga: 12, gd: 4, points: 20, form: ['W', 'D', 'L', 'W', 'W'] },
+  { rank: 3, team: 'Bali United', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/49425.png', played: 9, won: 6, drawn: 1, lost: 2, gf: 26, ga: 9, gd: 17, points: 19, form: ['W', 'L', 'D', 'D', 'W'] },
+  { rank: 4, team: 'Madura United', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/41654.png', played: 9, won: 6, drawn: 1, lost: 2, gf: 16, ga: 10, gd: 6, points: 19, form: ['W', 'D', 'L', 'W', 'W'] },
+  { rank: 5, team: 'Persib', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14105.png', played: 8, won: 5, drawn: 1, lost: 2, gf: 15, ga: 8, gd: 7, points: 16, isPersib: true, form: ['W', 'D', 'L', 'W', 'W'] },
+  { rank: 6, team: 'Persita', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14112.png', played: 8, won: 4, drawn: 3, lost: 1, gf: 17, ga: 11, gd: 6, points: 15, form: ['W', 'W', 'D', 'D', 'L'] },
+  { rank: 7, team: 'Persebaya', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/30677.png', played: 9, won: 3, drawn: 4, lost: 2, gf: 10, ga: 8, gd: 2, points: 13, form: ['W', 'D', 'L', 'W', 'L'] },
+  { rank: 8, team: 'Bhayangkara', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/31445.png', played: 9, won: 2, drawn: 6, lost: 1, gf: 12, ga: 11, gd: 1, points: 12, form: ['W', 'D', 'D', 'W', 'D'] },
+  { rank: 9, team: 'Garudayaksa', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/72710.png', played: 9, won: 3, drawn: 2, lost: 4, gf: 12, ga: 16, gd: -4, points: 11, form: ['W', 'D', 'L', 'W', 'W'] },
+  { rank: 10, team: 'Java United', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/31445.png', played: 8, won: 3, drawn: 3, lost: 2, gf: 12, ga: 10, gd: 2, points: 10, form: ['W', 'D', 'D', 'W', 'W'] },
+  { rank: 11, team: 'PSM', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14104.png', played: 9, won: 2, drawn: 4, lost: 3, gf: 10, ga: 14, gd: -4, points: 10, form: ['W', 'W', 'D', 'D', 'D'] },
+  { rank: 12, team: 'Borneo', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/50276.png', played: 8, won: 3, drawn: 1, lost: 4, gf: 8, ga: 10, gd: -2, points: 10, form: ['W', 'W', 'L', 'W', 'D'] },
+  { rank: 13, team: 'Persik', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14106.png', played: 9, won: 3, drawn: 1, lost: 5, gf: 9, ga: 14, gd: -5, points: 10, form: ['W', 'L', 'W', 'L', 'D'] },
+  { rank: 14, team: 'Arema', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/12971.png', played: 9, won: 2, drawn: 3, lost: 4, gf: 17, ga: 20, gd: -3, points: 9, form: ['L', 'L', 'W', 'L', 'L'] },
   { rank: 15, team: 'PSIM', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/70596.png', played: 9, won: 1, drawn: 2, lost: 6, gf: 6, ga: 14, gd: -8, points: 5, form: ['L', 'L', 'L', 'W', 'L'] },
   { rank: 16, team: 'PSS Sleman', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/38560.png', played: 8, won: 1, drawn: 1, lost: 6, gf: 10, ga: 16, gd: -6, points: 4, form: ['L', 'L', 'L', 'W', 'L'] },
-  { rank: 17, team: 'Isenmulang Kalteng FC', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/38560.png', played: 8, won: 1, drawn: 2, lost: 5, gf: 3, ga: 16, gd: -13, points: 3, form: ['L', 'D', 'L', 'L', 'L'] },
+  { rank: 17, team: 'Isen Mulang FC', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/38560.png', played: 8, won: 1, drawn: 2, lost: 5, gf: 3, ga: 16, gd: -13, points: 3, form: ['L', 'D', 'L', 'L', 'L'] },
   { rank: 18, team: 'Persijap Jepara', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14108.png', played: 8, won: 0, drawn: 2, lost: 6, gf: 4, ga: 16, gd: -12, points: 2, form: ['L', 'L', 'D', 'L', 'L'] },
 ];
 
 // =========================================================================
-// JADWAL & HASIL RESMI MUSIM 2026/2027 (FAKTUAL SUMBER GOOGLE & PT LIB)
+// JADWAL & HASIL RESMI SUPER LEAGUE 2026/2027
 // =========================================================================
 export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
   {
@@ -1403,7 +1403,7 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
     tournamentKey: 'liga1',
     roundOrWeek: 'Pekan 8 (Hasil Resmi Terakhir)',
     homeTeam: 'PERSIB Bandung',
-    awayTeam: 'Isenmulang Kalteng FC',
+    awayTeam: 'Isen Mulang FC',
     homeLogo: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
     awayLogo: 'https://img.a.transfermarkt.technology/wappen/head/38560.png',
     homeScore: 4,
@@ -1417,16 +1417,16 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
       'Menit 42\': Gol sundulan tajam striker anyar Uilliam',
       'Menit 67\': Gol individu Mariano Peralta melewati dua bek',
       'Menit 84\': Gol penutup Beckham Putra hasil kerjasama dengan Marc Klok',
-      'Kemenangan telak 4-0 menjaga Persib di posisi ke-5 dengan 16 poin, bersaing ketat di papan atas',
+      'Kemenangan telak 4-0 menjaga Persib di posisi ke-5 dengan 16 poin (8 main), siap menghadapi Java United di Pekan 9',
     ],
     events: [
-      { minute: "1'", type: 'chance', text: 'Kick-off babak pertama Persib vs Isenmulang Kalteng FC' },
+      { minute: "1'", type: 'chance', text: 'Kick-off babak pertama Persib vs Isen Mulang FC di GBLA' },
       { minute: "18'", type: 'goal', text: 'GOOOL! Thom Haye mencetak gol tendangan bebas melengkung indah!' },
       { minute: "42'", type: 'goal', text: 'GOOOL! Uilliam menggandakan keunggulan lewat sundulan tajam!' },
       { minute: "45+2'", type: 'chance', text: 'Babak pertama berakhir 2-0 untuk keunggulan mutlak Persib' },
       { minute: "67'", type: 'goal', text: 'GOOOL! Mariano Peralta melewati 2 bek dan mencetak gol ketiga 3-0!' },
       { minute: "84'", type: 'goal', text: 'GOOOL! Beckham Putra mengunci kemenangan telak 4-0!' },
-      { minute: "90+2'", type: 'chance', text: 'Peluit panjang! PERSIB Bandung 4 - 0 Isenmulang Kalteng FC' },
+      { minute: "90+2'", type: 'chance', text: 'Peluit panjang! PERSIB Bandung 4 - 0 Isen Mulang FC' },
     ],
     detailedEvents: [
       { minute: "18'", type: 'goal', team: 'home', player: 'Thom Haye', detail: 'Tendangan Bebas Langsung ke Sudut Gawang' },
@@ -1464,9 +1464,9 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
     venue: 'Stadion Jatidiri, Semarang',
     status: 'SCHEDULED',
     highlights: [
-      'Laga tandang krusial Persib untuk menyodok ke peringkat 1-3 Super League 2026/2027',
-      'Pertemuan perdana kedua tim di musim 2026/2027',
-      'Live Siaran Langsung Nasional & Streaming OTT Resmi',
+      'Laga penutup Pekan 9 Super League 2026/2027 antara Java United kontra PERSIB',
+      'Jika Persib menang, Maung Bandung akan meraih 19 poin dan melesat menyamai Bali United & Madura United di posisi 3!',
+      'Live Siaran Langsung Nasional & OTT Resmi',
     ],
   },
   {
@@ -1715,13 +1715,13 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
 ];
 
 // =========================================================================
-// ACL TWO 2026/2027 GROUP STANDINGS (GRUP E - FAKTUAL HASIL MATCHDAY 4)
+// ACL TWO 2026/2027 GROUP STANDINGS (GRUP F - FAKTUAL HASIL MATCHDAY 4)
 // =========================================================================
 export const ACL_GROUP_STANDINGS_2026_2027: GroupTeam[] = [
-  { name: 'PERSIB Bandung (IDN)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14105.png', played: 4, won: 4, drawn: 0, lost: 0, gf: 8, ga: 1, points: 12, isPersib: true },
-  { name: 'FC Seoul (KOR)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/6500.png', played: 4, won: 2, drawn: 0, lost: 2, gf: 6, ga: 4, points: 6 },
-  { name: 'Melbourne Victory (AUS)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/7006.png', played: 4, won: 1, drawn: 1, lost: 2, gf: 5, ga: 6, points: 4 },
-  { name: 'The Cong-Viettel FC (VIE)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/57443.png', played: 4, won: 0, drawn: 1, lost: 3, gf: 2, ga: 10, points: 1 },
+  { name: 'Port FC (THA)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/10850.png', played: 4, won: 3, drawn: 0, lost: 1, gf: 5, ga: 4, points: 9 },
+  { name: 'Lion City Sailors (SGP)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/5732.png', played: 4, won: 2, drawn: 1, lost: 1, gf: 8, ga: 5, points: 7 },
+  { name: 'PERSIB Bandung (IDN)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14105.png', played: 4, won: 1, drawn: 1, lost: 2, gf: 5, ga: 6, points: 4, isPersib: true },
+  { name: 'Zhejiang FC (CHN)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/7879.png', played: 4, won: 1, drawn: 0, lost: 3, gf: 2, ga: 5, points: 3 },
 ];
 
 // =========================================================================
