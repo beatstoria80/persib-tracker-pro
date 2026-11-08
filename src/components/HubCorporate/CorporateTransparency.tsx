@@ -5,7 +5,6 @@ import { useClubTracker } from '@/context/ClubTrackerContext';
 import {
   INFRASTRUCTURE_LIST,
   MANAGEMENT_MEMBERS_2026_2027,
-  FINANCIAL_OVERVIEW_2026_2027,
   OFFICIAL_SQUAD_2026_2027,
 } from '@/data/persib-data';
 import {
@@ -17,7 +16,7 @@ import {
 import { InfrastructureItem, ManagementMember, Player } from '@/types/club';
 
 export function CorporateTransparency() {
-  const { mode } = useClubTracker();
+  const { mode, financialOverview } = useClubTracker();
   const isPro = mode === 'pro';
 
   const [activeSection, setActiveSection] = useState<'infrastructure' | 'management' | 'ffp'>('infrastructure');
@@ -187,7 +186,7 @@ export function CorporateTransparency() {
                 FFP Compliance Musim 2026/2027
               </span>
               <h3 className="text-sm font-black tracking-tight mt-0.5">
-                Kepatuhan Finansial: {FINANCIAL_OVERVIEW_2026_2027.ffpComplianceScore}% (Grade A+)
+                Kepatuhan Finansial: {financialOverview.ffpComplianceScore}% (Grade A+)
               </h3>
             </div>
 
@@ -199,7 +198,7 @@ export function CorporateTransparency() {
               >
                 <div className="text-[10px] text-slate-400 font-medium">Nilai Pasar Skuad</div>
                 <div className="text-sm font-black font-mono text-blue-600 dark:text-cyan-400 mt-1">
-                  {FINANCIAL_OVERVIEW_2026_2027.totalSquadValue}
+                  {financialOverview.totalSquadValue}
                 </div>
               </div>
               <div
@@ -209,7 +208,7 @@ export function CorporateTransparency() {
               >
                 <div className="text-[10px] text-slate-400 font-medium">Wage / Revenue</div>
                 <div className="text-sm font-black font-mono text-emerald-500 mt-1">
-                  {FINANCIAL_OVERVIEW_2026_2027.wageToRevenueRatio}
+                  {financialOverview.wageToRevenueRatio}
                 </div>
               </div>
             </div>

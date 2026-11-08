@@ -11,7 +11,7 @@ import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransp
 import { ShieldCheck, Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, activeTournament, lastSyncedAt, syncFeedback } = useClubTracker();
+  const { mode, activeHub, activeTournament, lastSyncedAt, syncFeedback, groqBulletin } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
@@ -103,6 +103,26 @@ export default function HomePage() {
             </span>
           </div>
         </div>
+
+        {/* Dynamic AI Live Intelligence Bulletin - Updates immediately upon Refresh */}
+        {groqBulletin && (
+          <div className="px-4 sm:px-5 pt-1 pb-1">
+            <div
+              className={`px-3 py-2 rounded-2xl border text-xs flex items-center gap-2 transition-all shadow-xs ${
+                isPro
+                  ? 'bg-blue-950/40 border-blue-900/60 text-slate-200'
+                  : 'bg-blue-50/80 border-blue-200 text-slate-800'
+              }`}
+            >
+              <span className="shrink-0 text-[8.5px] font-mono font-black uppercase px-2 py-0.5 rounded bg-blue-600 text-white tracking-wider">
+                LIVE INTEL
+              </span>
+              <p className="text-[11px] font-medium leading-tight truncate">
+                {groqBulletin}
+              </p>
+            </div>
+          </div>
+        )}
 
         {/* Scrollable Main Mobile Hub Content with Generous Whitespace */}
         <main className="flex-1 px-4 sm:px-5 py-3 pb-44">

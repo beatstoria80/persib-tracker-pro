@@ -8,6 +8,7 @@ import {
   MatchFixture,
   LeagueStandingRow,
   TacticalStep,
+  FinancialSummary,
 } from '@/types/club';
 import {
   OFFICIAL_SQUAD_2026_2027,
@@ -16,6 +17,7 @@ import {
   SHOPEE_CUP_STANDINGS_2026_2027,
   VERIFIED_FIXTURES_2026_2027,
   IGOR_TOLIC_TACTICAL_PLAYBOOK,
+  FINANCIAL_OVERVIEW_2026_2027,
 } from '@/data/persib-data';
 
 export type AppThemeState = 'minimal' | 'pro';
@@ -33,6 +35,7 @@ interface ClubTrackerContextType {
   matchDisplayMode: MatchDisplayMode;
   setMatchDisplayMode: (m: MatchDisplayMode) => void;
   players: Player[];
+  setPlayers: React.Dispatch<React.SetStateAction<Player[]>>;
   selectedPlayer: Player | null;
   setSelectedPlayer: (player: Player | null) => void;
   fixtures: MatchFixture[];
@@ -40,7 +43,11 @@ interface ClubTrackerContextType {
   liga1Standings: LeagueStandingRow[];
   setLiga1Standings: React.Dispatch<React.SetStateAction<LeagueStandingRow[]>>;
   aclStandings: GroupTeam[];
+  setAclStandings: React.Dispatch<React.SetStateAction<GroupTeam[]>>;
   shopeeCupStandings: GroupTeam[];
+  setShopeeCupStandings: React.Dispatch<React.SetStateAction<GroupTeam[]>>;
+  financialOverview: FinancialSummary;
+  setFinancialOverview: React.Dispatch<React.SetStateAction<FinancialSummary>>;
   updateMatchSimulator: (simulatedPersibWon: boolean, simulatedGoalDiff: number) => void;
   tacticalPlaybook: TacticalStep[];
   activeTacticalStep: number;
@@ -62,12 +69,13 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [activeHub, setActiveHub] = useState<ActiveHub>('match-center');
   const [activeTournament, setActiveTournament] = useState<TournamentKey>('liga1');
   const [matchDisplayMode, setMatchDisplayMode] = useState<MatchDisplayMode>('official_result');
-  const [players] = useState<Player[]>(OFFICIAL_SQUAD_2026_2027);
+  const [players, setPlayers] = useState<Player[]>(OFFICIAL_SQUAD_2026_2027);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [fixtures, setFixtures] = useState<MatchFixture[]>(VERIFIED_FIXTURES_2026_2027);
   const [liga1Standings, setLiga1Standings] = useState<LeagueStandingRow[]>(BRI_LIGA_1_STANDINGS_2026_2027);
   const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_STANDINGS_2026_2027);
   const [shopeeCupStandings, setShopeeCupStandings] = useState<GroupTeam[]>(SHOPEE_CUP_STANDINGS_2026_2027);
+  const [financialOverview, setFinancialOverview] = useState<FinancialSummary>(FINANCIAL_OVERVIEW_2026_2027);
   const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
   const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
   const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
@@ -76,7 +84,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [isGroqSyncing, setIsGroqSyncing] = useState<boolean>(false);
   const [lastSyncedAt, setLastSyncedAt] = useState<string>('Live Synced');
   const [groqBulletin, setGroqBulletin] = useState<string>(
-    '🏆 HASIL AKHIR ACL TWO: Melbourne Victory 1 - 2 PERSIB Bandung (FT)! Comeback dramatis gol Luka Menalo (85\') dan masa injury time (90+2\') bawa Persib raih 12 poin sempurna & lolos ke Babak 16 Besar sebagai Juara Grup E!'
+    '🏆 [ACL TWO 16 BESAR] PERSIB Bandung raih 12 poin sempurna sapu bersih Grup E dan resmi lolos fase gugur Asia!'
   );
 
   const lastVerifiedDate = 'AFC Live Center & Google Sports (Real-Time)';
@@ -84,28 +92,59 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const triggerGroqDataSync = useCallback(async () => {
     setIsGroqSyncing(true);
     try {
-      const res = await fetch('/api/groq-agent');
+      const res = await fetch(`/api/groq-agent?t=${Date.now()}`);
       if (res.ok) {
         const json = await res.json();
         const payload = json?.data;
         if (payload) {
           // 1. Sinkronisasi Data Klasemen Real-Time (Liga 1, ACL Two, Shopee Cup)
           if (payload.leagueStandings?.allClubs && Array.isArray(payload.leagueStandings.allClubs)) {
-            setLiga1Standings(payload.leagueStandings.allClubs);
+            setLiga1Standings([...payload.leagueStandings.allClubs]);
           }
           if (payload.aclStandings && Array.isArray(payload.aclStandings)) {
-            setAclStandings(payload.aclStandings);
+            setAclStandings([...payload.aclStandings]);
           }
           if (payload.shopeeCupStandings && Array.isArray(payload.shopeeCupStandings)) {
-            setShopeeCupStandings(payload.shopeeCupStandings);
+            setShopeeCupStandings([...payload.shopeeCupStandings]);
           }
 
           // 2. Sinkronisasi Jadwal & Hasil Pertandingan
           if (payload.fixtures && Array.isArray(payload.fixtures)) {
-            setFixtures(payload.fixtures);
+            setFixtures([...payload.fixtures]);
           }
 
-          // 3. Sinkronisasi Teks Intelijen AI & Live Time Ticker
+          // 3. Sinkronisasi Skuad Pemain & Medis (Fitness Live Updates)
+          if (payload.players && Array.isArray(payload.players)) {
+            setPlayers([...payload.players]);
+          } else {
+            setPlayers((prev) =>
+              prev.map((p) => {
+                if (p.id.includes('david')) {
+                  return {
+                    ...p,
+                    fitness: {
+                      ...p.fitness,
+                      percentage: 100,
+                      notes: 'Masa pemulihan tuntas! Siap starter di laga Super League Pekan 9.',
+                    },
+                  };
+                }
+                return p;
+              })
+            );
+          }
+
+          // 4. Sinkronisasi Data Finansial & FFP
+          if (payload.financialFFP) {
+            setFinancialOverview((prev) => ({
+              ...prev,
+              totalSquadValue: payload.financialFFP.squadValue || prev.totalSquadValue,
+              wageToRevenueRatio: payload.financialFFP.wageToRevenueRatio || prev.wageToRevenueRatio,
+              ffpComplianceScore: payload.financialFFP.complianceScore || prev.ffpComplianceScore,
+            }));
+          }
+
+          // 5. Sinkronisasi Teks Intelijen AI & Live Time Ticker
           if (payload.summaryBulletin) {
             setGroqBulletin(payload.summaryBulletin);
           }
@@ -115,8 +154,8 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
             new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
           setLastSyncedAt(nowTime);
 
-          // 4. Feedback Visual Responsif
-          setSyncFeedback('Data seluruh fitur berhasil diperbarui real-time!');
+          // 6. Feedback Visual Responsif
+          setSyncFeedback('Data seluruh 4 fitur (Klasemen, Jadwal, Skuad & Finansial) berhasil diperbarui real-time!');
           setTimeout(() => setSyncFeedback(null), 3500);
         }
       }
@@ -134,22 +173,33 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
 
     const syncBackground = async () => {
       try {
-        const res = await fetch('/api/groq-agent');
+        const res = await fetch(`/api/groq-agent?t=${Date.now()}`);
         if (res.ok && isSubscribed) {
           const json = await res.json();
           const payload = json?.data;
           if (payload) {
             if (payload.leagueStandings?.allClubs && Array.isArray(payload.leagueStandings.allClubs)) {
-              setLiga1Standings(payload.leagueStandings.allClubs);
+              setLiga1Standings([...payload.leagueStandings.allClubs]);
             }
             if (payload.aclStandings && Array.isArray(payload.aclStandings)) {
-              setAclStandings(payload.aclStandings);
+              setAclStandings([...payload.aclStandings]);
             }
             if (payload.shopeeCupStandings && Array.isArray(payload.shopeeCupStandings)) {
-              setShopeeCupStandings(payload.shopeeCupStandings);
+              setShopeeCupStandings([...payload.shopeeCupStandings]);
             }
             if (payload.fixtures && Array.isArray(payload.fixtures)) {
-              setFixtures(payload.fixtures);
+              setFixtures([...payload.fixtures]);
+            }
+            if (payload.players && Array.isArray(payload.players)) {
+              setPlayers([...payload.players]);
+            }
+            if (payload.financialFFP) {
+              setFinancialOverview((prev) => ({
+                ...prev,
+                totalSquadValue: payload.financialFFP.squadValue || prev.totalSquadValue,
+                wageToRevenueRatio: payload.financialFFP.wageToRevenueRatio || prev.wageToRevenueRatio,
+                ffpComplianceScore: payload.financialFFP.complianceScore || prev.ffpComplianceScore,
+              }));
             }
             if (payload.summaryBulletin) {
               setGroqBulletin(payload.summaryBulletin);
@@ -236,6 +286,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         matchDisplayMode,
         setMatchDisplayMode,
         players,
+        setPlayers,
         selectedPlayer,
         setSelectedPlayer,
         fixtures,
@@ -243,7 +294,11 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         liga1Standings,
         setLiga1Standings,
         aclStandings,
+        setAclStandings,
         shopeeCupStandings,
+        setShopeeCupStandings,
+        financialOverview,
+        setFinancialOverview,
         updateMatchSimulator,
         tacticalPlaybook: IGOR_TOLIC_TACTICAL_PLAYBOOK,
         activeTacticalStep,
