@@ -260,11 +260,11 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       venue: 'Stadion Jatidiri, Semarang',
       statusText: 'FULL TIME - SELESAI',
       qualificationScenario: 'Persib bertahan di peringkat #5 dengan 16 poin (9 Main: 5 Menang, 1 Seri, 3 Kalah).',
-      // REFACTOR: Verified official 2026/2027 scorers (Java United: Ciro Alves 5' & Gustavo Almeida 19'; PERSIB: Balsa Sekulic 70')
+      // REFACTOR: Verified official 2026/2027 scorers & assists (Java United: Ciro Alves 5' & Gustavo Almeida 19' [Assist: Yance Sayuri]; PERSIB: Balsa Sekulic 70' [Assist: Adam Alis])
       keyEvents: [
-        { minute: "5'", type: 'goal', text: 'Gol Java United! Ciro Alves membuka keunggulan 1-0 lewat tembakan cepat' },
-        { minute: "19'", type: 'goal', text: 'Gol Java United! Gustavo Almeida menggandakan skor menjadi 2-0' },
-        { minute: "70'", type: 'goal', text: 'GOOOL PERSIB! Balsa Sekulic mencetak gol balasan memperkecil skor 2-1 (Assist: Marc Klok)' },
+        { minute: "5'", type: 'goal', text: 'Gol Java United! Ciro Alves membuka keunggulan 1-0 lewat eksekusi tendangan bebas langsung' },
+        { minute: "19'", type: 'goal', text: 'Gol Java United! Sundulan Gustavo Almeida menyambut umpan Yance Sayuri (2-0)' },
+        { minute: "70'", type: 'goal', text: 'GOOOL PERSIB! Balsa Sekulic mencetak gol balasan memanfaatkan umpan matang Adam Alis (2-1)' },
       ],
     },
     matchCenter: {
