@@ -156,7 +156,8 @@ export function MatchCenter() {
 
   // Sub-Page Navigation Tabs: Laga (featured), Jadwal (schedule), Klasemen (standings), Taktik (lineup)
   const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup'>('featured');
-  const [selectedFixtureId, setSelectedFixtureId] = useState<string>('l1-p8');
+  // REFACTOR: Decouple from hardcoded 'l1-p8' string. Null allows dynamic auto-selection of active/latest match
+  const [selectedFixtureId, setSelectedFixtureId] = useState<string | null>(null);
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
   const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'stats' | 'highlights'>('events');
   const [selectedClubForIntel, setSelectedClubForIntel] = useState<string | null>(null);
@@ -181,8 +182,14 @@ export function MatchCenter() {
     };
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
+  // REFACTOR: Dynamically prioritize explicit selection -> LIVE match -> Matchday 9 (l1-p9) -> latest finished/scheduled
   const currentFixture: MatchFixture =
-    tournamentFixtures.find((f: MatchFixture) => f.id === selectedFixtureId) || tournamentFixtures[0] || fixtures[0];
+    (selectedFixtureId ? tournamentFixtures.find((f: MatchFixture) => f.id === selectedFixtureId) : null) ||
+    tournamentFixtures.find((f) => f.status === 'LIVE') ||
+    tournamentFixtures.find((f) => f.id === 'l1-p9') ||
+    [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED' || f.status === 'SCHEDULED') ||
+    tournamentFixtures[0] ||
+    fixtures[0];
 
   const filteredSchedule = tournamentFixtures.filter((fix) => {
     if (scheduleFilter === 'upcoming') return fix.status === 'SCHEDULED' || fix.status === 'LIVE';
@@ -227,7 +234,8 @@ export function MatchCenter() {
           <button
             onClick={() => {
               setActiveTournament('liga1');
-              setSelectedFixtureId('l1-p8');
+              // REFACTOR: Dynamically clear selection so active matchday (Pekan 9) resolves automatically
+              setSelectedFixtureId(null);
             }}
             className={`py-2 px-1 rounded-xl text-xs font-black tracking-tight transition-all text-center ${
               activeTournament === 'liga1'
@@ -243,7 +251,8 @@ export function MatchCenter() {
           <button
             onClick={() => {
               setActiveTournament('acl2');
-              setSelectedFixtureId('acl2-26-md4-live');
+              // REFACTOR: Dynamically clear selection so latest ACL Two match resolves automatically
+              setSelectedFixtureId(null);
             }}
             className={`py-2 px-1 rounded-xl text-xs font-black tracking-tight transition-all text-center flex items-center justify-center gap-1 ${
               activeTournament === 'acl2'
@@ -260,7 +269,8 @@ export function MatchCenter() {
           <button
             onClick={() => {
               setActiveTournament('shopee_cup');
-              setSelectedFixtureId('shopee-26-md1-ft');
+              // REFACTOR: Dynamically clear selection so latest Shopee Cup match resolves automatically
+              setSelectedFixtureId(null);
             }}
             className={`py-2 px-1 rounded-xl text-xs font-black tracking-tight transition-all text-center flex items-center justify-center gap-1 ${
               activeTournament === 'shopee_cup'
@@ -355,7 +365,7 @@ export function MatchCenter() {
                   key={fix.id}
                   onClick={() => setSelectedFixtureId(fix.id)}
                   className={`px-3 py-1.5 rounded-full text-[10px] font-bold transition-all shrink-0 border flex items-center gap-1.5 ${
-                    selectedFixtureId === fix.id
+                    (selectedFixtureId ? selectedFixtureId === fix.id : currentFixture.id === fix.id)
                       ? 'bg-slate-950 text-white dark:bg-white dark:text-slate-950 border-transparent shadow-xs'
                       : isPro
                       ? 'bg-[#121620] border-slate-800 text-slate-400'
@@ -869,7 +879,7 @@ export function MatchCenter() {
                     setMatchViewTab('featured');
                   }}
                   className={`p-4 rounded-3xl border transition-all cursor-pointer active:scale-[0.99] ${
-                    selectedFixtureId === fix.id
+                    (selectedFixtureId ? selectedFixtureId === fix.id : currentFixture.id === fix.id)
                       ? isPro
                         ? 'bg-[#181D2A] border-cyan-500/50 ring-1 ring-cyan-500/30'
                         : 'bg-blue-50/70 border-blue-400 ring-1 ring-blue-300'

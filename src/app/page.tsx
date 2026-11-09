@@ -14,7 +14,14 @@ export default function HomePage() {
   const { mode, activeHub, activeTournament, lastSyncedAt, syncFeedback, groqBulletin, fixtures } = useClubTracker();
   const isPro = mode === 'pro';
 
-  const currentTournFixture = fixtures.find((f) => f.tournamentKey === activeTournament) || fixtures[0];
+  const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
+  // REFACTOR: Dynamically resolve active/latest match (prioritizing LIVE -> Matchday 9 (l1-p9) -> latest)
+  const currentTournFixture =
+    tournamentFixtures.find((f) => f.status === 'LIVE') ||
+    tournamentFixtures.find((f) => f.id === 'l1-p9') ||
+    [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED' || f.status === 'SCHEDULED') ||
+    tournamentFixtures[0] ||
+    fixtures[0];
 
   return (
     // Outer Container: Crisp framing with modern negative space
