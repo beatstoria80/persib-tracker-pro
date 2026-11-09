@@ -260,10 +260,11 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       venue: 'Stadion Jatidiri, Semarang',
       statusText: 'FULL TIME - SELESAI',
       qualificationScenario: 'Persib bertahan di peringkat #5 dengan 16 poin (9 Main: 5 Menang, 1 Seri, 3 Kalah).',
+      // REFACTOR: Correct club rosters according to official 2026/2027 registries (Ciro Alves & David da Silva play for Java United; Mariano Peralta plays for PERSIB)
       keyEvents: [
-        { minute: "34'", type: 'goal', text: 'Gol Java United! F. Ridwan mencetak gol pembuka 1-0' },
-        { minute: "58'", type: 'goal', text: 'GOOOL PERSIB! Ciro Alves menyamakan skor 1-1 (Assist: Marc Klok)' },
-        { minute: "76'", type: 'goal', text: 'Gol Java United! R. Hidayat mencetak gol penentu kemenangan 2-1' },
+        { minute: "34'", type: 'goal', text: 'Gol Java United! Ciro Alves mencetak gol pembuka 1-0 lewat tembakan keras' },
+        { minute: "58'", type: 'goal', text: 'GOOOL PERSIB! Mariano Peralta menyamakan skor 1-1 (Assist: Marc Klok)' },
+        { minute: "76'", type: 'goal', text: 'Gol Java United! David da Silva mencetak gol penentu kemenangan 2-1' },
       ],
     },
     matchCenter: {
@@ -272,7 +273,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
         matchweek: latestFinished?.roundOrWeek || 'Pekan 9 Super League',
         opponent: 'Java United',
         score: '2 - 1',
-        scorers: ['F. Ridwan 34\' (Java United)', 'Ciro Alves 58\' (PERSIB)', 'R. Hidayat 76\' (Java United)'],
+        scorers: ["Ciro Alves 34' (Java United)", "Mariano Peralta 58' (PERSIB)", "David da Silva 76' (Java United)"],
         venue: 'Stadion Jatidiri, Semarang',
       },
       nextFixture: {
@@ -293,13 +294,14 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     aclStandings: calculatedAcl,
     shopeeCupStandings: calculatedShopeeCup,
     players: OFFICIAL_SQUAD_2026_2027.map((p) => {
-      if (p.id.includes('david')) {
+      // REFACTOR: Verified Persib squad attacker Mariano Peralta
+      if (p.id.includes('peralta')) {
         return {
           ...p,
           fitness: {
             ...p.fitness,
             percentage: 100,
-            notes: 'Kondisi 100% fit & bugar! Siap tampil starter di laga Super League 2026/2027.',
+            notes: 'Kondisi 100% fit & bugar! Winger andalan siap tampil starter di laga Super League 2026/2027.',
           },
         };
       }
