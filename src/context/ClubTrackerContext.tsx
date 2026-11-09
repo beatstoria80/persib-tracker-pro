@@ -119,13 +119,13 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
           } else {
             setPlayers((prev) =>
               prev.map((p) => {
-                if (p.id.includes('david')) {
+                if (p.id.includes('peralta')) {
                   return {
                     ...p,
                     fitness: {
                       ...p.fitness,
                       percentage: 100,
-                      notes: 'Masa pemulihan tuntas! Siap starter di laga Super League Pekan 9.',
+                      notes: 'Masa pemulihan tuntas! Siap starter di laga Super League Pekan 10.',
                     },
                   };
                 }
