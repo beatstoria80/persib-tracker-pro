@@ -1747,13 +1747,54 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
 ];
 
 // =========================================================================
-// ACL TWO 2026/2027 GROUP STANDINGS (GRUP F - FAKTUAL HASIL MATCHDAY 4)
+// ACL TWO 2026/2027 GROUP STANDINGS (GRUP E - FAKTUAL HASIL MATCHDAY 4)
 // =========================================================================
 export const ACL_GROUP_STANDINGS_2026_2027: GroupTeam[] = [
-  { name: 'Port FC (THA)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/10850.png', played: 4, won: 3, drawn: 0, lost: 1, gf: 5, ga: 4, points: 9 },
-  { name: 'Lion City Sailors (SGP)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/5732.png', played: 4, won: 2, drawn: 1, lost: 1, gf: 8, ga: 5, points: 7 },
-  { name: 'PERSIB Bandung (IDN)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14105.png', played: 4, won: 1, drawn: 1, lost: 2, gf: 5, ga: 6, points: 4, isPersib: true },
-  { name: 'Zhejiang FC (CHN)', logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/7879.png', played: 4, won: 1, drawn: 0, lost: 3, gf: 2, ga: 5, points: 3 },
+  {
+    name: 'PERSIB Bandung (IDN)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
+    played: 4,
+    won: 4,
+    drawn: 0,
+    lost: 0,
+    gf: 7,
+    ga: 1,
+    points: 12,
+    isPersib: true,
+  },
+  {
+    name: 'FC Seoul (KOR)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/6500.png',
+    played: 4,
+    won: 2,
+    drawn: 1,
+    lost: 1,
+    gf: 5,
+    ga: 3,
+    points: 7,
+  },
+  {
+    name: 'Melbourne Victory (AUS)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/7006.png',
+    played: 4,
+    won: 1,
+    drawn: 0,
+    lost: 3,
+    gf: 3,
+    ga: 6,
+    points: 3,
+  },
+  {
+    name: 'The Cong-Viettel FC (VIE)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/57443.png',
+    played: 4,
+    won: 0,
+    drawn: 1,
+    lost: 3,
+    gf: 1,
+    ga: 6,
+    points: 1,
+  },
 ];
 
 // =========================================================================
