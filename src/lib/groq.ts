@@ -260,11 +260,11 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       venue: 'Stadion Jatidiri, Semarang',
       statusText: 'FULL TIME - SELESAI',
       qualificationScenario: 'Persib bertahan di peringkat #5 dengan 16 poin (9 Main: 5 Menang, 1 Seri, 3 Kalah).',
-      // REFACTOR: Verified official 2026/2027 scorers (Java United: Ciro Alves & R. Hidayat; PERSIB: Mariano Peralta)
+      // REFACTOR: Verified official 2026/2027 scorers (Java United: Ciro Alves 5' & Gustavo Almeida 19'; PERSIB: Balsa Sekulic 70')
       keyEvents: [
-        { minute: "34'", type: 'goal', text: 'Gol Java United! Ciro Alves membobol gawang lewat tembakan keras mendatar 1-0' },
-        { minute: "58'", type: 'goal', text: 'GOOOL PERSIB! Mariano Peralta menyamakan skor 1-1 (Assist: Marc Klok)' },
-        { minute: "76'", type: 'goal', text: 'Gol Java United! R. Hidayat mencetak gol penentu kemenangan 2-1' },
+        { minute: "5'", type: 'goal', text: 'Gol Java United! Ciro Alves membuka keunggulan 1-0 lewat tembakan cepat' },
+        { minute: "19'", type: 'goal', text: 'Gol Java United! Gustavo Almeida menggandakan skor menjadi 2-0' },
+        { minute: "70'", type: 'goal', text: 'GOOOL PERSIB! Balsa Sekulic mencetak gol balasan memperkecil skor 2-1 (Assist: Marc Klok)' },
       ],
     },
     matchCenter: {
@@ -273,7 +273,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
         matchweek: latestFinished?.roundOrWeek || 'Pekan 9 Super League',
         opponent: 'Java United',
         score: '2 - 1',
-        scorers: ["Ciro Alves 34' (Java United)", "Mariano Peralta 58' (PERSIB)", "R. Hidayat 76' (Java United)"],
+        scorers: ["Ciro Alves 5' (Java United)", "Gustavo Almeida 19' (Java United)", "Balsa Sekulic 70' (PERSIB)"],
         venue: 'Stadion Jatidiri, Semarang',
       },
       nextFixture: {
