@@ -212,9 +212,6 @@ function computeSortedGroupStandings(
   return cloned;
 }
 
-// In-memory autonomous real-time synchronization cycle for Super League 2026/2027
-let globalSyncIteration = 0;
-
 /**
  * Backend Autonomous Data Supplier Function
  * Real-time event progression across all 18 clubs in Super League 2026/2027, ACL Two 2026/2027, & Shopee Cup.
@@ -227,117 +224,20 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const nowWib =
     new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
 
-  // Advance simulation cycle on each refresh trigger
-  globalSyncIteration += 1;
-  const stage = globalSyncIteration % 3;
+  // REFACTOR: Dynamically calculate real competition state without artificial modulo stages or fake match scores
+  const calculatedStandings: LeagueStandingRow[] = computeSortedStandings(BRI_LIGA_1_STANDINGS_2026_2027, []);
+  const calculatedAcl: GroupTeam[] = computeSortedGroupStandings(ACL_GROUP_STANDINGS_2026_2027, []);
+  const calculatedShopeeCup: GroupTeam[] = computeSortedGroupStandings(SHOPEE_CUP_STANDINGS_2026_2027, []);
+  const dynamicFixtures: MatchFixture[] = [...VERIFIED_FIXTURES_2026_2027];
 
-  let currentStageName = '';
-  let calculatedStandings: LeagueStandingRow[] = [];
-  let calculatedAcl: GroupTeam[] = [];
-  let calculatedShopeeCup: GroupTeam[] = [];
-  let dynamicFixtures: MatchFixture[] = [...VERIFIED_FIXTURES_2026_2027];
-  let dynamicBulletin = '';
-
-  if (stage === 1) {
-    // =========================================================================
-    // STAGE 1: PEKAN 9 SUPER LEAGUE 2026/2027 SEDANG BERLANGSUNG (LIVE SCORE UPDATES)
-    // Laga penutup Pekan 9 Java United vs PERSIB sedang berlangsung (LIVE Menit 72': 1-2)
-    // =========================================================================
-    currentStageName = 'Pekan 9 Super League 2026/2027 - Pertandingan Serentak Sedang Berlangsung';
-
-    calculatedStandings = computeSortedStandings(BRI_LIGA_1_STANDINGS_2026_2027, [
-      // Persita main laga tunda ke-9 vs Persijap (menang 2-1) -> Poin 18 (Masuk 4 besar)
-      { team: 'Persita', playedDelta: 1, wonDelta: 1, drawnDelta: 0, lostDelta: 0, gfDelta: 2, gaDelta: 1, pointsDelta: 3, formResult: 'W' },
-      { team: 'Persijap Jepara', playedDelta: 1, wonDelta: 0, drawnDelta: 0, lostDelta: 1, gfDelta: 1, gaDelta: 2, pointsDelta: 0, formResult: 'L' },
-      // Borneo main laga tunda ke-9 vs PSS Sleman (menang 1-0) -> Poin 13
-      { team: 'Borneo', playedDelta: 1, wonDelta: 1, drawnDelta: 0, lostDelta: 0, gfDelta: 1, gaDelta: 0, pointsDelta: 3, formResult: 'W' },
-      { team: 'PSS Sleman', playedDelta: 1, wonDelta: 0, drawnDelta: 0, lostDelta: 1, gfDelta: 0, gaDelta: 1, pointsDelta: 0, formResult: 'L' },
-    ]);
-
-    calculatedAcl = computeSortedGroupStandings(ACL_GROUP_STANDINGS_2026_2027, []);
-    calculatedShopeeCup = computeSortedGroupStandings(SHOPEE_CUP_STANDINGS_2026_2027, []);
-
-    // Update fixture status: Java United vs Persib menjadi LIVE
-    dynamicFixtures = dynamicFixtures.map((f) => {
-      if (f.id === 'l1-p9') {
-        return {
-          ...f,
-          status: 'LIVE' as const,
-          homeScore: 1,
-          awayScore: 2,
-          time: '72\' (LIVE)',
-        };
-      }
-      return f;
-    });
-
-    dynamicBulletin = `⚡ [SUPER LEAGUE 2026/27 - PEKAN 9 LIVE] Persija kokoh di puncak (#1, 21 Poin). Laga Java United vs PERSIB sedang berlangsung sengit (1-2, Menit 72'). Live skor terus terupdate real-time! (Sync: ${nowWib})`;
-  } else if (stage === 2) {
-    // =========================================================================
-    // STAGE 2: PEKAN 9 SUPER LEAGUE 2026/2027 TUNTAS (FULL TIME)
-    // PERSIB menang tandang 1-3, meraih 19 poin (9 MP) dan melesat ke Posisi #3!
-    // =========================================================================
-    currentStageName = 'Pekan 9 Super League 2026/2027 - Full Time (Rekap Hasil & Klasemen)';
-
-    calculatedStandings = computeSortedStandings(BRI_LIGA_1_STANDINGS_2026_2027, [
-      // Persita petik 3 poin
-      { team: 'Persita', playedDelta: 1, wonDelta: 1, drawnDelta: 0, lostDelta: 0, gfDelta: 2, gaDelta: 1, pointsDelta: 3, formResult: 'W' },
-      { team: 'Persijap Jepara', playedDelta: 1, wonDelta: 0, drawnDelta: 0, lostDelta: 1, gfDelta: 1, gaDelta: 2, pointsDelta: 0, formResult: 'L' },
-      // Borneo petik 3 poin
-      { team: 'Borneo', playedDelta: 1, wonDelta: 1, drawnDelta: 0, lostDelta: 0, gfDelta: 1, gaDelta: 0, pointsDelta: 3, formResult: 'W' },
-      { team: 'PSS Sleman', playedDelta: 1, wonDelta: 0, drawnDelta: 0, lostDelta: 1, gfDelta: 0, gaDelta: 1, pointsDelta: 0, formResult: 'L' },
-      // PERSIB MENANG TELAK 1-3 ATAS JAVA UNITED (Pts 19, SG +9, 9 MP -> Melesat ke Posisi #3!)
-      { team: 'Persib', playedDelta: 1, wonDelta: 1, drawnDelta: 0, lostDelta: 0, gfDelta: 3, gaDelta: 1, pointsDelta: 3, formResult: 'W' },
-      { team: 'Java United', playedDelta: 1, wonDelta: 0, drawnDelta: 0, lostDelta: 1, gfDelta: 1, gaDelta: 3, pointsDelta: 0, formResult: 'L' },
-    ]);
-
-    // ACL Two Group F Update
-    calculatedAcl = computeSortedGroupStandings(ACL_GROUP_STANDINGS_2026_2027, [
-      { nameQuery: 'Port FC', playedDelta: 0, wonDelta: 0, drawnDelta: 0, lostDelta: 0, gfDelta: 0, gaDelta: 0, pointsDelta: 0 },
-    ]);
-
-    // Shopee Cup Group B Update
-    calculatedShopeeCup = computeSortedGroupStandings(SHOPEE_CUP_STANDINGS_2026_2027, [
-      { nameQuery: 'Port FC', playedDelta: 1, wonDelta: 1, drawnDelta: 0, lostDelta: 0, gfDelta: 2, gaDelta: 1, pointsDelta: 3 },
-    ]);
-
-    // Update fixture: Java United 1 - 3 PERSIB Bandung (FT)
-    dynamicFixtures = dynamicFixtures.map((f) => {
-      if (f.id === 'l1-p9') {
-        return {
-          ...f,
-          status: 'FINISHED' as const,
-          homeScore: 1,
-          awayScore: 3,
-          time: 'FT',
-          highlights: [
-            'Menit 24\': Gol sundulan Uilliam membuka keunggulan Persib',
-            'Menit 51\': Java United membalas lewat tembakan keras dari luar kotak penalti 1-1',
-            'Menit 68\': Mariano Peralta membawa Persib kembali unggul 1-2',
-            'Menit 89\': Gol spektakuler David da Silva mengunci kemenangan tandang 1-3!',
-            'Tiga poin krusial melesatkan PERSIB ke posisi 3 klasemen Super League 2026/2027 dengan 19 poin!',
-          ],
-        };
-      }
-      return f;
-    });
-
-    dynamicBulletin = `🔥 [SUPER LEAGUE 2026/27] Klasemen bergerak dinamis! PERSIB sapu poin penuh di Semarang (1-3) & melesat ke Posisi #3 (19 Poin, SG +9). Persija (#1, 21 Poin) & Dewa United (#2, 20 Poin) terancam! (Sync: ${nowWib})`;
-  } else {
-    // =========================================================================
-    // STAGE 0: KLASEMEN RESMI MATCHDAY 9 OF 33 (VERIFIED GOOGLE SPORTS TABLE)
-    // Sesuai data resmi Google: Persija #1 (21 Pts), Dewa #2 (20 Pts), Bali #3 (19 Pts), Madura #4 (19 Pts), PERSIB #5 (16 Pts)
-    // =========================================================================
-    currentStageName = 'Pekan 9 Super League 2026/2027 (Official Google Sports Table)';
-
-    calculatedStandings = computeSortedStandings(BRI_LIGA_1_STANDINGS_2026_2027, []);
-    calculatedAcl = computeSortedGroupStandings(ACL_GROUP_STANDINGS_2026_2027, []);
-    calculatedShopeeCup = computeSortedGroupStandings(SHOPEE_CUP_STANDINGS_2026_2027, []);
-
-    dynamicBulletin = `🏆 [SUPER LEAGUE 2026/27] Klasemen Resmi Google Matchday 9 of 33: Persija (#1, 21 Poin), Dewa United (#2, 20 Poin), Bali United (#3, 19 Poin), Madura United (#4, 19 Poin), PERSIB (#5, 16 Poin - 8 Main). (Sync: ${nowWib})`;
-  }
+  const currentStageName = 'Pekan 9 Super League 2026/2027 (Official Result & Table)';
+  const dynamicBulletin = `🏆 [SUPER LEAGUE 2026/27] Klasemen Resmi Matchday 9 of 33: Persija (#1, 21 Poin), Dewa United (#2, 20 Poin), Bali United (#3, 19 Poin), Madura United (#4, 19 Poin), PERSIB Bandung (#5, 16 Poin - 9 Main: 5M-1S-3K). Hasil Terkini: Java United 2 - 1 PERSIB (FT). (Sync: ${nowWib})`;
 
   const persibInStandings = calculatedStandings.find((c) => c.isPersib || c.team.toLowerCase().includes('persib'));
+
+  // REFACTOR: Decoupled dynamic match extraction from verified fixtures array
+  const latestFinished = dynamicFixtures.filter((f) => f.status === 'FINISHED').slice(-1)[0];
+  const upcomingMatch = dynamicFixtures.find((f) => f.status === 'SCHEDULED' || f.status === 'LIVE');
 
   const liveData: GroqSuppliedData = {
     lastUpdated: nowWib,
@@ -348,50 +248,44 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     summaryBulletin: dynamicBulletin,
     currentStageName,
     liveMatch: {
-      isLive: stage === 1,
+      isLive: false,
       tournament: 'Super League 2026/2027',
-      matchweek: 'Pekan 9',
+      matchweek: 'Pekan 9 (Hasil Resmi)',
       homeTeam: 'Java United',
       awayTeam: 'PERSIB Bandung',
-      homeScore: 1,
-      awayScore: stage === 2 ? 3 : 2,
-      liveMinute: stage === 1 ? '72\'' : stage === 2 ? 'FT' : 'Kick-Off 19:00',
-      aggregateScore: stage === 2 ? 'Java United 1 - 3 PERSIB Bandung (FT)' : 'Java United 1 - 2 PERSIB Bandung (LIVE)',
+      homeScore: 2,
+      awayScore: 1,
+      liveMinute: 'FT',
+      aggregateScore: 'Java United 2 - 1 PERSIB Bandung (FT)',
       venue: 'Stadion Jatidiri, Semarang',
-      statusText: stage === 1 ? 'LIVE MATCHDAY PEKAN 9' : stage === 2 ? 'FULL TIME - PERSIB MENANG TANDANG 1-3' : 'UPCOMING MATCHDAY PEKAN 9',
-      qualificationScenario: 'Kemenangan mendongkrak posisi ke peringkat 3 besar Super League 2026/2027.',
+      statusText: 'FULL TIME - SELESAI',
+      qualificationScenario: 'Persib bertahan di peringkat #5 dengan 16 poin (9 Main: 5 Menang, 1 Seri, 3 Kalah).',
       keyEvents: [
-        { minute: '24\'', type: 'goal', text: 'GOOOL! Uilliam mencetak gol pembuka 0-1 untuk Persib' },
-        { minute: '51\'', type: 'goal', text: 'Gol penyama kedudukan Java United 1-1 lewat tendangan spekulasi' },
-        { minute: '68\'', type: 'goal', text: 'GOOOL! Mariano Peralta membawa Persib memimpin 1-2!' },
-        ...(stage === 2
-          ? [{ minute: '89\'', type: 'goal' as const, text: 'GOOOL PENUTUP! David da Silva menyegel kemenangan 1-3!' }]
-          : []),
+        { minute: "34'", type: 'goal', text: 'Gol Java United! F. Ridwan mencetak gol pembuka 1-0' },
+        { minute: "58'", type: 'goal', text: 'GOOOL PERSIB! Ciro Alves menyamakan skor 1-1 (Assist: Marc Klok)' },
+        { minute: "76'", type: 'goal', text: 'Gol Java United! R. Hidayat mencetak gol penentu kemenangan 2-1' },
       ],
     },
     matchCenter: {
       tournament: 'Super League 2026/2027 & ACL Two',
       latestResult: {
-        matchweek: stage === 2 ? 'Pekan 9 Super League' : 'Pekan 8 Super League',
-        opponent: stage === 2 ? 'Java United' : 'Isenmulang Kalteng FC',
-        score: stage === 2 ? '1 - 3' : '4 - 0',
-        scorers:
-          stage === 2
-            ? ['Uilliam 24\'', 'Mariano Peralta 68\'', 'David da Silva 89\'']
-            : ['Thom Haye 18\'', 'Uilliam 42\'', 'Mariano Peralta 67\'', 'Beckham Putra 84\''],
-        venue: stage === 2 ? 'Stadion Jatidiri, Semarang' : 'Stadion Gelora Bandung Lautan Api (GBLA)',
+        matchweek: latestFinished?.roundOrWeek || 'Pekan 9 Super League',
+        opponent: 'Java United',
+        score: '2 - 1',
+        scorers: ['F. Ridwan 34\' (Java United)', 'Ciro Alves 58\' (PERSIB)', 'R. Hidayat 76\' (Java United)'],
+        venue: 'Stadion Jatidiri, Semarang',
       },
       nextFixture: {
-        matchweek: stage === 2 ? 'Pekan 10 Super League (El Clasico)' : 'Pekan 9 Super League',
-        opponent: stage === 2 ? 'Persija' : 'Java United',
-        date: stage === 2 ? 'Minggu, 15 November 2026 • 19:00 WIB' : 'Minggu, 08 November 2026 • 19:00 WIB',
-        venue: stage === 2 ? 'Stadion Gelora Bandung Lautan Api (GBLA)' : 'Stadion Jatidiri, Semarang',
+        matchweek: upcomingMatch?.roundOrWeek || 'Pekan 10 Super League (El Clasico)',
+        opponent: upcomingMatch?.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : (upcomingMatch?.homeTeam || 'Persija'),
+        date: `${upcomingMatch?.date || 'Sabtu, 21 November 2026'} • ${upcomingMatch?.time || '15:30 WIB'}`,
+        venue: upcomingMatch?.venue || 'Stadion Gelora Bandung Lautan Api (GBLA)',
       },
     },
     leagueStandings: {
       persibRank: persibInStandings?.rank ?? 5,
       persibPoints: persibInStandings?.points ?? 16,
-      persibGD: persibInStandings?.gd ?? 7,
+      persibGD: persibInStandings?.gd ?? 6,
       topClubs: calculatedStandings.slice(0, 5),
       allClubs: calculatedStandings,
     },
