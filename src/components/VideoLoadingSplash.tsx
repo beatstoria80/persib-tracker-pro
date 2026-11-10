@@ -110,27 +110,8 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       }`}
       onClick={handleDismiss}
     >
-      {/* Background Poster & Fallback (Guarantees zero black screen during video buffering) */}
-      <div
-        style={{ backgroundColor: '#002B7F' }}
-        className="absolute inset-0 w-full h-full flex flex-col items-center justify-center pointer-events-none"
-      >
-        <div className="relative flex flex-col items-center space-y-4">
-          <div className="w-20 h-20 rounded-full bg-blue-900/60 p-2 border-2 border-cyan-400/50 shadow-2xl flex items-center justify-center animate-pulse">
-            <img
-              src="/icon-192.png"
-              alt="PERSIB Crest"
-              className="w-16 h-16 object-contain filter drop-shadow-md"
-            />
-          </div>
-          <span className="text-[11px] font-mono font-black text-cyan-300 tracking-widest uppercase">
-            PERSIB TRACKER PRO 2026/27
-          </span>
-        </div>
-      </div>
-
-      {/* Fullscreen Video Player */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden bg-transparent">
+      {/* REFACTOR: Hapus elemen logo statis lama - Latar belakang langsung memutar VideoLoading.mp4 murni */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#002B7F]">
         <video
           ref={videoRef}
           autoPlay
@@ -141,15 +122,13 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
           style={{ backgroundColor: '#002B7F' }}
-          className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
-            isPlaying ? 'opacity-100' : 'opacity-0'
-          }`}
+          className="w-full h-full object-cover object-center"
         >
           <source src="/VideoLoading.mp4" type="video/mp4" />
           <source src="/Video loading.mp4" type="video/mp4" />
         </video>
-        {/* Subtle Cyan/Royal Blue Gradient overlay (Zero dark tint) */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#002B7F]/60 via-transparent to-[#002B7F]/25 pointer-events-none" />
+        {/* Subtle royal blue wash - Tanpa latar hitam kelam */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#002B7F]/40 via-transparent to-transparent pointer-events-none" />
       </div>
 
       {/* Top Header: Skip Pill Button */}

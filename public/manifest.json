@@ -1,9 +1,9 @@
 {
-  "name": "PERSIB TRACKER - Official Club Hub",
-  "short_name": "Persib Tracker",
+  "name": "PERSIB TRACKER",
+  "short_name": "PERSIB",
   "description": "Aplikasi Resmi Pelacak Laga, Taktik, Skuad & Finansial PERSIB Bandung Musim 2026/2027",
-  "start_url": "/",
-  "id": "/",
+  "start_url": "/?pwa=persib-v2",
+  "id": "/?pwa=persib-v2",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
