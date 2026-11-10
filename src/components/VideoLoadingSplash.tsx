@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Sparkles, ArrowRight, Play } from 'lucide-react';
+import { ArrowRight, Play } from 'lucide-react';
 
 interface VideoLoadingSplashProps {
   onFinish?: () => void;
@@ -11,7 +11,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const [isFading, setIsFading] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [progress, setProgress] = useState<number>(0);
   const [autoplayBlocked, setAutoplayBlocked] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -68,8 +67,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const handleTimeUpdate = () => {
     const v = videoRef.current;
     if (!v || !v.duration) return;
-    const pct = Math.min(100, Math.round((v.currentTime / v.duration) * 100));
-    setProgress(pct);
 
     // Dismiss when video is within 0.1s of completion
     if (v.currentTime >= v.duration - 0.1) {
@@ -111,7 +108,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       }`}
       onClick={handleDismiss}
     >
-      {/* REFACTOR: Hapus elemen logo statis lama - Latar belakang langsung memutar VideoLoading.mp4 murni */}
+      {/* REFACTOR: Video murni layar penuh tanpa blocking element atau latar hitam */}
       <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#002B7F]">
         <video
           ref={videoRef}
@@ -128,31 +125,24 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           <source src="/VideoLoading.mp4" type="video/mp4" />
           <source src="/Video loading.mp4" type="video/mp4" />
         </video>
-        {/* Subtle royal blue wash - Tanpa latar hitam kelam */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#002B7F]/40 via-transparent to-transparent pointer-events-none" />
       </div>
 
-      {/* Top Header: Skip Pill Button */}
-      <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 flex items-center justify-between">
-        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/80 backdrop-blur-md border border-cyan-400/40 text-cyan-300 text-[10px] font-mono font-black tracking-wider shadow-lg">
-          <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse" />
-          <span>PERSIB PRO 2026/27</span>
-        </div>
-
+      {/* Top Header: Clean subtle Skip Pill Button */}
+      <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 flex items-center justify-end">
         <button
           type="button"
           onClick={(e) => {
             e.stopPropagation();
             handleDismiss();
           }}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-950/80 hover:bg-blue-900 active:scale-95 backdrop-blur-md border border-cyan-400/40 text-white text-[11px] font-bold shadow-xl transition-all"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-950/70 hover:bg-blue-900 active:scale-95 backdrop-blur-md border border-cyan-400/30 text-white text-[11px] font-bold shadow-lg transition-all"
         >
           <span>Lewati</span>
           <ArrowRight className="w-3.5 h-3.5 text-cyan-400" />
         </button>
       </div>
 
-      {/* Center Action: Play Button if Autoplay was restricted by mobile OS */}
+      {/* Center Action: Play Button fallback if Autoplay was restricted by mobile OS */}
       {autoplayBlocked && !isPlaying && (
         <div className="relative z-20 flex flex-col items-center justify-center p-4">
           <button
@@ -166,35 +156,8 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         </div>
       )}
 
-      {/* Bottom Telemetry & Real Video Progress Indicator */}
-      <div className="relative z-10 w-full max-w-[430px] mx-auto p-6 flex flex-col items-center text-center space-y-3 pb-8 sm:pb-6">
-        <div className="space-y-1">
-          <h1 className="text-lg sm:text-xl font-black tracking-tight text-white drop-shadow-md">
-            PERSIB TRACKER PRO
-          </h1>
-          <p className="text-xs text-cyan-200 font-medium tracking-wide drop-shadow-xs">
-            {isPlaying ? 'Memutar Animasi Pembuka 1x...' : 'Menyiapkan Animasi Pembuka...'}
-          </p>
-        </div>
-
-        {/* Dynamic Progress Bar bound to real video duration */}
-        <div className="w-full max-w-xs space-y-1.5">
-          <div className="h-1.5 w-full bg-blue-950/60 backdrop-blur-xs rounded-full overflow-hidden p-0.5 border border-cyan-400/30 shadow-inner">
-            <div
-              className="h-full bg-gradient-to-r from-blue-400 via-cyan-300 to-white rounded-full transition-all duration-75 ease-out shadow-sm"
-              style={{ width: `${progress}%` }}
-            />
-          </div>
-          <div className="flex items-center justify-between text-[9px] font-mono text-cyan-300 font-bold px-0.5">
-            <span>KECEPATAN 1.0X</span>
-            <span>{progress}%</span>
-          </div>
-        </div>
-
-        <span className="text-[10px] text-white/80 font-medium">
-          Ketuk layar untuk langsung masuk ke aplikasi
-        </span>
-      </div>
+      {/* REFACTOR: UI UX copy teks, progress bar shape, dan label 'Kecepatan 1.0x' dihilangkan seluruhnya agar video tampil sinematik & bersih */}
+      <div className="relative z-10 w-full p-4 pointer-events-none" />
     </div>
   );
 }
