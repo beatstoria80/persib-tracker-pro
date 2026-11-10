@@ -10,9 +10,24 @@ import {
   BarChart2,
   Users,
   Activity,
+  Swords,
+  TrendingUp,
 } from 'lucide-react';
-import { MatchFixture, Player, LeagueStandingRow, GroupTeam, TacticalPlayerPos } from '@/types/club';
-import { getClubLogo, getPlayerAvatar, getClubProfile } from '@/data/persib-data';
+import {
+  MatchFixture,
+  Player,
+  LeagueStandingRow,
+  GroupTeam,
+  TacticalPlayerPos,
+  TacticalDuelMatchup,
+} from '@/types/club';
+import {
+  getClubLogo,
+  getPlayerAvatar,
+  getClubProfile,
+  getOpponentSquad,
+  convertOpponentPlayerToPlayer,
+} from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
 import { ClubIntelligenceView } from './ClubIntelligenceView';
 
@@ -159,8 +174,11 @@ export function MatchCenter() {
   // REFACTOR: Decouple from hardcoded 'l1-p8' string. Null allows dynamic auto-selection of active/latest match
   const [selectedFixtureId, setSelectedFixtureId] = useState<string | null>(null);
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
-  const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'stats' | 'highlights'>('events');
+  // REFACTOR: AAA-grade expanded match center tabs with opponent squad, tactical duels, spatial pitch, and momentum
+  const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'lineups' | 'duels' | 'pitch' | 'stats' | 'highlights'>('events');
   const [selectedClubForIntel, setSelectedClubForIntel] = useState<string | null>(null);
+  const [heroLineupFilter, setHeroLineupFilter] = useState<'all' | 'persib' | 'opponent'>('all');
+  const [taktikClashMode, setTaktikClashMode] = useState<'dual' | 'persib' | 'opponent'>('dual');
 
   // Auto-play tactical transition loop
   useEffect(() => {
@@ -200,6 +218,60 @@ export function MatchCenter() {
   const startingXI: Player[] = players.filter((p: Player) => p.squadRole === 'starting');
   const substitutes: Player[] = players.filter((p: Player) => p.squadRole === 'substitute');
   const persibStanding = liga1Standings.find((r) => r.isPersib || r.team.toLowerCase().includes('persib'));
+
+  // REFACTOR: Opponent squad, tactical duels, and dual formation telemetry
+  const isPersibHome = currentFixture.homeTeam.toUpperCase().includes('PERSIB');
+  const opponentTeamName = isPersibHome ? currentFixture.awayTeam : currentFixture.homeTeam;
+  const opponentLogo = isPersibHome ? currentFixture.awayLogo : currentFixture.homeLogo;
+  const opponentSquadData = currentFixture.opponentSquad || getOpponentSquad(opponentTeamName);
+  const opponentProfile = getClubProfile(opponentTeamName);
+  const activeTacticalDuels: TacticalDuelMatchup[] =
+    currentFixture.tacticalDuels && currentFixture.tacticalDuels.length > 0
+      ? currentFixture.tacticalDuels
+      : [
+          {
+            id: 'duel-default-1',
+            title: 'Pertarungan Maestro Lini Tengah',
+            zone: 'Central Midfield Zone',
+            persibPlayer: {
+              name: 'Thom Haye',
+              number: 33,
+              position: 'MF (DMF)',
+              rating: 9.2,
+              avatarUrl: getPlayerAvatar('Thom Haye'),
+            },
+            opponentPlayer: {
+              name: opponentSquadData.startingXI[5]?.name || opponentSquadData.startingXI[0]?.name || 'Gelandang Lawan',
+              number: opponentSquadData.startingXI[5]?.number || 8,
+              position: opponentSquadData.startingXI[5]?.position || 'MF',
+              rating: 8.5,
+              avatarUrl: opponentSquadData.startingXI[5]?.avatarUrl,
+            },
+            keyInsight: 'Pertarungan penguasaan tempo dan progresi bola ke sepertiga akhir pertahanan lawan.',
+            winProbability: [62, 38],
+          },
+          {
+            id: 'duel-default-2',
+            title: 'Duel Benteng Udara vs Ujung Tombak',
+            zone: 'Central Defensive Box',
+            persibPlayer: {
+              name: 'Patricio Matricardi',
+              number: 48,
+              position: 'DF (CB)',
+              rating: 8.7,
+              avatarUrl: getPlayerAvatar('Patricio Matricardi'),
+            },
+            opponentPlayer: {
+              name: opponentSquadData.startingXI[9]?.name || 'Striker Lawan',
+              number: opponentSquadData.startingXI[9]?.number || 9,
+              position: opponentSquadData.startingXI[9]?.position || 'CF',
+              rating: 8.8,
+              avatarUrl: opponentSquadData.startingXI[9]?.avatarUrl,
+            },
+            keyInsight: 'Duel fisik kotak penalti untuk menetralisir crossing udara dan bola liar secepat mungkin.',
+            winProbability: [59, 41],
+          },
+        ];
 
   return (
     <div className="space-y-4">
@@ -512,10 +584,11 @@ export function MatchCenter() {
                 </div>
               )}
 
-              {/* Match Intelligence Navigation Switcher (Events vs Stats vs Highlights) */}
+              {/* Match Intelligence Navigation Switcher (6 Comprehensive AAA Sub-tabs) */}
               <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800">
-                <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center mb-3">
+                <div className="grid grid-cols-3 sm:grid-cols-6 gap-1 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center mb-3.5">
                   <button
+                    type="button"
                     onClick={() => setHeroDetailTab('events')}
                     className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
                       heroDetailTab === 'events'
@@ -526,6 +599,40 @@ export function MatchCenter() {
                     <span>⚽ Gol & Kartu</span>
                   </button>
                   <button
+                    type="button"
+                    onClick={() => setHeroDetailTab('lineups')}
+                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                      heroDetailTab === 'lineups'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>👥 Skuad & XI</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setHeroDetailTab('duels')}
+                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                      heroDetailTab === 'duels'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>⚔️ Duel 1v1</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setHeroDetailTab('pitch')}
+                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                      heroDetailTab === 'pitch'
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    <span>🗺️ Formasi 2D</span>
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => setHeroDetailTab('stats')}
                     className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
                       heroDetailTab === 'stats'
@@ -536,6 +643,7 @@ export function MatchCenter() {
                     <span>📊 Statistik</span>
                   </button>
                   <button
+                    type="button"
                     onClick={() => setHeroDetailTab('highlights')}
                     className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
                       heroDetailTab === 'highlights'
@@ -547,25 +655,59 @@ export function MatchCenter() {
                   </button>
                 </div>
 
-                {/* Tab 1: Detailed Match Events (Gol, Assist, Kartu Merah, Kartu Kuning) */}
+                {/* Tab 1: Detailed Match Events (Gol, Assist, Kartu Merah, Kartu Kuning) with Verified Player & Assist Avatars */}
                 {heroDetailTab === 'events' && (
                   <div className="space-y-2">
                     {currentFixture.detailedEvents && currentFixture.detailedEvents.length > 0 ? (
                       currentFixture.detailedEvents.map((ev, idx) => {
-                        const matchedPlayer = players.find(
+                        const matchedPersib = players.find(
                           (p) =>
                             ev.player.toLowerCase().includes(p.name.toLowerCase()) ||
                             p.name.toLowerCase().includes(ev.player.toLowerCase())
                         );
+                        const matchedOpp = opponentSquadData.startingXI
+                          .concat(opponentSquadData.substitutes)
+                          .find(
+                            (op) =>
+                              ev.player.toLowerCase().includes(op.name.toLowerCase()) ||
+                              op.name.toLowerCase().includes(ev.player.toLowerCase())
+                          );
+                        const targetPlayerObj: Player | null = matchedPersib
+                          ? matchedPersib
+                          : matchedOpp
+                          ? convertOpponentPlayerToPlayer(matchedOpp, opponentTeamName)
+                          : null;
+
+                        const matchedAssistPersib = ev.assistBy
+                          ? players.find(
+                              (p) =>
+                                ev.assistBy?.toLowerCase().includes(p.name.toLowerCase()) ||
+                                p.name.toLowerCase().includes(ev.assistBy?.toLowerCase() || '')
+                            )
+                          : null;
+                        const matchedAssistOpp = ev.assistBy
+                          ? opponentSquadData.startingXI
+                              .concat(opponentSquadData.substitutes)
+                              .find(
+                                (op) =>
+                                  ev.assistBy?.toLowerCase().includes(op.name.toLowerCase()) ||
+                                  op.name.toLowerCase().includes(ev.assistBy?.toLowerCase() || '')
+                              )
+                          : null;
+                        const assistPlayerObj: Player | null = matchedAssistPersib
+                          ? matchedAssistPersib
+                          : matchedAssistOpp
+                          ? convertOpponentPlayerToPlayer(matchedAssistOpp, opponentTeamName)
+                          : null;
 
                         return (
                           <div
                             key={idx}
                             onClick={() => {
-                              if (matchedPlayer) setSelectedPlayer(matchedPlayer);
+                              if (targetPlayerObj) setSelectedPlayer(targetPlayerObj);
                             }}
                             className={`p-2.5 rounded-2xl border flex items-start gap-2.5 transition-all ${
-                              matchedPlayer ? 'cursor-pointer active:scale-[0.99]' : ''
+                              targetPlayerObj ? 'cursor-pointer active:scale-[0.99]' : ''
                             } ${
                               ev.type === 'goal'
                                 ? isPro
@@ -589,6 +731,16 @@ export function MatchCenter() {
                               {ev.minute}
                             </span>
 
+                            {/* Verified Player Photo Avatar */}
+                            <div className="shrink-0">
+                              <PlayerAvatar
+                                name={targetPlayerObj ? targetPlayerObj.name : ev.player}
+                                avatarUrl={targetPlayerObj?.avatarUrl}
+                                number={targetPlayerObj?.number}
+                                size="sm"
+                              />
+                            </div>
+
                             {/* Event Icon */}
                             <span className="text-base shrink-0 leading-none mt-0.5">
                               {ev.type === 'goal' && '⚽'}
@@ -603,6 +755,11 @@ export function MatchCenter() {
                                 <span className="font-black text-xs leading-tight">
                                   {ev.player}
                                 </span>
+                                {targetPlayerObj && (
+                                  <span className="text-[9px] font-mono px-1.5 py-0.2 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold">
+                                    #{targetPlayerObj.number} {targetPlayerObj.position}
+                                  </span>
+                                )}
                                 {ev.type === 'goal' && (
                                   <span className="text-[9px] font-mono px-1.5 py-0.2 rounded-full bg-emerald-500 text-white font-bold uppercase">
                                     GOL
@@ -621,14 +778,32 @@ export function MatchCenter() {
                               </div>
 
                               {ev.assistBy && (
-                                <div className="text-[10px] text-blue-600 dark:text-cyan-400 font-bold mt-0.5 flex items-center gap-1">
+                                <div
+                                  onClick={(e) => {
+                                    if (assistPlayerObj) {
+                                      e.stopPropagation();
+                                      setSelectedPlayer(assistPlayerObj);
+                                    }
+                                  }}
+                                  className="text-[10px] text-blue-600 dark:text-cyan-400 font-bold mt-1 flex items-center gap-1.5"
+                                >
+                                  <div className="shrink-0">
+                                    <PlayerAvatar
+                                      name={assistPlayerObj ? assistPlayerObj.name : ev.assistBy}
+                                      avatarUrl={assistPlayerObj?.avatarUrl}
+                                      number={assistPlayerObj?.number}
+                                      size="xs"
+                                    />
+                                  </div>
                                   <span>👟 Assist:</span>
-                                  <span className="underline decoration-blue-400/50">{ev.assistBy}</span>
+                                  <span className="underline decoration-blue-400/50 hover:text-blue-500">
+                                    {ev.assistBy}
+                                  </span>
                                 </div>
                               )}
 
                               {ev.detail && (
-                                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-0.5 leading-snug">
+                                <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1 leading-snug">
                                   {ev.detail}
                                 </p>
                               )}
@@ -657,9 +832,607 @@ export function MatchCenter() {
                   </div>
                 )}
 
-                {/* Tab 2: Detailed Match Statistics Box Score (Sofascore Dual-Bar Comparison) */}
-                {heroDetailTab === 'stats' && (
+                {/* Tab 2: Skuad Lengkap Lawan & Persib (Starting XI & Substitutes) */}
+                {heroDetailTab === 'lineups' && (
+                  <div className="space-y-3.5">
+                    {/* Filter Skuad Selector */}
+                    <div className="flex items-center gap-1.5 p-1 rounded-xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setHeroLineupFilter('all')}
+                        className={`flex-1 py-1 px-2 rounded-lg text-[10px] font-black transition-all ${
+                          heroLineupFilter === 'all'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        Semua Skuad
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHeroLineupFilter('persib')}
+                        className={`flex-1 py-1 px-2 rounded-lg text-[10px] font-black transition-all ${
+                          heroLineupFilter === 'persib'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        🔵 Persib
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setHeroLineupFilter('opponent')}
+                        className={`flex-1 py-1 px-2 rounded-lg text-[10px] font-black transition-all truncate ${
+                          heroLineupFilter === 'opponent'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        🔴 {opponentTeamName}
+                      </button>
+                    </div>
+
+                    {/* Skuad Lawan (Starting XI & Substitutes) */}
+                    {(heroLineupFilter === 'all' || heroLineupFilter === 'opponent') && (
+                      <div className="p-3 rounded-2xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                          <div className="flex items-center gap-2">
+                            <ClubThumb name={opponentTeamName} logoUrl={opponentLogo || opponentProfile.logoUrl} />
+                            <h4 className="text-xs font-black uppercase text-slate-900 dark:text-white">
+                              Skuad Resmi: {opponentTeamName}
+                            </h4>
+                          </div>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-red-500/15 text-red-600 dark:text-red-400 font-bold">
+                            {opponentProfile.preferredFormation}
+                          </span>
+                        </div>
+
+                        {/* Opponent Starting XI */}
+                        <div>
+                          <div className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 flex items-center justify-between">
+                            <span>Starting XI ({opponentSquadData.startingXI.length} Pemain)</span>
+                            <span className="text-emerald-500">Terverifikasi Kick-Off</span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {opponentSquadData.startingXI.map((opp) => {
+                              const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
+                              return (
+                                <div
+                                  key={opp.id}
+                                  onClick={() => setSelectedPlayer(oppAsPlayer)}
+                                  className={`flex items-center justify-between p-2 rounded-xl border cursor-pointer active:scale-[0.98] transition-all ${
+                                    isPro
+                                      ? 'bg-slate-900/60 border-slate-800 hover:border-red-500/50'
+                                      : 'bg-white border-slate-200 hover:border-red-500 shadow-xs'
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-2.5 min-w-0">
+                                    <PlayerAvatar
+                                      name={opp.name}
+                                      avatarUrl={opp.avatarUrl}
+                                      number={opp.number}
+                                      position={opp.position.includes('GK') ? 'GK' : opp.position.includes('DF') ? 'DF' : opp.position.includes('MF') ? 'MF' : 'FW'}
+                                      size="sm"
+                                    />
+                                    <div className="min-w-0">
+                                      <div className="text-xs font-black truncate">{opp.name}</div>
+                                      <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5 truncate">
+                                        <span className="font-mono font-bold text-red-500">{opp.position}</span>
+                                        <span>•</span>
+                                        <span>{opp.tacticalRole || opp.marketValue}</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 shrink-0">
+                                    #{opp.number}
+                                  </span>
+                                </div>
+                              );
+                            })}
+                          </div>
+                        </div>
+
+                        {/* Opponent Substitutes */}
+                        {opponentSquadData.substitutes.length > 0 && (
+                          <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+                            <div className="text-[10px] font-mono font-bold text-slate-400 uppercase mb-2">
+                              Pemain Cadangan / Substitutes ({opponentSquadData.substitutes.length} Pemain)
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {opponentSquadData.substitutes.map((opp) => {
+                                const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
+                                return (
+                                  <div
+                                    key={opp.id}
+                                    onClick={() => setSelectedPlayer(oppAsPlayer)}
+                                    className={`flex items-center justify-between p-2 rounded-xl border cursor-pointer active:scale-[0.98] transition-all ${
+                                      isPro
+                                        ? 'bg-slate-900/30 border-slate-800/80 hover:border-slate-700'
+                                        : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                      <PlayerAvatar
+                                        name={opp.name}
+                                        avatarUrl={opp.avatarUrl}
+                                        number={opp.number}
+                                        position={opp.position.includes('GK') ? 'GK' : opp.position.includes('DF') ? 'DF' : opp.position.includes('MF') ? 'MF' : 'FW'}
+                                        size="xs"
+                                      />
+                                      <div className="min-w-0">
+                                        <div className="text-xs font-bold truncate">{opp.name}</div>
+                                        <div className="text-[10px] text-slate-400 truncate">
+                                          <span className="font-mono text-slate-500 font-bold">{opp.position}</span> • {opp.tacticalRole || opp.marketValue}
+                                        </div>
+                                      </div>
+                                    </div>
+                                    <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 shrink-0">
+                                      #{opp.number}
+                                    </span>
+                                  </div>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+
+                    {/* Skuad PERSIB Bandung */}
+                    {(heroLineupFilter === 'all' || heroLineupFilter === 'persib') && (
+                      <div className="p-3 rounded-2xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
+                        <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse" />
+                            <h4 className="text-xs font-black uppercase text-slate-900 dark:text-white">
+                              Skuad Resmi: PERSIB BANDUNG
+                            </h4>
+                          </div>
+                          <span className="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-600/15 text-blue-600 dark:text-cyan-400 font-bold">
+                            4-2-3-1 Modern Pangeran Biru
+                          </span>
+                        </div>
+
+                        {/* Persib Starting XI */}
+                        <div>
+                          <div className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 flex items-center justify-between">
+                            <span>Starting XI ({startingXI.length} Pemain)</span>
+                            <span className="text-emerald-500">100% Siap Tempur</span>
+                          </div>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {startingXI.map((player) => (
+                              <div
+                                key={player.id}
+                                onClick={() => setSelectedPlayer(player)}
+                                className={`flex items-center justify-between p-2 rounded-xl border cursor-pointer active:scale-[0.98] transition-all ${
+                                  isPro
+                                    ? 'bg-slate-900/60 border-slate-800 hover:border-cyan-400/50'
+                                    : 'bg-white border-slate-200 hover:border-blue-600 shadow-xs'
+                                }`}
+                              >
+                                <div className="flex items-center gap-2.5 min-w-0">
+                                  <PlayerAvatar
+                                    name={player.name}
+                                    avatarUrl={player.avatarUrl}
+                                    number={player.number}
+                                    position={player.position}
+                                    size="sm"
+                                  />
+                                  <div className="min-w-0">
+                                    <div className="text-xs font-black truncate">{player.name}</div>
+                                    <div className="text-[10px] text-slate-500 dark:text-slate-400 flex items-center gap-1.5 truncate">
+                                      <span className="font-mono font-bold text-blue-600 dark:text-cyan-400">{player.position}</span>
+                                      <span>•</span>
+                                      <span>{player.marketValue}</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-cyan-300 shrink-0">
+                                  #{player.number}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Persib Substitutes */}
+                        {substitutes.length > 0 && (
+                          <div className="pt-2 border-t border-slate-200 dark:border-slate-800">
+                            <div className="text-[10px] font-mono font-bold text-slate-400 uppercase mb-2">
+                              Pemain Cadangan / Substitutes ({substitutes.length} Pemain)
+                            </div>
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                              {substitutes.map((player) => (
+                                <div
+                                  key={player.id}
+                                  onClick={() => setSelectedPlayer(player)}
+                                  className={`flex items-center justify-between p-2 rounded-xl border cursor-pointer active:scale-[0.98] transition-all ${
+                                    isPro
+                                      ? 'bg-slate-900/30 border-slate-800/80 hover:border-slate-700'
+                                      : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
+                                  }`}
+                                >
+                                  <div className="flex items-center gap-2.5 min-w-0">
+                                    <PlayerAvatar
+                                      name={player.name}
+                                      avatarUrl={player.avatarUrl}
+                                      number={player.number}
+                                      position={player.position}
+                                      size="xs"
+                                    />
+                                    <div className="min-w-0">
+                                      <div className="text-xs font-bold truncate">{player.name}</div>
+                                      <div className="text-[10px] text-slate-400 truncate">
+                                        <span className="font-mono text-slate-500 font-bold">{player.position}</span> • {player.nationality}
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 text-slate-500 shrink-0">
+                                    #{player.number}
+                                  </span>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Tab 3: Key Tactical Duels (1v1 Clash Cards) with Probabilities & Scouting Notes */}
+                {heroDetailTab === 'duels' && (
                   <div className="space-y-3">
+                    <div className="p-2.5 rounded-2xl bg-blue-600/10 border border-blue-600/20 text-xs">
+                      <div className="flex items-center gap-2 font-black text-blue-600 dark:text-cyan-400 text-[11px]">
+                        <Swords className="w-4 h-4 shrink-0" />
+                        <span>Analisis Duel Kunci Pertandingan (1-on-1 Head-to-Head Clash)</span>
+                      </div>
+                      <p className="text-[10px] text-slate-600 dark:text-slate-300 mt-1">
+                        Pertarungan spasial kunci yang menentukan penguasaan bola dan konversi peluang di atas lapangan.
+                      </p>
+                    </div>
+
+                    <div className="space-y-3">
+                      {activeTacticalDuels.map((duel, dIdx) => {
+                        const matchedPersib = players.find((p) => p.name.toLowerCase().includes(duel.persibPlayer.name.toLowerCase()));
+                        const matchedOpp = opponentSquadData.startingXI.concat(opponentSquadData.substitutes).find((op) => op.name.toLowerCase().includes(duel.opponentPlayer.name.toLowerCase()));
+                        const oppAsPlayer = matchedOpp ? convertOpponentPlayerToPlayer(matchedOpp, opponentTeamName) : null;
+
+                        return (
+                          <div
+                            key={duel.id || dIdx}
+                            className={`p-3.5 rounded-2xl border transition-all ${
+                              isPro
+                                ? 'bg-slate-900/60 border-slate-800'
+                                : 'bg-slate-50/80 border-slate-200 shadow-xs'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 dark:border-slate-800">
+                              <span className="text-xs font-black tracking-tight">{duel.title}</span>
+                              <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-cyan-300 font-bold uppercase">
+                                {duel.zone}
+                              </span>
+                            </div>
+
+                            {/* Dual Clash Fighters Visual */}
+                            <div className="flex items-center justify-between gap-2">
+                              {/* Persib Fighter */}
+                              <div
+                                onClick={() => { if (matchedPersib) setSelectedPlayer(matchedPersib); }}
+                                className={`flex-1 p-2 rounded-xl border flex items-center gap-2 cursor-pointer transition-all ${
+                                  isPro ? 'bg-slate-900/90 border-blue-800/60 hover:border-cyan-400' : 'bg-white border-blue-200 hover:border-blue-400'
+                                }`}
+                              >
+                                <PlayerAvatar
+                                  name={duel.persibPlayer.name}
+                                  avatarUrl={duel.persibPlayer.avatarUrl}
+                                  number={duel.persibPlayer.number}
+                                  position={duel.persibPlayer.position.includes('CB') || duel.persibPlayer.position.includes('DF') ? 'DF' : duel.persibPlayer.position.includes('MF') ? 'MF' : 'FW'}
+                                  size="sm"
+                                />
+                                <div className="min-w-0 flex-1">
+                                  <div className="text-xs font-black truncate">{duel.persibPlayer.name}</div>
+                                  <div className="text-[10px] font-mono text-blue-600 dark:text-cyan-400 font-bold">
+                                    #{duel.persibPlayer.number} • {duel.persibPlayer.position}
+                                  </div>
+                                </div>
+                              </div>
+
+                              {/* VS Center Pillar */}
+                              <div className="shrink-0 flex flex-col items-center px-1">
+                                <span className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-mono font-black text-[10px] text-slate-700 dark:text-slate-300">
+                                  VS
+                                </span>
+                              </div>
+
+                              {/* Opponent Fighter */}
+                              <div
+                                onClick={() => { if (oppAsPlayer) setSelectedPlayer(oppAsPlayer); }}
+                                className={`flex-1 p-2 rounded-xl border flex items-center gap-2 cursor-pointer transition-all ${
+                                  isPro ? 'bg-slate-900/90 border-red-800/60 hover:border-red-400' : 'bg-white border-red-200 hover:border-red-400'
+                                }`}
+                              >
+                                <PlayerAvatar
+                                  name={duel.opponentPlayer.name}
+                                  avatarUrl={duel.opponentPlayer.avatarUrl}
+                                  number={duel.opponentPlayer.number}
+                                  position={duel.opponentPlayer.position.includes('CB') || duel.opponentPlayer.position.includes('DF') ? 'DF' : duel.opponentPlayer.position.includes('MF') ? 'MF' : 'FW'}
+                                  size="sm"
+                                />
+                                <div className="min-w-0 flex-1 text-right sm:text-left">
+                                  <div className="text-xs font-black truncate">{duel.opponentPlayer.name}</div>
+                                  <div className="text-[10px] font-mono text-red-500 font-bold">
+                                    #{duel.opponentPlayer.number} • {duel.opponentPlayer.position}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Win Probability Bar */}
+                            <div className="mt-3 space-y-1">
+                              <div className="flex items-center justify-between text-[10px] font-mono font-black">
+                                <span className="text-blue-600 dark:text-cyan-400">{duel.winProbability[0]}% Dominan</span>
+                                <span className="text-slate-400">Probabilitas Duel</span>
+                                <span className="text-red-500">{duel.winProbability[1]}% Dominan</span>
+                              </div>
+                              <div className="h-1.5 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden flex">
+                                <div className="h-full bg-blue-600 rounded-l-full transition-all duration-500" style={{ width: `${duel.winProbability[0]}%` }} />
+                                <div className="h-full bg-red-500 rounded-r-full transition-all duration-500" style={{ width: `${duel.winProbability[1]}%` }} />
+                              </div>
+                            </div>
+
+                            {/* Tactical Note */}
+                            <p className="mt-2 text-[10px] text-slate-500 dark:text-slate-400 leading-relaxed italic">
+                              💡 {duel.keyInsight}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab 4: Interactive 2D Pitch Dual Formation Clash */}
+                {heroDetailTab === 'pitch' && (
+                  <div className="space-y-3">
+                    {/* Mode Toggle inside Pitch Tab */}
+                    <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center">
+                      <button
+                        type="button"
+                        onClick={() => setTaktikClashMode('dual')}
+                        className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all ${
+                          taktikClashMode === 'dual'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        ⚡ Dual Bentrok
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTaktikClashMode('persib')}
+                        className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all ${
+                          taktikClashMode === 'persib'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        🔵 Formasi Persib
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setTaktikClashMode('opponent')}
+                        className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all truncate ${
+                          taktikClashMode === 'opponent'
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        }`}
+                      >
+                        🔴 {opponentTeamName}
+                      </button>
+                    </div>
+
+                    {/* 2D Green Football Pitch Canvas */}
+                    <div className="relative w-full h-[520px] rounded-2xl bg-gradient-to-b from-emerald-950 via-emerald-800 to-emerald-950 border-2 border-emerald-500/50 overflow-hidden shadow-inner select-none">
+                      {/* Pitch Grass Stripes */}
+                      <div className="absolute inset-0 flex flex-col pointer-events-none opacity-20">
+                        <div className="flex-1 bg-white/5" />
+                        <div className="flex-1 bg-transparent" />
+                        <div className="flex-1 bg-white/5" />
+                        <div className="flex-1 bg-transparent" />
+                        <div className="flex-1 bg-white/5" />
+                        <div className="flex-1 bg-transparent" />
+                      </div>
+
+                      {/* Pitch White Markings */}
+                      <div className="absolute inset-2 border border-white/30 rounded-xl pointer-events-none" />
+                      <div className="absolute top-1/2 left-2 right-2 h-[1px] bg-white/30 pointer-events-none" />
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border border-white/30 pointer-events-none flex items-center justify-center">
+                        <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
+                      </div>
+
+                      {/* Top Penalty Area (Opponent Box) */}
+                      <div className="absolute top-2 left-1/2 -translate-x-1/2 w-44 h-20 border-b border-x border-white/30 pointer-events-none">
+                        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-8 border-b border-x border-white/30" />
+                      </div>
+
+                      {/* Bottom Penalty Area (Persib Box) */}
+                      <div className="absolute bottom-2 left-1/2 -translate-x-1/2 w-44 h-20 border-t border-x border-white/30 pointer-events-none">
+                        <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-20 h-8 border-t border-x border-white/30" />
+                      </div>
+
+                      {/* Team Name Watermarks */}
+                      <div className="absolute top-4 left-4 text-[10px] font-mono font-black text-white/40 tracking-wider uppercase pointer-events-none">
+                        {opponentTeamName} ({opponentProfile.preferredFormation})
+                      </div>
+                      <div className="absolute bottom-4 right-4 text-[10px] font-mono font-black text-cyan-300/40 tracking-wider uppercase pointer-events-none">
+                        PERSIB BANDUNG (4-2-3-1)
+                      </div>
+
+                      {/* Center Ball ⚽ */}
+                      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
+                        <span className="inline-block text-base filter drop-shadow-md animate-bounce">
+                          ⚽
+                        </span>
+                      </div>
+
+                      {/* Dual Bentrok Mode: Renders Both Persib & Opponent XI */}
+                      {(taktikClashMode === 'dual' || taktikClashMode === 'opponent') &&
+                        opponentSquadData.startingXI.map((opp) => {
+                          const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
+                          // Calculate position on upper half (bottom: 54% to 92%)
+                          const posX = opp.pitchX !== undefined ? opp.pitchX : 75;
+                          const posY = opp.pitchY !== undefined ? opp.pitchY : 50;
+
+                          return (
+                            <div
+                              key={opp.id}
+                              onClick={() => setSelectedPlayer(oppAsPlayer)}
+                              style={{ bottom: `${posX}%`, left: `${posY}%` }}
+                              className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-10 transition-transform active:scale-90"
+                            >
+                              <div className="relative">
+                                <div className="w-8 h-8 rounded-full border-2 border-red-500 overflow-hidden shadow-lg bg-slate-900 group-hover:scale-110 transition-transform">
+                                  <img
+                                    src={opp.avatarUrl}
+                                    alt={opp.name}
+                                    referrerPolicy="no-referrer"
+                                    className="w-full h-full object-cover object-top"
+                                    onError={(e) => {
+                                      (e.currentTarget as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                                        opp.name
+                                      )}&background=dc2626&color=ffffff&bold=true`;
+                                    }}
+                                  />
+                                </div>
+                                <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-red-600 text-white font-mono font-black text-[8px] flex items-center justify-center border border-white">
+                                  {opp.number}
+                                </span>
+                              </div>
+                              <span className="mt-0.5 px-1.5 py-0.2 rounded bg-black/75 backdrop-blur-xs text-[8px] font-bold text-white whitespace-nowrap shadow-xs">
+                                {opp.name.split(' ').slice(0, 2).join(' ')}
+                              </span>
+                            </div>
+                          );
+                        })}
+
+                      {/* Persib XI on lower half (bottom: 6% to 46%) */}
+                      {(taktikClashMode === 'dual' || taktikClashMode === 'persib') &&
+                        (currentTacticalPhase.playerPositions && currentTacticalPhase.playerPositions.length > 0
+                          ? currentTacticalPhase.playerPositions
+                          : [
+                              { id: 'p-gk', name: 'Teja Paku Alam', number: 14, role: 'GK', x: 8, y: 50 },
+                              { id: 'p-rb', name: 'Kakang Rudianto', number: 5, role: 'RB', x: 20, y: 82 },
+                              { id: 'p-cb1', name: 'Patricio Matricardi', number: 4, role: 'CB', x: 16, y: 62 },
+                              { id: 'p-cb2', name: 'Federico Barba', number: 3, role: 'CB', x: 16, y: 38 },
+                              { id: 'p-lb', name: 'Edo Febriansah', number: 97, role: 'LB', x: 20, y: 18 },
+                              { id: 'p-dm1', name: 'Thom Haye', number: 33, role: 'DM', x: 30, y: 60 },
+                              { id: 'p-dm2', name: 'Marc Klok', number: 23, role: 'DM', x: 30, y: 40 },
+                              { id: 'p-rw', name: 'Febri Hariyadi', number: 13, role: 'RW', x: 42, y: 82 },
+                              { id: 'p-am', name: 'Tyronne del Pino', number: 10, role: 'AM', x: 40, y: 50 },
+                              { id: 'p-lw', name: 'Beckham Putra', number: 7, role: 'LW', x: 42, y: 18 },
+                              { id: 'p-cf', name: 'David da Silva', number: 19, role: 'CF', x: 47, y: 50 },
+                            ]
+                        ).map((pos) => {
+                          const fullPlayer = players.find(
+                            (p) => p.number === pos.number || p.name.toLowerCase().includes(pos.name.toLowerCase())
+                          );
+
+                          return (
+                            <TacticalPlayerNode
+                              key={pos.id}
+                              pos={pos}
+                              fullPlayer={fullPlayer}
+                              onSelectPlayer={setSelectedPlayer}
+                            />
+                          );
+                        })}
+                    </div>
+
+                    <div className="text-center">
+                      <span className="text-[10px] font-mono text-slate-500 dark:text-slate-400">
+                        💡 Ketuk avatar pemain mana pun di atas lapangan untuk membuka lembar analisis mendalam
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Tab 5: Detailed Match Statistics & Live Momentum Timeline */}
+                {heroDetailTab === 'stats' && (
+                  <div className="space-y-3.5">
+                    {/* Live Momentum Timeline Bar Chart */}
+                    {currentFixture.liveMomentumTimeline && currentFixture.liveMomentumTimeline.length > 0 && (
+                      <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-1.5 text-xs font-black">
+                            <TrendingUp className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
+                            <span>Grafik Momentum Tekanan Laga (90 Menit)</span>
+                          </div>
+                          <div className="flex items-center gap-2 text-[9px] font-mono font-bold">
+                            <span className="flex items-center gap-1 text-blue-600 dark:text-cyan-400">
+                              <span className="w-2 h-2 rounded-full bg-blue-600" />
+                              Persib
+                            </span>
+                            <span className="flex items-center gap-1 text-red-500">
+                              <span className="w-2 h-2 rounded-full bg-red-500" />
+                              {opponentTeamName}
+                            </span>
+                          </div>
+                        </div>
+
+                        {/* Momentum Bars */}
+                        <div className="h-24 w-full flex items-center justify-between gap-0.5 pt-4 pb-2 border-b border-slate-200 dark:border-slate-800 relative">
+                          {/* Center Zero Line */}
+                          <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-300 dark:bg-slate-700 pointer-events-none" />
+
+                          {currentFixture.liveMomentumTimeline.map((pt, pIdx) => {
+                            const diff = pt.persibPressure - pt.opponentPressure;
+                            const isPositive = diff >= 0;
+                            const heightPct = Math.min(100, Math.max(20, Math.abs(diff)));
+
+                            return (
+                              <div
+                                key={pIdx}
+                                title={`Menit ${pt.minute}': ${pt.highlight || (isPositive ? `Persib Menekan (${pt.persibPressure}%)` : `${opponentTeamName} Menekan (${pt.opponentPressure}%)`)}`}
+                                className="flex-1 flex flex-col items-center justify-center h-full relative group cursor-pointer"
+                              >
+                                {pt.highlight && (
+                                  <span className="absolute -top-3 text-[10px] animate-bounce z-10">
+                                    {pt.highlight.includes('Gol') ? '⚽' : pt.highlight.includes('Kartu') ? '🟨' : '⚡'}
+                                  </span>
+                                )}
+                                <div className="h-full w-full flex flex-col justify-center">
+                                  {isPositive ? (
+                                    <div className="h-1/2 flex items-end">
+                                      <div
+                                        className="w-full bg-blue-600 group-hover:bg-cyan-400 rounded-t-xs transition-all"
+                                        style={{ height: `${heightPct}%` }}
+                                      />
+                                    </div>
+                                  ) : (
+                                    <div className="h-1/2 flex items-start">
+                                      <div
+                                        className="w-full bg-red-500 group-hover:bg-red-400 rounded-b-xs transition-all"
+                                        style={{ height: `${heightPct}%` }}
+                                      />
+                                    </div>
+                                  )}
+                                </div>
+                              </div>
+                            );
+                          })}
+                        </div>
+
+                        <div className="flex items-center justify-between text-[9px] font-mono text-slate-400">
+                          <span>0&apos; Kick-Off</span>
+                          <span>45&apos; HT</span>
+                          <span>90&apos; Full-Time</span>
+                        </div>
+                      </div>
+                    )}
+
+                    {/* Sofascore Dual-Bar Comparison */}
                     {currentFixture.statsSummary ? (
                       <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-3">
                         {/* Club Headers */}
@@ -778,7 +1551,7 @@ export function MatchCenter() {
                   </div>
                 )}
 
-                {/* Tab 3: Tactical Highlights & Knowledge Notes */}
+                {/* Tab 6: Tactical Highlights & Knowledge Notes */}
                 {heroDetailTab === 'highlights' && (
                   <div className="space-y-2">
                     {currentFixture.highlights && currentFixture.highlights.length > 0 ? (
@@ -1308,73 +2081,122 @@ export function MatchCenter() {
                 : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
             }`}
           >
+            {/* 3-Way Tactical Mode Switcher */}
+            <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 mb-3 text-center">
+              <button
+                type="button"
+                onClick={() => setTaktikClashMode('dual')}
+                className={`py-2 px-1 rounded-xl text-[10px] font-black transition-all ${
+                  taktikClashMode === 'dual'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                ⚡ Bentrok Dual Formasi
+              </button>
+              <button
+                type="button"
+                onClick={() => setTaktikClashMode('persib')}
+                className={`py-2 px-1 rounded-xl text-[10px] font-black transition-all ${
+                  taktikClashMode === 'persib'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                🔵 Persib 4-2-3-1
+              </button>
+              <button
+                type="button"
+                onClick={() => setTaktikClashMode('opponent')}
+                className={`py-2 px-1 rounded-xl text-[10px] font-black transition-all truncate ${
+                  taktikClashMode === 'opponent'
+                    ? 'bg-blue-600 text-white shadow-sm'
+                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                }`}
+              >
+                🔴 {opponentTeamName}
+              </button>
+            </div>
+
             {/* Header Formasi & Telemetry */}
             <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 flex-wrap">
                   <h3 className="text-xs sm:text-sm font-black tracking-tight text-slate-950 dark:text-white whitespace-nowrap">
-                    Formasi Visual 4-2-3-1
+                    {taktikClashMode === 'dual'
+                      ? `Bentrok Taktikal: Persib (4-2-3-1) vs ${opponentTeamName} (${opponentProfile.preferredFormation})`
+                      : taktikClashMode === 'opponent'
+                      ? `Formasi ${opponentTeamName}: ${opponentProfile.preferredFormation}`
+                      : 'Formasi Visual 4-2-3-1 Persib Bandung'}
                   </h3>
                   <span className="px-2 py-0.5 rounded-full bg-blue-600/15 border border-blue-600/30 text-blue-700 dark:text-cyan-300 font-mono text-[9px] font-black uppercase whitespace-nowrap">
-                    Igor Tolic
+                    {taktikClashMode === 'opponent' ? opponentProfile.headCoach : 'Igor Tolic'}
                   </span>
                 </div>
                 <p className="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 truncate">
-                  Posisi spasial & pergerakan taktis real-time per detik
+                  {taktikClashMode === 'dual'
+                    ? 'Konfrontasi spasial 22 pemain utama dengan verified avatar transfermarkt & klub'
+                    : 'Posisi spasial & pergerakan taktis real-time per detik'}
                 </p>
               </div>
 
               {/* Tactical Phase Telemetry Badge */}
-              <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold shrink-0">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400" />
-                <span>Fase {activeTacticalStep}/3</span>
-              </div>
+              {taktikClashMode === 'persib' && (
+                <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-700 dark:text-slate-300 text-[10px] font-mono font-bold shrink-0">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 dark:bg-cyan-400" />
+                  <span>Fase {activeTacticalStep}/3</span>
+                </div>
+              )}
             </div>
 
-            {/* Tactical Phase Selector Tabs */}
-            <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 mb-3 text-center">
-              {[
-                { step: 1, label: 'Fase 1: Build-Up' },
-                { step: 2, label: 'Fase 2: Flank Overload' },
-                { step: 3, label: 'Fase 3: Box Finishing' },
-              ].map((phase) => (
-                <button
-                  key={phase.step}
-                  type="button"
-                  onClick={() => {
-                    setIsTacticsPlaying(false);
-                    setActiveTacticalStep(phase.step);
-                  }}
-                  className={`py-1.5 px-2 rounded-xl text-[10px] font-black transition-all ${
-                    activeTacticalStep === phase.step
-                      ? 'bg-blue-600 text-white shadow-sm'
-                      : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
-                  }`}
-                >
-                  {phase.label}
-                </button>
-              ))}
-            </div>
+            {/* Tactical Phase Selector Tabs (Only when Persib formation mode) */}
+            {taktikClashMode === 'persib' && (
+              <div className="grid grid-cols-3 gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 mb-3 text-center">
+                {[
+                  { step: 1, label: 'Fase 1: Build-Up' },
+                  { step: 2, label: 'Fase 2: Flank Overload' },
+                  { step: 3, label: 'Fase 3: Box Finishing' },
+                ].map((phase) => (
+                  <button
+                    key={phase.step}
+                    type="button"
+                    onClick={() => {
+                      setIsTacticsPlaying(false);
+                      setActiveTacticalStep(phase.step);
+                    }}
+                    className={`py-1.5 px-2 rounded-xl text-[10px] font-black transition-all ${
+                      activeTacticalStep === phase.step
+                        ? 'bg-blue-600 text-white shadow-sm'
+                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    }`}
+                  >
+                    {phase.label}
+                  </button>
+                ))}
+              </div>
+            )}
 
             {/* Tactical Phase Briefing Card */}
-            <div
-              className={`p-2.5 rounded-2xl border text-xs mb-3 transition-all ${
-                isPro
-                  ? 'bg-blue-950/20 border-blue-900/50 text-cyan-200'
-                  : 'bg-blue-50/70 border-blue-200 text-blue-950'
-              }`}
-            >
-              <div className="flex items-center gap-1.5 font-bold text-[11px] text-blue-600 dark:text-cyan-400">
-                <Activity className="w-3.5 h-3.5" />
-                <span>{currentTacticalPhase.label}</span>
+            {taktikClashMode === 'persib' && (
+              <div
+                className={`p-2.5 rounded-2xl border text-xs mb-3 transition-all ${
+                  isPro
+                    ? 'bg-blue-950/20 border-blue-900/50 text-cyan-200'
+                    : 'bg-blue-50/70 border-blue-200 text-blue-950'
+                }`}
+              >
+                <div className="flex items-center gap-1.5 font-bold text-[11px] text-blue-600 dark:text-cyan-400">
+                  <Activity className="w-3.5 h-3.5" />
+                  <span>{currentTacticalPhase.label}</span>
+                </div>
+                <p className="text-[10px] mt-1 text-slate-600 dark:text-slate-300 leading-relaxed">
+                  {currentTacticalPhase.description}
+                </p>
               </div>
-              <p className="text-[10px] mt-1 text-slate-600 dark:text-slate-300 leading-relaxed">
-                {currentTacticalPhase.description}
-              </p>
-            </div>
+            )}
 
             {/* 2D Green Football Pitch Canvas */}
-            <div className="relative w-full h-[450px] rounded-2xl bg-gradient-to-b from-emerald-950 via-emerald-800 to-emerald-950 border-2 border-emerald-500/50 overflow-hidden shadow-inner select-none">
+            <div className="relative w-full h-[520px] rounded-2xl bg-gradient-to-b from-emerald-950 via-emerald-800 to-emerald-950 border-2 border-emerald-500/50 overflow-hidden shadow-inner select-none">
               {/* Pitch Grass Stripes */}
               <div className="absolute inset-0 flex flex-col pointer-events-none opacity-20">
                 <div className="flex-1 bg-white/5" />
@@ -1386,13 +2208,8 @@ export function MatchCenter() {
               </div>
 
               {/* Pitch White Markings */}
-              {/* Outer Inset Border */}
               <div className="absolute inset-2 border border-white/30 rounded-xl pointer-events-none" />
-
-              {/* Halfway Line */}
               <div className="absolute top-1/2 left-2 right-2 h-[1px] bg-white/30 pointer-events-none" />
-
-              {/* Center Circle */}
               <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-20 h-20 rounded-full border border-white/30 pointer-events-none flex items-center justify-center">
                 <div className="w-1.5 h-1.5 rounded-full bg-white/50" />
               </div>
@@ -1407,153 +2224,342 @@ export function MatchCenter() {
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-20 h-8 border-t border-x border-white/30" />
               </div>
 
-              {/* Gliding Animated Football ⚽ */}
-              {currentTacticalPhase.ballPos && (
-                <div
-                  className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ease-out z-20 pointer-events-none"
-                  style={{
-                    bottom: `${currentTacticalPhase.ballPos.x}%`,
-                    left: `${currentTacticalPhase.ballPos.y}%`,
-                  }}
-                >
-                  <span className="inline-block text-base filter drop-shadow-md animate-bounce">
-                    ⚽
-                  </span>
-                </div>
-              )}
+              {/* Watermarks */}
+              <div className="absolute top-4 left-4 text-[10px] font-mono font-black text-white/40 tracking-wider uppercase pointer-events-none">
+                {opponentTeamName} ({opponentProfile.preferredFormation})
+              </div>
+              <div className="absolute bottom-4 right-4 text-[10px] font-mono font-black text-cyan-300/40 tracking-wider uppercase pointer-events-none">
+                PERSIB BANDUNG (4-2-3-1)
+              </div>
 
-              {/* 11 Starting Players Position Nodes with Verified Profile Photos */}
-              {currentTacticalPhase.playerPositions?.map((pos) => {
-                const fullPlayer = players.find(
-                  (p) => p.number === pos.number || p.name.toLowerCase().includes(pos.name.toLowerCase())
-                );
+              {/* Animated or Centered Football ⚽ */}
+              <div
+                className="absolute -translate-x-1/2 -translate-y-1/2 transition-all duration-700 ease-out z-20 pointer-events-none"
+                style={{
+                  bottom: taktikClashMode === 'persib' && currentTacticalPhase.ballPos ? `${currentTacticalPhase.ballPos.x}%` : '50%',
+                  left: taktikClashMode === 'persib' && currentTacticalPhase.ballPos ? `${currentTacticalPhase.ballPos.y}%` : '50%',
+                }}
+              >
+                <span className="inline-block text-base filter drop-shadow-md animate-bounce">
+                  ⚽
+                </span>
+              </div>
 
-                return (
-                  <TacticalPlayerNode
-                    key={pos.id}
-                    pos={pos}
-                    fullPlayer={fullPlayer}
-                    onSelectPlayer={setSelectedPlayer}
-                  />
-                );
-              })}
+              {/* Opponent Starting XI Nodes (Upper Half) */}
+              {(taktikClashMode === 'dual' || taktikClashMode === 'opponent') &&
+                opponentSquadData.startingXI.map((opp) => {
+                  const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
+                  const posX = opp.pitchX !== undefined ? opp.pitchX : 75;
+                  const posY = opp.pitchY !== undefined ? opp.pitchY : 50;
+
+                  return (
+                    <div
+                      key={opp.id}
+                      onClick={() => setSelectedPlayer(oppAsPlayer)}
+                      style={{ bottom: `${posX}%`, left: `${posY}%` }}
+                      className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-10 transition-transform active:scale-90"
+                    >
+                      <div className="relative">
+                        <div className="w-8 h-8 rounded-full border-2 border-red-500 overflow-hidden shadow-lg bg-slate-900 group-hover:scale-110 transition-transform">
+                          <img
+                            src={opp.avatarUrl}
+                            alt={opp.name}
+                            referrerPolicy="no-referrer"
+                            className="w-full h-full object-cover object-top"
+                            onError={(e) => {
+                              (e.currentTarget as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(
+                                opp.name
+                              )}&background=dc2626&color=ffffff&bold=true`;
+                            }}
+                          />
+                        </div>
+                        <span className="absolute -bottom-1 -right-1 w-4 h-4 rounded-full bg-red-600 text-white font-mono font-black text-[8px] flex items-center justify-center border border-white">
+                          {opp.number}
+                        </span>
+                      </div>
+                      <span className="mt-0.5 px-1.5 py-0.2 rounded bg-black/75 backdrop-blur-xs text-[8px] font-bold text-white whitespace-nowrap shadow-xs">
+                        {opp.name.split(' ').slice(0, 2).join(' ')}
+                      </span>
+                    </div>
+                  );
+                })}
+
+              {/* Persib 11 Starting Players Position Nodes */}
+              {(taktikClashMode === 'dual' || taktikClashMode === 'persib') &&
+                (currentTacticalPhase.playerPositions && currentTacticalPhase.playerPositions.length > 0
+                  ? currentTacticalPhase.playerPositions
+                  : [
+                      { id: 'p-gk', name: 'Teja Paku Alam', number: 14, role: 'GK', x: 8, y: 50 },
+                      { id: 'p-rb', name: 'Kakang Rudianto', number: 5, role: 'RB', x: 20, y: 82 },
+                      { id: 'p-cb1', name: 'Patricio Matricardi', number: 4, role: 'CB', x: 16, y: 62 },
+                      { id: 'p-cb2', name: 'Federico Barba', number: 3, role: 'CB', x: 16, y: 38 },
+                      { id: 'p-lb', name: 'Edo Febriansah', number: 97, role: 'LB', x: 20, y: 18 },
+                      { id: 'p-dm1', name: 'Thom Haye', number: 33, role: 'DM', x: 30, y: 60 },
+                      { id: 'p-dm2', name: 'Marc Klok', number: 23, role: 'DM', x: 30, y: 40 },
+                      { id: 'p-rw', name: 'Febri Hariyadi', number: 13, role: 'RW', x: 42, y: 82 },
+                      { id: 'p-am', name: 'Tyronne del Pino', number: 10, role: 'AM', x: 40, y: 50 },
+                      { id: 'p-lw', name: 'Beckham Putra', number: 7, role: 'LW', x: 42, y: 18 },
+                      { id: 'p-cf', name: 'David da Silva', number: 19, role: 'CF', x: 47, y: 50 },
+                    ]
+                ).map((pos) => {
+                  const fullPlayer = players.find(
+                    (p) => p.number === pos.number || p.name.toLowerCase().includes(pos.name.toLowerCase())
+                  );
+
+                  return (
+                    <TacticalPlayerNode
+                      key={pos.id}
+                      pos={pos}
+                      fullPlayer={fullPlayer}
+                      onSelectPlayer={setSelectedPlayer}
+                    />
+                  );
+                })}
             </div>
 
             <div className="mt-2.5 text-center">
               <span className="text-[10px] font-mono text-slate-600 dark:text-slate-400">
-                💡 Ketuk foto pemain di lapangan untuk melihat profil medis & statistik lengkap
+                💡 Ketuk foto pemain mana pun di lapangan untuk membuka lembar analisis mendalam
               </span>
             </div>
           </div>
 
-          {/* 11 Pemain Pertama (Starting XI) & Substitutes Card */}
-          <div
-            className={`rounded-[32px] border p-5 shadow-xl transition-all ${
-              isPro
-                ? 'bg-[#121620] border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.5)]'
-                : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
-            }`}
-          >
-            <div className="pb-3 border-b border-slate-200 dark:border-slate-800 mb-4">
-              <h3 className="text-sm font-black tracking-tight">Daftar Skuad & Rating Fisik</h3>
-              <p className="text-[11px] text-slate-400 mt-0.5">
-                Head Coach: <strong className="text-blue-600 dark:text-cyan-400">Igor Tolic</strong> • Starting XI & Rotasi
-              </p>
-            </div>
-
-            <div className="space-y-4">
-              {/* Starting XI Section */}
-              <div>
-                <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-amber-500 flex items-center justify-between">
-                  <span>11 Pemain Pertama (Starting XI)</span>
-                  <span className="text-emerald-500 font-bold">100% Siap Tempur</span>
-                </h4>
-                <div className="space-y-2">
-                  {startingXI.map((player: Player) => (
-                    <div
-                      key={player.id}
-                      onClick={() => setSelectedPlayer(player)}
-                      className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
-                        isPro
-                          ? 'bg-slate-900/80 border-slate-800 hover:border-cyan-400/50'
-                          : 'bg-slate-50 border-slate-200 hover:border-blue-600 shadow-xs'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <PlayerAvatar
-                          name={player.name}
-                          number={player.number}
-                          avatarUrl={player.avatarUrl}
-                          position={player.position}
-                          isStarting={true}
-                          size="md"
-                        />
-                        <div>
-                          <div className="text-xs font-black">{player.name}</div>
-                          <div className="text-[10px] text-slate-400 font-medium">
-                            <span className="font-mono font-bold text-blue-600 dark:text-cyan-400">
-                              {player.position}
-                            </span>{' '}
-                            • {player.nationality} • {player.marketValue}
-                          </div>
-                        </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-mono text-emerald-500 font-bold">
-                          {player.fitness.percentage}% Fit
-                        </span>
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
-                      </div>
-                    </div>
-                  ))}
+          {/* Skuad Lawan (Starting XI & Substitutes) Card when in dual or opponent mode */}
+          {(taktikClashMode === 'dual' || taktikClashMode === 'opponent') && (
+            <div
+              className={`rounded-[32px] border p-5 shadow-xl transition-all ${
+                isPro
+                  ? 'bg-[#121620] border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.5)]'
+                  : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
+              }`}
+            >
+              <div className="pb-3 border-b border-slate-200 dark:border-slate-800 mb-4 flex items-center justify-between">
+                <div>
+                  <h3 className="text-sm font-black tracking-tight text-red-500">
+                    Daftar Skuad Resmi: {opponentTeamName}
+                  </h3>
+                  <p className="text-[11px] text-slate-400 mt-0.5">
+                    Pelatih: <strong className="text-red-400">{opponentProfile.headCoach}</strong> • Formasi: {opponentProfile.preferredFormation}
+                  </p>
                 </div>
+                <span className="text-[10px] font-mono px-2.5 py-0.5 rounded-full bg-red-500/15 text-red-600 dark:text-red-400 font-black">
+                  Nilai Skuad {opponentProfile.squadMarketValue}
+                </span>
               </div>
 
-              {/* Substitutes Section */}
-              <div>
-                <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-slate-400">
-                  Pemain Pengganti & Rotasi (Substitutes)
-                </h4>
-                <div className="space-y-2">
-                  {substitutes.map((player: Player) => (
-                    <div
-                      key={player.id}
-                      onClick={() => setSelectedPlayer(player)}
-                      className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
-                        isPro
-                          ? 'bg-slate-900/40 border-slate-800/80 hover:border-slate-700'
-                          : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <PlayerAvatar
-                          name={player.name}
-                          number={player.number}
-                          avatarUrl={player.avatarUrl}
-                          position={player.position}
-                          isStarting={false}
-                          size="md"
-                        />
-                        <div>
-                          <div className="text-xs font-bold">{player.name}</div>
-                          <div className="text-[10px] text-slate-400 font-medium">
-                            <span className="font-mono font-bold text-slate-500">{player.position}</span> •{' '}
-                            {player.nationality}
+              <div className="space-y-4">
+                {/* Starting XI Section */}
+                <div>
+                  <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-red-500 flex items-center justify-between">
+                    <span>11 Pemain Pertama (Starting XI)</span>
+                    <span className="text-emerald-500 font-bold">Terverifikasi Kick-Off</span>
+                  </h4>
+                  <div className="space-y-2">
+                    {opponentSquadData.startingXI.map((opp) => {
+                      const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
+                      return (
+                        <div
+                          key={opp.id}
+                          onClick={() => setSelectedPlayer(oppAsPlayer)}
+                          className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
+                            isPro
+                              ? 'bg-slate-900/80 border-slate-800 hover:border-red-500/50'
+                              : 'bg-slate-50 border-slate-200 hover:border-red-500 shadow-xs'
+                          }`}
+                        >
+                          <div className="flex items-center gap-3">
+                            <PlayerAvatar
+                              name={opp.name}
+                              number={opp.number}
+                              avatarUrl={opp.avatarUrl}
+                              position={opp.position.includes('GK') ? 'GK' : opp.position.includes('DF') ? 'DF' : opp.position.includes('MF') ? 'MF' : 'FW'}
+                              isStarting={true}
+                              size="md"
+                            />
+                            <div>
+                              <div className="text-xs font-black">{opp.name}</div>
+                              <div className="text-[10px] text-slate-400 font-medium">
+                                <span className="font-mono font-bold text-red-500">
+                                  {opp.position}
+                                </span>{' '}
+                                • {opp.nationality} • {opp.tacticalRole || opp.marketValue}
+                              </div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-[11px] font-mono text-emerald-500 font-bold">
+                              {opp.fitnessPercentage || 100}% Fit
+                            </span>
+                            <ChevronRight className="w-4 h-4 text-slate-400" />
                           </div>
                         </div>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-mono text-emerald-500 font-bold">
-                          {player.fitness.percentage}% Fit
-                        </span>
-                        <ChevronRight className="w-4 h-4 text-slate-400" />
-                      </div>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Opponent Substitutes Section */}
+                {opponentSquadData.substitutes.length > 0 && (
+                  <div>
+                    <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-slate-400">
+                      Pemain Cadangan & Rotasi ({opponentSquadData.substitutes.length} Pemain)
+                    </h4>
+                    <div className="space-y-2">
+                      {opponentSquadData.substitutes.map((opp) => {
+                        const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
+                        return (
+                          <div
+                            key={opp.id}
+                            onClick={() => setSelectedPlayer(oppAsPlayer)}
+                            className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
+                              isPro
+                                ? 'bg-slate-900/40 border-slate-800/80 hover:border-slate-700'
+                                : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
+                            }`}
+                          >
+                            <div className="flex items-center gap-3">
+                              <PlayerAvatar
+                                name={opp.name}
+                                number={opp.number}
+                                avatarUrl={opp.avatarUrl}
+                                position={opp.position.includes('GK') ? 'GK' : opp.position.includes('DF') ? 'DF' : opp.position.includes('MF') ? 'MF' : 'FW'}
+                                isStarting={false}
+                                size="md"
+                              />
+                              <div>
+                                <div className="text-xs font-bold">{opp.name}</div>
+                                <div className="text-[10px] text-slate-400 font-medium">
+                                  <span className="font-mono font-bold text-slate-500">{opp.position}</span> •{' '}
+                                  {opp.nationality}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="flex items-center gap-2">
+                              <span className="text-[11px] font-mono text-emerald-500 font-bold">
+                                {opp.fitnessPercentage || 100}% Fit
+                              </span>
+                              <ChevronRight className="w-4 h-4 text-slate-400" />
+                            </div>
+                          </div>
+                        );
+                      })}
                     </div>
-                  ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
+
+          {/* 11 Pemain Pertama (Starting XI) & Substitutes Card (Persib) */}
+          {(taktikClashMode === 'dual' || taktikClashMode === 'persib') && (
+            <div
+              className={`rounded-[32px] border p-5 shadow-xl transition-all ${
+                isPro
+                  ? 'bg-[#121620] border-slate-800 shadow-[0_12px_40px_rgba(0,0,0,0.5)]'
+                  : 'bg-white border-slate-200 shadow-[0_12px_35px_rgba(0,0,0,0.06)]'
+              }`}
+            >
+              <div className="pb-3 border-b border-slate-200 dark:border-slate-800 mb-4">
+                <h3 className="text-sm font-black tracking-tight text-blue-600 dark:text-cyan-400">Daftar Skuad & Rating Fisik: PERSIB BANDUNG</h3>
+                <p className="text-[11px] text-slate-400 mt-0.5">
+                  Head Coach: <strong className="text-blue-600 dark:text-cyan-400">Igor Tolic</strong> • Starting XI & Rotasi
+                </p>
+              </div>
+
+              <div className="space-y-4">
+                {/* Starting XI Section */}
+                <div>
+                  <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-amber-500 flex items-center justify-between">
+                    <span>11 Pemain Pertama (Starting XI)</span>
+                    <span className="text-emerald-500 font-bold">100% Siap Tempur</span>
+                  </h4>
+                  <div className="space-y-2">
+                    {startingXI.map((player: Player) => (
+                      <div
+                        key={player.id}
+                        onClick={() => setSelectedPlayer(player)}
+                        className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
+                          isPro
+                            ? 'bg-slate-900/80 border-slate-800 hover:border-cyan-400/50'
+                            : 'bg-slate-50 border-slate-200 hover:border-blue-600 shadow-xs'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <PlayerAvatar
+                            name={player.name}
+                            number={player.number}
+                            avatarUrl={player.avatarUrl}
+                            position={player.position}
+                            isStarting={true}
+                            size="md"
+                          />
+                          <div>
+                            <div className="text-xs font-black">{player.name}</div>
+                            <div className="text-[10px] text-slate-400 font-medium">
+                              <span className="font-mono font-bold text-blue-600 dark:text-cyan-400">
+                                {player.position}
+                              </span>{' '}
+                              • {player.nationality} • {player.marketValue}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-mono text-emerald-500 font-bold">
+                            {player.fitness.percentage}% Fit
+                          </span>
+                          <ChevronRight className="w-4 h-4 text-slate-400" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Substitutes Section */}
+                <div>
+                  <h4 className="text-[10px] font-mono font-black uppercase tracking-wider mb-2 text-slate-400">
+                    Pemain Pengganti & Rotasi (Substitutes)
+                  </h4>
+                  <div className="space-y-2">
+                    {substitutes.map((player: Player) => (
+                      <div
+                        key={player.id}
+                        onClick={() => setSelectedPlayer(player)}
+                        className={`flex items-center justify-between p-2.5 sm:p-3 rounded-2xl border cursor-pointer active:scale-[0.98] transition-all ${
+                          isPro
+                            ? 'bg-slate-900/40 border-slate-800/80 hover:border-slate-700'
+                            : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <PlayerAvatar
+                            name={player.name}
+                            number={player.number}
+                            avatarUrl={player.avatarUrl}
+                            position={player.position}
+                            isStarting={false}
+                            size="md"
+                          />
+                          <div>
+                            <div className="text-xs font-bold">{player.name}</div>
+                            <div className="text-[10px] text-slate-400 font-medium">
+                              <span className="font-mono font-bold text-slate-500">{player.position}</span> •{' '}
+                              {player.nationality}
+                            </div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] font-mono text-emerald-500 font-bold">
+                            {player.fitness.percentage}% Fit
+                          </span>
+                          <ChevronRight className="w-4 h-4 text-slate-400" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       )}
     </div>

@@ -103,6 +103,54 @@ export interface MatchStatsSummary {
   saves: [number, number];
 }
 
+export interface ClubPlayerProfile {
+  id: string;
+  name: string;
+  fullName?: string;
+  number: number;
+  position: string;
+  roleBadge?: string;
+  nationality: string;
+  marketValue: string;
+  avatarUrl?: string;
+  isStarting: boolean;
+  fitnessPercentage: number;
+  rating?: number;
+  keyStat: string;
+  tacticalRole?: string;
+  pitchX?: number; // 0-100 vertical position on pitch
+  pitchY?: number; // 0-100 horizontal position on pitch
+}
+
+export interface TacticalDuelMatchup {
+  id: string;
+  title: string;
+  zone: string;
+  persibPlayer: {
+    name: string;
+    number: number;
+    position: string;
+    rating: number;
+    avatarUrl?: string;
+  };
+  opponentPlayer: {
+    name: string;
+    number: number;
+    position: string;
+    rating: number;
+    avatarUrl?: string;
+  };
+  keyInsight: string;
+  winProbability: [number, number]; // [persib %, opponent %]
+}
+
+export interface LiveMomentumPoint {
+  minute: number;
+  persibPressure: number; // 0 - 100
+  opponentPressure: number; // 0 - 100
+  highlight?: string;
+}
+
 export interface MatchFixture {
   id: string;
   tournament: string;
@@ -124,6 +172,16 @@ export interface MatchFixture {
   events?: Array<{ minute: string; type: 'goal' | 'card' | 'sub' | 'chance'; text: string }>;
   detailedEvents?: MatchEventItem[];
   statsSummary?: MatchStatsSummary;
+  opponentSquad?: {
+    startingXI: ClubPlayerProfile[];
+    substitutes: ClubPlayerProfile[];
+  };
+  persibLineup?: {
+    startingXI: ClubPlayerProfile[];
+    substitutes: ClubPlayerProfile[];
+  };
+  tacticalDuels?: TacticalDuelMatchup[];
+  liveMomentumTimeline?: LiveMomentumPoint[];
 }
 
 export interface LeagueStandingRow {
