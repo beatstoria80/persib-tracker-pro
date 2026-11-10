@@ -1,76 +1,102 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { Sparkles, ArrowRight } from 'lucide-react';
+import { Sparkles, ArrowRight, Play } from 'lucide-react';
 
 interface VideoLoadingSplashProps {
   onFinish?: () => void;
-  minDurationMs?: number;
 }
 
-export function VideoLoadingSplash({ onFinish, minDurationMs = 3200 }: VideoLoadingSplashProps) {
+export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const [isFading, setIsFading] = useState<boolean>(false);
+  const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [progress, setProgress] = useState<number>(0);
+  const [autoplayBlocked, setAutoplayBlocked] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleDismiss = useCallback(() => {
+    if (isFading) return;
     setIsFading(true);
-
-    // Safely remove native raw preloader if still present in DOM
-    const rawSplash = document.getElementById('pwa-native-splash');
-    if (rawSplash) {
-      rawSplash.style.transition = 'opacity 0.3s ease-out';
-      rawSplash.style.opacity = '0';
-      setTimeout(() => {
-        try {
-          rawSplash.remove();
-        } catch {
-          rawSplash.style.display = 'none';
-        }
-      }, 300);
-    }
-
     setTimeout(() => {
       setIsVisible(false);
       if (onFinish) onFinish();
-    }, 400);
-  }, [onFinish]);
+    }, 450);
+  }, [isFading, onFinish]);
+
+  const attemptPlay = useCallback(() => {
+    const v = videoRef.current;
+    if (!v) return;
+
+    // REFACTOR: Explicitly configure DOM properties to bypass mobile browser autoplay restrictions
+    v.muted = true;
+    v.defaultMuted = true;
+    v.playsInline = true;
+    v.playbackRate = 1.0;
+    v.defaultPlaybackRate = 1.0;
+    v.setAttribute('muted', '');
+    v.setAttribute('playsinline', '');
+    v.setAttribute('webkit-playsinline', '');
+
+    const playPromise = v.play();
+    if (playPromise !== undefined) {
+      playPromise
+        .then(() => {
+          setAutoplayBlocked(false);
+        })
+        .catch(() => {
+          // Autoplay restricted by mobile OS battery saver / user gesture requirement
+          setAutoplayBlocked(true);
+        });
+    }
+  }, []);
 
   useEffect(() => {
-    // REFACTOR: Explicitly enforce 1.0x native fast playback rate on mobile devices
-    if (videoRef.current) {
-      videoRef.current.playbackRate = 1.0;
-      videoRef.current.defaultPlaybackRate = 1.0;
-      const playPromise = videoRef.current.play();
-      if (playPromise && playPromise.catch) {
-        playPromise.catch(() => {
-          // Handled silently if mobile battery saver blocks autoplay
-        });
-      }
-    }
+    attemptPlay();
 
-    // Hide raw DOM preloader now that interactive React splash is running
-    const rawSplash = document.getElementById('pwa-native-splash');
-    if (rawSplash) {
-      rawSplash.style.display = 'none';
-    }
-
-    // High precision loading progress counter
-    const startTime = Date.now();
-    const interval = setInterval(() => {
-      const elapsed = Date.now() - startTime;
-      const pct = Math.min(100, Math.round((elapsed / minDurationMs) * 100));
-      setProgress(pct);
-
-      if (elapsed >= minDurationMs) {
-        clearInterval(interval);
+    // Safety fallback: If video fails to load after 8s, allow user to enter app
+    const fallbackTimer = setTimeout(() => {
+      if (!isPlaying) {
         handleDismiss();
       }
-    }, 40);
+    }, 8000);
 
-    return () => clearInterval(interval);
-  }, [minDurationMs, handleDismiss]);
+    return () => clearTimeout(fallbackTimer);
+  }, [attemptPlay, isPlaying, handleDismiss]);
+
+  const handleTimeUpdate = () => {
+    const v = videoRef.current;
+    if (!v || !v.duration) return;
+    const pct = Math.min(100, Math.round((v.currentTime / v.duration) * 100));
+    setProgress(pct);
+
+    // Dismiss when video is within 0.1s of completion
+    if (v.currentTime >= v.duration - 0.1) {
+      handleDismiss();
+    }
+  };
+
+  const handleVideoPlaying = () => {
+    setIsPlaying(true);
+    setAutoplayBlocked(false);
+  };
+
+  const handleManualPlayTap = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    const v = videoRef.current;
+    if (v) {
+      v.play()
+        .then(() => {
+          setIsPlaying(true);
+          setAutoplayBlocked(false);
+        })
+        .catch(() => {
+          handleDismiss();
+        });
+    } else {
+      handleDismiss();
+    }
+  };
 
   if (!isVisible) return null;
 
@@ -78,37 +104,55 @@ export function VideoLoadingSplash({ onFinish, minDurationMs = 3200 }: VideoLoad
     <div
       role="dialog"
       aria-label="Layar Pemuatan Persib Tracker"
-      className={`fixed inset-0 z-[99999] bg-[#002B7F] flex flex-col justify-between overflow-hidden select-none transition-opacity duration-400 ${
+      style={{ backgroundColor: '#002B7F' }}
+      className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none transition-opacity duration-500 ${
         isFading ? 'opacity-0 pointer-events-none' : 'opacity-100'
       }`}
       onClick={handleDismiss}
     >
-      {/* Background Fullscreen Video with Zero Dark Cast */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#002B7F]">
+      {/* Background Poster & Fallback (Guarantees zero black screen during video buffering) */}
+      <div
+        style={{ backgroundColor: '#002B7F' }}
+        className="absolute inset-0 w-full h-full flex flex-col items-center justify-center pointer-events-none"
+      >
+        <div className="relative flex flex-col items-center space-y-4">
+          <div className="w-20 h-20 rounded-full bg-blue-900/60 p-2 border-2 border-cyan-400/50 shadow-2xl flex items-center justify-center animate-pulse">
+            <img
+              src="/icon-192.png"
+              alt="PERSIB Crest"
+              className="w-16 h-16 object-contain filter drop-shadow-md"
+            />
+          </div>
+          <span className="text-[11px] font-mono font-black text-cyan-300 tracking-widest uppercase">
+            PERSIB TRACKER PRO 2026/27
+          </span>
+        </div>
+      </div>
+
+      {/* Fullscreen Video Player */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden bg-transparent">
         <video
           ref={videoRef}
           autoPlay
           muted
           playsInline
-          loop
           preload="auto"
-          onLoadedMetadata={() => {
-            if (videoRef.current) {
-              videoRef.current.playbackRate = 1.0;
-              videoRef.current.defaultPlaybackRate = 1.0;
-            }
-          }}
+          onPlaying={handleVideoPlaying}
+          onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
-          className="w-full h-full object-cover object-center filter brightness-105 contrast-105"
+          style={{ backgroundColor: '#002B7F' }}
+          className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
+            isPlaying ? 'opacity-100' : 'opacity-0'
+          }`}
         >
           <source src="/VideoLoading.mp4" type="video/mp4" />
           <source src="/Video loading.mp4" type="video/mp4" />
         </video>
-        {/* REFACTOR: Cyan/Royal Blue subtle gradient - Eliminates any dark pitch black cast */}
+        {/* Subtle Cyan/Royal Blue Gradient overlay (Zero dark tint) */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#002B7F]/60 via-transparent to-[#002B7F]/25 pointer-events-none" />
       </div>
 
-      {/* Top Bar: Skip Pill Button */}
+      {/* Top Header: Skip Pill Button */}
       <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 flex items-center justify-between">
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/80 backdrop-blur-md border border-cyan-400/40 text-cyan-300 text-[10px] font-mono font-black tracking-wider shadow-lg">
           <Sparkles className="w-3 h-3 text-cyan-400 animate-pulse" />
@@ -128,18 +172,32 @@ export function VideoLoadingSplash({ onFinish, minDurationMs = 3200 }: VideoLoad
         </button>
       </div>
 
-      {/* Bottom Telemetry & Progress Indicator */}
+      {/* Center Action: Play Button if Autoplay was restricted by mobile OS */}
+      {autoplayBlocked && !isPlaying && (
+        <div className="relative z-20 flex flex-col items-center justify-center p-4">
+          <button
+            type="button"
+            onClick={handleManualPlayTap}
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-cyan-400 text-blue-950 font-black text-xs shadow-2xl hover:scale-105 active:scale-95 transition-all"
+          >
+            <Play className="w-4 h-4 fill-current" />
+            <span>Putar Video Pembuka</span>
+          </button>
+        </div>
+      )}
+
+      {/* Bottom Telemetry & Real Video Progress Indicator */}
       <div className="relative z-10 w-full max-w-[430px] mx-auto p-6 flex flex-col items-center text-center space-y-3 pb-8 sm:pb-6">
         <div className="space-y-1">
           <h1 className="text-lg sm:text-xl font-black tracking-tight text-white drop-shadow-md">
             PERSIB TRACKER PRO
           </h1>
           <p className="text-xs text-cyan-200 font-medium tracking-wide drop-shadow-xs">
-            Memuat Intelegensi & Data Real-Time Klub...
+            {isPlaying ? 'Memutar Animasi Pembuka 1x...' : 'Menyiapkan Animasi Pembuka...'}
           </p>
         </div>
 
-        {/* Dynamic Progress Bar */}
+        {/* Dynamic Progress Bar bound to real video duration */}
         <div className="w-full max-w-xs space-y-1.5">
           <div className="h-1.5 w-full bg-blue-950/60 backdrop-blur-xs rounded-full overflow-hidden p-0.5 border border-cyan-400/30 shadow-inner">
             <div
@@ -148,7 +206,7 @@ export function VideoLoadingSplash({ onFinish, minDurationMs = 3200 }: VideoLoad
             />
           </div>
           <div className="flex items-center justify-between text-[9px] font-mono text-cyan-300 font-bold px-0.5">
-            <span>KECEPATAN STANDAR 1X</span>
+            <span>KECEPATAN 1.0X</span>
             <span>{progress}%</span>
           </div>
         </div>

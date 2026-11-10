@@ -51,59 +51,6 @@ export default function RootLayout({
         style={{ backgroundColor: "#002B7F", margin: 0, padding: 0 }}
         className="antialiased min-h-screen bg-[#002B7F]"
       >
-        {/* Instant Native PWA Video Preloader - Plays immediately at 1.0x from millisecond 0 without waiting for JS */}
-        <div
-          id="pwa-native-splash"
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100vw",
-            height: "100vh",
-            backgroundColor: "#002B7F",
-            zIndex: 99998,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            overflow: "hidden",
-          }}
-        >
-          <video
-            id="pwa-native-video"
-            autoPlay
-            muted
-            playsInline
-            loop
-            preload="auto"
-            style={{
-              width: "100%",
-              height: "100%",
-              objectFit: "cover",
-              objectPosition: "center",
-              backgroundColor: "#002B7F",
-            }}
-          >
-            <source src="/VideoLoading.mp4" type="video/mp4" />
-            <source src="/Video loading.mp4" type="video/mp4" />
-          </video>
-        </div>
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                try {
-                  var v = document.getElementById('pwa-native-video');
-                  if (v) {
-                    v.playbackRate = 1.0;
-                    v.defaultPlaybackRate = 1.0;
-                    var p = v.play();
-                    if (p && p.catch) { p.catch(function(){}); }
-                  }
-                } catch(e) {}
-              })();
-            `,
-          }}
-        />
         <ClubTrackerProvider>{children}</ClubTrackerProvider>
       </body>
     </html>

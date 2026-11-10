@@ -27,7 +27,7 @@ export default function HomePage() {
   return (
     <>
       {/* PWA Video Splash & Loading Screen on Smartphone Launch */}
-      <VideoLoadingSplash minDurationMs={2600} />
+      <VideoLoadingSplash />
 
       {/* Outer Container: Crisp framing with modern negative space */}
       <div
