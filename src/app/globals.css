@@ -30,3 +30,98 @@ body {
   -ms-overflow-style: none;
   scrollbar-width: none;
 }
+
+/* =========================================================================
+   AAA-TIER STAGGERED RISE TRANSITION ANIMATIONS (POST-SPLASH ENTRANCE)
+   ========================================================================= */
+
+@keyframes uiRiseUp {
+  0% {
+    opacity: 0;
+    transform: translateY(32px) scale(0.97);
+    filter: blur(5px);
+  }
+  65% {
+    opacity: 0.98;
+    transform: translateY(-2px) scale(1.004);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes uiHeaderDrop {
+  0% {
+    opacity: 0;
+    transform: translateY(-26px);
+    filter: blur(4px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0px);
+  }
+}
+
+@keyframes uiNavRise {
+  0% {
+    opacity: 0;
+    transform: translateY(40px) scale(0.92);
+    filter: blur(4px);
+  }
+  70% {
+    opacity: 1;
+    transform: translateY(-3px) scale(1.018);
+    filter: blur(0px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0px);
+  }
+}
+
+@keyframes subtleShimmerSheen {
+  0% {
+    box-shadow: 0 0 0 rgba(6, 182, 212, 0);
+  }
+  50% {
+    box-shadow: 0 0 30px rgba(6, 182, 212, 0.22);
+  }
+  100% {
+    box-shadow: 0 0 0 rgba(6, 182, 212, 0);
+  }
+}
+
+/* Staggered Element Classes for Smooth Cinematic Entrance */
+.animate-ui-header-drop {
+  animation: uiHeaderDrop 650ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  will-change: transform, opacity;
+}
+
+.animate-ui-rise-1 {
+  animation: uiRiseUp 700ms cubic-bezier(0.16, 1, 0.3, 1) 80ms forwards;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+.animate-ui-rise-2 {
+  animation: uiRiseUp 750ms cubic-bezier(0.16, 1, 0.3, 1) 160ms forwards;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+.animate-ui-rise-3 {
+  animation: uiRiseUp 800ms cubic-bezier(0.16, 1, 0.3, 1) 240ms forwards, subtleShimmerSheen 1.4s ease-out 450ms forwards;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}
+
+.animate-ui-nav-rise {
+  animation: uiNavRise 750ms cubic-bezier(0.16, 1, 0.3, 1) 320ms forwards;
+  animation-fill-mode: both;
+  will-change: transform, opacity;
+}

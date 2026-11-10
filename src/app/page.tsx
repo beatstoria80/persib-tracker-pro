@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { Header } from '@/components/Header';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
@@ -15,6 +15,9 @@ export default function HomePage() {
   const { mode, activeHub, activeTournament, lastSyncedAt, syncFeedback, groqBulletin, fixtures } = useClubTracker();
   const isPro = mode === 'pro';
 
+  // REFACTOR: State pemicu transisi rise element UI/UX bertingkat (staggered cascade) setelah video splash selesai
+  const [hasEnteredApp, setHasEnteredApp] = useState<boolean>(false);
+
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
   // REFACTOR: Dynamically resolve active/latest match (prioritizing LIVE -> Matchday 9 (l1-p9) -> latest)
   const currentTournFixture =
@@ -27,7 +30,7 @@ export default function HomePage() {
   return (
     <>
       {/* PWA Video Splash & Loading Screen on Smartphone Launch */}
-      <VideoLoadingSplash />
+      <VideoLoadingSplash onFinish={() => setHasEnteredApp(true)} />
 
       {/* Outer Container: Crisp framing with modern negative space */}
       <div
@@ -60,8 +63,10 @@ export default function HomePage() {
             : 'bg-[#F8FAFC] text-slate-950 sm:border-slate-200 shadow-xl'
         }`}
       >
-        {/* Sleek Mobile Header */}
-        <Header />
+        {/* Sleek Mobile Header with Drop-Down Entrance */}
+        <div className={hasEnteredApp ? 'animate-ui-header-drop' : 'opacity-0 -translate-y-4'}>
+          <Header />
+        </div>
 
         {/* Real-Time Live Sync Notification Toast */}
         {syncFeedback && (
@@ -72,10 +77,12 @@ export default function HomePage() {
         )}
 
         {/* 1-Tap PWA Install Card for Mobile Users */}
-        <InstallPwaPrompt />
+        <div className={hasEnteredApp ? 'animate-ui-rise-1' : 'opacity-0'}>
+          <InstallPwaPrompt />
+        </div>
 
-        {/* Unified Minimal Live Status Banner */}
-        <div className="px-4 sm:px-5 pt-2.5 pb-1">
+        {/* Unified Minimal Live Status Banner - Stage 1 Rise */}
+        <div className={`px-4 sm:px-5 pt-2.5 pb-1 ${hasEnteredApp ? 'animate-ui-rise-1' : 'opacity-0 translate-y-6'}`}>
           <div
             className={`flex items-center justify-between px-3 py-2 rounded-2xl border text-xs gap-2 ${
               isPro
@@ -109,9 +116,9 @@ export default function HomePage() {
           </div>
         </div>
 
-        {/* Dynamic AI Live Intelligence Bulletin - Updates immediately upon Refresh */}
+        {/* Dynamic AI Live Intelligence Bulletin - Stage 2 Rise */}
         {groqBulletin && (
-          <div className="px-4 sm:px-5 pt-1 pb-1">
+          <div className={`px-4 sm:px-5 pt-1 pb-1 ${hasEnteredApp ? 'animate-ui-rise-2' : 'opacity-0 translate-y-6'}`}>
             <div
               className={`px-3 py-2 rounded-2xl border text-xs flex items-center gap-2 transition-all shadow-xs ${
                 isPro
@@ -129,8 +136,8 @@ export default function HomePage() {
           </div>
         )}
 
-        {/* Scrollable Main Mobile Hub Content with Generous Whitespace */}
-        <main className="flex-1 px-4 sm:px-5 py-3 pb-44">
+        {/* Scrollable Main Mobile Hub Content - Stage 3 High Impact Rise with Sheen */}
+        <main className={`flex-1 px-4 sm:px-5 py-3 pb-44 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
           <div>
             {activeHub === 'match-center' && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}
@@ -151,8 +158,10 @@ export default function HomePage() {
           </footer>
         </main>
 
-        {/* Floating Pill Mobile Bottom Navigation */}
-        <MobileBottomNav />
+        {/* Floating Pill Mobile Bottom Navigation - Stage 4 Rise with Spring Bounce */}
+        <div className={hasEnteredApp ? 'animate-ui-nav-rise' : 'opacity-0 translate-y-10'}>
+          <MobileBottomNav />
+        </div>
       </div>
     </div>
     </>

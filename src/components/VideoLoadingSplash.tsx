@@ -18,10 +18,11 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const handleDismiss = useCallback(() => {
     if (isFading) return;
     setIsFading(true);
+    // REFACTOR: Trigger onFinish synchronously with fade-out so underlying elements rise up in cross-fade sync
+    if (onFinish) onFinish();
     setTimeout(() => {
       setIsVisible(false);
-      if (onFinish) onFinish();
-    }, 450);
+    }, 550);
   }, [isFading, onFinish]);
 
   const attemptPlay = useCallback(() => {
@@ -105,8 +106,8 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       role="dialog"
       aria-label="Layar Pemuatan Persib Tracker"
       style={{ backgroundColor: '#002B7F' }}
-      className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none transition-opacity duration-500 ${
-        isFading ? 'opacity-0 pointer-events-none' : 'opacity-100'
+      className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none transition-all duration-500 ease-out ${
+        isFading ? 'opacity-0 scale-105 filter blur-xs pointer-events-none' : 'opacity-100 scale-100 filter blur-0'
       }`}
       onClick={handleDismiss}
     >
