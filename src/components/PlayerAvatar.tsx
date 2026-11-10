@@ -25,15 +25,11 @@ export function PlayerAvatar({
   const [retryStage, setRetryStage] = useState<number>(0);
   const rawSrc = avatarUrl || getPlayerAvatar(name);
 
-  // Fallback cascade: direct Transfermarkt/Custom -> Weserv Image Proxy -> UI Avatars high-res
+  // Fallback cascade: direct Transfermarkt/Custom -> UI Avatars high-res with official styling
   const getSrc = () => {
     if (retryStage === 0 && rawSrc) return rawSrc;
-    if (retryStage <= 1 && rawSrc) {
-      const cleanUrl = rawSrc.replace(/^https?:\/\//, '');
-      return `https://images.weserv.nl/?url=${encodeURIComponent(cleanUrl)}&w=200&h=200&fit=cover`;
-    }
-    // Final reliable photo fallback
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=1d4ed8&color=ffffff&bold=true&size=128`;
+    // Guaranteed high-res photo fallback so UI frame is NEVER empty
+    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0284c7&color=ffffff&bold=true&size=256`;
   };
 
   const currentSrc = getSrc();
@@ -67,15 +63,16 @@ export function PlayerAvatar({
           : 'bg-gradient-to-br from-blue-800 via-blue-950 to-slate-950 shadow-blue-900/30'
       } ${className}`}
     >
-      {retryStage <= 2 && currentSrc ? (
+      {currentSrc ? (
         <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
           <img
             src={currentSrc}
             alt={name}
             referrerPolicy="no-referrer"
-            crossOrigin="anonymous"
             className="w-full h-full object-contain select-none transition-all duration-300 scale-[0.88] origin-bottom drop-shadow-sm"
-            onError={() => setRetryStage((prev) => prev + 1)}
+            onError={() => {
+              if (retryStage < 2) setRetryStage((prev) => prev + 1);
+            }}
             loading="lazy"
           />
           {/* Subtle bottom vignette to ensure number readability without cutting off the face */}

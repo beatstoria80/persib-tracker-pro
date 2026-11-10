@@ -59,7 +59,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€50K (Rp 870 Jt)',
     contractUntil: '31 Mei 2029',
     verifiedData: true,
-    avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/1376683-1737430465.png',
+    avatarUrl: 'https://ui-avatars.com/api/?name=Rhaka+Bintang&background=0284c7&color=ffffff&bold=true&size=256',
     fitness: {
       status: 'fit',
       percentage: 100,
@@ -635,7 +635,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€50K (Rp 870 Jt)',
     contractUntil: '31 Mei 2029',
     verifiedData: true,
-    avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/1020476-1709536830.png',
+    avatarUrl: 'https://ui-avatars.com/api/?name=Nazriel+Alfaro&background=0284c7&color=ffffff&bold=true&size=256',
     fitness: {
       status: 'fit',
       percentage: 100,
@@ -1135,7 +1135,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
 export const PLAYER_AVATARS: Record<string, string> = {
   // GK
   'teja-14': 'https://img.a.transfermarkt.technology/portrait/header/474524-1737430429.png',
-  'rakha-60': 'https://img.a.transfermarkt.technology/portrait/header/1376683-1737430465.png',
+  'rakha-60': 'https://ui-avatars.com/api/?name=Rhaka+Bintang&background=0284c7&color=ffffff&bold=true&size=256',
   'fitrah-81': 'https://img.a.transfermarkt.technology/portrait/header/1221253-1737430465.png',
   'fitrah-98': 'https://img.a.transfermarkt.technology/portrait/header/1221253-1737430465.png',
 
@@ -1158,7 +1158,7 @@ export const PLAYER_AVATARS: Record<string, string> = {
   'febri-13': 'https://img.a.transfermarkt.technology/portrait/header/506019-1737431818.png',
   'notsuda-17': 'https://img.a.transfermarkt.technology/portrait/header/218277-1758466151.jpg',
   'adam-18': 'https://img.a.transfermarkt.technology/portrait/header/505890-1737431465.png',
-  'nazriel-19': 'https://img.a.transfermarkt.technology/portrait/header/1020476-1709536830.png',
+  'nazriel-19': 'https://ui-avatars.com/api/?name=Nazriel+Alfaro&background=0284c7&color=ffffff&bold=true&size=256',
   'klok-23': 'https://img.a.transfermarkt.technology/portrait/header/272708-1789636624.png',
   'rafi-30': 'https://img.a.transfermarkt.technology/portrait/header/933097-1737431859.png',
   'haye-33': 'https://img.a.transfermarkt.technology/portrait/header/178219-1707214741.jpg',
@@ -1184,10 +1184,26 @@ export const PLAYER_AVATARS: Record<string, string> = {
   // Persib Putri
   'tia-darti-13': 'https://img.a.transfermarkt.technology/portrait/header/817899-1789636503.png',
   'nurul-9': 'https://img.a.transfermarkt.technology/portrait/header/662777-1737431497.png',
+
+  // Key Opponent & Liga 1 Stars (Verified Portals)
+  'ciro-77': 'https://img.a.transfermarkt.technology/portrait/header/81458-1758703896.jpg',
+  'gustavo-70': 'https://img.a.transfermarkt.technology/portrait/header/686044-1680375322.jpeg',
+  'mamut-9': 'https://img.a.transfermarkt.technology/portrait/header/446996-1790400323.png',
+  'ridho-5': 'https://img.a.transfermarkt.technology/portrait/header/734648-1734334228.jpeg',
+  'witan-78': 'https://img.a.transfermarkt.technology/portrait/header/630444-1705465856.png',
+  'gajos-10': 'https://img.a.transfermarkt.technology/portrait/header/236891-1669218242.png',
+  'kambuaya-19': 'https://img.a.transfermarkt.technology/portrait/header/649447-1739596620.png',
+  'marukawa-10': 'https://img.a.transfermarkt.technology/portrait/header/648128-1739596182.png',
+  'lilipaly-14': 'https://img.a.transfermarkt.technology/portrait/header/195271-1737545052.png',
+  'nadeo-25': 'https://img.a.transfermarkt.technology/portrait/header/506141-1737545403.png',
+  'moreira-10': 'https://img.a.transfermarkt.technology/portrait/header/662578-1585392108.JPG',
+  'yance-23': 'https://img.a.transfermarkt.technology/portrait/header/875177-1758705812.jpg',
+  'yakob-2': 'https://img.a.transfermarkt.technology/portrait/header/663274-1758705805.jpg',
+  'alex-martins-9': 'https://img.a.transfermarkt.technology/portrait/header/347019-1789636445.png',
 };
 
 export function getPlayerAvatar(idOrName: string): string {
-  if (!idOrName) return 'https://img.a.transfermarkt.technology/portrait/header/187515-1718870104.png';
+  if (!idOrName) return 'https://ui-avatars.com/api/?name=Player&background=0284c7&color=ffffff&bold=true&size=256';
   if (PLAYER_AVATARS[idOrName]) return PLAYER_AVATARS[idOrName];
 
   const lower = idOrName.toLowerCase();
@@ -1230,7 +1246,23 @@ export function getPlayerAvatar(idOrName: string): string {
   if (lower.includes('athaya') || lower.includes('zahran')) return PLAYER_AVATARS['athaya-36'];
   if (lower.includes('rafi') || lower.includes('rasyiq')) return PLAYER_AVATARS['rafi-30'];
 
-  return 'https://img.a.transfermarkt.technology/portrait/header/187515-1718870104.png';
+  // Competitor Key Players
+  if (lower.includes('ciro')) return PLAYER_AVATARS['ciro-77'];
+  if (lower.includes('gustavo')) return PLAYER_AVATARS['gustavo-70'];
+  if (lower.includes('mamut')) return PLAYER_AVATARS['mamut-9'];
+  if (lower.includes('ridho')) return PLAYER_AVATARS['ridho-5'];
+  if (lower.includes('witan')) return PLAYER_AVATARS['witan-78'];
+  if (lower.includes('gajos')) return PLAYER_AVATARS['gajos-10'];
+  if (lower.includes('kambuaya')) return PLAYER_AVATARS['kambuaya-19'];
+  if (lower.includes('marukawa')) return PLAYER_AVATARS['marukawa-10'];
+  if (lower.includes('lilipaly')) return PLAYER_AVATARS['lilipaly-14'];
+  if (lower.includes('nadeo')) return PLAYER_AVATARS['nadeo-25'];
+  if (lower.includes('moreira')) return PLAYER_AVATARS['moreira-10'];
+  if (lower.includes('yance')) return PLAYER_AVATARS['yance-23'];
+  if (lower.includes('yakob')) return PLAYER_AVATARS['yakob-2'];
+  if (lower.includes('alex martins') || lower.includes('martins')) return PLAYER_AVATARS['alex-martins-9'];
+
+  return `https://ui-avatars.com/api/?name=${encodeURIComponent(idOrName)}&background=0284c7&color=ffffff&bold=true&size=256`;
 }
 
 // Ensure 100% of players in OFFICIAL_SQUAD_2026_2027 have verified avatarUrl populated
@@ -2119,9 +2151,9 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
     ],
     keyPlayers: [
       { name: 'Alex Martins', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 6.8 M', keyStat: '11 Gol / 9 Laga', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/347019-1789636445.png' },
-      { name: 'Taisei Marukawa', position: 'Sayap Kiri (LW)', number: 10, marketValue: 'Rp 6.0 M', keyStat: '6 Assist & 4 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/655938-1698226189.jpg' },
-      { name: 'Hugo Gomes (Jaja)', position: 'Gelandang Serang (AM)', number: 8, marketValue: 'Rp 7.2 M', keyStat: 'Akurasi Umpan 91%', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/344933-1698226145.jpg' },
-      { name: 'Ricky Kambuaya', position: 'Gelandang Box-to-Box', number: 19, marketValue: 'Rp 5.5 M', keyStat: '3.4 Intersep/Laga', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/559864-1698226065.jpg' },
+      { name: 'Taisei Marukawa', position: 'Sayap Kiri (LW)', number: 10, marketValue: 'Rp 6.0 M', keyStat: '6 Assist & 4 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/648128-1739596182.png' },
+      { name: 'Ricky Kambuaya', position: 'Gelandang Box-to-Box', number: 19, marketValue: 'Rp 5.5 M', keyStat: '3.4 Intersep/Laga', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/649447-1739596620.png' },
+      { name: 'Hugo Gomes (Jaja)', position: 'Gelandang Serang (AM)', number: 8, marketValue: 'Rp 7.2 M', keyStat: 'Akurasi Umpan 91%', avatarUrl: 'https://ui-avatars.com/api/?name=Hugo+Gomes&background=0284c7&color=ffffff&bold=true&size=256' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'PERSIB 2 - 2 Dewa United (Laga Sengit GBLA)',
@@ -2161,9 +2193,9 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       'Sering kesulitan membongkar pertahanan lawan yang bermain deep-low block.',
     ],
     keyPlayers: [
-      { name: 'Lulinha', position: 'Winger Kiri (LW)', number: 11, marketValue: 'Rp 5.2 M', keyStat: '7 Gol Musim Ini', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/52835-1698226298.jpg' },
-      { name: 'Jordy Wehrmann', position: 'Gelandang Bertahan (DM)', number: 6, marketValue: 'Rp 5.0 M', keyStat: '88% Tackles Won', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/361109-1721035678.jpg' },
-      { name: 'Pedro Monteiro', position: 'Bek Tengah (CB)', number: 4, marketValue: 'Rp 4.5 M', keyStat: '5.2 Sapuan Udara/Laga', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/225399-1698226345.jpg' },
+      { name: 'Lulinha', position: 'Winger Kiri (LW)', number: 11, marketValue: 'Rp 5.2 M', keyStat: '7 Gol Musim Ini', avatarUrl: 'https://ui-avatars.com/api/?name=Lulinha&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Jordy Wehrmann', position: 'Gelandang Bertahan (DM)', number: 6, marketValue: 'Rp 5.0 M', keyStat: '88% Tackles Won', avatarUrl: 'https://ui-avatars.com/api/?name=Jordy+Wehrmann&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Pedro Monteiro', position: 'Bek Tengah (CB)', number: 4, marketValue: 'Rp 4.5 M', keyStat: '5.2 Sapuan Udara/Laga', avatarUrl: 'https://ui-avatars.com/api/?name=Pedro+Monteiro&background=0284c7&color=ffffff&bold=true&size=256' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'Madura United 1 - 3 PERSIB Bandung',
@@ -2204,10 +2236,10 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       'Sering terpancing emosi dan pelanggaran di laga berintensitas tinggi (El Clasico).',
     ],
     keyPlayers: [
-      { name: 'Ivan Mamut', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 7.5 M', keyStat: 'Target Man & 8 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/346850-1662635955.jpg' },
-      { name: 'Rizky Ridho', position: 'Bek Tengah (CB)', number: 5, marketValue: 'Rp 7.5 M', keyStat: 'Akurasi Passing 93%', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/716540-1698226456.jpg' },
-      { name: 'Maciej Gajos', position: 'Playmaker (AM)', number: 10, marketValue: 'Rp 6.2 M', keyStat: '5 Assist Kunci', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/120892-1698226490.jpg' },
-      { name: 'Witan Sulaeman', position: 'Inside Forward (RF)', number: 78, marketValue: 'Rp 4.8 M', keyStat: '86% Dribble Success', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/627440-1698226512.jpg' },
+      { name: 'Ivan Mamut', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 7.5 M', keyStat: 'Target Man & 8 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/446996-1790400323.png' },
+      { name: 'Rizky Ridho', position: 'Bek Tengah (CB)', number: 5, marketValue: 'Rp 7.5 M', keyStat: 'Akurasi Passing 93%', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/734648-1734334228.jpeg' },
+      { name: 'Maciej Gajos', position: 'Playmaker (AM)', number: 10, marketValue: 'Rp 6.2 M', keyStat: '5 Assist Kunci', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/236891-1669218242.png' },
+      { name: 'Witan Sulaeman', position: 'Inside Forward (RF)', number: 78, marketValue: 'Rp 4.8 M', keyStat: '86% Dribble Success', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/630444-1705465856.png' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'PERSIB 2 - 0 Persija Jakarta (GBLA)',
@@ -2247,10 +2279,10 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       'Sering mengandalkan long ball terburu-buru ketika ditekan.',
     ],
     keyPlayers: [
-      { name: 'Everton Nascimento', position: 'Penyerang Tengah (CF)', number: 99, marketValue: 'Rp 6.5 M', keyStat: '8 Gol Musim Ini', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/341907-1698226620.jpg' },
-      { name: 'Privat Mbarga', position: 'Winger Kanan (RW)', number: 37, marketValue: 'Rp 6.2 M', keyStat: '6 Gol & 5 Assist', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/313337-1698226600.jpg' },
-      { name: 'Mitsuru Maruoka', position: 'Gelandang Sentral (CM)', number: 8, marketValue: 'Rp 5.8 M', keyStat: 'Daya Jelajah 11.2 km/laga', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/308118-1698226640.jpg' },
-      { name: 'Adilson Maringa', position: 'Kiper Utama (GK)', number: 1, marketValue: 'Rp 4.5 M', keyStat: '85% Save Ratio', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/678999-1698226660.jpg' },
+      { name: 'Everton Nascimento', position: 'Penyerang Tengah (CF)', number: 99, marketValue: 'Rp 6.5 M', keyStat: '8 Gol Musim Ini', avatarUrl: 'https://ui-avatars.com/api/?name=Everton+Nascimento&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Privat Mbarga', position: 'Winger Kanan (RW)', number: 37, marketValue: 'Rp 6.2 M', keyStat: '6 Gol & 5 Assist', avatarUrl: 'https://ui-avatars.com/api/?name=Privat+Mbarga&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Mitsuru Maruoka', position: 'Gelandang Sentral (CM)', number: 8, marketValue: 'Rp 5.8 M', keyStat: 'Daya Jelajah 11.2 km/laga', avatarUrl: 'https://ui-avatars.com/api/?name=Mitsuru+Maruoka&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Adilson Maringa', position: 'Kiper Utama (GK)', number: 1, marketValue: 'Rp 4.5 M', keyStat: '85% Save Ratio', avatarUrl: 'https://ui-avatars.com/api/?name=Adilson+Maringa&background=0284c7&color=ffffff&bold=true&size=256' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'PERSIB 3 - 0 Bali United (Semifinal Championship)',
@@ -2333,9 +2365,9 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       'Efektivitas konversi gol striker murni terkadang mengalami kebuntuan saat menghadapi low block.',
     ],
     keyPlayers: [
-      { name: 'Bruno Moreira', position: 'Winger Kiri & Kapten', number: 10, marketValue: 'Rp 6.5 M', keyStat: 'Dribble King & 5 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/691230-1698226700.jpg' },
-      { name: 'Francisco Rivera', position: 'Playmaker (AM)', number: 7, marketValue: 'Rp 6.0 M', keyStat: '6 Big Chances Created', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/353272-1698226720.jpg' },
-      { name: 'Malik Risaldi', position: 'Sayap Timnas (RW)', number: 77, marketValue: 'Rp 4.5 M', keyStat: 'Kecepatan Sprint 33 km/h', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/689045-1698226740.jpg' },
+      { name: 'Bruno Moreira', position: 'Winger Kiri & Kapten', number: 10, marketValue: 'Rp 6.5 M', keyStat: 'Dribble King & 5 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/662578-1585392108.JPG' },
+      { name: 'Francisco Rivera', position: 'Playmaker (AM)', number: 7, marketValue: 'Rp 6.0 M', keyStat: '6 Big Chances Created', avatarUrl: 'https://ui-avatars.com/api/?name=Francisco+Rivera&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Malik Risaldi', position: 'Sayap Timnas (RW)', number: 77, marketValue: 'Rp 4.5 M', keyStat: 'Kecepatan Sprint 33 km/h', avatarUrl: 'https://ui-avatars.com/api/?name=Malik+Risaldi&background=0284c7&color=ffffff&bold=true&size=256' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'PERSIB 2 - 0 Persebaya Surabaya (GBLA)',
@@ -2374,9 +2406,9 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       'Konsistensi performa saat laga tandang di luar pulau Kalimantan.',
     ],
     keyPlayers: [
-      { name: 'Leo Gaucho', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 6.2 M', keyStat: '6 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/744032-1721035800.jpg' },
-      { name: 'Stefano Lilipaly', position: 'Gelandang Serang (AM)', number: 14, marketValue: 'Rp 5.2 M', keyStat: 'Spesialis Bola Mati', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/118342-1698226800.jpg' },
-      { name: 'Nadeo Argawinata', position: 'Kiper Utama (GK)', number: 25, marketValue: 'Rp 5.0 M', keyStat: '4 Clean Sheet', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/545020-1698226820.jpg' },
+      { name: 'Leo Gaucho', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 6.2 M', keyStat: '6 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Leo+Gaucho&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Stefano Lilipaly', position: 'Gelandang Serang (AM)', number: 14, marketValue: 'Rp 5.2 M', keyStat: 'Spesialis Bola Mati', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/195271-1737545052.png' },
+      { name: 'Nadeo Argawinata', position: 'Kiper Utama (GK)', number: 25, marketValue: 'Rp 5.0 M', keyStat: '4 Clean Sheet', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/506141-1737545403.png' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'Borneo FC 1 - 0 PERSIB',
@@ -2415,9 +2447,9 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       'Minim kreasi serangan ketika tertinggal lebih dahulu.',
     ],
     keyPlayers: [
-      { name: 'Marios Ogkmpoe', position: 'Striker (CF)', number: 9, marketValue: 'Rp 5.0 M', keyStat: '5 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/340055-1721035900.jpg' },
-      { name: 'Bae Sin-yeong', position: 'Gelandang Bertahan (DM)', number: 33, marketValue: 'Rp 4.5 M', keyStat: 'Tackle Sukses 87%', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/371408-1698226900.jpg' },
-      { name: 'Javlon Guseynov', position: 'Bek Tengah (CB)', number: 19, marketValue: 'Rp 4.2 M', keyStat: 'Kapten & Komando Lini Belakang', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/279133-1698226920.jpg' },
+      { name: 'Marios Ogkmpoe', position: 'Striker (CF)', number: 9, marketValue: 'Rp 5.0 M', keyStat: '5 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Marios+Ogkmpoe&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Bae Sin-yeong', position: 'Gelandang Bertahan (DM)', number: 33, marketValue: 'Rp 4.5 M', keyStat: 'Tackle Sukses 87%', avatarUrl: 'https://ui-avatars.com/api/?name=Bae+Sin-yeong&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Javlon Guseynov', position: 'Bek Tengah (CB)', number: 19, marketValue: 'Rp 4.2 M', keyStat: 'Kapten & Komando Lini Belakang', avatarUrl: 'https://ui-avatars.com/api/?name=Javlon+Guseynov&background=0284c7&color=ffffff&bold=true&size=256' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'Persita 3 - 3 PERSIB Bandung',
@@ -2456,9 +2488,9 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       'Rentan terkena kartu kuning dan akumulasi pelanggaran taktikal.',
     ],
     keyPlayers: [
-      { name: 'Nermin Haljeta', position: 'Penyerang (CF)', number: 99, marketValue: 'Rp 5.5 M', keyStat: '5 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/340060-1721036000.jpg' },
-      { name: 'Yuran Fernandes', position: 'Bek Tengah & Kapten (CB)', number: 4, marketValue: 'Rp 6.0 M', keyStat: 'Sapuan Udara 94%', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/535444-1698227000.jpg' },
-      { name: 'Daisuke Sakai', position: 'Gelandang Serang (AM)', number: 10, marketValue: 'Rp 4.8 M', keyStat: 'Akurasi Umpan Terobosan 85%', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/295082-1721036100.jpg' },
+      { name: 'Nermin Haljeta', position: 'Penyerang (CF)', number: 99, marketValue: 'Rp 5.5 M', keyStat: '5 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Nermin+Haljeta&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Yuran Fernandes', position: 'Bek Tengah & Kapten (CB)', number: 4, marketValue: 'Rp 6.0 M', keyStat: 'Sapuan Udara 94%', avatarUrl: 'https://ui-avatars.com/api/?name=Yuran+Fernandes&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Daisuke Sakai', position: 'Gelandang Serang (AM)', number: 10, marketValue: 'Rp 4.8 M', keyStat: 'Akurasi Umpan Terobosan 85%', avatarUrl: 'https://ui-avatars.com/api/?name=Daisuke+Sakai&background=0284c7&color=ffffff&bold=true&size=256' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'PSM 0 - 0 PERSIB Bandung',
@@ -2497,9 +2529,9 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       'Kerap kehilangan fokus saat mengantisipasi serangan balik cepat lawan (kemasukan 20 gol).',
     ],
     keyPlayers: [
-      { name: 'Dalberto Luan', position: 'Penyerang Tengah (CF)', number: 94, marketValue: 'Rp 5.8 M', keyStat: '6 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/519888-1701073000.jpg' },
-      { name: 'Lucas Frigeri', position: 'Kiper Utama (GK)', number: 31, marketValue: 'Rp 4.5 M', keyStat: '42 Saves Musim Ini', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/258900-1701073100.jpg' },
-      { name: 'Charles Lokolingoy', position: 'Winger/Forward', number: 11, marketValue: 'Rp 4.8 M', keyStat: 'Kecepatan & Finishing', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/678900-1721036200.jpg' },
+      { name: 'Dalberto Luan', position: 'Penyerang Tengah (CF)', number: 94, marketValue: 'Rp 5.8 M', keyStat: '6 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Dalberto+Luan&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Lucas Frigeri', position: 'Kiper Utama (GK)', number: 31, marketValue: 'Rp 4.5 M', keyStat: '42 Saves Musim Ini', avatarUrl: 'https://ui-avatars.com/api/?name=Lucas+Frigeri&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Charles Lokolingoy', position: 'Winger/Forward', number: 11, marketValue: 'Rp 4.8 M', keyStat: 'Kecepatan & Finishing', avatarUrl: 'https://ui-avatars.com/api/?name=Charles+Lokolingoy&background=0284c7&color=ffffff&bold=true&size=256' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'PERSIB 1 - 1 Arema FC (GBLA)',
@@ -2538,9 +2570,10 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       'Garis pertahanan rentan kewalahan saat menghadapi dominasi sirkulasi umpan terobosan cepat di tengah.',
     ],
     keyPlayers: [
-      { name: 'Ciro Alves', position: 'Penyerang Sayap (LW/RW)', number: 77, marketValue: 'Rp 6.0 M', keyStat: 'Spesialis Bola Mati & 6 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/187515-1718870104.png' },
-      { name: 'Gustavo Almeida', position: 'Penyerang Tengah (CF)', number: 70, marketValue: 'Rp 7.0 M', keyStat: 'Finishing Klinis & 9 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/883441-1701072938.jpg' },
-      { name: 'Yance Sayuri', position: 'Bek/Sayap Kiri (LB/LWB)', number: 23, marketValue: 'Rp 4.8 M', keyStat: 'Assist Master & Sprint Kilat', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/902976-1721036300.jpg' },
+      { name: 'Ciro Alves', position: 'Penyerang Sayap (LW/RW)', number: 77, marketValue: 'Rp 6.0 M', keyStat: 'Spesialis Bola Mati & 6 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/81458-1758703896.jpg' },
+      { name: 'Gustavo Almeida', position: 'Penyerang Tengah (CF)', number: 70, marketValue: 'Rp 7.0 M', keyStat: 'Finishing Klinis & 9 Gol', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/686044-1680375322.jpeg' },
+      { name: 'Yance Sayuri', position: 'Bek/Sayap Kiri (LB/LWB)', number: 23, marketValue: 'Rp 4.8 M', keyStat: 'Assist Master & Sprint Kilat', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/875177-1758705812.jpg' },
+      { name: 'Yakob Sayuri', position: 'Sayap Kanan (RW/RWB)', number: 2, marketValue: 'Rp 5.2 M', keyStat: 'Akselerasi & Crossing Tajam', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/663274-1758705805.jpg' },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'Java United 2 - 1 PERSIB Bandung (Stadion Jatidiri)',
@@ -2549,6 +2582,293 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
       drawsVsPersib: 0,
       lossesVsPersib: 0,
       scoutingReport: 'Java United sangat agresif di 20 menit awal lewat bola mati Ciro Alves dan crossing Yance Sayuri ke Gustavo Almeida. Disiplin duel udara wajib ditingkatkan.',
+    },
+    verifiedBy: 'PT LIB & Tim Scouting Analitik PERSIB',
+  },
+  'Bhayangkara': {
+    id: 'bhayangkara-presisi',
+    name: 'Bhayangkara Presisi FC',
+    shortName: 'Bhayangkara',
+    nickname: 'The Guardian',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/31445.png',
+    city: 'Bekasi / Lampung',
+    foundedYear: 2016,
+    stadium: 'Stadion Patriot Candrabhaga',
+    stadiumCapacity: '30.000 Penonton',
+    headCoach: 'Mario Gomez',
+    headCoachNationality: 'Argentina',
+    squadPhotoUrl: 'https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&w=800&q=80',
+    preferredFormation: '4-3-3 Disciplined Midfield',
+    squadMarketValue: 'Rp 76.5 Miliar',
+    tacticalStyle: 'Transisi cepat dengan penguasaan bola terukur dan kreativitas playmaker asing.',
+    attackRating: 84,
+    defenseRating: 86,
+    tacticalFlexibility: 85,
+    strengths: [
+      { title: 'Visi Playmaker Matias Mier', rating: 91, description: 'Matias Mier memiliki umpan kunci dan tembakan jarak jauh yang mematikan.' },
+      { title: 'Kedisiplinan Fisik dan Taktikal', rating: 88, description: 'Lini tengah bermain kompak dan solid dalam memutus alur serangan lawan.' },
+    ],
+    weaknesses: [
+      'Sering kesulitan saat ditekan dengan pressing tinggi di garis pertahanan sendiri.',
+    ],
+    keyPlayers: [
+      { name: 'Matias Mier', position: 'Playmaker (AM)', number: 10, marketValue: 'Rp 6.0 M', keyStat: 'Pengatur Serangan & 5 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Matias+Mier&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Dendy Sulistyawan', position: 'Penyerang Sayap (RW)', number: 22, marketValue: 'Rp 4.5 M', keyStat: 'Kecepatan & Sprint Kilat', avatarUrl: 'https://ui-avatars.com/api/?name=Dendy+Sulistyawan&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Radja Nainggolan', position: 'Gelandang Sentral (CM)', number: 14, marketValue: 'Rp 5.5 M', keyStat: 'Visi & Tembakan Roket', avatarUrl: 'https://ui-avatars.com/api/?name=Radja+Nainggolan&background=0284c7&color=ffffff&bold=true&size=256' },
+    ],
+    headToHeadVsPersib: {
+      lastMeetingScore: 'PERSIB 0 - 0 Bhayangkara FC',
+      lastMeetingDate: 'Maret 2026',
+      totalWinsVsPersib: 4,
+      drawsVsPersib: 4,
+      lossesVsPersib: 6,
+      scoutingReport: 'The Guardian selalu menyulitkan dengan blok pertahanan rapat. Butuh sirkulasi bola cepat untuk membuka celah.',
+    },
+    verifiedBy: 'PT LIB & Tim Scouting Analitik PERSIB',
+  },
+  'Garudayaksa': {
+    id: 'garudayaksa',
+    name: 'Garudayaksa Football Academy FC',
+    shortName: 'Garudayaksa',
+    nickname: 'Elang Muda',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/72710.png',
+    city: 'Bekasi, Jawa Barat',
+    foundedYear: 2022,
+    stadium: 'Stadion Garudayaksa Arena',
+    stadiumCapacity: '20.000 Penonton',
+    headCoach: 'Dzenan Radoncic',
+    headCoachNationality: 'Montenegro',
+    squadPhotoUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    preferredFormation: '4-2-3-1 High Energy Pressing',
+    squadMarketValue: 'Rp 65.0 Miliar',
+    tacticalStyle: 'Intensitas lari tinggi, determinasi talenta muda nasional, serta transisi kilat.',
+    attackRating: 82,
+    defenseRating: 81,
+    tacticalFlexibility: 84,
+    strengths: [
+      { title: 'Stamina dan Daya Jelajah Tinggi', rating: 90, description: 'Skuad muda yang mampu melakukan pressing tanpa henti selama 90 menit.' },
+      { title: 'Agresivitas Serangan Balik', rating: 86, description: 'Umpan direct cepat yang langsung menyasar ruang kosong di belakang bek lawan.' },
+    ],
+    weaknesses: [
+      'Kerap terburu-buru dalam penyelesaian akhir dan minim pengalaman di laga genting.',
+    ],
+    keyPlayers: [
+      { name: 'Dimas Drajad', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 5.0 M', keyStat: 'Finishing Klinis & 6 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Dimas+Drajad&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Alfeandra Dewangga', position: 'Bek / Gelandang Bertahan', number: 19, marketValue: 'Rp 4.8 M', keyStat: 'Intersepsi & Lemparan Jauh', avatarUrl: 'https://ui-avatars.com/api/?name=Alfeandra+Dewangga&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Syahrul Trisna', position: 'Kiper Utama (GK)', number: 1, marketValue: 'Rp 3.5 M', keyStat: 'Refleks & Penyelamatan Dekat', avatarUrl: 'https://ui-avatars.com/api/?name=Syahrul+Trisna&background=0284c7&color=ffffff&bold=true&size=256' },
+    ],
+    headToHeadVsPersib: {
+      lastMeetingScore: 'PERSIB 3 - 1 Garudayaksa FC',
+      lastMeetingDate: 'Agustus 2026',
+      totalWinsVsPersib: 1,
+      drawsVsPersib: 1,
+      lossesVsPersib: 3,
+      scoutingReport: 'Manfaatkan pengalaman dan kematangan Thom Haye serta Marc Klok untuk mendikte tempo melawan intensitas muda Garudayaksa.',
+    },
+    verifiedBy: 'PT LIB & Tim Scouting Analitik PERSIB',
+  },
+  'Persik': {
+    id: 'persik',
+    name: 'Persik Kediri',
+    shortName: 'Persik',
+    nickname: 'Macan Putih',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14106.png',
+    city: 'Kediri, Jawa Timur',
+    foundedYear: 1950,
+    stadium: 'Stadion Brawijaya',
+    stadiumCapacity: '20.000 Penonton',
+    headCoach: 'Marcelo Rospide',
+    headCoachNationality: 'Brasil',
+    squadPhotoUrl: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
+    preferredFormation: '4-3-3 Creative Attacking',
+    squadMarketValue: 'Rp 72.8 Miliar',
+    tacticalStyle: 'Kreativitas tinggi di sepertiga akhir lapangan ditopang kemampuan dribble dan visi umpan Ze Valente.',
+    attackRating: 85,
+    defenseRating: 82,
+    tacticalFlexibility: 83,
+    strengths: [
+      { title: 'Visi Playmaker Ze Valente', rating: 92, description: 'Ze Valente merupakan salah satu pengumpan paling kreatif dan berbahaya di Liga 1.' },
+      { title: 'Etos Kerja Rohit Chand', rating: 89, description: 'Pemain timnas Nepal yang konsisten memutus serangan lawan di lini tengah.' },
+    ],
+    weaknesses: [
+      'Garis pertahanan sering kewalahan menghadapi crossing diagonal ke tiang jauh.',
+    ],
+    keyPlayers: [
+      { name: 'Ze Valente', position: 'Playmaker (AM)', number: 10, marketValue: 'Rp 5.8 M', keyStat: 'Visi Magis & 5 Assist', avatarUrl: 'https://ui-avatars.com/api/?name=Ze+Valente&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Ramiro Fergonzi', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 4.5 M', keyStat: 'Target Man & 5 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Ramiro+Fergonzi&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Rohit Chand', position: 'Gelandang Bertahan (DM)', number: 32, marketValue: 'Rp 4.0 M', keyStat: 'Tackle Sukses 88%', avatarUrl: 'https://ui-avatars.com/api/?name=Rohit+Chand&background=0284c7&color=ffffff&bold=true&size=256' },
+    ],
+    headToHeadVsPersib: {
+      lastMeetingScore: 'Persik 0 - 2 PERSIB Bandung',
+      lastMeetingDate: 'Oktober 2026',
+      totalWinsVsPersib: 3,
+      drawsVsPersib: 2,
+      lossesVsPersib: 7,
+      scoutingReport: 'Kunci meredam Persik adalah menutup pergerakan Ze Valente dan tidak memberikan ruang tembak bebas di luar kotak penalti.',
+    },
+    verifiedBy: 'PT LIB & Tim Scouting Analitik PERSIB',
+  },
+  'PSIM': {
+    id: 'psim',
+    name: 'PSIM Yogyakarta',
+    shortName: 'PSIM',
+    nickname: 'Laskar Mataram',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/70596.png',
+    city: 'Yogyakarta',
+    foundedYear: 1929,
+    stadium: 'Stadion Mandala Krida',
+    stadiumCapacity: '35.000 Penonton',
+    headCoach: 'Seto Nurdiantoro',
+    headCoachNationality: 'Indonesia',
+    squadPhotoUrl: 'https://images.unsplash.com/photo-1522778119026-d647f0596c20?auto=format&fit=crop&w=800&q=80',
+    preferredFormation: '4-3-3 Ball Possession Mataram',
+    squadMarketValue: 'Rp 58.5 Miliar',
+    tacticalStyle: 'Kombinasi operan pendek kaki ke kaki khas Yogyakarta dengan semangat juang tinggi di kandang.',
+    attackRating: 80,
+    defenseRating: 83,
+    tacticalFlexibility: 82,
+    strengths: [
+      { title: 'Kekompakan Kolektif Tim', rating: 87, description: 'Permainan rapi dari kaki ke kaki dan disiplin formasi yang terjaga.' },
+      { title: 'Fanatisme Dukungan Brajamusti', rating: 93, description: 'Atmosfer Mandala Krida memberi suntikan moral ekstra bagi para pemain.' },
+    ],
+    weaknesses: [
+      'Minim daya dobrak fisik saat berhadapan dengan bek berpostur kekar.',
+    ],
+    keyPlayers: [
+      { name: 'Rafael Rodrigues', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 4.2 M', keyStat: 'Penyelesai Peluang & 4 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Rafael+Rodrigues&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Savio Roberto', position: 'Gelandang Sentral (CM)', number: 8, marketValue: 'Rp 3.8 M', keyStat: 'Pengatur Ritme Lapangan', avatarUrl: 'https://ui-avatars.com/api/?name=Savio+Roberto&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Kim Shin-young', position: 'Bek Tengah (CB)', number: 5, marketValue: 'Rp 3.5 M', keyStat: 'Disiplin Blok Udara', avatarUrl: 'https://ui-avatars.com/api/?name=Kim+Shin-young&background=0284c7&color=ffffff&bold=true&size=256' },
+    ],
+    headToHeadVsPersib: {
+      lastMeetingScore: 'PERSIB 3 - 0 PSIM Yogyakarta',
+      lastMeetingDate: 'Musim 2026/2027',
+      totalWinsVsPersib: 1,
+      drawsVsPersib: 2,
+      lossesVsPersib: 5,
+      scoutingReport: 'PERSIB unggul dalam duel fisik dan kedalaman skuad. Waspadai serangan balik cepat dari sayap PSIM.',
+    },
+    verifiedBy: 'PT LIB & Tim Scouting Analitik PERSIB',
+  },
+  'PSS Sleman': {
+    id: 'pss-sleman',
+    name: 'PSS Sleman',
+    shortName: 'PSS Sleman',
+    nickname: 'Super Elang Jawa (Super Elja)',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/38560.png',
+    city: 'Sleman, D.I. Yogyakarta',
+    foundedYear: 1976,
+    stadium: 'Stadion Maguwoharjo',
+    stadiumCapacity: '31.700 Penonton',
+    headCoach: 'Wagner Lopes',
+    headCoachNationality: 'Jepang / Brasil',
+    squadPhotoUrl: 'https://images.unsplash.com/photo-1517466787929-bc90951d0974?auto=format&fit=crop&w=800&q=80',
+    preferredFormation: '4-2-3-1 High Press Dynamic',
+    squadMarketValue: 'Rp 68.0 Miliar',
+    tacticalStyle: 'Transisi cepat dengan pergerakan eksplosif lini serang dan dukungan militan suporter BCS.',
+    attackRating: 82,
+    defenseRating: 81,
+    tacticalFlexibility: 83,
+    strengths: [
+      { title: 'Kecepatan Sayap dan Striker Timnas', rating: 88, description: 'Hokky Caraka memiliki insting gol tajam dan determinasi duel fisik prima.' },
+      { title: 'Pengalaman Kapten Kim Kurniawan', rating: 87, description: 'Kim mengomandoi transisi lini tengah dengan daya jelajah luar biasa.' },
+    ],
+    weaknesses: [
+      'Konsistensi pertahanan di menit-menit akhir babak kedua kerap lengah.',
+    ],
+    keyPlayers: [
+      { name: 'Hokky Caraka', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 4.5 M', keyStat: 'Striker Timnas & 4 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Hokky+Caraka&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Kim Jeffrey Kurniawan', position: 'Gelandang Box-to-Box & Kapten', number: 23, marketValue: 'Rp 3.5 M', keyStat: 'Intersepsi & Pemimpin Tim', avatarUrl: 'https://ui-avatars.com/api/?name=Kim+Kurniawan&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Cleberson', position: 'Bek Tengah (CB)', number: 4, marketValue: 'Rp 4.0 M', keyStat: 'Kekuatan Duel Udara 89%', avatarUrl: 'https://ui-avatars.com/api/?name=Cleberson&background=0284c7&color=ffffff&bold=true&size=256' },
+    ],
+    headToHeadVsPersib: {
+      lastMeetingScore: 'PERSIB 4 - 1 PSS Sleman (GBLA)',
+      lastMeetingDate: 'Musim 2026/2027',
+      totalWinsVsPersib: 2,
+      drawsVsPersib: 3,
+      lossesVsPersib: 7,
+      scoutingReport: 'PERSIB memiliki rekor pertemuan sangat dominan. Antisipasi akselerasi Hokky Caraka dan umpan terobosan Kim Kurniawan.',
+    },
+    verifiedBy: 'PT LIB & Tim Scouting Analitik PERSIB',
+  },
+  'Isen Mulang FC': {
+    id: 'isen-mulang',
+    name: 'Isen Mulang FC (Kalteng)',
+    shortName: 'Isen Mulang FC',
+    nickname: 'Laskar Isen Mulang',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/38560.png',
+    city: 'Palangka Raya, Kalimantan Tengah',
+    foundedYear: 1970,
+    stadium: 'Stadion Tuah Pahoe',
+    stadiumCapacity: '15.000 Penonton',
+    headCoach: 'Eko Purdjianto',
+    headCoachNationality: 'Indonesia',
+    squadPhotoUrl: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80',
+    preferredFormation: '4-4-2 Compact Low Block',
+    squadMarketValue: 'Rp 52.0 Miliar',
+    tacticalStyle: 'Pertahanan berlapis rendah dengan fokus menghentikan kreasi bola lawan dan serangan balik cepat.',
+    attackRating: 78,
+    defenseRating: 82,
+    tacticalFlexibility: 80,
+    strengths: [
+      { title: 'Semangat Pantang Menyerah Isen Mulang', rating: 88, description: 'Bermain militan dan solid saat menghadapi klub-klub unggulan papan atas.' },
+      { title: 'Kedisiplinan Formasi Blok Rapat', rating: 84, description: 'Menutup rapat ruang tembak di area penalti sendiri.' },
+    ],
+    weaknesses: [
+      'Produktivitas lini depan minim saat dipaksa mengejar ketertinggalan skor.',
+    ],
+    keyPlayers: [
+      { name: 'Guy Junior', position: 'Penyerang Berpengalaman (CF)', number: 9, marketValue: 'Rp 3.0 M', keyStat: 'Target Man & 3 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Guy+Junior&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Michael Rumere', position: 'Gelandang Serang (AM)', number: 10, marketValue: 'Rp 3.2 M', keyStat: 'Dribble & Akselerasi Flank', avatarUrl: 'https://ui-avatars.com/api/?name=Michael+Rumere&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Dendi Agustan', position: 'Bek Tengah & Kapten (CB)', number: 6, marketValue: 'Rp 2.8 M', keyStat: 'Sapuan Udara & Kepemimpinan', avatarUrl: 'https://ui-avatars.com/api/?name=Dendi+Agustan&background=0284c7&color=ffffff&bold=true&size=256' },
+    ],
+    headToHeadVsPersib: {
+      lastMeetingScore: 'PERSIB 2 - 0 Isen Mulang FC (GBLA)',
+      lastMeetingDate: 'Musim 2026/2027',
+      totalWinsVsPersib: 1,
+      drawsVsPersib: 1,
+      lossesVsPersib: 4,
+      scoutingReport: 'PERSIB mendominasi statistik pertandingan. Manfaatkan tendangan jarak jauh dan crossing terukur untuk membongkar compact low block mereka.',
+    },
+    verifiedBy: 'PT LIB & Tim Scouting Analitik PERSIB',
+  },
+  'Persijap Jepara': {
+    id: 'persijap-jepara',
+    name: 'Persijap Jepara',
+    shortName: 'Persijap Jepara',
+    nickname: 'Laskar Kalinyamat',
+    logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14108.png',
+    city: 'Jepara, Jawa Tengah',
+    foundedYear: 1954,
+    stadium: 'Stadion Gelora Bumi Kartini (GBK)',
+    stadiumCapacity: '25.000 Penonton',
+    headCoach: 'Kahudi Wahyu',
+    headCoachNationality: 'Indonesia',
+    squadPhotoUrl: 'https://images.unsplash.com/photo-1518091043644-c1d4457512c6?auto=format&fit=crop&w=800&q=80',
+    preferredFormation: '4-3-3 Energetic Counter Attack',
+    squadMarketValue: 'Rp 50.0 Miliar',
+    tacticalStyle: 'Transisi vertikal mengandalkan kecepatan sayap dan duel bola mati Laskar Kalinyamat.',
+    attackRating: 77,
+    defenseRating: 81,
+    tacticalFlexibility: 80,
+    strengths: [
+      { title: 'Determinasi Tinggi di Gelora Bumi Kartini', rating: 89, description: 'Selalu memberikan perlawanan sengit saat bermain di hadapan ribuan suporter Banaspati.' },
+      { title: 'Kecepatan Sayap Kontra Serangan', rating: 85, description: 'Mampu merepotkan transisi bertahan lawan lewat serangan kilat.' },
+    ],
+    weaknesses: [
+      'Kedalaman skuad terbatas dan rentan kebobolan saat menghadapi tim bertempo cepat.',
+    ],
+    keyPlayers: [
+      { name: 'Rosalvo', position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 3.5 M', keyStat: 'Target Man & 3 Gol', avatarUrl: 'https://ui-avatars.com/api/?name=Rosalvo&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Rakhmatsho Rakhmatzoda', position: 'Gelandang Bertahan (DM)', number: 8, marketValue: 'Rp 3.2 M', keyStat: 'Petarung Lini Tengah', avatarUrl: 'https://ui-avatars.com/api/?name=Rakhmatzoda&background=0284c7&color=ffffff&bold=true&size=256' },
+      { name: 'Fikron Afriyanto', position: 'Bek Tengah & Kapten (CB)', number: 4, marketValue: 'Rp 2.5 M', keyStat: 'Komando Pertahanan', avatarUrl: 'https://ui-avatars.com/api/?name=Fikron+Afriyanto&background=0284c7&color=ffffff&bold=true&size=256' },
+    ],
+    headToHeadVsPersib: {
+      lastMeetingScore: 'PERSIB 3 - 0 Persijap Jepara',
+      lastMeetingDate: 'Musim 2026/2027',
+      totalWinsVsPersib: 1,
+      drawsVsPersib: 1,
+      lossesVsPersib: 6,
+      scoutingReport: 'PERSIB unggul mutlak dalam kualitas teknis. Kunci kemenangan adalah menjaga tempo serangan dan mengurung lini pertahanan Persijap sejak menit awal.',
     },
     verifiedBy: 'PT LIB & Tim Scouting Analitik PERSIB',
   },
@@ -2605,9 +2925,9 @@ export function getClubProfile(teamName: string, standingRow?: LeagueStandingRow
       'Konsentrasi pertahanan rentan menurun saat menghadapi umpan kombinasi satu-dua sentuhan cepat.',
     ],
     keyPlayers: [
-      { name: `Bintang Utama ${cleanName}`, position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 4.5 M', keyStat: `${Math.ceil(gf * 0.4)} Gol Musim Ini`, avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(cleanName)}+Nine&background=0284c7&color=fff&bold=true` },
-      { name: `Playmaker ${cleanName}`, position: 'Gelandang Serang (AM)', number: 10, marketValue: 'Rp 4.0 M', keyStat: 'Pengatur Serangan Kunci', avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(cleanName)}+Ten&background=0369a1&color=fff&bold=true` },
-      { name: `Tembok Pertahanan`, position: 'Bek Tengah & Kapten (CB)', number: 4, marketValue: 'Rp 3.8 M', keyStat: 'Pemimpin Lini Belakang', avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(cleanName)}+Four&background=075985&color=fff&bold=true` },
+      { name: `Bintang Utama ${cleanName}`, position: 'Penyerang Tengah (CF)', number: 9, marketValue: 'Rp 4.5 M', keyStat: `${Math.ceil(gf * 0.4)} Gol Musim Ini`, avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(cleanName + ' Nine')}&background=0284c7&color=ffffff&bold=true&size=256` },
+      { name: `Playmaker ${cleanName}`, position: 'Gelandang Serang (AM)', number: 10, marketValue: 'Rp 4.0 M', keyStat: 'Pengatur Serangan Kunci', avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(cleanName + ' Ten')}&background=0369a1&color=ffffff&bold=true&size=256` },
+      { name: `Tembok Pertahanan`, position: 'Bek Tengah & Kapten (CB)', number: 4, marketValue: 'Rp 3.8 M', keyStat: 'Pemimpin Lini Belakang', avatarUrl: `https://ui-avatars.com/api/?name=${encodeURIComponent(cleanName + ' Four')}&background=075985&color=ffffff&bold=true&size=256` },
     ],
     headToHeadVsPersib: {
       lastMeetingScore: `PERSIB 2 - 1 ${cleanName}`,
