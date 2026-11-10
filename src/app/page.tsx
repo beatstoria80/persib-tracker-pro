@@ -8,6 +8,7 @@ import { InstallPwaPrompt } from '@/components/InstallPwaPrompt';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
+import { VideoLoadingSplash } from '@/components/VideoLoadingSplash';
 import { ShieldCheck, Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
@@ -24,12 +25,16 @@ export default function HomePage() {
     fixtures[0];
 
   return (
-    // Outer Container: Crisp framing with modern negative space
-    <div
-      className={`min-h-screen w-full flex justify-center items-start transition-colors duration-200 ${
-        isPro ? 'bg-[#080B11]' : 'bg-[#EDF2F7]'
-      }`}
-    >
+    <>
+      {/* PWA Video Splash & Loading Screen on Smartphone Launch */}
+      <VideoLoadingSplash minDurationMs={2600} />
+
+      {/* Outer Container: Crisp framing with modern negative space */}
+      <div
+        className={`min-h-screen w-full flex justify-center items-start transition-colors duration-200 ${
+          isPro ? 'bg-[#080B11]' : 'bg-[#EDF2F7]'
+        }`}
+      >
       {/* Desktop Helper Notice */}
       <div className="hidden xl:flex fixed left-10 top-12 flex-col gap-2 max-w-xs text-xs pointer-events-none">
         <div
@@ -150,5 +155,6 @@ export default function HomePage() {
         <MobileBottomNav />
       </div>
     </div>
+    </>
   );
 }

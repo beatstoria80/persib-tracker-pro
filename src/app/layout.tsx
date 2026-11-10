@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#1D4ED8",
+  themeColor: "#002B7F",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -47,7 +47,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" className={`${plusJakarta.variable} font-sans`}>
-      <body className="antialiased min-h-screen">
+      <body className="antialiased min-h-screen bg-[#002B7F]">
         <ClubTrackerProvider>{children}</ClubTrackerProvider>
       </body>
     </html>
