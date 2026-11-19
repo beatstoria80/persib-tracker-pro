@@ -2,10 +2,10 @@
 
 import React from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
-import { Zap, Sun, RefreshCw } from 'lucide-react';
+import { Zap, Sun, RefreshCw, Download } from 'lucide-react';
 
 export function Header() {
-  const { mode, toggleMode, isGroqSyncing, triggerGroqDataSync } = useClubTracker();
+  const { mode, toggleMode, isGroqSyncing, triggerGroqDataSync, isStandalone, triggerPwaInstall } = useClubTracker();
   const isPro = mode === 'pro';
 
   return (
@@ -54,6 +54,23 @@ export function Header() {
 
         {/* Right: Modern Pill Actions */}
         <div className="flex items-center gap-2">
+          {/* REFACTOR: Tombol Pasang App di Header yang selalu dapat diakses oleh pengguna browser */}
+          {!isStandalone && (
+            <button
+              onClick={triggerPwaInstall}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full font-black text-[11px] transition-all shadow-sm active:scale-95 ${
+                isPro
+                  ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/30 ring-1 ring-cyan-400/30'
+                  : 'bg-blue-700 hover:bg-blue-800 text-white shadow-blue-700/20'
+              }`}
+              title="Pasang aplikasi di layar utama HP"
+              aria-label="Pasang Aplikasi di HP"
+            >
+              <Download className="w-3.5 h-3.5 animate-bounce" />
+              <span>Pasang App</span>
+            </button>
+          )}
+
           {/* Refresh Action: Hanya Icon UI Refresh (Teks Groq Dihilangkan) */}
           <button
             onClick={() => triggerGroqDataSync()}

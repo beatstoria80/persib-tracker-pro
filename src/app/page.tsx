@@ -9,6 +9,7 @@ import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
 import { VideoLoadingSplash } from '@/components/VideoLoadingSplash';
+import { PwaInstallModal } from '@/components/PwaInstallModal';
 import { ShieldCheck, Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
@@ -19,10 +20,11 @@ export default function HomePage() {
   const [hasEnteredApp, setHasEnteredApp] = useState<boolean>(false);
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
-  // REFACTOR: Dynamically resolve active/latest match (prioritizing LIVE -> Matchday 9 (l1-p9) -> latest)
+  // REFACTOR: Prioritaskan laga LIVE -> Laga Pekan 10 (Semen Padang) / Pekan 11 (Borneo FC) -> Laga Finished/Scheduled terkini
   const currentTournFixture =
     tournamentFixtures.find((f) => f.status === 'LIVE') ||
-    tournamentFixtures.find((f) => f.id === 'l1-p9') ||
+    tournamentFixtures.find((f) => f.id === 'l1-p10') ||
+    tournamentFixtures.find((f) => f.id === 'l1-p11') ||
     [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED' || f.status === 'SCHEDULED') ||
     tournamentFixtures[0] ||
     fixtures[0];
@@ -164,6 +166,9 @@ export default function HomePage() {
         </div>
       </div>
     </div>
+
+    {/* Dedicated Multi-Platform PWA Installation Modal */}
+    <PwaInstallModal />
     </>
   );
 }

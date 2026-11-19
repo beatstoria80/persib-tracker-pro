@@ -24,6 +24,11 @@ export type AppThemeState = 'minimal' | 'pro';
 export type ActiveHub = 'match-center' | 'roster' | 'transparency';
 export type MatchDisplayMode = 'official_result' | 'upcoming_schedule' | 'tactical_simulation';
 
+export interface BeforeInstallPromptEvent extends Event {
+  prompt: () => Promise<void>;
+  userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>;
+}
+
 interface ClubTrackerContextType {
   mode: AppThemeState;
   setMode: (mode: AppThemeState) => void;
@@ -60,6 +65,12 @@ interface ClubTrackerContextType {
   groqBulletin: string;
   triggerGroqDataSync: () => Promise<void>;
   syncFeedback: string | null;
+  // REFACTOR: Global PWA installation states & trigger handler
+  isStandalone: boolean;
+  isPwaInstallModalOpen: boolean;
+  setIsPwaInstallModalOpen: (open: boolean) => void;
+  triggerPwaInstall: () => Promise<void>;
+  deferredPrompt: BeforeInstallPromptEvent | null;
 }
 
 const ClubTrackerContext = createContext<ClubTrackerContextType | undefined>(undefined);
@@ -79,6 +90,17 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
   const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
   const [syncFeedback, setSyncFeedback] = useState<string | null>(null);
+
+  // REFACTOR: PWA Installation state management with lazy initializer to avoid cascading renders
+  const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
+  const [isPwaInstallModalOpen, setIsPwaInstallModalOpen] = useState<boolean>(false);
+  const [isStandalone, setIsStandalone] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return false;
+    return (
+      window.matchMedia('(display-mode: standalone)').matches ||
+      (window.navigator as unknown as { standalone?: boolean }).standalone === true
+    );
+  });
 
   // Autonomous Backend Groq AI Data Feeder State (Backend supplier, NOT chatbot)
   const [isGroqSyncing, setIsGroqSyncing] = useState<boolean>(false);
@@ -234,17 +256,56 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     // Register PWA Service Worker for standalone installability on any mobile phone
-    if (typeof window !== 'undefined' && 'serviceWorker' in navigator) {
-      navigator.serviceWorker
-        .register('/sw.js')
-        .then((reg) => {
-          reg.update();
-        })
-        .catch((err) => {
-          console.warn('PWA ServiceWorker registration notice:', err);
-        });
+    if (typeof window !== 'undefined') {
+      const handleBeforeInstall = (e: Event) => {
+        e.preventDefault();
+        setDeferredPrompt(e as BeforeInstallPromptEvent);
+      };
+
+      const handleAppInstalled = () => {
+        setIsStandalone(true);
+        setDeferredPrompt(null);
+        setIsPwaInstallModalOpen(false);
+      };
+
+      window.addEventListener('beforeinstallprompt', handleBeforeInstall);
+      window.addEventListener('appinstalled', handleAppInstalled);
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker
+          .register('/sw.js')
+          .then((reg) => {
+            reg.update();
+          })
+          .catch((err) => {
+            console.warn('PWA ServiceWorker registration notice:', err);
+          });
+      }
+
+      return () => {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstall);
+        window.removeEventListener('appinstalled', handleAppInstalled);
+      };
     }
   }, []);
+
+  const triggerPwaInstall = useCallback(async () => {
+    if (deferredPrompt) {
+      try {
+        await deferredPrompt.prompt();
+        const choice = await deferredPrompt.userChoice;
+        if (choice.outcome === 'accepted') {
+          setIsStandalone(true);
+        }
+        setDeferredPrompt(null);
+      } catch (err) {
+        console.warn('Native install prompt failed, opening modal guide:', err);
+        setIsPwaInstallModalOpen(true);
+      }
+    } else {
+      setIsPwaInstallModalOpen(true);
+    }
+  }, [deferredPrompt]);
 
   const updateMatchSimulator = (simulatedPersibWon: boolean, simulatedGoalDiff: number) => {
     const updated = ACL_GROUP_STANDINGS_2026_2027.map((team: GroupTeam) => {
@@ -311,6 +372,11 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         groqBulletin,
         triggerGroqDataSync,
         syncFeedback,
+        isStandalone,
+        isPwaInstallModalOpen,
+        setIsPwaInstallModalOpen,
+        triggerPwaInstall,
+        deferredPrompt,
       }}
     >
       <div
