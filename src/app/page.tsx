@@ -38,9 +38,10 @@ export default function HomePage() {
       {/* PWA Video Splash & Loading Screen on Smartphone Launch */}
       <VideoLoadingSplash onFinish={() => setHasEnteredApp(true)} />
 
-      {/* Outer Container: Crisp framing with modern negative space */}
+      {/* REFACTOR: Outer container strictly hidden until video opening finishes - Zero main page flash before video */}
       <div
-        className={`min-h-screen w-full flex justify-center items-start transition-colors duration-200 ${
+        style={{ display: hasEnteredApp ? 'flex' : 'none' }}
+        className={`min-h-screen w-full justify-center items-start transition-colors duration-200 ${
           isPro ? 'bg-[#080B11]' : 'bg-[#EDF2F7]'
         }`}
       >

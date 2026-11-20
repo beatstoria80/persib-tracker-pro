@@ -66,10 +66,10 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
-    if (!v || !v.duration) return;
+    if (!v || !v.duration || isNaN(v.duration)) return;
 
-    // Dismiss when video is within 0.1s of completion
-    if (v.currentTime >= v.duration - 0.1) {
+    // Dismiss when video is within 0.15s of completion
+    if (v.duration > 0.5 && v.currentTime >= v.duration - 0.15) {
       handleDismiss();
     }
   };
@@ -106,7 +106,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none transition-all duration-500 ease-out ${
         isFading ? 'opacity-0 scale-105 filter blur-xs pointer-events-none' : 'opacity-100 scale-100 filter blur-0'
       }`}
-      onClick={handleDismiss}
     >
       {/* REFACTOR: Video animasi sinematik baru 'Stadium Scene Logo Animation' layar penuh */}
       <div className="absolute inset-0 w-full h-full overflow-hidden bg-black">

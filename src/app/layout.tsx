@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#002B7F",
+  themeColor: "#050811",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -46,10 +46,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="id" style={{ backgroundColor: "#002B7F" }} className={`${plusJakarta.variable} font-sans`}>
+    <html lang="id" style={{ backgroundColor: "#050811" }} className={`${plusJakarta.variable} font-sans`}>
       <body
-        style={{ backgroundColor: "#002B7F", margin: 0, padding: 0 }}
-        className="antialiased min-h-screen bg-[#002B7F]"
+        style={{ backgroundColor: "#050811", margin: 0, padding: 0 }}
+        className="antialiased min-h-screen bg-[#050811]"
       >
         <ClubTrackerProvider>{children}</ClubTrackerProvider>
       </body>
