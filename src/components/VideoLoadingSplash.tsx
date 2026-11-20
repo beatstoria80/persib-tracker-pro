@@ -102,14 +102,14 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     <div
       role="dialog"
       aria-label="Layar Pemuatan Persib Tracker"
-      style={{ backgroundColor: '#002B7F' }}
+      style={{ backgroundColor: '#050811' }}
       className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none transition-all duration-500 ease-out ${
         isFading ? 'opacity-0 scale-105 filter blur-xs pointer-events-none' : 'opacity-100 scale-100 filter blur-0'
       }`}
       onClick={handleDismiss}
     >
-      {/* REFACTOR: Video murni layar penuh tanpa blocking element atau latar hitam */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden bg-[#002B7F]">
+      {/* REFACTOR: Video animasi sinematik baru 'Stadium Scene Logo Animation' layar penuh */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden bg-black">
         <video
           ref={videoRef}
           autoPlay
@@ -119,11 +119,10 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           onPlaying={handleVideoPlaying}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
-          style={{ backgroundColor: '#002B7F' }}
+          style={{ backgroundColor: '#000000' }}
           className="w-full h-full object-cover object-center"
         >
-          <source src="/VideoLoading.mp4" type="video/mp4" />
-          <source src="/Video loading.mp4" type="video/mp4" />
+          <source src="/Stadium_scene_logo_animation_6f37cafb.mp4" type="video/mp4" />
         </video>
       </div>
 
