@@ -11,7 +11,8 @@ import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransp
 import { VideoLoadingSplash } from '@/components/VideoLoadingSplash';
 import { PwaInstallModal } from '@/components/PwaInstallModal';
 import { LiveTelemetryWidget } from '@/components/LiveTelemetryWidget';
-import { ShieldCheck, Smartphone, CheckCircle2 } from 'lucide-react';
+import { SponsorshipFooter } from '@/components/SponsorshipFooter';
+import { Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
   const { mode, activeHub, activeTournament, syncFeedback, fixtures } = useClubTracker();
@@ -102,18 +103,8 @@ export default function HomePage() {
             {activeHub === 'transparency' && <CorporateTransparency />}
           </div>
 
-          {/* Compact Minimal Footer */}
-          <footer
-            className={`mt-10 pt-4 border-t text-[10px] text-center ${
-              isPro ? 'border-slate-800 text-slate-500' : 'border-slate-200 text-slate-500'
-            }`}
-          >
-            <div className="flex items-center justify-center gap-1.5 font-bold mb-0.5">
-              <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
-              <span>PERSIB TRACKER • PT Persib Bandung Bermartabat</span>
-            </div>
-            <p className="opacity-75">100% Data Resmi Musim 2026/2027</p>
-          </footer>
+          {/* REFACTOR: Official Sponsorship & Partner Footer Section */}
+          <SponsorshipFooter />
         </main>
 
         {/* Floating Pill Mobile Bottom Navigation - Stage 4 Rise with Spring Bounce */}
