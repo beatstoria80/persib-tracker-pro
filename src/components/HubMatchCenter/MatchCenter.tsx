@@ -200,11 +200,15 @@ export function MatchCenter() {
     };
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
-  // REFACTOR: Dynamically prioritize explicit selection -> LIVE match -> Matchday 9 (l1-p9) -> latest finished/scheduled
+  // REFACTOR: Dynamically prioritize explicit selection -> LIVE match -> tournament-aware matchday -> latest finished/scheduled
   const currentFixture: MatchFixture =
     (selectedFixtureId ? tournamentFixtures.find((f: MatchFixture) => f.id === selectedFixtureId) : null) ||
     tournamentFixtures.find((f) => f.status === 'LIVE') ||
-    tournamentFixtures.find((f) => f.id === 'l1-p9') ||
+    (activeTournament === 'shopee_cup'
+      ? tournamentFixtures.find((f) => f.id === 'shopee-26-md2-ft') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')
+      : activeTournament === 'acl2'
+      ? tournamentFixtures.find((f) => f.id === 'acl2-26-md4-live') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')
+      : tournamentFixtures.find((f) => f.id === 'l1-p9') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')) ||
     [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED' || f.status === 'SCHEDULED') ||
     tournamentFixtures[0] ||
     fixtures[0];
@@ -218,6 +222,8 @@ export function MatchCenter() {
   const startingXI: Player[] = players.filter((p: Player) => p.squadRole === 'starting');
   const substitutes: Player[] = players.filter((p: Player) => p.squadRole === 'substitute');
   const persibStanding = liga1Standings.find((r) => r.isPersib || r.team.toLowerCase().includes('persib'));
+  const persibAclTeam = aclStandings.find((t) => t.isPersib || t.name.toLowerCase().includes('persib'));
+  const persibShopeeTeam = shopeeCupStandings.find((t) => t.isPersib || t.name.toLowerCase().includes('persib'));
 
   // REFACTOR: Opponent squad, tactical duels, and dual formation telemetry
   const isPersibHome = currentFixture.homeTeam.toUpperCase().includes('PERSIB');
@@ -1765,7 +1771,7 @@ export function MatchCenter() {
             >
               <div className="flex items-center justify-between mb-2">
                 <span className="text-[10px] font-mono uppercase font-bold text-blue-600 dark:text-cyan-300">
-                  Grup E • Klasemen Sementara
+                  Grup E • AFC Champions League Two
                 </span>
                 <span className="px-2.5 py-0.5 rounded-full bg-emerald-500 text-white text-[9px] font-black uppercase tracking-wider">
                   Juara Grup E • Lolos 16 Besar
@@ -1777,26 +1783,26 @@ export function MatchCenter() {
                     PERSIB Bandung
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
-                    Rekor Sempurna 100% Menang (4 Laga, 12 Poin)
+                    Rekor Sempurna 100% Menang ({persibAclTeam?.played ?? 4} Laga, {persibAclTeam?.points ?? 12} Poin)
                   </p>
                 </div>
                 <div className="text-right font-mono">
-                  <span className="text-3xl font-black text-blue-600 dark:text-cyan-400">12</span>
+                  <span className="text-3xl font-black text-blue-600 dark:text-cyan-400">{persibAclTeam?.points ?? 12}</span>
                   <span className="text-[10px] text-slate-400 block -mt-1 font-bold">Poin</span>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 mt-4 pt-3.5 border-t border-slate-200 dark:border-blue-900/40 text-center text-[10px]">
                 <div>
                   <span className="block text-slate-400 font-medium">Main</span>
-                  <span className="font-mono font-bold text-xs">4 Laga</span>
+                  <span className="font-mono font-bold text-xs">{persibAclTeam?.played ?? 4} Laga</span>
                 </div>
                 <div>
                   <span className="block text-slate-400 font-medium">Gol (GF:GA)</span>
-                  <span className="font-mono font-bold text-xs">8 : 1</span>
+                  <span className="font-mono font-bold text-xs">{persibAclTeam?.gf ?? 8} : {persibAclTeam?.ga ?? 1}</span>
                 </div>
                 <div>
                   <span className="block text-slate-400 font-medium">Selisih Gol</span>
-                  <span className="font-mono font-bold text-emerald-500 text-xs">+7</span>
+                  <span className="font-mono font-bold text-emerald-500 text-xs">+{((persibAclTeam?.gf ?? 8) - (persibAclTeam?.ga ?? 1))}</span>
                 </div>
               </div>
             </div>
@@ -1824,26 +1830,26 @@ export function MatchCenter() {
                     PERSIB Bandung
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
-                    Debut Kemenangan Comeback 3-1 di Markas Port FC
+                    Menang 6-0 vs Shan United & 3-1 vs Port FC (Rekor Sempurna 100%)
                   </p>
                 </div>
                 <div className="text-right font-mono">
-                  <span className="text-3xl font-black text-orange-600 dark:text-orange-400">3</span>
+                  <span className="text-3xl font-black text-orange-600 dark:text-orange-400">{persibShopeeTeam?.points ?? 6}</span>
                   <span className="text-[10px] text-slate-400 block -mt-1 font-bold">Poin</span>
                 </div>
               </div>
               <div className="grid grid-cols-3 gap-2 mt-4 pt-3.5 border-t border-slate-200 dark:border-orange-900/40 text-center text-[10px]">
                 <div>
                   <span className="block text-slate-400 font-medium">Main</span>
-                  <span className="font-mono font-bold text-xs">1 Laga</span>
+                  <span className="font-mono font-bold text-xs">{persibShopeeTeam?.played ?? 2} Laga</span>
                 </div>
                 <div>
                   <span className="block text-slate-400 font-medium">Gol (GF:GA)</span>
-                  <span className="font-mono font-bold text-xs">3 : 1</span>
+                  <span className="font-mono font-bold text-xs">{persibShopeeTeam?.gf ?? 9} : {persibShopeeTeam?.ga ?? 1}</span>
                 </div>
                 <div>
                   <span className="block text-slate-400 font-medium">Selisih Gol</span>
-                  <span className="font-mono font-bold text-emerald-500 text-xs">+2</span>
+                  <span className="font-mono font-bold text-emerald-500 text-xs">+{((persibShopeeTeam?.gf ?? 9) - (persibShopeeTeam?.ga ?? 1))}</span>
                 </div>
               </div>
             </div>

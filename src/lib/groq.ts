@@ -230,9 +230,9 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const calculatedShopeeCup: GroupTeam[] = computeSortedGroupStandings(SHOPEE_CUP_STANDINGS_2026_2027, []);
   const dynamicFixtures: MatchFixture[] = [...VERIFIED_FIXTURES_2026_2027];
 
-  // REFACTOR: Sinkronisasi data resmi hasil Pekan 9 dan Big Match Pekan 10 vs Bali United FC sesuai sumber PT LIB / ileague.id
-  const currentStageName = 'Pekan 10 Super League 2026/2027 (Jelang Big Match vs Bali United FC)';
-  const dynamicBulletin = `🏆 [SUPER LEAGUE 2026/2027] Klasemen Resmi Matchday 9: Persija (#1, 21 Poin), Dewa United (#2, 20 Poin), Bali United (#3, 19 Poin), Madura United (#4, 19 Poin), PERSIB Bandung (#5, 16 Poin [9 Laga: 5M-1S-3K, SG +6]). Hasil Terkini: Java United 2 - 1 PERSIB (FT). Laga Mendatang: PERSIB vs Bali United FC (Minggu, 22 Nov 2026, 19:00 WIB, GBLA). (Sync: ${nowWib})`;
+  // REFACTOR: Sinkronisasi data resmi Super League 2026/2027 dan Shopee Cup 2026/2027
+  const currentStageName = 'Pekan 10 Super League 2026/2027 & Matchday 2 Shopee Cup ASEAN';
+  const dynamicBulletin = `🏆 [SUPER LEAGUE & SHOPEE CUP 2026/2027] Super League: Persija (#1, 21 Poin), Dewa United (#2, 20 Poin), Bali United (#3, 19 Poin), PERSIB (#5, 16 Poin). Shopee Cup Grup B: PERSIB Bandung memuncaki grup (2 Laga, 6 Poin, Gol 9-1 [+8]) pasca membantai Shan United 6-0. Laga Mendatang: PERSIB vs Bali United FC (Minggu, 22 Nov 2026, 19:00 WIB, GBLA). (Sync: ${nowWib})`;
 
   const persibInStandings = calculatedStandings.find((c) => c.isPersib || c.team.toLowerCase().includes('persib'));
 
@@ -331,14 +331,15 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   // If valid Groq API key is configured, enhance bulletin with Groq LPU inference
   if (apiKey && !apiKey.startsWith('gsk_fjb3E')) {
     try {
-      // REFACTOR: Pedoman data valid resmi sebagai acuan inferensi Groq AI (PT LIB, ileague.id, persib.co.id)
-      const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League 2026/2027 resmi dengan pedoman data valid terverifikasi (sumber: ileague.id, ligaindonesiabaru.com, persib.co.id, AFC Match Center).
+      // REFACTOR: Pedoman data valid resmi sebagai acuan inferensi Groq AI (PT LIB, ileague.id, persib.co.id, Shopee Cup)
+      const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League & Shopee Cup 2026/2027 resmi dengan pedoman data valid terverifikasi (sumber: ileague.id, ligaindonesiabaru.com, persib.co.id, ASEAN Club Championship).
 PEDOMAN DATA VALID:
 - Musim aktif: Super League 2026/2027 (Pekan 9 selesai, menuju Pekan 10).
-- Peringkat Persib: #5 (9 laga, 5 menang, 1 seri, 3 kalah, 16 poin, selisih gol +6).
-- Hasil Terkini: Java United 2 - 1 PERSIB Bandung (8 November 2026, Stadion Jatidiri).
+- Peringkat Persib Super League: #5 (9 laga, 5 menang, 1 seri, 3 kalah, 16 poin, selisih gol +6).
+- Hasil Terkini Super League: Java United 2 - 1 PERSIB Bandung (8 November 2026, Stadion Jatidiri).
 - Laga Mendatang Terdekat: PERSIB Bandung vs Bali United FC (Pekan 10, Minggu, 22 November 2026, 19:00 WIB, Stadion GBLA).
-- Papan Atas Klasemen: #1 Persija (21 poin), #2 Dewa United (20 poin), #3 Bali United (19 poin), #4 Madura United (19 poin).
+- Shopee Cup 2026/2027 Grup B: PERSIB Bandung memuncaki klasemen Grup B (2 laga, 2 menang, 6 poin, gol 9-1 [+8]) setelah menang 6-0 atas Shan United (19 Nov 2026).
+- Papan Atas Super League: #1 Persija (21 poin), #2 Dewa United (20 poin), #3 Bali United (19 poin), #4 Madura United (19 poin).
 Keluarkan 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kompetisi dan pergerakan klasemen ini tanpa basa-basi atau markdown.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {

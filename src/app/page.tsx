@@ -20,11 +20,14 @@ export default function HomePage() {
   const [hasEnteredApp, setHasEnteredApp] = useState<boolean>(false);
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
-  // REFACTOR: Prioritaskan laga LIVE -> Big Match Terdekat Pekan 10 (Bali United) -> Hasil Terkini Pekan 9 (Java United) -> Fixture terkini
+  // REFACTOR: Tournament-aware resolution: LIVE -> tournament key match -> scheduled / latest finished
   const currentTournFixture =
     tournamentFixtures.find((f) => f.status === 'LIVE') ||
-    tournamentFixtures.find((f) => f.id === 'l1-p10') ||
-    tournamentFixtures.find((f) => f.id === 'l1-p9') ||
+    (activeTournament === 'shopee_cup'
+      ? tournamentFixtures.find((f) => f.id === 'shopee-26-md2-ft')
+      : activeTournament === 'acl2'
+      ? tournamentFixtures.find((f) => f.id === 'acl2-26-md4-live')
+      : tournamentFixtures.find((f) => f.id === 'l1-p10') || tournamentFixtures.find((f) => f.id === 'l1-p9')) ||
     tournamentFixtures.find((f) => f.status === 'SCHEDULED') ||
     [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED') ||
     tournamentFixtures[0] ||
