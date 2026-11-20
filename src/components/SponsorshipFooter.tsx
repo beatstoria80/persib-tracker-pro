@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
-import { Globe, Mail, ExternalLink, Sparkles, ShieldCheck } from 'lucide-react';
+import { Globe, Mail, ExternalLink } from 'lucide-react';
 
 export function SponsorshipFooter() {
   const { mode } = useClubTracker();
@@ -69,9 +69,11 @@ export function SponsorshipFooter() {
   ];
 
   return (
-    <footer className="mt-10 pt-4 pb-2 text-center select-none">
+    <footer className="mt-8 pt-2 pb-2 text-center select-none">
       {/* =========================================================================
-          SPONSORSHIP & OFFICIAL PARTNER CARD
+          // REFACTOR: SPONSORSHIP & OFFICIAL PARTNER CARD (MINIMALIS & ELEGAN)
+          - Removed top sponsor badge pill and bottom accreditation footer per user markup.
+          - Kept brand headline, 2x2 interactive social pills, and inquiries line.
           ========================================================================= */}
       <div
         className={`p-4 sm:p-5 rounded-3xl border transition-all duration-300 shadow-sm ${
@@ -80,23 +82,6 @@ export function SponsorshipFooter() {
             : 'bg-gradient-to-br from-blue-50/60 via-white to-slate-50 border-blue-200/80 text-slate-800'
         }`}
       >
-        {/* Header Sponsor Badge */}
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <div className="flex items-center gap-1.5">
-            <span className="flex items-center gap-1 text-[8.5px] font-mono font-black uppercase px-2 py-0.5 rounded-full bg-blue-600 text-white tracking-wider shadow-xs">
-              <Sparkles className="w-2.5 h-2.5" />
-              <span>OFFICIAL SPONSOR</span>
-            </span>
-            <span className="text-[10px] font-bold text-slate-500 dark:text-slate-400">
-              Aplikasi Didukung Oleh
-            </span>
-          </div>
-
-          <span className="text-[10px] font-mono font-extrabold text-blue-600 dark:text-cyan-400">
-            NINOC ENTERPRISE
-          </span>
-        </div>
-
         {/* Brand Headline */}
         <div className="text-left mb-3.5">
           <h4 className="text-sm font-black tracking-tight text-slate-950 dark:text-white">
@@ -150,17 +135,6 @@ export function SponsorshipFooter() {
             ninoc.enterprise@gmail.com
           </a>
         </div>
-      </div>
-
-      {/* =========================================================================
-          PERSIB OFFICIAL DATA ACCREDITATION
-          ========================================================================= */}
-      <div className="mt-6 text-[10px] text-center text-slate-500 dark:text-slate-400">
-        <div className="flex items-center justify-center gap-1.5 font-bold mb-0.5">
-          <ShieldCheck className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
-          <span>PERSIB TRACKER • PT Persib Bandung Bermartabat</span>
-        </div>
-        <p className="opacity-75">100% Data Resmi Musim 2026/2027</p>
       </div>
     </footer>
   );

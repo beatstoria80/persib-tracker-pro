@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v5 (Unmasked Icons & Instant Precaching)
-const CACHE_NAME = 'persib-tracker-pwa-v5';
+// PERSIB TRACKER - PWA Service Worker v6 (Network-First for Live UI Updates)
+const CACHE_NAME = 'persib-tracker-pwa-v6';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
@@ -7,7 +7,6 @@ const PRECACHE_ASSETS = [
   '/icon-512.png',
   '/icon-apple.png',
   '/new_persib_logo.jpeg',
-  '/Stadium_scene_logo_animation_6f37cafb.mp4',
 ];
 
 self.addEventListener('install', (event) => {
@@ -44,6 +43,23 @@ self.addEventListener('fetch', (event) => {
 
   // Let browser native media player handle byte-range requests directly
   if (event.request.headers.get('range')) {
+    return;
+  }
+
+  // REFACTOR: Network-First Strategy for HTML document navigation
+  // Ensures smartphone users always receive live Vercel updates immediately upon opening the app
+  if (event.request.mode === 'navigate' || event.request.destination === 'document') {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response.status === 200) {
+            const clone = response.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
+          }
+          return response;
+        })
+        .catch(() => caches.match(event.request).then((cached) => cached || caches.match('/')))
+    );
     return;
   }
 
