@@ -1,12 +1,13 @@
-// PERSIB TRACKER - PWA Service Worker v4 (Zero Black Screen & Instant Video Precache)
-const CACHE_NAME = 'persib-tracker-pwa-v4';
+// PERSIB TRACKER - PWA Service Worker v5 (Unmasked Icons & Instant Precaching)
+const CACHE_NAME = 'persib-tracker-pwa-v5';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
   '/icon-192.png',
   '/icon-512.png',
-  '/VideoLoading.mp4',
-  '/Video loading.mp4',
+  '/icon-apple.png',
+  '/new_persib_logo.jpeg',
+  '/Stadium_scene_logo_animation_6f37cafb.mp4',
 ];
 
 self.addEventListener('install', (event) => {

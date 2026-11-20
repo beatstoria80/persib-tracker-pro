@@ -2,13 +2,13 @@
   "name": "PERSIB TRACKER",
   "short_name": "PERSIB",
   "description": "Aplikasi Resmi Pelacak Laga, Taktik, Skuad & Finansial PERSIB Bandung Musim 2026/2027",
-  "start_url": "/?pwa=persib-v4",
-  "id": "/?pwa=persib-v4",
+  "start_url": "/?pwa=persib-v5",
+  "id": "/?pwa=persib-v5",
   "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#002B7F",
-  "theme_color": "#002B7F",
+  "background_color": "#050811",
+  "theme_color": "#050811",
   "categories": ["sports", "news"],
   "icons": [
     {
@@ -18,22 +18,10 @@
       "purpose": "any"
     },
     {
-      "src": "/icon-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
       "src": "/icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
-    },
-    {
-      "src": "/icon-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "maskable"
     }
   ]
 }
