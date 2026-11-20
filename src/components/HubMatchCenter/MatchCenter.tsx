@@ -1329,16 +1329,16 @@ export function MatchCenter() {
                           ? currentTacticalPhase.playerPositions
                           : [
                               { id: 'p-gk', name: 'Teja Paku Alam', number: 14, role: 'GK', x: 8, y: 50 },
-                              { id: 'p-rb', name: 'Kakang Rudianto', number: 5, role: 'RB', x: 20, y: 82 },
+                              { id: 'p-rb', name: 'Sandy Walsh', number: 6, role: 'RB', x: 20, y: 82 },
                               { id: 'p-cb1', name: 'Patricio Matricardi', number: 4, role: 'CB', x: 16, y: 62 },
-                              { id: 'p-cb2', name: 'Federico Barba', number: 3, role: 'CB', x: 16, y: 38 },
-                              { id: 'p-lb', name: 'Edo Febriansah', number: 97, role: 'LB', x: 20, y: 18 },
+                              { id: 'p-cb2', name: 'Gabriel Mutombo', number: 3, role: 'CB', x: 16, y: 38 },
+                              { id: 'p-lb', name: 'Eliano Reijnders', number: 2, role: 'LB', x: 20, y: 18 },
                               { id: 'p-dm1', name: 'Thom Haye', number: 33, role: 'DM', x: 30, y: 60 },
                               { id: 'p-dm2', name: 'Marc Klok', number: 23, role: 'DM', x: 30, y: 40 },
-                              { id: 'p-rw', name: 'Febri Hariyadi', number: 13, role: 'RW', x: 42, y: 82 },
-                              { id: 'p-am', name: 'Tyronne del Pino', number: 10, role: 'AM', x: 40, y: 50 },
-                              { id: 'p-lw', name: 'Beckham Putra', number: 7, role: 'LW', x: 42, y: 18 },
-                              { id: 'p-cf', name: 'David da Silva', number: 19, role: 'CF', x: 47, y: 50 },
+                              { id: 'p-rw', name: 'Mariano Peralta', number: 10, role: 'RW', x: 42, y: 82 },
+                              { id: 'p-am', name: 'Luciano Guaycochea', number: 8, role: 'AM', x: 40, y: 50 },
+                              { id: 'p-lw', name: 'Ragnar Oratmangoen', number: 77, role: 'LW', x: 42, y: 18 },
+                              { id: 'p-cf', name: 'Balša Sekulić', number: 99, role: 'CF', x: 47, y: 50 },
                             ]
                         ).map((pos) => {
                           const fullPlayer = players.find(
@@ -2296,16 +2296,16 @@ export function MatchCenter() {
                   ? currentTacticalPhase.playerPositions
                   : [
                       { id: 'p-gk', name: 'Teja Paku Alam', number: 14, role: 'GK', x: 8, y: 50 },
-                      { id: 'p-rb', name: 'Kakang Rudianto', number: 5, role: 'RB', x: 20, y: 82 },
+                      { id: 'p-rb', name: 'Sandy Walsh', number: 6, role: 'RB', x: 20, y: 82 },
                       { id: 'p-cb1', name: 'Patricio Matricardi', number: 4, role: 'CB', x: 16, y: 62 },
-                      { id: 'p-cb2', name: 'Federico Barba', number: 3, role: 'CB', x: 16, y: 38 },
-                      { id: 'p-lb', name: 'Edo Febriansah', number: 97, role: 'LB', x: 20, y: 18 },
+                      { id: 'p-cb2', name: 'Gabriel Mutombo', number: 3, role: 'CB', x: 16, y: 38 },
+                      { id: 'p-lb', name: 'Eliano Reijnders', number: 2, role: 'LB', x: 20, y: 18 },
                       { id: 'p-dm1', name: 'Thom Haye', number: 33, role: 'DM', x: 30, y: 60 },
                       { id: 'p-dm2', name: 'Marc Klok', number: 23, role: 'DM', x: 30, y: 40 },
-                      { id: 'p-rw', name: 'Febri Hariyadi', number: 13, role: 'RW', x: 42, y: 82 },
-                      { id: 'p-am', name: 'Tyronne del Pino', number: 10, role: 'AM', x: 40, y: 50 },
-                      { id: 'p-lw', name: 'Beckham Putra', number: 7, role: 'LW', x: 42, y: 18 },
-                      { id: 'p-cf', name: 'David da Silva', number: 19, role: 'CF', x: 47, y: 50 },
+                      { id: 'p-rw', name: 'Mariano Peralta', number: 10, role: 'RW', x: 42, y: 82 },
+                      { id: 'p-am', name: 'Luciano Guaycochea', number: 8, role: 'AM', x: 40, y: 50 },
+                      { id: 'p-lw', name: 'Ragnar Oratmangoen', number: 77, role: 'LW', x: 42, y: 18 },
+                      { id: 'p-cf', name: 'Balša Sekulić', number: 99, role: 'CF', x: 47, y: 50 },
                     ]
                 ).map((pos) => {
                   const fullPlayer = players.find(

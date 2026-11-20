@@ -267,7 +267,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       qualificationScenario: 'Persib Bandung mengumpulkan 16 poin dari 9 pertandingan (posisi #5) dan bersiap menjamu Bali United (#3, 19 Poin) di Stadion GBLA pada Pekan 10 guna merangsek kembali ke 3 besar klasemen.',
       keyEvents: [
         { minute: "14'", type: 'goal', text: 'Gol Java United! Gali Freitas menyambar bola serangan balik cepat 1-0!' },
-        { minute: "41'", type: 'goal', text: 'GOOOL PERSIB! Ciro Alves menyamakan kedudukan 1-1 lewat placing akurat!' },
+        { minute: "41'", type: 'goal', text: 'GOOOL PERSIB! Mariano Peralta menyamakan kedudukan 1-1 lewat placing akurat!' },
         { minute: "78'", type: 'goal', text: 'Gol Java United! Sepakan keras Taisei Marukawa memastikan keunggulan 2-1' },
       ],
     },
@@ -277,7 +277,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
         matchweek: latestFinished?.roundOrWeek || 'Pekan 9 Super League 2026/2027',
         opponent: 'Java United',
         score: '2 - 1',
-        scorers: ["Ciro Alves 41' (PERSIB)", "Gali Freitas 14'", "Taisei Marukawa 78'"],
+        scorers: ["Mariano Peralta 41' (PERSIB)", "Gali Freitas 14'", "Taisei Marukawa 78'"],
         venue: 'Stadion Jatidiri, Semarang',
       },
       nextFixture: {
