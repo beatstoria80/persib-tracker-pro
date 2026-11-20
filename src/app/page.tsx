@@ -10,10 +10,11 @@ import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
 import { VideoLoadingSplash } from '@/components/VideoLoadingSplash';
 import { PwaInstallModal } from '@/components/PwaInstallModal';
+import { LiveTelemetryWidget } from '@/components/LiveTelemetryWidget';
 import { ShieldCheck, Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, activeTournament, lastSyncedAt, syncFeedback, groqBulletin, fixtures } = useClubTracker();
+  const { mode, activeHub, activeTournament, syncFeedback, fixtures } = useClubTracker();
   const isPro = mode === 'pro';
 
   // REFACTOR: State pemicu transisi rise element UI/UX bertingkat (staggered cascade) setelah video splash selesai
@@ -88,60 +89,10 @@ export default function HomePage() {
           <InstallPwaPrompt />
         </div>
 
-        {/* Unified Minimal Live Status Banner - Stage 1 Rise */}
-        <div className={`px-4 sm:px-5 pt-2.5 pb-1 ${hasEnteredApp ? 'animate-ui-rise-1' : 'opacity-0 translate-y-6'}`}>
-          <div
-            className={`flex items-center justify-between px-3 py-2 rounded-2xl border text-xs gap-2 ${
-              isPro
-                ? 'bg-[#121620]/90 border-slate-800 text-slate-300 shadow-sm'
-                : 'bg-white border-slate-200 text-slate-700 shadow-xs'
-            }`}
-          >
-            <div className="flex items-center gap-2 min-w-0">
-              <span className="relative flex h-2 w-2 shrink-0">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
-              </span>
-              <p className="truncate text-[11px] font-bold">
-                <span className="text-blue-600 dark:text-cyan-400 font-extrabold mr-1">
-                  {activeTournament === 'liga1' ? 'Super League:' : activeTournament === 'acl2' ? 'ACL Two:' : 'Shopee Cup:'}
-                </span>
-                <span>
-                  {currentTournFixture
-                    ? `${currentTournFixture.homeTeam} ${currentTournFixture.homeScore ?? 0} - ${currentTournFixture.awayScore ?? 0} ${currentTournFixture.awayTeam} (${currentTournFixture.status === 'FINISHED' ? 'FT' : currentTournFixture.status === 'LIVE' ? 'LIVE' : currentTournFixture.time})`
-                    : 'Memuat data kompetisi real-time...'}
-                </span>
-              </p>
-            </div>
-            <span
-              className={`shrink-0 font-mono font-extrabold px-2 py-0.5 rounded-lg text-[9px] ${
-                isPro ? 'bg-blue-950 text-cyan-300 border border-blue-800/60' : 'bg-blue-50 text-blue-900 border border-blue-200'
-              }`}
-            >
-              {lastSyncedAt}
-            </span>
-          </div>
+        {/* REFACTOR: Unified Live Telemetry & AI Intelligence Widget (Menggantikan 2 bar terpotong sebelumnya) */}
+        <div className={hasEnteredApp ? 'animate-ui-rise-1' : 'opacity-0 translate-y-6'}>
+          <LiveTelemetryWidget currentFixture={currentTournFixture} />
         </div>
-
-        {/* Dynamic AI Live Intelligence Bulletin - Stage 2 Rise */}
-        {groqBulletin && (
-          <div className={`px-4 sm:px-5 pt-1 pb-1 ${hasEnteredApp ? 'animate-ui-rise-2' : 'opacity-0 translate-y-6'}`}>
-            <div
-              className={`px-3 py-2 rounded-2xl border text-xs flex items-center gap-2 transition-all shadow-xs ${
-                isPro
-                  ? 'bg-blue-950/40 border-blue-900/60 text-slate-200'
-                  : 'bg-blue-50/80 border-blue-200 text-slate-800'
-              }`}
-            >
-              <span className="shrink-0 text-[8.5px] font-mono font-black uppercase px-2 py-0.5 rounded bg-blue-600 text-white tracking-wider">
-                LIVE INTEL
-              </span>
-              <p className="text-[11px] font-medium leading-tight truncate">
-                {groqBulletin}
-              </p>
-            </div>
-          </div>
-        )}
 
         {/* Scrollable Main Mobile Hub Content - Stage 3 High Impact Rise with Sheen */}
         <main className={`flex-1 px-4 sm:px-5 py-3 pb-44 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
