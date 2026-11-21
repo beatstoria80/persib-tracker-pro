@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v28 (Crisp unblurred profile video with minimalist chevron rise & collapse)
-const CACHE_NAME = 'persib-tracker-pwa-v28';
+// PERSIB TRACKER - PWA Service Worker v30 (Mobile text wrap fix, clean sub-badge layout & multi-club top scorers)
+const CACHE_NAME = 'persib-tracker-pwa-v30';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
