@@ -14,7 +14,7 @@ export default function PlayerIndexRedirect() {
     <div className="min-h-screen w-full bg-[#050811] flex items-center justify-center text-white font-mono text-sm">
       <div className="animate-pulse flex items-center gap-2">
         <span className="w-2.5 h-2.5 rounded-full bg-blue-500 animate-ping" />
-        <span>Memuat Video Profil Peralta...</span>
+        <span>Memuat Profil Peralta...</span>
       </div>
     </div>
   );

@@ -1,15 +1,16 @@
 'use client';
 
 import React, { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { PlayerCategory, Position, SquadRole, Player } from '@/types/club';
-import { PlayerDetailModal } from './PlayerDetailModal';
 import { FitnessTrackerBadge } from './FitnessTrackerBadge';
 import { ShieldCheck, ChevronRight, Activity } from 'lucide-react';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
 
 export function RosterDeepDive() {
-  const { mode, players, selectedPlayer, setSelectedPlayer } = useClubTracker();
+  const router = useRouter();
+  const { mode, players } = useClubTracker();
   const isPro = mode === 'pro';
 
   const [activeCategory, setActiveCategory] = useState<PlayerCategory>('senior');
@@ -142,7 +143,8 @@ export function RosterDeepDive() {
         {filteredPlayers.map((player: Player) => (
           <div
             key={player.id}
-            onClick={() => setSelectedPlayer(player)}
+            // // REFACTOR: Direct navigation to player profile page without popup card modal
+            onClick={() => router.push(`/player/${player.id}`)}
             className={`rounded-[28px] border p-4 cursor-pointer active:scale-[0.98] transition-all shadow-md ${
               isPro
                 ? 'bg-[#121620] border-slate-800 hover:border-cyan-400/50 shadow-[0_4px_20px_rgba(0,0,0,0.3)]'
@@ -167,11 +169,6 @@ export function RosterDeepDive() {
                     {player.squadRole === 'starting' && (
                       <span className="text-[8px] font-mono font-black uppercase px-1.5 py-0.2 rounded-md bg-amber-400 text-slate-950">
                         XI
-                      </span>
-                    )}
-                    {(player.videoUrl || player.id.includes('peralta')) && (
-                      <span className="inline-flex items-center gap-0.5 text-[8px] font-mono font-black uppercase px-1.5 py-0.2 rounded-md bg-purple-500/20 text-purple-400 border border-purple-500/30">
-                        🎬 Video
                       </span>
                     )}
                   </div>
@@ -204,11 +201,6 @@ export function RosterDeepDive() {
           </div>
         ))}
       </div>
-
-      <PlayerDetailModal
-        player={selectedPlayer}
-        onClose={() => setSelectedPlayer(null)}
-      />
     </div>
   );
 }

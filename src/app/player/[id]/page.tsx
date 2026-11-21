@@ -6,13 +6,8 @@ import { useParams, useRouter } from 'next/navigation';
 import { OFFICIAL_SQUAD_2026_2027, getPlayerAvatar } from '@/data/persib-data';
 import {
   ArrowLeft,
-  Volume2,
-  VolumeX,
-  Play,
-  Pause,
   ShieldCheck,
   Share2,
-  Sparkles,
 } from 'lucide-react';
 
 export default function PlayerVideoProfilePage() {
@@ -28,28 +23,8 @@ export default function PlayerVideoProfilePage() {
     OFFICIAL_SQUAD_2026_2027.find((p) => p.id === 'peralta-10') ||
     OFFICIAL_SQUAD_2026_2027[0];
 
-  const [isMuted, setIsMuted] = useState<boolean>(true);
-  const [isPlaying, setIsPlaying] = useState<boolean>(true);
   const [copiedToast, setCopiedToast] = useState<string | null>(null);
   const videoRef = useRef<HTMLVideoElement | null>(null);
-
-  const togglePlay = () => {
-    if (!videoRef.current) return;
-    if (isPlaying) {
-      videoRef.current.pause();
-      setIsPlaying(false);
-    } else {
-      videoRef.current.play().catch(() => {});
-      setIsPlaying(true);
-    }
-  };
-
-  const toggleMute = () => {
-    if (!videoRef.current) return;
-    const nextMute = !isMuted;
-    videoRef.current.muted = nextMute;
-    setIsMuted(nextMute);
-  };
 
   const handleShare = async () => {
     const url = typeof window !== 'undefined' ? window.location.href : '';
@@ -57,7 +32,7 @@ export default function PlayerVideoProfilePage() {
       try {
         await navigator.share({
           title: `${activePlayer.name} #${activePlayer.number} - PERSIB Bandung 2026/2027`,
-          text: `Profil video eksklusif ${activePlayer.name} (${activePlayer.position}) skuad resmi PERSIB Bandung musim 2026/2027.`,
+          text: `Profil resmi ${activePlayer.name} (${activePlayer.position}) skuad PERSIB Bandung musim 2026/2027.`,
           url,
         });
       } catch {
@@ -70,21 +45,27 @@ export default function PlayerVideoProfilePage() {
     }
   };
 
-  // Video resolution: Mariano Peralta uses /peralta.mp4, others fallback to stadium animation loop
-  const videoSource = activePlayer.videoUrl || (activePlayer.id.includes('peralta') ? '/peralta.mp4' : '/peralta.mp4');
+  // Authentic player video resolution (Sandy Walsh, Mariano Peralta, or default)
+  const videoSource =
+    activePlayer.videoUrl ||
+    (activePlayer.id.includes('walsh')
+      ? '/Sandy_Wals.mp4'
+      : activePlayer.id.includes('peralta')
+      ? '/peralta.mp4'
+      : '/peralta.mp4');
 
   return (
     <div className="min-h-screen w-full bg-[#050811] text-white flex justify-center items-start overflow-hidden">
       {/* 430px Mobile-First App Canvas */}
       <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-black">
-        {/* Background Looping Video */}
+        {/* Background Looping Stream */}
         <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950">
           <video
             ref={videoRef}
             src={videoSource}
             autoPlay
             loop
-            muted={isMuted}
+            muted
             playsInline
             className="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.05]"
           />
@@ -101,7 +82,7 @@ export default function PlayerVideoProfilePage() {
           </div>
         )}
 
-        {/* Top Control Bar */}
+        {/* // REFACTOR: Ultra-minimalist top navigation header (purged blue guide badge & player control toggles) */}
         <header className="relative z-20 px-4 pt-5 pb-3 flex items-center justify-between">
           <button
             onClick={() => router.push('/')}
@@ -111,53 +92,14 @@ export default function PlayerVideoProfilePage() {
             <ArrowLeft className="w-5 h-5" />
           </button>
 
-          <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-900/60 backdrop-blur-md border border-blue-400/30">
-            <Sparkles className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
-            <span className="text-[11px] font-black uppercase tracking-wider text-cyan-300">
-              Profil Video 2026/2027
-            </span>
-          </div>
-
-          <div className="flex items-center gap-2">
-            {/* Play/Pause Button */}
-            <button
-              onClick={togglePlay}
-              className="w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/80 transition-all active:scale-95"
-              aria-label={isPlaying ? 'Jeda Video' : 'Putar Video'}
-            >
-              {isPlaying ? <Pause className="w-4 h-4" /> : <Play className="w-4 h-4 ml-0.5" />}
-            </button>
-
-            {/* Mute/Unmute Button */}
-            <button
-              onClick={toggleMute}
-              className="w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/80 transition-all active:scale-95"
-              aria-label={isMuted ? 'Buka Suara' : 'Bisukan Suara'}
-            >
-              {isMuted ? <VolumeX className="w-4 h-4 text-slate-300" /> : <Volume2 className="w-4 h-4 text-cyan-400" />}
-            </button>
-
-            {/* Share Button */}
-            <button
-              onClick={handleShare}
-              className="w-9 h-9 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/80 transition-all active:scale-95"
-              aria-label="Bagikan Profil"
-            >
-              <Share2 className="w-4 h-4" />
-            </button>
-          </div>
+          <button
+            onClick={handleShare}
+            className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/80 transition-all active:scale-95"
+            aria-label="Bagikan Profil"
+          >
+            <Share2 className="w-4 h-4" />
+          </button>
         </header>
-
-        {/* Center Minimal Watermark Badge */}
-        <div className="relative z-10 px-5 flex items-center justify-between pointer-events-none">
-          <div className="flex items-center gap-2 px-3 py-1 rounded-xl bg-black/30 backdrop-blur-xs border border-white/10 text-[10px] font-mono tracking-widest text-slate-300 uppercase">
-            <span>PERSIB TRACKER PRO</span>
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-ping" />
-          </div>
-          <div className="font-mono text-xs font-black text-white/50 tracking-widest">
-            HD 1080P LOOP
-          </div>
-        </div>
 
         {/* Bottom Interactive Player Profile Sheet */}
         <div className="relative z-20 px-4 pb-6 pt-2 flex flex-col gap-3">

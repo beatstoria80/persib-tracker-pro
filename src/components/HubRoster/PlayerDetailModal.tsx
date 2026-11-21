@@ -232,14 +232,14 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
             </div>
           </div>
 
-          {/* // REFACTOR: Fullscreen Video Profile Link */}
+          {/* // REFACTOR: Fullscreen Profile Link */}
           <div className="pt-1">
             <Link
               href={`/player/${player.id}`}
               className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 active:scale-[0.98] transition-all"
             >
-              <Film className="w-4 h-4 text-cyan-200 animate-pulse" />
-              <span>Buka Video Profil Loop ({player.name})</span>
+              <Film className="w-4 h-4 text-cyan-200" />
+              <span>Buka Profil Lengkap ({player.name})</span>
             </Link>
           </div>
         </div>

@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v12 (Zero Past Season Relics - Full 2026/2027 Domestic & Asia Alignment)
-const CACHE_NAME = 'persib-tracker-pwa-v12';
+// PERSIB TRACKER - PWA Service Worker v13 (Direct Minimalist Player Navigation - Zero Pop Card - Clean Header)
+const CACHE_NAME = 'persib-tracker-pwa-v13';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
