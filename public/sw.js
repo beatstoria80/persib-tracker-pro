@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v23 (Groq AI Model Fixed to openai/gpt-oss-120b with Dynamic Multi-Category Intelligence)
-const CACHE_NAME = 'persib-tracker-pwa-v23';
+// PERSIB TRACKER - PWA Service Worker v24 (Mobile Android responsive typography & scroll clearance)
+const CACHE_NAME = 'persib-tracker-pwa-v24';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

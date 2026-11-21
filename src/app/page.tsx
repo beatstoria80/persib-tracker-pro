@@ -105,15 +105,15 @@ export default function HomePage() {
         </div>
 
         {/* Scrollable Main Mobile Hub Content - Stage 3 High Impact Rise with Sheen */}
-        <main className={`flex-1 px-4 sm:px-5 py-3 pb-36 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
+        <main className={`flex-1 px-4 sm:px-5 py-3 pb-48 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
           <div>
             {(activeHub === 'match-center' || activeHub === 'ai-chat') && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}
             {activeHub === 'transparency' && <CorporateTransparency />}
           </div>
 
-          {/* REFACTOR: Official Sponsorship & Partner Footer Section */}
-          <div className="mt-4">
+          {/* REFACTOR: Official Sponsorship & Partner Footer Section with full bottom clearance */}
+          <div className="mt-6 mb-4">
             <SponsorshipFooter />
           </div>
         </main>

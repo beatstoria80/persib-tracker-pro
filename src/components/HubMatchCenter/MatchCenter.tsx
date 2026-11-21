@@ -478,9 +478,9 @@ export function MatchCenter() {
                   : 'bg-gradient-to-b from-slate-50 to-white'
               }`}
             >
-              <div className="flex items-center justify-between text-[10px] font-bold uppercase tracking-wider mb-5">
-                <span className="text-slate-400 font-mono">{currentFixture.tournament}</span>
-                <span className="px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-cyan-300 font-extrabold">
+              <div className="flex items-center justify-between gap-2 text-[10px] font-bold uppercase tracking-wider mb-4">
+                <span className="text-slate-400 font-mono text-[9px] sm:text-[10px] whitespace-nowrap shrink-0">{currentFixture.tournament}</span>
+                <span className="px-2 py-0.5 rounded-full bg-blue-100 text-blue-900 dark:bg-blue-950 dark:text-cyan-300 font-extrabold text-[9px] sm:text-[9.5px] whitespace-nowrap truncate max-w-[65%] text-right">
                   {currentFixture.roundOrWeek}
                 </span>
               </div>
@@ -511,7 +511,7 @@ export function MatchCenter() {
                   >
                     VS
                   </div>
-                  <span className="text-[9px] font-mono font-bold text-slate-400 mt-1 uppercase">
+                  <span className="text-[9px] font-mono font-bold text-slate-400 mt-1 uppercase whitespace-nowrap">
                     {currentFixture.status === 'FINISHED' ? 'Full Time' : currentFixture.time}
                   </span>
                 </div>
@@ -540,33 +540,40 @@ export function MatchCenter() {
                   : 'bg-slate-50/80 border-slate-200 text-slate-950'
               }`}
             >
-              <div className="flex items-center justify-between pb-3.5 border-b border-slate-200 dark:border-slate-800/80">
-                <div>
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+              <div className="flex items-center justify-between gap-2 pb-3.5 border-b border-slate-200 dark:border-slate-800/80">
+                <div className="shrink-0">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider whitespace-nowrap">
                     {currentFixture.status === 'FINISHED' ? 'Skor Akhir' : 'Jadwal Kick-off'}
                   </span>
-                  <div className="text-2xl font-black font-mono tracking-tight mt-0.5">
+                  <div className="mt-0.5 whitespace-nowrap">
                     {currentFixture.status === 'FINISHED' ? (
-                      <span className="text-blue-600 dark:text-cyan-400">
+                      <span className="text-xl sm:text-2xl font-black font-mono text-blue-600 dark:text-cyan-400">
                         {currentFixture.homeScore} : {currentFixture.awayScore}
                       </span>
                     ) : (
-                      <span>{currentFixture.time}</span>
+                      <div className="flex items-baseline gap-1">
+                        <span className="text-xl sm:text-2xl font-black font-mono tracking-tight text-slate-900 dark:text-white">
+                          {currentFixture.time.split(' ')[0]}
+                        </span>
+                        <span className="text-xs sm:text-sm font-bold text-slate-500 dark:text-slate-400 font-mono">
+                          {currentFixture.time.split(' ').slice(1).join(' ') || 'WIB'}
+                        </span>
+                      </div>
                     )}
                   </div>
                 </div>
 
-                <div className="text-right">
-                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider">
+                <div className="text-right min-w-0">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider whitespace-nowrap">
                     {currentFixture.status === 'FINISHED' ? 'Status Laga' : 'Tanggal Pertandingan'}
                   </span>
-                  <div className="text-xs font-bold mt-1">
+                  <div className="text-[11px] sm:text-xs font-bold mt-1 whitespace-nowrap">
                     {currentFixture.status === 'FINISHED' ? (
-                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold text-[10px]">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold text-[10px] whitespace-nowrap">
                         FT (Selesai)
                       </span>
                     ) : (
-                      <span className="font-mono text-slate-700 dark:text-slate-200">
+                      <span className="font-mono text-slate-700 dark:text-slate-200 whitespace-nowrap">
                         {currentFixture.date}
                       </span>
                     )}
@@ -599,68 +606,68 @@ export function MatchCenter() {
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('events')}
-                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
                       heroDetailTab === 'events'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span>⚽ Gol & Kartu</span>
+                    <span className="truncate">⚽ Gol & Kartu</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('lineups')}
-                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
                       heroDetailTab === 'lineups'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span>👥 Skuad & XI</span>
+                    <span className="truncate">👥 Skuad & XI</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('duels')}
-                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
                       heroDetailTab === 'duels'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span>⚔️ Duel 1v1</span>
+                    <span className="truncate">⚔️ Duel 1v1</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('pitch')}
-                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
                       heroDetailTab === 'pitch'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span>🗺️ Formasi 2D</span>
+                    <span className="truncate">🗺️ Formasi 2D</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('stats')}
-                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
                       heroDetailTab === 'stats'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span>📊 Statistik</span>
+                    <span className="truncate">📊 Statistik</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('highlights')}
-                    className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all flex items-center justify-center gap-1 ${
+                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
                       heroDetailTab === 'highlights'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span>💡 Catatan</span>
+                    <span className="truncate">💡 Catatan</span>
                   </button>
                 </div>
 
