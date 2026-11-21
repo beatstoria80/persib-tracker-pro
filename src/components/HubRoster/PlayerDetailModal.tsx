@@ -1,9 +1,10 @@
 'use client';
 
 import React from 'react';
+import Link from 'next/link';
 import { Player } from '@/types/club';
 import { useClubTracker } from '@/context/ClubTrackerContext';
-import { X, ShieldCheck, Calendar, DollarSign, Activity, CheckCircle2, AlertCircle } from 'lucide-react';
+import { X, ShieldCheck, Calendar, DollarSign, Activity, CheckCircle2, AlertCircle, Film } from 'lucide-react';
 import { FitnessTrackerBadge } from './FitnessTrackerBadge';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
 
@@ -229,6 +230,17 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
                 {player.marketValue}
               </strong>
             </div>
+          </div>
+
+          {/* // REFACTOR: Fullscreen Video Profile Link */}
+          <div className="pt-1">
+            <Link
+              href={`/player/${player.id}`}
+              className="w-full py-3.5 px-4 rounded-2xl bg-gradient-to-r from-blue-600 via-indigo-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white font-black text-xs uppercase tracking-wider flex items-center justify-center gap-2 shadow-lg shadow-blue-600/30 active:scale-[0.98] transition-all"
+            >
+              <Film className="w-4 h-4 text-cyan-200 animate-pulse" />
+              <span>Buka Video Profil Loop ({player.name})</span>
+            </Link>
           </div>
         </div>
       </div>

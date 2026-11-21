@@ -41,6 +41,7 @@ export interface Player {
   };
   stats: PlayerStats;
   avatarUrl?: string;
+  videoUrl?: string;
 }
 
 export interface MatchShot {

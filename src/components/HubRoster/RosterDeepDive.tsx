@@ -169,6 +169,11 @@ export function RosterDeepDive() {
                         XI
                       </span>
                     )}
+                    {(player.videoUrl || player.id.includes('peralta')) && (
+                      <span className="inline-flex items-center gap-0.5 text-[8px] font-mono font-black uppercase px-1.5 py-0.2 rounded-md bg-purple-500/20 text-purple-400 border border-purple-500/30">
+                        🎬 Video
+                      </span>
+                    )}
                   </div>
                   <div className="text-[11px] text-slate-400 font-medium mt-0.5">
                     {player.nationality} • <strong className="text-blue-600 dark:text-cyan-400">{player.position}</strong> ({player.age} thn)

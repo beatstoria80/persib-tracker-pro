@@ -942,6 +942,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     contractUntil: '31 Mei 2028',
     verifiedData: true,
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/748602-1771091732.jpg',
+    videoUrl: '/peralta.mp4',
     fitness: {
       status: 'fit',
       percentage: 100,
