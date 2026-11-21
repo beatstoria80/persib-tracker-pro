@@ -4,8 +4,6 @@ import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import {
   Send,
-  Sparkles,
-  Bot,
   User,
   Copy,
   Check,
@@ -17,6 +15,7 @@ import {
   Zap,
 } from 'lucide-react';
 import Image from 'next/image';
+import { SoccerChatIcon } from '@/components/icons/SoccerChatIcon';
 
 interface Message {
   id: string;
@@ -54,7 +53,7 @@ export function PersibAiChat() {
       id: 'init-1',
       role: 'assistant',
       content:
-        '**Sampurasun, Bobotoh!** 🔵\n\nSaya adalah **Persib AI Intelligence Assistant** resmi musim **2026/2027**.\n\nTanyakan apa saja tentang:\n* 🏆 **Jadwal & Hasil Laga:** Super League, ACL Two, & Shopee Cup\n* 📊 **Klasemen:** Peringkat terkini Super League & Grup B Asia\n* 👥 **Pemain & Taktik:** Thom Haye, Sandy Walsh, Ragnar, Peralta, dan racikan Bojan Hodak\n\nSilakan pilih topik cepat di bawah atau ketik pertanyaan Anda!',
+        '**Sampurasun, Bobotoh!** ⚽💬\n\nSaya adalah **Persib Football Chat Assistant** resmi musim **2026/2027**.\n\nTanyakan apa saja tentang:\n* 🏆 **Jadwal & Hasil Laga:** Super League, ACL Two, & Shopee Cup\n* 📊 **Klasemen:** Peringkat terkini Super League & Grup B Asia\n* 👥 **Pemain & Taktik:** Thom Haye, Sandy Walsh, Ragnar, Peralta, dan racikan Bojan Hodak\n\nSilakan pilih topik cepat di bawah atau ketik pertanyaan Anda!',
       timestamp: 'Baru saja',
     },
   ]);
@@ -185,15 +184,16 @@ export function PersibAiChat() {
 
             <div>
               <div className="flex items-center gap-2">
-                <h2 className="text-sm font-black tracking-tight text-slate-900 dark:text-white">
-                  PERSIB AI CHAT
+                <h2 className="text-sm font-black tracking-tight text-slate-900 dark:text-white flex items-center gap-1.5">
+                  <SoccerChatIcon className="w-4 h-4 text-blue-600 dark:text-cyan-400" />
+                  <span>PERSIB CHAT</span>
                 </h2>
                 <span className="text-[9px] font-mono font-bold uppercase px-2 py-0.5 rounded-full bg-blue-600/20 text-blue-600 dark:text-cyan-400 border border-blue-500/30">
                   2026/2027
                 </span>
               </div>
               <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                Konsultan Intelijen & Tanya Jawab Event Pangeran Biru
+                Konsultan Sepakbola & Tanya Jawab Event Pangeran Biru
               </p>
             </div>
           </div>
@@ -257,8 +257,8 @@ export function PersibAiChat() {
               className={`flex gap-2.5 sm:gap-3 ${isUser ? 'justify-end' : 'justify-start'}`}
             >
               {!isUser && (
-                <div className="w-7 h-7 rounded-xl bg-blue-700/80 p-0.5 flex items-center justify-center shrink-0 mt-0.5 shadow-md">
-                  <Bot className="w-4 h-4 text-cyan-300" />
+                <div className="w-7 h-7 rounded-xl bg-blue-700/90 p-1 flex items-center justify-center shrink-0 mt-0.5 shadow-md">
+                  <SoccerChatIcon className="w-4 h-4 text-cyan-300" />
                 </div>
               )}
 
@@ -315,8 +315,8 @@ export function PersibAiChat() {
         {/* Loading Indicator with Animated Bouncing Dots */}
         {isLoading && (
           <div className="flex gap-2.5 items-center justify-start">
-            <div className="w-7 h-7 rounded-xl bg-blue-700/80 flex items-center justify-center shrink-0 shadow-md">
-              <Sparkles className="w-4 h-4 text-cyan-300 animate-spin" />
+            <div className="w-7 h-7 rounded-xl bg-blue-700/80 p-1 flex items-center justify-center shrink-0 shadow-md">
+              <SoccerChatIcon className="w-4 h-4 text-cyan-300 animate-bounce" />
             </div>
             <div
               className={`rounded-2xl px-4 py-3 rounded-bl-none flex items-center gap-1.5 ${
@@ -327,7 +327,7 @@ export function PersibAiChat() {
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce [animation-delay:-0.15s]" />
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-bounce" />
               <span className="text-[10px] text-slate-400 ml-1.5 font-medium">
-                Persib AI sedang menganalisis data...
+                Persib sedang menganalisis data...
               </span>
             </div>
           </div>

@@ -2,13 +2,14 @@
 
 import React from 'react';
 import { useClubTracker, ActiveHub } from '@/context/ClubTrackerContext';
-import { Trophy, Users, Building2, Bot } from 'lucide-react';
+import { Trophy, Users, Building2 } from 'lucide-react';
+import { SoccerChatIcon } from '@/components/icons/SoccerChatIcon';
 
 export function MobileBottomNav() {
   const { mode, activeHub, setActiveHub } = useClubTracker();
   const isPro = mode === 'pro';
 
-  // REFACTOR: 4 Hub Navigation Items including dedicated Persib AI Chat
+  // REFACTOR: 4 Hub Navigation Items with Authentic Bola + Chat Icon (No AI Slop)
   const navItems: { id: ActiveHub; label: string; icon: React.ReactNode; badge?: string }[] = [
     {
       id: 'match-center',
@@ -30,23 +31,24 @@ export function MobileBottomNav() {
     {
       id: 'ai-chat',
       label: 'Ai Chat',
-      icon: <Bot className="w-4.5 h-4.5 text-cyan-400" />,
-      badge: 'AI',
+      icon: <SoccerChatIcon className="w-4.5 h-4.5 text-cyan-400" />,
+      badge: 'LIVE',
     },
   ];
 
   return (
     <div
-      className="fixed bottom-0 inset-x-0 max-w-[430px] mx-auto z-40 px-3 sm:px-4 pointer-events-none"
-      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 10px)' }}
+      className="fixed bottom-0 inset-x-0 z-50 pointer-events-none flex justify-center"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)' }}
     >
-      <nav
-        className={`pointer-events-auto rounded-full p-1.5 flex items-center justify-around shadow-2xl backdrop-blur-xl border transition-all ${
-          isPro
-            ? 'bg-[#121620]/95 border-slate-700/80 shadow-[0_10px_35px_rgba(0,0,0,0.6)]'
-            : 'bg-white/95 border-slate-200/90 shadow-[0_10px_30px_rgba(0,0,0,0.12)]'
-        }`}
-      >
+      <div className="w-full max-w-[430px] px-3 sm:px-4">
+        <nav
+          className={`pointer-events-auto rounded-full p-1.5 flex items-center justify-around shadow-2xl backdrop-blur-xl border transition-all ${
+            isPro
+              ? 'bg-[#0E121B]/95 border-slate-700/80 shadow-[0_10px_35px_rgba(0,0,0,0.65)]'
+              : 'bg-white/95 border-slate-200/90 shadow-[0_10px_30px_rgba(0,0,0,0.12)]'
+          }`}
+        >
         {navItems.map((item) => {
           const isActive = activeHub === item.id;
           return (
@@ -87,6 +89,7 @@ export function MobileBottomNav() {
           );
         })}
       </nav>
+      </div>
     </div>
   );
 }

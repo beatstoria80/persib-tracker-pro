@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v19 (Minimized Player Profile Card with Rise Drawer for Unobstructed Looping Video)
-const CACHE_NAME = 'persib-tracker-pwa-v19';
+// PERSIB TRACKER - PWA Service Worker v20 (Permanently Fixed Bottom Nav, Bola+Chat Icon, & Clean Footer Spacing)
+const CACHE_NAME = 'persib-tracker-pwa-v20';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

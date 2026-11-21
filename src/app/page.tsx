@@ -106,7 +106,7 @@ export default function HomePage() {
         </div>
 
         {/* Scrollable Main Mobile Hub Content - Stage 3 High Impact Rise with Sheen */}
-        <main className={`flex-1 px-4 sm:px-5 py-3 pb-44 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
+        <main className={`flex-1 px-4 sm:px-5 py-3 pb-36 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
           <div>
             {activeHub === 'match-center' && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}
@@ -114,15 +114,15 @@ export default function HomePage() {
             {activeHub === 'ai-chat' && <PersibAiChat />}
           </div>
 
-          {/* REFACTOR: Official Sponsorship & Partner Footer Section */}
-          <SponsorshipFooter />
+          {/* REFACTOR: Official Sponsorship & Partner Footer Section (Turunkan ke bawah agar tidak menabrak chat input) */}
+          <div className={activeHub === 'ai-chat' ? 'mt-24 pt-6 border-t border-slate-200/50 dark:border-slate-800/60' : 'mt-4'}>
+            <SponsorshipFooter />
+          </div>
         </main>
-
-        {/* Floating Pill Mobile Bottom Navigation - Stage 4 Rise with Spring Bounce */}
-        <div className={hasEnteredApp ? 'animate-ui-nav-rise' : 'opacity-0 translate-y-10'}>
-          <MobileBottomNav />
-        </div>
       </div>
+
+      {/* Floating Pill Mobile Bottom Navigation - Permanently fixed at viewport bottom */}
+      <MobileBottomNav />
     </div>
 
     {/* Dedicated Multi-Platform PWA Installation Modal */}

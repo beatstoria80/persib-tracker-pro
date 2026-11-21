@@ -69,21 +69,21 @@ export function SponsorshipFooter() {
   ];
 
   return (
-    <footer className="mt-8 pt-2 pb-2 text-center select-none">
+    <footer className="pt-2 pb-2 text-center select-none">
       {/* =========================================================================
-          // REFACTOR: SPONSORSHIP & OFFICIAL PARTNER CARD (MINIMALIS & ELEGAN)
-          - Removed top sponsor badge pill and bottom accreditation footer per user markup.
-          - Kept brand headline, 2x2 interactive social pills, and inquiries line.
+          // REFACTOR: SPONSORSHIP & OFFICIAL PARTNER CARD (MINIMALIS, COMPACT & TANPA DEAD SPACE)
+          - Tightened padding & margin to eliminate wasteful negative space.
+          - Placed at the very bottom of the view hierarchy.
           ========================================================================= */}
       <div
-        className={`p-4 sm:p-5 rounded-3xl border transition-all duration-300 shadow-sm ${
+        className={`p-3.5 sm:p-4 rounded-2xl border transition-all duration-300 shadow-sm ${
           isPro
             ? 'bg-gradient-to-br from-[#121622] via-[#0E121A] to-[#0A0D14] border-slate-800 text-slate-200'
             : 'bg-gradient-to-br from-blue-50/60 via-white to-slate-50 border-blue-200/80 text-slate-800'
         }`}
       >
         {/* Brand Headline */}
-        <div className="text-left mb-3.5">
+        <div className="text-left mb-2.5">
           <h4 className="text-sm font-black tracking-tight text-slate-950 dark:text-white">
             NINOC (ninoc.co)
           </h4>
@@ -100,7 +100,7 @@ export function SponsorshipFooter() {
               href={item.href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`p-2.5 rounded-2xl border transition-all active:scale-95 flex items-center justify-between gap-2 ${
+              className={`p-2 rounded-xl border transition-all active:scale-95 flex items-center justify-between gap-2 ${
                 isPro
                   ? `bg-[#161B28]/80 border-slate-800 hover:border-slate-700 ${item.bgColor}`
                   : `bg-white border-slate-200 hover:border-blue-300 shadow-2xs ${item.bgColor}`
@@ -110,10 +110,10 @@ export function SponsorshipFooter() {
               <div className="flex items-center gap-2 min-w-0">
                 {item.icon}
                 <div className="min-w-0">
-                  <span className="block text-[10px] font-mono font-bold uppercase text-slate-400 dark:text-slate-400 leading-none">
+                  <span className="block text-[9.5px] font-mono font-bold uppercase text-slate-400 dark:text-slate-400 leading-none">
                     {item.name}
                   </span>
-                  <span className="block text-[11px] font-black truncate leading-tight mt-0.5 text-slate-900 dark:text-slate-100">
+                  <span className="block text-[10.5px] font-black truncate leading-tight mt-0.5 text-slate-900 dark:text-slate-100">
                     {item.id === 'email' ? 'Hubungi Kami' : item.handle}
                   </span>
                 </div>
@@ -125,7 +125,7 @@ export function SponsorshipFooter() {
         </div>
 
         {/* Email Direct Display */}
-        <div className="mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-center gap-1.5 text-[10px] text-slate-500 dark:text-slate-400">
+        <div className="mt-2 pt-1.5 border-t border-slate-200 dark:border-slate-800/80 flex items-center justify-center gap-1.5 text-[9.5px] text-slate-500 dark:text-slate-400">
           <Mail className="w-3 h-3 text-blue-600 dark:text-cyan-400" />
           <span>Inquiries:</span>
           <a
