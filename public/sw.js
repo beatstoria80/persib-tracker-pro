@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v18 (Added Persib AI Chat Hub & Minimalist Feeds Bar)
-const CACHE_NAME = 'persib-tracker-pwa-v18';
+// PERSIB TRACKER - PWA Service Worker v19 (Minimized Player Profile Card with Rise Drawer for Unobstructed Looping Video)
+const CACHE_NAME = 'persib-tracker-pwa-v19';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
