@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v20 (Permanently Fixed Bottom Nav, Bola+Chat Icon, & Clean Footer Spacing)
-const CACHE_NAME = 'persib-tracker-pwa-v20';
+// PERSIB TRACKER - PWA Service Worker v21 (Window-Style AI Tactical Chat & Dedicated /chat Route)
+const CACHE_NAME = 'persib-tracker-pwa-v21';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

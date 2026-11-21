@@ -8,7 +8,7 @@ import { InstallPwaPrompt } from '@/components/InstallPwaPrompt';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
-import { PersibAiChat } from '@/components/HubAiChat/PersibAiChat';
+import { PersibAiChatWindow } from '@/components/HubAiChat/PersibAiChatWindow';
 import { VideoLoadingSplash } from '@/components/VideoLoadingSplash';
 import { PwaInstallModal } from '@/components/PwaInstallModal';
 import { LiveTelemetryWidget } from '@/components/LiveTelemetryWidget';
@@ -16,7 +16,7 @@ import { SponsorshipFooter } from '@/components/SponsorshipFooter';
 import { Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, activeTournament, syncFeedback, fixtures } = useClubTracker();
+  const { mode, activeHub, setActiveHub, activeTournament, syncFeedback, fixtures } = useClubTracker();
   const isPro = mode === 'pro';
 
   // REFACTOR: State pemicu transisi rise element UI/UX bertingkat (staggered cascade) setelah video splash selesai
@@ -111,13 +111,17 @@ export default function HomePage() {
             {activeHub === 'match-center' && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}
             {activeHub === 'transparency' && <CorporateTransparency />}
-            {activeHub === 'ai-chat' && <PersibAiChat />}
+            {activeHub === 'ai-chat' && (
+              <PersibAiChatWindow onClose={() => setActiveHub('match-center')} />
+            )}
           </div>
 
-          {/* REFACTOR: Official Sponsorship & Partner Footer Section (Turunkan ke bawah agar tidak menabrak chat input) */}
-          <div className={activeHub === 'ai-chat' ? 'mt-24 pt-6 border-t border-slate-200/50 dark:border-slate-800/60' : 'mt-4'}>
-            <SponsorshipFooter />
-          </div>
+          {/* REFACTOR: Official Sponsorship & Partner Footer Section (Suppressed in dedicated AI chat window) */}
+          {activeHub !== 'ai-chat' && (
+            <div className="mt-4">
+              <SponsorshipFooter />
+            </div>
+          )}
         </main>
       </div>
 

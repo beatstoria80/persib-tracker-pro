@@ -1,11 +1,14 @@
 'use client';
 
 import React from 'react';
+import { useRouter, usePathname } from 'next/navigation';
 import { useClubTracker, ActiveHub } from '@/context/ClubTrackerContext';
 import { Trophy, Users, Building2 } from 'lucide-react';
 import { SoccerChatIcon } from '@/components/icons/SoccerChatIcon';
 
 export function MobileBottomNav() {
+  const router = useRouter();
+  const pathname = usePathname();
   const { mode, activeHub, setActiveHub } = useClubTracker();
   const isPro = mode === 'pro';
 
@@ -50,12 +53,17 @@ export function MobileBottomNav() {
           }`}
         >
         {navItems.map((item) => {
-          const isActive = activeHub === item.id;
+          const isActive = pathname === '/chat' ? item.id === 'ai-chat' : activeHub === item.id;
           return (
             <button
               type="button"
               key={item.id}
-              onClick={() => setActiveHub(item.id)}
+              onClick={() => {
+                setActiveHub(item.id);
+                if (pathname === '/chat' && item.id !== 'ai-chat') {
+                  router.push('/');
+                }
+              }}
               className={`relative flex items-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-full transition-all duration-200 active:scale-95 ${
                 isActive
                   ? isPro
