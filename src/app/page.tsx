@@ -8,6 +8,7 @@ import { InstallPwaPrompt } from '@/components/InstallPwaPrompt';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
+import { PersibAiChat } from '@/components/HubAiChat/PersibAiChat';
 import { VideoLoadingSplash } from '@/components/VideoLoadingSplash';
 import { PwaInstallModal } from '@/components/PwaInstallModal';
 import { LiveTelemetryWidget } from '@/components/LiveTelemetryWidget';
@@ -110,6 +111,7 @@ export default function HomePage() {
             {activeHub === 'match-center' && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}
             {activeHub === 'transparency' && <CorporateTransparency />}
+            {activeHub === 'ai-chat' && <PersibAiChat />}
           </div>
 
           {/* REFACTOR: Official Sponsorship & Partner Footer Section */}

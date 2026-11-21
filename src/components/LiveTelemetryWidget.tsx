@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { MatchFixture } from '@/types/club';
-import { Sparkles, ChevronDown, ChevronUp, RefreshCw, Trophy, ShieldCheck } from 'lucide-react';
+import { ChevronDown, ChevronUp, RefreshCw, Trophy, ShieldCheck } from 'lucide-react';
 
 interface LiveTelemetryWidgetProps {
   currentFixture: MatchFixture | null;
@@ -189,12 +189,9 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
           >
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5">
-                <span className="flex items-center gap-1 text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-full bg-blue-600 text-white tracking-wider shrink-0 shadow-xs">
-                  <Sparkles className="w-2.5 h-2.5" />
-                  <span>LIVE INTEL</span>
-                </span>
-                <span className="text-[10px] font-bold text-blue-700 dark:text-cyan-300">
-                  Analisis Otonom AI
+                {/* REFACTOR: Minimalist feeds copy text replacing previous live intel badge */}
+                <span className="text-xs font-black uppercase tracking-wider text-blue-700 dark:text-cyan-400">
+                  feeds
                 </span>
               </div>
 

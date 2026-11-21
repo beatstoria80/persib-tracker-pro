@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v17 (Synchronized Shopee Cup 2026/2027 Group B Schedule & Opponents)
-const CACHE_NAME = 'persib-tracker-pwa-v17';
+// PERSIB TRACKER - PWA Service Worker v18 (Added Persib AI Chat Hub & Minimalist Feeds Bar)
+const CACHE_NAME = 'persib-tracker-pwa-v18';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

@@ -2,35 +2,43 @@
 
 import React from 'react';
 import { useClubTracker, ActiveHub } from '@/context/ClubTrackerContext';
-import { Trophy, Users, Building2 } from 'lucide-react';
+import { Trophy, Users, Building2, Bot } from 'lucide-react';
 
 export function MobileBottomNav() {
   const { mode, activeHub, setActiveHub } = useClubTracker();
   const isPro = mode === 'pro';
 
+  // REFACTOR: 4 Hub Navigation Items including dedicated Persib AI Chat
   const navItems: { id: ActiveHub; label: string; icon: React.ReactNode; badge?: string }[] = [
     {
       id: 'match-center',
       label: 'Matches',
-      icon: <Trophy className="w-5 h-5" />,
-      badge: '#4',
+      icon: <Trophy className="w-4.5 h-4.5" />,
+      badge: '#6',
     },
     {
       id: 'roster',
       label: 'Roster',
-      icon: <Users className="w-5 h-5" />,
+      icon: <Users className="w-4.5 h-4.5" />,
     },
     {
       id: 'transparency',
       label: 'Club FFP',
-      icon: <Building2 className="w-5 h-5" />,
+      icon: <Building2 className="w-4.5 h-4.5" />,
       badge: '94%',
+    },
+    {
+      id: 'ai-chat',
+      label: 'Ai Chat',
+      icon: <Bot className="w-4.5 h-4.5 text-cyan-400" />,
+      badge: 'AI',
     },
   ];
 
   return (
-    <div className="fixed bottom-0 inset-x-0 max-w-[430px] mx-auto z-40 px-5 pointer-events-none"
-      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 12px)' }}
+    <div
+      className="fixed bottom-0 inset-x-0 max-w-[430px] mx-auto z-40 px-3 sm:px-4 pointer-events-none"
+      style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 10px)' }}
     >
       <nav
         className={`pointer-events-auto rounded-full p-1.5 flex items-center justify-around shadow-2xl backdrop-blur-xl border transition-all ${
@@ -43,9 +51,10 @@ export function MobileBottomNav() {
           const isActive = activeHub === item.id;
           return (
             <button
+              type="button"
               key={item.id}
               onClick={() => setActiveHub(item.id)}
-              className={`relative flex items-center gap-2 py-2.5 px-4 rounded-full transition-all duration-200 active:scale-95 ${
+              className={`relative flex items-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-full transition-all duration-200 active:scale-95 ${
                 isActive
                   ? isPro
                     ? 'bg-blue-600 text-white shadow-md shadow-blue-600/30 font-black'
@@ -57,14 +66,20 @@ export function MobileBottomNav() {
             >
               <span className="shrink-0">{item.icon}</span>
               {isActive && (
-                <span className="text-xs tracking-tight uppercase font-extrabold pr-1">
+                <span className="text-[11px] tracking-tight uppercase font-extrabold pr-0.5">
                   {item.label}
                 </span>
               )}
               {item.badge && !isActive && (
-                <span className={`text-[8.5px] font-mono font-bold px-1.5 py-0.2 rounded-full ${
-                  isPro ? 'bg-slate-800 text-slate-300' : 'bg-slate-100 text-slate-600'
-                }`}>
+                <span
+                  className={`text-[8px] font-mono font-bold px-1.5 py-0.2 rounded-full ${
+                    item.id === 'ai-chat'
+                      ? 'bg-cyan-500/20 text-cyan-400 border border-cyan-400/30'
+                      : isPro
+                      ? 'bg-slate-800 text-slate-300'
+                      : 'bg-slate-100 text-slate-600'
+                  }`}
+                >
                   {item.badge}
                 </span>
               )}

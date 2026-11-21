@@ -21,7 +21,7 @@ import {
 } from '@/data/persib-data';
 
 export type AppThemeState = 'minimal' | 'pro';
-export type ActiveHub = 'match-center' | 'roster' | 'transparency';
+export type ActiveHub = 'match-center' | 'roster' | 'transparency' | 'ai-chat';
 export type MatchDisplayMode = 'official_result' | 'upcoming_schedule' | 'tactical_simulation';
 
 export interface BeforeInstallPromptEvent extends Event {
