@@ -73,7 +73,7 @@ export default function PlayerVideoProfilePage() {
     <div className="min-h-screen w-full bg-[#050811] text-white flex justify-center items-start overflow-hidden">
       {/* 430px Mobile-First App Canvas */}
       <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-black">
-        {/* Background Looping Stream or Cinematic Portrait Backdrop */}
+        {/* Background Looping Stream or Cinematic Portrait Backdrop (100% Crisp, No Blur, Full Opacity) */}
         <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950 flex items-center justify-center">
           {videoSource ? (
             <video
@@ -83,7 +83,7 @@ export default function PlayerVideoProfilePage() {
               loop
               muted
               playsInline
-              className="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.05]"
+              className="w-full h-full object-cover object-center opacity-100"
             />
           ) : (
             <div className="relative w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#0A101D] via-[#050811] to-black">
@@ -98,16 +98,9 @@ export default function PlayerVideoProfilePage() {
               </span>
             </div>
           )}
-          {/* Top Cinematic Gradient Overlay */}
-          <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/80 via-black/30 to-transparent pointer-events-none" />
-          {/* Bottom Cinematic Gradient Overlay - dynamically subdued when card is minimized */}
-          <div
-            className={`absolute inset-x-0 bottom-0 pointer-events-none transition-all duration-300 ${
-              isExpanded
-                ? 'h-full bg-gradient-to-t from-black/85 via-black/60 to-transparent'
-                : 'h-40 bg-gradient-to-t from-black/80 via-black/20 to-transparent'
-            }`}
-          />
+          {/* Subtle Top & Bottom Gradient (Unobtrusive, Keeps Video Crisp & Unblurred) */}
+          <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
+          <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
         </div>
 
         {/* Floating Notification Toast */}
@@ -136,12 +129,12 @@ export default function PlayerVideoProfilePage() {
           </button>
         </header>
 
-        {/* Backdrop for easy tap-to-minimize over the video area */}
+        {/* Transparent tap area over upper video to close sheet (Zero Blur, Zero Dimming) */}
         {isExpanded && (
           <div
             onClick={() => setIsExpanded(false)}
-            className="absolute inset-0 z-15 bg-black/40 backdrop-blur-[2px] transition-opacity cursor-pointer"
-            aria-label="Tutup detail dan tonton video"
+            className="absolute inset-0 z-15 cursor-pointer"
+            aria-label="Tutup detail"
           />
         )}
 
@@ -176,10 +169,8 @@ export default function PlayerVideoProfilePage() {
                 </div>
               </div>
 
-              <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-blue-600 text-white border border-blue-400/50 text-[11px] font-black uppercase tracking-wider shadow-lg shadow-blue-600/30 shrink-0 ml-2 group-hover:bg-blue-500 transition-colors">
-                <span>Rise</span>
-                <ChevronUp className="w-3.5 h-3.5 text-cyan-200 animate-bounce" />
-              </div>
+              {/* Minimalist Rise Icon Chevron without capsule or copy text */}
+              <ChevronUp className="w-5 h-5 text-white/80 group-hover:text-cyan-400 transition-colors shrink-0 ml-2" />
             </button>
           </div>
         )}
@@ -190,16 +181,15 @@ export default function PlayerVideoProfilePage() {
             className="relative z-20 px-4 pb-6 pt-2 flex flex-col gap-3 max-h-[82vh] overflow-y-auto no-scrollbar animate-sheet-rise"
             style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)' }}
           >
-            {/* Header / Collapse Handle Button */}
+            {/* Minimalist Collapse Handle without capsule or copy text */}
             <div className="flex justify-center -mb-1">
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-slate-900/90 hover:bg-slate-800 text-slate-300 hover:text-white border border-white/20 text-[11px] font-bold shadow-xl active:scale-95 transition-all"
-                aria-label="Sembunyikan profil"
+                className="p-1.5 text-white/70 hover:text-white transition-colors active:scale-90"
+                aria-label="Tutup sheet profil"
               >
-                <span>Tutup & Tonton Video</span>
-                <ChevronDown className="w-3.5 h-3.5 text-cyan-400" />
+                <ChevronDown className="w-6 h-6 text-white/80 hover:text-cyan-400" />
               </button>
             </div>
 

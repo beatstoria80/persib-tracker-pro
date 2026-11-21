@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v27 (Added Uilliam Barros & Luka Menalo HD video profiles)
-const CACHE_NAME = 'persib-tracker-pwa-v27';
+// PERSIB TRACKER - PWA Service Worker v28 (Crisp unblurred profile video with minimalist chevron rise & collapse)
+const CACHE_NAME = 'persib-tracker-pwa-v28';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
