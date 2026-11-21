@@ -48,10 +48,14 @@ export default function PlayerVideoProfilePage() {
     }
   };
 
-  // REFACTOR: Authentic player video resolution (Thom Haye, Ragnar Oratmangoen, Sandy Walsh, Mariano Peralta, or default)
+  // REFACTOR: Authentic player video resolution without forced default fallback
   const videoSource =
     activePlayer.videoUrl ||
-    (activePlayer.id.includes('haye')
+    (activePlayer.id.includes('reijnders')
+      ? '/Reijnders.mp4'
+      : activePlayer.id.includes('klok')
+      ? '/Klok.mp4'
+      : activePlayer.id.includes('haye')
       ? '/haye.mp4'
       : activePlayer.id.includes('ragnar')
       ? '/Ragnar.mp4'
@@ -59,31 +63,45 @@ export default function PlayerVideoProfilePage() {
       ? '/Sandy_Walsh.mp4'
       : activePlayer.id.includes('peralta')
       ? '/peralta.mp4'
-      : '/peralta.mp4');
+      : undefined);
 
   return (
     <div className="min-h-screen w-full bg-[#050811] text-white flex justify-center items-start overflow-hidden">
       {/* 430px Mobile-First App Canvas */}
       <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-black">
-        {/* Background Looping Stream */}
-        <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950">
-          <video
-            ref={videoRef}
-            src={videoSource}
-            autoPlay
-            loop
-            muted
-            playsInline
-            className="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.05]"
-          />
+        {/* Background Looping Stream or Cinematic Portrait Backdrop */}
+        <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950 flex items-center justify-center">
+          {videoSource ? (
+            <video
+              ref={videoRef}
+              src={videoSource}
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="w-full h-full object-cover object-center filter brightness-[0.92] contrast-[1.05]"
+            />
+          ) : (
+            <div className="relative w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#0A101D] via-[#050811] to-black">
+              <div className="absolute w-72 h-72 rounded-full bg-blue-600/10 blur-3xl pointer-events-none" />
+              <img
+                src={activePlayer.avatarUrl || getPlayerAvatar(activePlayer.name)}
+                alt={activePlayer.name}
+                className="w-56 h-56 object-cover rounded-full border-4 border-blue-500/30 shadow-2xl drop-shadow-[0_0_35px_rgba(2,132,199,0.3)] filter brightness-95"
+              />
+              <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest mt-6">
+                Official Player Roster
+              </span>
+            </div>
+          )}
           {/* Top Cinematic Gradient Overlay */}
           <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-black/80 via-black/30 to-transparent pointer-events-none" />
           {/* Bottom Cinematic Gradient Overlay - dynamically subdued when card is minimized */}
           <div
             className={`absolute inset-x-0 bottom-0 pointer-events-none transition-all duration-300 ${
               isExpanded
-                ? 'h-full bg-gradient-to-t from-black/95 via-black/80 to-transparent'
-                : 'h-40 bg-gradient-to-t from-black/85 via-black/30 to-transparent'
+                ? 'h-full bg-gradient-to-t from-black/85 via-black/60 to-transparent'
+                : 'h-40 bg-gradient-to-t from-black/80 via-black/20 to-transparent'
             }`}
           />
         </div>
@@ -132,7 +150,7 @@ export default function PlayerVideoProfilePage() {
             <button
               type="button"
               onClick={() => setIsExpanded(true)}
-              className="w-full flex items-center justify-between p-3.5 px-4 rounded-2xl bg-slate-950/80 hover:bg-slate-900/90 backdrop-blur-xl border border-white/20 shadow-2xl transition-all duration-300 group active:scale-[0.98]"
+              className="w-full flex items-center justify-between p-3.5 px-4 rounded-2xl bg-slate-950/20 hover:bg-slate-900/30 backdrop-blur-md border border-white/20 shadow-2xl transition-all duration-300 group active:scale-[0.98]"
               aria-label="Buka Profil Lengkap Pemain"
             >
               <div className="flex items-center gap-3 min-w-0">
@@ -181,8 +199,8 @@ export default function PlayerVideoProfilePage() {
               </button>
             </div>
 
-            {/* Main Player Identification Card */}
-            <div className="p-4 rounded-3xl bg-slate-950/85 backdrop-blur-xl border border-white/15 shadow-2xl space-y-3">
+            {/* Main Player Identification Card (20% Opacity) */}
+            <div className="p-4 rounded-3xl bg-slate-950/20 backdrop-blur-md border border-white/15 shadow-2xl space-y-3">
               <div className="flex items-start justify-between">
                 <div className="space-y-1">
                   <div className="flex items-center gap-2">
@@ -235,7 +253,7 @@ export default function PlayerVideoProfilePage() {
               </div>
 
               {/* Tactical Brief */}
-              <div className="text-[11px] text-slate-300 leading-relaxed bg-blue-950/30 p-2.5 rounded-xl border border-blue-500/20">
+              <div className="text-[11px] text-slate-300 leading-relaxed bg-blue-950/20 backdrop-blur-xs p-2.5 rounded-xl border border-blue-500/20">
                 <span className="text-blue-400 font-bold block text-[10px] uppercase font-mono mb-0.5">
                   Peran Taktikal Bojan Hodak:
                 </span>
@@ -268,8 +286,8 @@ export default function PlayerVideoProfilePage() {
                       }}
                       className={`flex items-center gap-2 px-2.5 py-1.5 rounded-2xl border transition-all shrink-0 active:scale-95 ${
                         isSelected
-                          ? 'bg-blue-600 border-cyan-400 text-white shadow-lg shadow-blue-600/40 ring-2 ring-cyan-400/50'
-                          : 'bg-slate-900/80 border-white/10 text-slate-300 hover:bg-slate-800'
+                          ? 'bg-blue-600/80 border-cyan-400 text-white shadow-lg shadow-blue-600/40 ring-2 ring-cyan-400/50'
+                          : 'bg-slate-900/20 backdrop-blur-xs border-white/10 text-slate-300 hover:bg-slate-800/40'
                       }`}
                     >
                       <div className="relative w-7 h-7 rounded-full overflow-hidden border border-white/30 shrink-0">

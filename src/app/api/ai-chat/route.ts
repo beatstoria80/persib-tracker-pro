@@ -4,6 +4,26 @@ import { PersibIntelligenceEngine, PersibAiChatMessage } from '@/data/persib-int
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
+// REFACTOR: Strips raw AI-generated tokens (** for bold, _ for italics, and <br> tags) to ensure human, clean output
+export function cleanAiResponseText(rawText: string): string {
+  if (!rawText) return '';
+  return rawText
+    // Replace <br>, <br/>, <br /> with newline
+    .replace(/<br\s*\/?>/gi, '\n')
+    // Remove markdown bold asterisks **text** -> text
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*\*/g, '')
+    // Remove markdown italic underscores _text_ -> text
+    .replace(/(^|\s)_([^_]+)_(?=\s|$|[.,!?:;])/g, '$1$2')
+    .replace(/_([^_]+)_/g, '$1')
+    .replace(/(^|\s)_(?=\S)|(?<=\S)_(?=\s|$)/g, '$1')
+    // Remove markdown header tags
+    .replace(/^#{1,6}\s+/gm, '')
+    // Normalize excessive newlines
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 interface ChatHistoryItem {
   role: 'user' | 'assistant' | 'system';
   content: string;
@@ -96,7 +116,7 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
 
 FORMAT & GAYA JAWABAN:
 - Berbahasa Indonesia fasih, tajam, profesional, berbasis data nyata, dan antusias 🔵.
-- Gunakan struktur markdown yang rapi (bolding, bullet points) agar optimal untuk pembaca mobile smartphone.
+- HINDARI SIMBOL MARKDOWN KAKU: DILARANG menggunakan tanda bintang ganda (**) untuk penekanan, garis bawah (_) untuk cetak miring, atau tag html (<br>) di dalam teks respons. Tuliskan teks secara alami, bersih, dan mudah dibaca tanpa simbol-simbol tersebut.
 - Jika ditanya tentang Persib, hubungkan dengan performa musim 2026/2027. Jika ditanya tentang sepak bola internasional/FIFA, berikan fakta komprehensif tanpa ragu.`;
 
     if (apiKey) {
@@ -129,9 +149,9 @@ FORMAT & GAYA JAWABAN:
             if (replyText && typeof replyText === 'string') {
               return NextResponse.json({
                 success: true,
-                reply: replyText.trim(),
+                reply: cleanAiResponseText(replyText.trim()),
                 category: engineResponse.category,
-                actionableTips: engineResponse.actionableTips,
+                actionableTips: engineResponse.actionableTips?.map((tip) => cleanAiResponseText(tip)),
                 metricsContext: engineResponse.metricsContext,
                 provider: `groq-${m}`,
               });
@@ -146,9 +166,9 @@ FORMAT & GAYA JAWABAN:
     // Factual rule-based fallback response directly from PersibIntelligenceEngine
     return NextResponse.json({
       success: true,
-      reply: engineResponse.text,
+      reply: cleanAiResponseText(engineResponse.text),
       category: engineResponse.category,
-      actionableTips: engineResponse.actionableTips,
+      actionableTips: engineResponse.actionableTips?.map((tip) => cleanAiResponseText(tip)),
       metricsContext: engineResponse.metricsContext,
       provider: 'persib-tactical-intelligence-engine',
     });

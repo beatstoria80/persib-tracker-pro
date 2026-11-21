@@ -9,6 +9,21 @@
  * - Data Finansial, FFP & Tata Kelola PT Persib Bandung Bermartabat (PT PBB)
  */
 
+// REFACTOR: Global response sanitizer stripping raw AI formatting tokens (*, **, _, <br>)
+export function cleanAiResponseText(rawText: string): string {
+  if (!rawText) return '';
+  return rawText
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*\*/g, '')
+    .replace(/(^|\s)_([^_]+)_(?=\s|$|[.,!?:;])/g, '$1$2')
+    .replace(/_([^_]+)_/g, '$1')
+    .replace(/(^|\s)_(?=\S)|(?<=\S)_(?=\s|$)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 export interface PersibAiChatMessage {
   id: string;
   sender: 'ai' | 'user';
@@ -160,7 +175,7 @@ export class PersibIntelligenceEngine {
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'squad',
         actionableTips: [
@@ -201,7 +216,7 @@ export class PersibIntelligenceEngine {
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'match',
         actionableTips: [
@@ -242,7 +257,7 @@ export class PersibIntelligenceEngine {
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'standing',
         actionableTips: [
@@ -289,7 +304,7 @@ export class PersibIntelligenceEngine {
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'shopee',
         actionableTips: [
@@ -337,7 +352,7 @@ Maung Bandung mencetak sejarah baru sebagai klub Indonesia dengan performa palin
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'acl',
         actionableTips: [
@@ -383,7 +398,7 @@ Maung Bandung mencetak sejarah baru sebagai klub Indonesia dengan performa palin
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'tactical',
         actionableTips: [
@@ -435,7 +450,7 @@ Maung Bandung mencetak sejarah baru sebagai klub Indonesia dengan performa palin
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'squad',
         actionableTips: [
@@ -479,7 +494,7 @@ Tanyakan apa saja seputar taktik Bojan Hodak, kondisi pemain, atau jadwal beriku
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'general',
         actionableTips: [
@@ -517,7 +532,7 @@ Semua fokus tim saat ini tercurah pada laga krusial kontra Bali United besok mal
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'match',
         actionableTips: [
@@ -568,7 +583,7 @@ Silakan ajukan pertanyaan spesifik mengenai turnamen internasional, profil klub 
       return {
         id: 'msg-' + Date.now(),
         sender: 'ai',
-        text,
+        text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'general',
         actionableTips: [
@@ -598,7 +613,7 @@ Silakan ajukan pertanyaan spesifik seputar taktik Bojan Hodak, kondisi pemain, a
     return {
       id: 'msg-' + Date.now(),
       sender: 'ai',
-      text,
+      text: cleanAiResponseText(text),
       timestamp: timeStr,
       category: 'general',
       actionableTips: [

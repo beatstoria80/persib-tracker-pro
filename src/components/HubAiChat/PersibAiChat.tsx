@@ -17,6 +17,21 @@ import {
 import Image from 'next/image';
 import { SoccerChatIcon } from '@/components/icons/SoccerChatIcon';
 
+// REFACTOR: Strips raw AI-generated tokens (_, **, and <br>)
+function cleanAiResponseText(rawText: string): string {
+  if (!rawText) return '';
+  return rawText
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*\*/g, '')
+    .replace(/(^|\s)_([^_]+)_(?=\s|$|[.,!?:;])/g, '$1$2')
+    .replace(/_([^_]+)_/g, '$1')
+    .replace(/(^|\s)_(?=\S)|(?<=\S)_(?=\s|$)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 interface Message {
   id: string;
   role: 'user' | 'assistant';
@@ -53,7 +68,7 @@ export function PersibAiChat() {
       id: 'init-1',
       role: 'assistant',
       content:
-        '**Sampurasun, Bobotoh!** ⚽💬\n\nSaya adalah **Persib Football Chat Assistant** resmi musim **2026/2027**.\n\nTanyakan apa saja tentang:\n* 🏆 **Jadwal & Hasil Laga:** Super League, ACL Two, & Shopee Cup\n* 📊 **Klasemen:** Peringkat terkini Super League & Grup B Asia\n* 👥 **Pemain & Taktik:** Thom Haye, Sandy Walsh, Ragnar, Peralta, dan racikan Bojan Hodak\n\nSilakan pilih topik cepat di bawah atau ketik pertanyaan Anda!',
+        'Sampurasun, Bobotoh! ⚽💬\n\nSaya adalah Persib & Global Football Chat Assistant resmi musim 2026/2027.\n\nTanyakan apa saja tentang:\n• 🏆 Jadwal & Hasil Laga: Super League, ACL Two, & Shopee Cup\n• 📊 Klasemen: Peringkat terkini Super League & Grup B Asia\n• 🎯 Top Scorer & Assist: David da Silva, Tyronne, Peralta, Sekulić, dan Thom Haye\n• 👥 Pemain & Taktik: Thom Haye, Sandy Walsh, Ragnar, Klok, Reijnders, dan racikan Bojan Hodak\n\nSilakan pilih topik cepat di bawah atau ketik pertanyaan Anda!',
       timestamp: 'Baru saja',
     },
   ]);
@@ -111,7 +126,7 @@ export function PersibAiChat() {
       const data = await res.json();
       const replyContent =
         data.success && data.reply
-          ? data.reply
+          ? cleanAiResponseText(data.reply)
           : 'Maaf, terjadi gangguan pada jaringan cerdas. Silakan coba beberapa saat lagi.';
 
       setMessages((prev) => [
@@ -271,9 +286,9 @@ export function PersibAiChat() {
                     : 'bg-slate-100/90 border border-slate-200 text-slate-900 rounded-bl-none'
                 }`}
               >
-                {/* Formatted Markdown Content */}
+                {/* Formatted Content Cleaned of raw AI markdown tokens */}
                 <div className="whitespace-pre-wrap font-sans selection:bg-cyan-500 selection:text-black">
-                  {m.content}
+                  {cleanAiResponseText(m.content)}
                 </div>
 
                 <div

@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v25 (Global Football AI Intelligence & Multi-Tournament Top Scorer Hub)
-const CACHE_NAME = 'persib-tracker-pwa-v25';
+// PERSIB TRACKER - PWA Service Worker v26 (Natural AI chat response, 20% player profile card opacity, Reijnders & Klok videos)
+const CACHE_NAME = 'persib-tracker-pwa-v26';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

@@ -36,7 +36,7 @@ export function MobileBottomNav() {
     },
     {
       id: 'ai-chat',
-      label: 'Ai Chat',
+      label: 'Chat',
       icon: <SoccerChatIcon className="w-4.5 h-4.5 text-cyan-400" />,
       badge: 'LIVE',
       route: '/chat',

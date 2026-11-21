@@ -21,6 +21,21 @@ import {
   PersibIntelligenceEngine,
 } from '@/data/persib-intelligence-engine';
 
+// REFACTOR: Sanitizes AI responses to remove raw tokens (_, **, and <br>)
+function cleanAiResponseText(rawText: string): string {
+  if (!rawText) return '';
+  return rawText
+    .replace(/<br\s*\/?>/gi, '\n')
+    .replace(/\*\*(.*?)\*\*/g, '$1')
+    .replace(/\*\*/g, '')
+    .replace(/(^|\s)_([^_]+)_(?=\s|$|[.,!?:;])/g, '$1$2')
+    .replace(/_([^_]+)_/g, '$1')
+    .replace(/(^|\s)_(?=\S)|(?<=\S)_(?=\s|$)/g, '$1')
+    .replace(/^#{1,6}\s+/gm, '')
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 let messageSeqId = 1;
 function createMessageId(prefix: string): string {
   return `${prefix}-${messageSeqId++}`;
@@ -47,7 +62,7 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
       id: 'init-1',
       sender: 'ai',
       text:
-        '**Sampurasun, Bobotoh!** ⚽💬\n\nSelamat datang di **Persib & Global Football Tactical Intelligence** resmi musim **2026/2027**.\n\nTanyakan apa saja seputar:\n* 🎯 **Top Scorer & Raja Assist:** Daftar pencetak gol terbanyak David da Silva, Tyronne, Peralta, Sekulić, serta 9 assist Thom Haye\n* ⚔️ **Big Match Pekan 10:** Kontra Bali United (Minggu, 22 Nov 2026, 19:00 WIB di GBLA)\n* 📊 **Klasemen & Skor:** Super League (#6, 16 Poin) & Puncak Grup B Shopee Cup (#1, 6 Poin)\n* ⭐ **ACL Two Asia:** Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n* 🌍 **Sepak Bola Dunia & FIFA:** Piala Dunia, Liga Champions, Timnas Indonesia, taktik modern & regulasi IFAB\n\nSilakan pilih topik rekomendasi di atas atau ketik pertanyaan langsung!',
+        'Sampurasun, Bobotoh! ⚽💬\n\nSelamat datang di Persib & Global Football Tactical Intelligence resmi musim 2026/2027.\n\nTanyakan apa saja seputar:\n• 🎯 Top Scorer & Raja Assist: Rekor gol David da Silva, Tyronne, Peralta, Sekulić, serta 9 assist Thom Haye\n• ⚔️ Big Match Pekan 10: Kontra Bali United (Minggu, 22 Nov 2026, 19:00 WIB di GBLA)\n• 📊 Klasemen & Skor: Super League (#6, 16 Poin) & Puncak Grup B Shopee Cup (#1, 6 Poin)\n• ⭐ ACL Two Asia: Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n• 🌍 Sepak Bola Dunia & FIFA: Piala Dunia, Liga Champions, Timnas Indonesia, taktik modern & regulasi IFAB\n\nSilakan pilih topik rekomendasi di atas atau ketik pertanyaan langsung!',
       timestamp: 'Baru saja',
       category: 'general',
       actionableTips: [
@@ -120,10 +135,10 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
         const aiMsg: PersibAiChatMessage = {
           id: createMessageId('ai'),
           sender: 'ai',
-          text: data.reply || data.message || 'Data tidak tersedia.',
+          text: cleanAiResponseText(data.reply || data.message || 'Data tidak tersedia.'),
           timestamp: getLocalWibTimeString(),
           category: data.category || 'general',
-          actionableTips: data.actionableTips || [],
+          actionableTips: (data.actionableTips || []).map((t: string) => cleanAiResponseText(t)),
           metricsContext: data.metricsContext || undefined,
         };
         setMessages((prev) => [...prev, aiMsg]);
@@ -133,6 +148,7 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
     } catch {
       // Deterministic instant fallback
       const fallbackMsg = PersibIntelligenceEngine.generateResponse(text);
+      fallbackMsg.text = cleanAiResponseText(fallbackMsg.text);
       setMessages((prev) => [...prev, fallbackMsg]);
     } finally {
       setIsLoading(false);
@@ -317,9 +333,9 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
                   </div>
                 )}
 
-                {/* Main Content Body */}
+                {/* Main Content Body (Sanitized without raw AI asterisks or underscores) */}
                 <div className="whitespace-pre-wrap font-sans selection:bg-cyan-500 selection:text-black">
-                  {m.text}
+                  {cleanAiResponseText(m.text)}
                 </div>
 
                 {/* Metrics Context HUD Box */}

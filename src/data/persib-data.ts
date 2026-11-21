@@ -129,6 +129,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€650K (Rp 11.3 M)',
     contractUntil: '31 Mei 2028',
     verifiedData: true,
+    videoUrl: '/Reijnders.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/538057-1756360506.jpg',
     fitness: {
       status: 'fit',
@@ -670,6 +671,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€375K (Rp 6.52 M)',
     contractUntil: '31 Desember 2027',
     verifiedData: true,
+    videoUrl: '/Klok.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/272708-1789636624.png',
     fitness: {
       status: 'fit',
