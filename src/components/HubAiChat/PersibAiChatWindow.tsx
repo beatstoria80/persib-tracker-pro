@@ -47,7 +47,7 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
       id: 'init-1',
       sender: 'ai',
       text:
-        '**Sampurasun, Bobotoh!** ⚽💬\n\nSelamat datang di **Persib Tactical Intelligence Window** resmi musim **2026/2027**.\n\nTanyakan apa saja seputar:\n* ⚔️ **Big Match Pekan 10:** Kontra Bali United (Minggu, 22 Nov 2026, 19:00 WIB di GBLA)\n* 📊 **Klasemen:** Posisi PERSIB di Super League (#6, 16 Poin) & Puncak Shopee Cup (#1, 6 Poin)\n* ⭐ **ACL Two Asia:** Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n* 📋 **Taktik & Skuad:** Formasi Bojan Hodak, Thom Haye, Sandy Walsh, Ragnar, dan Peralta\n\nSilakan pilih topik rekomendasi di atas atau ketik pertanyaan langsung!',
+        '**Sampurasun, Bobotoh!** ⚽💬\n\nSelamat datang di **Persib & Global Football Tactical Intelligence** resmi musim **2026/2027**.\n\nTanyakan apa saja seputar:\n* 🎯 **Top Scorer & Raja Assist:** Daftar pencetak gol terbanyak David da Silva, Tyronne, Peralta, Sekulić, serta 9 assist Thom Haye\n* ⚔️ **Big Match Pekan 10:** Kontra Bali United (Minggu, 22 Nov 2026, 19:00 WIB di GBLA)\n* 📊 **Klasemen & Skor:** Super League (#6, 16 Poin) & Puncak Grup B Shopee Cup (#1, 6 Poin)\n* ⭐ **ACL Two Asia:** Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n* 🌍 **Sepak Bola Dunia & FIFA:** Piala Dunia, Liga Champions, Timnas Indonesia, taktik modern & regulasi IFAB\n\nSilakan pilih topik rekomendasi di atas atau ketik pertanyaan langsung!',
       timestamp: 'Baru saja',
       category: 'general',
       actionableTips: [

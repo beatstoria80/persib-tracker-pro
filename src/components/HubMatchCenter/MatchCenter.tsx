@@ -15,6 +15,8 @@ import {
   Target,
   Flame,
   Sparkles,
+  Award,
+  Crown,
 } from 'lucide-react';
 import {
   MatchFixture,
@@ -23,6 +25,7 @@ import {
   GroupTeam,
   TacticalPlayerPos,
   TacticalDuelMatchup,
+  TopScorerEntry,
 } from '@/types/club';
 import {
   getClubLogo,
@@ -30,6 +33,7 @@ import {
   getClubProfile,
   getOpponentSquad,
   convertOpponentPlayerToPlayer,
+  TOP_SCORERS_2026_2027,
 } from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
 import { ClubIntelligenceView } from './ClubIntelligenceView';
@@ -172,8 +176,9 @@ export function MatchCenter() {
   } = useClubTracker();
   const isPro = mode === 'pro';
 
-  // Sub-Page Navigation Tabs: Laga (featured), Jadwal (schedule), Klasemen (standings), Taktik (lineup)
-  const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup'>('featured');
+  // Sub-Page Navigation Tabs: Laga (featured), Jadwal (schedule), Klasemen (standings), Taktik (lineup), Top Skor (scorers)
+  const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup' | 'scorers'>('featured');
+  const [scorerTournamentFilter, setScorerTournamentFilter] = useState<'all' | 'liga1' | 'shopee' | 'acl2'>('all');
   // REFACTOR: Decouple from hardcoded 'l1-p8' string. Null allows dynamic auto-selection of active/latest match
   const [selectedFixtureId, setSelectedFixtureId] = useState<string | null>(null);
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
@@ -367,9 +372,9 @@ export function MatchCenter() {
         </div>
       </div>
 
-      {/* 2. Structured Sub-Page Navigation Tabs (4-Column Balanced Grid) */}
+      {/* 2. Structured Sub-Page Navigation Tabs (5-Column Responsive Grid) */}
       <div
-        className={`p-1 rounded-2xl border grid grid-cols-4 gap-1 text-xs font-bold ${
+        className={`p-1 rounded-2xl border grid grid-cols-5 gap-0.5 sm:gap-1 text-xs font-bold ${
           isPro
             ? 'bg-[#121620] border-slate-800 text-slate-400'
             : 'bg-white border-slate-200 text-slate-600 shadow-xs'
@@ -377,7 +382,7 @@ export function MatchCenter() {
       >
         <button
           onClick={() => setMatchViewTab('featured')}
-          className={`py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
+          className={`py-2 rounded-xl text-[10px] sm:text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
             matchViewTab === 'featured'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -385,13 +390,13 @@ export function MatchCenter() {
               : 'hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Trophy className="w-3.5 h-3.5" />
-          <span>Laga</span>
+          <Trophy className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">Laga</span>
         </button>
 
         <button
           onClick={() => setMatchViewTab('schedule')}
-          className={`py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
+          className={`py-2 rounded-xl text-[10px] sm:text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
             matchViewTab === 'schedule'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -399,8 +404,8 @@ export function MatchCenter() {
               : 'hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Calendar className="w-3.5 h-3.5" />
-          <span>Jadwal</span>
+          <Calendar className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">Jadwal</span>
         </button>
 
         <button
@@ -408,7 +413,7 @@ export function MatchCenter() {
             setMatchViewTab('standings');
             setSelectedClubForIntel(null);
           }}
-          className={`py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
+          className={`py-2 rounded-xl text-[10px] sm:text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
             matchViewTab === 'standings'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -416,13 +421,13 @@ export function MatchCenter() {
               : 'hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <BarChart2 className="w-3.5 h-3.5" />
-          <span>Klasemen</span>
+          <BarChart2 className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">Klasemen</span>
         </button>
 
         <button
           onClick={() => setMatchViewTab('lineup')}
-          className={`py-2 rounded-xl text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
+          className={`py-2 rounded-xl text-[10px] sm:text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
             matchViewTab === 'lineup'
               ? isPro
                 ? 'bg-slate-800 text-cyan-300 shadow-sm'
@@ -430,8 +435,22 @@ export function MatchCenter() {
               : 'hover:text-slate-900 dark:hover:text-white'
           }`}
         >
-          <Users className="w-3.5 h-3.5" />
-          <span>Taktik</span>
+          <Users className="w-3.5 h-3.5 shrink-0" />
+          <span className="truncate">Taktik</span>
+        </button>
+
+        <button
+          onClick={() => setMatchViewTab('scorers')}
+          className={`py-2 rounded-xl text-[10px] sm:text-[11px] font-extrabold transition-all text-center flex items-center justify-center gap-1 ${
+            matchViewTab === 'scorers'
+              ? isPro
+                ? 'bg-slate-800 text-cyan-300 shadow-sm'
+                : 'bg-blue-50 text-blue-900 shadow-xs'
+              : 'hover:text-slate-900 dark:hover:text-white'
+          }`}
+        >
+          <Flame className="w-3.5 h-3.5 shrink-0 text-amber-500" />
+          <span className="truncate">Top Skor</span>
         </button>
       </div>
 
@@ -2791,6 +2810,380 @@ export function MatchCenter() {
               </div>
             </div>
           )}
+        </div>
+      )}
+
+      {/* 7. Sub-Page Tab 5: Dedicated Top Scorers & Playmaker Hub (Semua Event Resmi) */}
+      {matchViewTab === 'scorers' && (
+        <div className="space-y-4">
+          {/* Header & Tournament Filter Controls */}
+          <div
+            className={`p-4 rounded-3xl border transition-all ${
+              isPro
+                ? 'bg-gradient-to-br from-[#121622] via-[#0E121A] to-[#0A0D14] border-slate-800'
+                : 'bg-gradient-to-br from-blue-50/70 via-white to-slate-50 border-blue-200 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div>
+                <div className="flex items-center gap-1.5">
+                  <Flame className="w-4 h-4 text-amber-500 animate-pulse" />
+                  <h3 className="text-sm font-black tracking-tight text-slate-900 dark:text-white">
+                    Pusat Top Skor & Playmaker
+                  </h3>
+                </div>
+                <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
+                  Statistik gol & assist resmi seluruh ajang kompetisi PERSIB 2026/2027
+                </p>
+              </div>
+
+              <span className="px-2 py-0.5 rounded-full text-[9px] font-mono font-bold bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30 shrink-0">
+                GOLDEN BOOT
+              </span>
+            </div>
+
+            {/* Tournament Selector Pills */}
+            <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+              {[
+                { id: 'all', label: 'Semua Event (Akumulasi)' },
+                { id: 'liga1', label: 'Super League' },
+                { id: 'shopee', label: 'Shopee Cup' },
+                { id: 'acl2', label: 'ACL Two' },
+              ].map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setScorerTournamentFilter(t.id as 'all' | 'liga1' | 'shopee' | 'acl2')}
+                  className={`px-3 py-1.5 rounded-full text-[10.5px] font-extrabold whitespace-nowrap transition-all border shrink-0 ${
+                    scorerTournamentFilter === t.id
+                      ? 'bg-blue-600 text-white border-blue-500 shadow-sm'
+                      : isPro
+                      ? 'bg-[#161B28] text-slate-400 border-slate-800 hover:text-white'
+                      : 'bg-white text-slate-600 border-slate-200 hover:text-slate-900'
+                  }`}
+                >
+                  {t.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Quick Metrics Banner (3 Cards) */}
+          <div className="grid grid-cols-3 gap-2">
+            <div
+              className={`p-3 rounded-2xl border text-center ${
+                isPro ? 'bg-[#121620] border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+              }`}
+            >
+              <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block">Total Gol Tim</span>
+              <div className="text-xl font-black font-mono text-blue-600 dark:text-cyan-400 mt-0.5">
+                {scorerTournamentFilter === 'all'
+                  ? '33'
+                  : scorerTournamentFilter === 'liga1'
+                  ? '16'
+                  : scorerTournamentFilter === 'shopee'
+                  ? '9'
+                  : '8'}
+              </div>
+              <span className="text-[9px] text-slate-400 font-medium">Musim 2026/27</span>
+            </div>
+
+            <div
+              className={`p-3 rounded-2xl border text-center ${
+                isPro ? 'bg-[#121620] border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+              }`}
+            >
+              <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block">Top Scorer #1</span>
+              <div className="text-xl font-black font-mono text-amber-500 mt-0.5">
+                {scorerTournamentFilter === 'all'
+                  ? '10 Gol'
+                  : scorerTournamentFilter === 'liga1'
+                  ? '7 Gol'
+                  : '3 Gol'}
+              </div>
+              <span className="text-[9px] text-slate-400 font-medium truncate block">
+                {scorerTournamentFilter === 'all'
+                  ? 'David da Silva'
+                  : scorerTournamentFilter === 'liga1'
+                  ? 'G. Almeida / David (6)'
+                  : scorerTournamentFilter === 'shopee'
+                  ? 'Balša Sekulić'
+                  : 'Tyronne del Pino'}
+              </span>
+            </div>
+
+            <div
+              className={`p-3 rounded-2xl border text-center ${
+                isPro ? 'bg-[#121620] border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+              }`}
+            >
+              <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block">Raja Assist</span>
+              <div className="text-xl font-black font-mono text-emerald-500 mt-0.5">
+                {scorerTournamentFilter === 'all' ? '9 Ast' : scorerTournamentFilter === 'liga1' ? '5 Ast' : '3 Ast'}
+              </div>
+              <span className="text-[9px] text-slate-400 font-medium truncate block">
+                Thom Haye (#33)
+              </span>
+            </div>
+          </div>
+
+          {/* Golden Boot Podium (Top 3 Visual Display) */}
+          {(() => {
+            const list = TOP_SCORERS_2026_2027[scorerTournamentFilter] || [];
+            const first = list[0];
+            const second = list[1];
+            const third = list[2];
+
+            if (!first) return null;
+
+            return (
+              <div
+                className={`p-4 rounded-3xl border transition-all ${
+                  isPro
+                    ? 'bg-gradient-to-b from-[#181D2A] to-[#10141D] border-slate-800'
+                    : 'bg-gradient-to-b from-blue-50/50 to-white border-slate-200 shadow-sm'
+                }`}
+              >
+                <div className="text-center mb-3">
+                  <span className="text-[10px] font-mono uppercase font-black tracking-wider text-amber-500 flex items-center justify-center gap-1">
+                    <Crown className="w-3.5 h-3.5" />
+                    PODIUM GOLDEN BOOT
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 items-end pt-2 pb-1">
+                  {/* Rank 2 (Silver) */}
+                  {second && (
+                    <div className="flex flex-col items-center text-center">
+                      <div className="relative">
+                        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-slate-300 dark:border-slate-500 shadow-md bg-slate-800">
+                          <img
+                            src={second.avatarUrl || getPlayerAvatar(second.playerName)}
+                            alt={second.playerName}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(second.playerName)}&background=475569&color=ffffff&bold=true`;
+                            }}
+                          />
+                        </div>
+                        <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-slate-300 text-slate-900 font-black text-[10px] flex items-center justify-center shadow-xs">
+                          2
+                        </span>
+                      </div>
+                      <h4 className="text-[11px] font-black mt-2 leading-tight truncate w-full text-slate-900 dark:text-white">
+                        {second.playerName.split(' ')[0]}
+                      </h4>
+                      <span className="text-[9px] text-slate-400 font-medium truncate w-full">
+                        {second.clubName.replace('PERSIB Bandung', 'PERSIB')}
+                      </span>
+                      <div className="mt-1 px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-[10px] font-mono font-black text-slate-800 dark:text-slate-200">
+                        {second.goals} Gol
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Rank 1 (Gold - Elevated) */}
+                  {first && (
+                    <div className="flex flex-col items-center text-center -translate-y-2">
+                      <div className="relative">
+                        <div className="w-18 h-18 rounded-full overflow-hidden border-3 border-amber-400 shadow-lg shadow-amber-500/20 bg-slate-900">
+                          <img
+                            src={first.avatarUrl || getPlayerAvatar(first.playerName)}
+                            alt={first.playerName}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(first.playerName)}&background=d97706&color=ffffff&bold=true`;
+                            }}
+                          />
+                        </div>
+                        <span className="absolute -top-3 left-1/2 -translate-x-1/2 text-amber-400 text-base">
+                          👑
+                        </span>
+                        <span className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full bg-amber-400 text-slate-950 font-black text-xs flex items-center justify-center shadow-sm">
+                          1
+                        </span>
+                      </div>
+                      <h4 className="text-xs font-black mt-2.5 leading-tight truncate w-full text-amber-500 dark:text-amber-400">
+                        {first.playerName}
+                      </h4>
+                      <span className="text-[9.5px] text-slate-400 font-medium truncate w-full">
+                        {first.clubName.replace('PERSIB Bandung', 'PERSIB')}
+                      </span>
+                      <div className="mt-1 px-3 py-0.5 rounded-full bg-amber-500 text-slate-950 text-xs font-mono font-black shadow-xs">
+                        {first.goals} Gol
+                      </div>
+                      <span className="text-[9px] text-slate-400 mt-0.5 font-mono">
+                        {first.assists} Assist • {first.matches} Laga
+                      </span>
+                    </div>
+                  )}
+
+                  {/* Rank 3 (Bronze) */}
+                  {third && (
+                    <div className="flex flex-col items-center text-center">
+                      <div className="relative">
+                        <div className="w-14 h-14 rounded-full overflow-hidden border-2 border-amber-700/70 shadow-md bg-slate-800">
+                          <img
+                            src={third.avatarUrl || getPlayerAvatar(third.playerName)}
+                            alt={third.playerName}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(third.playerName)}&background=92400e&color=ffffff&bold=true`;
+                            }}
+                          />
+                        </div>
+                        <span className="absolute -bottom-1 -right-1 w-5 h-5 rounded-full bg-amber-700 text-white font-black text-[10px] flex items-center justify-center shadow-xs">
+                          3
+                        </span>
+                      </div>
+                      <h4 className="text-[11px] font-black mt-2 leading-tight truncate w-full text-slate-900 dark:text-white">
+                        {third.playerName.split(' ')[0]}
+                      </h4>
+                      <span className="text-[9px] text-slate-400 font-medium truncate w-full">
+                        {third.clubName.replace('PERSIB Bandung', 'PERSIB')}
+                      </span>
+                      <div className="mt-1 px-2 py-0.5 rounded-full bg-slate-200 dark:bg-slate-800 text-[10px] font-mono font-black text-slate-800 dark:text-slate-200">
+                        {third.goals} Gol
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+            );
+          })()}
+
+          {/* Full Leaderboard Table / Cards */}
+          <div
+            className={`p-4 rounded-3xl border transition-all ${
+              isPro ? 'bg-[#121620] border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+                Daftar Lengkap Pencetak Gol
+              </span>
+              <span className="text-[10px] font-mono text-slate-400">
+                Peringkat & Efisiensi
+              </span>
+            </div>
+
+            <div className="space-y-2">
+              {(TOP_SCORERS_2026_2027[scorerTournamentFilter] || []).map((sc: TopScorerEntry) => (
+                <div
+                  key={`${sc.tournament}-${sc.rank}-${sc.playerName}`}
+                  className={`p-2.5 rounded-2xl border transition-all flex items-center justify-between gap-2 ${
+                    sc.isPersib
+                      ? isPro
+                        ? 'bg-blue-950/20 border-blue-900/40 hover:bg-blue-950/30'
+                        : 'bg-blue-50/50 border-blue-200 hover:bg-blue-50/80'
+                      : isPro
+                      ? 'bg-[#161B28] border-slate-800 hover:bg-[#1a2130]'
+                      : 'bg-slate-50 border-slate-200 hover:bg-slate-100'
+                  }`}
+                >
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <span
+                      className={`w-6 h-6 rounded-full font-mono font-black text-[11px] flex items-center justify-center shrink-0 ${
+                        sc.rank === 1
+                          ? 'bg-amber-400 text-slate-950'
+                          : sc.rank === 2
+                          ? 'bg-slate-300 text-slate-900'
+                          : sc.rank === 3
+                          ? 'bg-amber-700 text-white'
+                          : 'bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400'
+                      }`}
+                    >
+                      {sc.rank}
+                    </span>
+
+                    <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
+                      <img
+                        src={sc.avatarUrl || getPlayerAvatar(sc.playerName)}
+                        alt={sc.playerName}
+                        className="w-full h-full object-cover"
+                        onError={(e) => {
+                          (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(sc.playerName)}&background=0284c7&color=ffffff&bold=true`;
+                        }}
+                      />
+                    </div>
+
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-1.5">
+                        <span className="font-black text-xs truncate text-slate-900 dark:text-white">
+                          {sc.playerName}
+                        </span>
+                        {sc.isPersib && (
+                          <span className="px-1.5 py-0.2 rounded text-[8.5px] font-black bg-blue-600 text-white shrink-0">
+                            PERSIB
+                          </span>
+                        )}
+                      </div>
+                      <div className="text-[10px] text-slate-400 font-medium flex items-center gap-1">
+                        <span>{sc.clubName.replace('PERSIB Bandung', '')}</span>
+                        <span>•</span>
+                        <span>{sc.position}</span>
+                        <span>•</span>
+                        <span>{sc.matches} Main</span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div className="text-right shrink-0">
+                    <div className="text-sm font-black font-mono text-blue-600 dark:text-cyan-400">
+                      {sc.goals} <span className="text-[10px] font-sans font-bold text-slate-400">GOL</span>
+                    </div>
+                    <div className="text-[9.5px] font-mono text-slate-400">
+                      {sc.assists} Ast • {Math.round(sc.minutesPlayed / Math.max(1, sc.goals))} m/gol
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Raja Assist Spotlight (Playmakers of the Season) */}
+          <div
+            className={`p-4 rounded-3xl border transition-all ${
+              isPro ? 'bg-[#121620] border-slate-800' : 'bg-white border-slate-200 shadow-sm'
+            }`}
+          >
+            <div className="flex items-center justify-between gap-2 mb-3">
+              <div className="flex items-center gap-1.5">
+                <Target className="w-4 h-4 text-emerald-500" />
+                <h4 className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
+                  Raja Assist (Playmaker Kunci)
+                </h4>
+              </div>
+              <span className="text-[9.5px] font-mono text-emerald-500 font-bold">
+                Kreasi Peluang
+              </span>
+            </div>
+
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                { name: 'Thom Haye', num: 33, role: 'Playmaker Maestro', assists: 9, matches: 15, key: 'Umpan Kunci No. 1' },
+                { name: 'Ragnar Oratmangoen', num: 77, role: 'Winger Kilat', assists: 5, matches: 13, key: 'Dribel & Cutback' },
+                { name: 'Tyronne del Pino', num: 10, role: 'Gelandang Serang', assists: 4, matches: 14, key: 'Through Pass' },
+                { name: 'Marc Klok', num: 23, role: 'Kapten Tim', assists: 4, matches: 14, key: 'Set Piece & Crossing' },
+              ].map((pm) => (
+                <div
+                  key={pm.name}
+                  className={`p-3 rounded-2xl border transition-all ${
+                    isPro ? 'bg-[#161B28] border-slate-800' : 'bg-slate-50 border-slate-200'
+                  }`}
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] font-mono font-bold text-slate-400">#{pm.num}</span>
+                    <span className="text-xs font-mono font-black text-emerald-500">{pm.assists} Assist</span>
+                  </div>
+                  <div className="font-black text-xs text-slate-900 dark:text-white mt-1 truncate">
+                    {pm.name}
+                  </div>
+                  <div className="text-[9.5px] text-slate-400 mt-0.5 truncate">{pm.key}</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       )}
     </div>

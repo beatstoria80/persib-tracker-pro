@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v24 (Mobile Android responsive typography & scroll clearance)
-const CACHE_NAME = 'persib-tracker-pwa-v24';
+// PERSIB TRACKER - PWA Service Worker v25 (Global Football AI Intelligence & Multi-Tournament Top Scorer Hub)
+const CACHE_NAME = 'persib-tracker-pwa-v25';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

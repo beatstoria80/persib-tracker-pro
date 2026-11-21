@@ -296,3 +296,20 @@ export interface ClubAnalysisProfile {
   };
   verifiedBy: string;
 }
+
+export interface TopScorerEntry {
+  rank: number;
+  playerId?: string;
+  playerName: string;
+  clubName: string;
+  clubLogo?: string;
+  isPersib: boolean;
+  position: string;
+  avatarUrl?: string;
+  matches: number;
+  goals: number;
+  assists: number;
+  minutesPlayed: number;
+  penalties?: number;
+  tournament: 'all' | 'liga1' | 'acl2' | 'shopee';
+}

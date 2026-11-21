@@ -37,6 +37,13 @@ export interface QuickPrompt {
 
 export const PERSIB_QUICK_PROMPTS: QuickPrompt[] = [
   {
+    id: 'p-top-scorer',
+    label: 'Top Scorer & Assist Persib',
+    category: 'squad',
+    icon: '🎯',
+    question: 'Siapa saja daftar pencetak gol terbanyak (top scorer) dan raja assist Persib di semua event musim 2026/2027?',
+  },
+  {
     id: 'p-bali-united',
     label: 'Big Match vs Bali United',
     category: 'match',
@@ -109,6 +116,61 @@ export class PersibIntelligenceEngine {
       shopeeRank: 1,
       aclStatus: 'Juara Grup E (Lolos 16 Besar Asia)',
     };
+
+    // =========================================================================
+    // KATEGORI 0: TOP SCORER & RAJA ASSIST RESMI PERSIB (SEMUA KOMPETISI 2026/2027)
+    // =========================================================================
+    if (
+      q.includes('top score') ||
+      q.includes('top scorer') ||
+      q.includes('top skor') ||
+      q.includes('scorer') ||
+      q.includes('pencetak gol') ||
+      q.includes('gol terbanyak') ||
+      q.includes('assist') ||
+      q.includes('top assist') ||
+      q.includes('golden boot') ||
+      q.includes('raja gol')
+    ) {
+      const text = `Berikut adalah **Daftar Resmi Top Scorer & Top Assist PERSIB Bandung Musim 2026/2027** di semua ajang kompetisi:
+
+🥇 **Top Scorer Akumulasi (Semua Ajang Kompetisi)**:
+1. ⚽ **David da Silva** — **10 Gol, 3 Assist** (15 Laga | Super League: 6, Shopee Cup: 2, ACL Two: 2)
+2. ⚽ **Tyronne del Pino** — **5 Gol, 4 Assist** (14 Laga | ACL Two: 3, Super League: 2)
+3. ⚽ **Mariano Peralta** — **5 Gol, 3 Assist** (14 Laga | Super League: 4, Shopee Cup: 1)
+4. ⚽ **Balša Sekulić** — **4 Gol, 1 Assist** (8 Laga | Shopee Cup: 3, ACL Two: 1)
+5. ⚽ **Ragnar Oratmangoen ("Wak Haji")** — **4 Gol, 5 Assist** (13 Laga | Super League: 3, Shopee Cup: 1)
+6. ⚽ **Ciro Alves** — **3 Gol, 3 Assist** (12 Laga | Shopee Cup: 2, ACL Two: 1)
+7. ⚽ **Thom Haye** — **2 Gol, 9 Assist** (15 Laga | Super League: 1, ACL Two: 1)
+
+---
+
+🎯 **Raja Assist (Playmaker Terbanyak 2026/2027)**:
+* 👑 **Thom Haye (#33)**: **9 Assist** (Super League: 5, ACL Two: 3, Shopee Cup: 1) — Metronom paling kreatif di Asia Tenggara!
+* 🥈 **Ragnar Oratmangoen (#77)**: **5 Assist**
+* 🥉 **Marc Klok (#23)**: **4 Assist**
+
+---
+
+🏆 **Distribusi Gol per Kompetisi**:
+* **Super League 2026/2027**: 16 Gol total (David da Silva 6, Peralta 4, Ragnar 3, Tyronne 2, Haye 1)
+* **Shopee Cup (Grup B)**: 9 Gol total (Sekulić 3 [Hat-trick vs Shan], David 2, Ciro 2, Peralta 1, Ragnar 1)
+* **ACL Two (Grup E)**: 8 Gol total (Tyronne 3, David 2, Haye 1, Sekulić 1, Ciro 1)`;
+
+      return {
+        id: 'msg-' + Date.now(),
+        sender: 'ai',
+        text,
+        timestamp: timeStr,
+        category: 'squad',
+        actionableTips: [
+          'Buka tab "Top Skor" di Match Center untuk melihat visual podium sepatu emas interaktif.',
+          'David da Silva memimpin perburuan Golden Boot internal dengan rata-rata 0.67 gol per pertandingan.',
+          'Thom Haye mencatatkan efisiensi konversi umpan kunci tertinggi (88.4%) di kompetisi AFC.'
+        ],
+        metricsContext: defaultMetrics,
+      };
+    }
 
     // =========================================================================
     // KATEGORI 1: JADWAL & BIG MATCH SUPER LEAGUE PEKAN 10 VS BALI UNITED
@@ -462,6 +524,57 @@ Semua fokus tim saat ini tercurah pada laga krusial kontra Bali United besok mal
           'Tren performa PERSIB sedang menanjak dengan 3 kemenangan beruntun di semua kompetisi.',
           'Catatan defensif solid dengan kebobolan rata-rata di bawah 1 gol per laga.',
           'Detail kartu pertandingan lengkap dapat dilihat di Match Center aplikasi.'
+        ],
+        metricsContext: defaultMetrics,
+      };
+    }
+
+    // =========================================================================
+    // KATEGORI 9: SEPAK BOLA GLOBAL, FIFA, TIMNAS & TAKTIK INTERNASIONAL
+    // =========================================================================
+    if (
+      q.includes('fifa') ||
+      q.includes('world cup') ||
+      q.includes('piala dunia') ||
+      q.includes('champions league') ||
+      q.includes('ucl') ||
+      q.includes('premier league') ||
+      q.includes('la liga') ||
+      q.includes('serie a') ||
+      q.includes('bundesliga') ||
+      q.includes('timnas') ||
+      q.includes('indonesia') ||
+      q.includes('ballon d') ||
+      q.includes('messi') ||
+      q.includes('ronaldo') ||
+      q.includes('offside') ||
+      q.includes('var') ||
+      q.includes('tiki taka') ||
+      q.includes('gegenpressing')
+    ) {
+      const text = `⚽ **Pusat Intelijen Sepak Bola Profesional & FIFA**:
+
+Saya siap mengulas taktik, data, sejarah, dan dinamika sepak bola profesional global:
+
+🌍 **Topik Sepak Bola Dunia**:
+* **FIFA World Cup 2026**: Edisi bersejarah pertama dengan format 48 negara peserta di 3 tuan rumah (Amerika Serikat, Kanada, Meksiko).
+* **Timnas Indonesia**: Skuad Garuda di Kualifikasi Piala Dunia 2026 Putaran 3/4 Asia didukung pilar tangguh seperti Jay Idzes, Thom Haye, Sandy Walsh, Maarten Paes, dan Ragnar Oratmangoen.
+* **UEFA Champions League**: Format baru *Swiss Model* 36 klub dalam satu klasemen liga besar tanpa fase grup konvensional.
+* **Teori & Taktik Modern**: Positional Play, Gegenpressing, Inverted Full-Back, Box Midfield 3-2-4-1, serta metriks canggih xG (Expected Goals).
+* **Regulasi IFAB/FIFA**: Protokol VAR, semi-automated offside technology, dan interpretasi deliberate play.
+
+Silakan ajukan pertanyaan spesifik mengenai turnamen internasional, profil klub Eropa, analisis pemain, maupun regulasi FIFA!`;
+
+      return {
+        id: 'msg-' + Date.now(),
+        sender: 'ai',
+        text,
+        timestamp: timeStr,
+        category: 'general',
+        actionableTips: [
+          'Tanyakan analisis perbandingan pemain kelas dunia atau teori formasi sepak bola modern.',
+          'Sistem terintegrasi penuh dengan model Groq AI berpengetahuan ensiklopedis luas.',
+          'Pilar Timnas Indonesia seperti Thom Haye, Sandy Walsh, dan Ragnar kini memperkuat PERSIB Bandung!'
         ],
         metricsContext: defaultMetrics,
       };
