@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v11 (Official 2026/2027 Full 9-Matchday Fixtures & Standings Verification)
-const CACHE_NAME = 'persib-tracker-pwa-v11';
+// PERSIB TRACKER - PWA Service Worker v12 (Zero Past Season Relics - Full 2026/2027 Domestic & Asia Alignment)
+const CACHE_NAME = 'persib-tracker-pwa-v12';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
