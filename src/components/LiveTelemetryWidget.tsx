@@ -239,7 +239,7 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
                   </div>
                   <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
                     <ShieldCheck className="w-3 h-3 text-emerald-500 shrink-0" />
-                    <span>Super League: #5 (16 Pts)</span>
+                    <span>Super League: #6 (16 Pts)</span>
                   </div>
                 </div>
               )}

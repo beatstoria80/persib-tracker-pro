@@ -306,7 +306,7 @@ export function MatchCenter() {
               ? 'Puncak Grup B'
               : activeTournament === 'acl2'
               ? 'Juara Grup E'
-              : `Peringkat #${persibStanding?.rank || 5}`}
+              : `Peringkat #${persibStanding?.rank || 6}`}
           </span>
         </div>
 

@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v15 (Fixed Mobile Opening Video Refresh Loop & Session Storage Guards)
-const CACHE_NAME = 'persib-tracker-pwa-v15';
+// PERSIB TRACKER - PWA Service Worker v16 (Rectified Super League 2026/2027 Official Standings Matrix & Rank Telemetry)
+const CACHE_NAME = 'persib-tracker-pwa-v16';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

@@ -45,10 +45,12 @@ export default function PlayerVideoProfilePage() {
     }
   };
 
-  // REFACTOR: Authentic player video resolution (Sandy Walsh, Mariano Peralta, or default)
+  // REFACTOR: Authentic player video resolution (Ragnar Oratmangoen, Sandy Walsh, Mariano Peralta, or default)
   const videoSource =
     activePlayer.videoUrl ||
-    (activePlayer.id.includes('walsh')
+    (activePlayer.id.includes('ragnar')
+      ? '/Ragnar.mp4'
+      : activePlayer.id.includes('walsh')
       ? '/Sandy_Walsh.mp4'
       : activePlayer.id.includes('peralta')
       ? '/peralta.mp4'

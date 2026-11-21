@@ -232,7 +232,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
 
   // REFACTOR: Sinkronisasi data faktual Super League 2026/2027 (setelah Pekan 9, menjelang Big Match Pekan 10 besok Minggu, 22 November 2026)
   const currentStageName = 'Menjelang Big Match Pekan 10 Super League 2026/2027 Kontra Bali United (22 November 2026)';
-  const dynamicBulletin = `🏆 [SUPER LEAGUE 2026/2027 & ASIA] Super League Pekan 10: PERSIB Bandung (#5, 16 Poin) fokus persiapan akhir jelang Big Match krusial kontra Bali United FC (#3, 19 Poin) di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB. Shopee Cup Grup B: PERSIB kokoh di puncak klasemen (6 Poin, Gol 9-1 [+8]) pasca membantai Shan United 6-0. ACL Two: Rekor 100% menang mengunci tiket Babak 16 Besar Asia! (Sync: ${nowWib})`;
+  const dynamicBulletin = `🏆 [SUPER LEAGUE 2026/2027 & ASIA] Super League Pekan 10: PERSIB Bandung (#6, 16 Poin) fokus persiapan akhir jelang Big Match krusial kontra Bali United FC (#3, 19 Poin) di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB. Shopee Cup Grup B: PERSIB kokoh di puncak klasemen (6 Poin, Gol 9-1 [+8]) pasca membantai Shan United 6-0. ACL Two: Rekor 100% menang mengunci tiket Babak 16 Besar Asia! (Sync: ${nowWib})`;
 
   const persibInStandings = calculatedStandings.find((c) => c.isPersib || c.team.toLowerCase().includes('persib'));
 
@@ -264,7 +264,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       aggregateScore: 'Kick-off Besok (Minggu, 22 November 2026, 19:00 WIB)',
       venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
       statusText: 'SCHEDULED - BESOK MINGGU, 22 NOV 2026 (19:00 WIB)',
-      qualificationScenario: 'Super Big Match Pekan 10: PERSIB Bandung (#5, 16 Poin) menyambut Bali United (#3, 19 Poin) di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB. Kemenangan akan membawa Maung Bandung menyamai perolehan 19 poin Serdadu Tridatu di papan atas.',
+      qualificationScenario: 'Super Big Match Pekan 10: PERSIB Bandung (#6, 16 Poin) menyambut Bali United (#3, 19 Poin) di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB. Kemenangan akan membawa Maung Bandung menyamai perolehan 19 poin Serdadu Tridatu di papan atas.',
       keyEvents: [
         { minute: 'Pre-Match', type: 'chance', text: 'Skuad Bojan Hodak mematangkan taktik akhir jelang Super Big Match kontra Bali United di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB.' },
       ],
@@ -286,8 +286,8 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       },
     },
     leagueStandings: {
-      // REFACTOR: Sinkronisasi peringkat resmi faktual setelah Pekan 9 (Posisi #5 dengan 16 poin)
-      persibRank: persibInStandings?.rank ?? 5,
+      // REFACTOR: Sinkronisasi peringkat resmi faktual setelah Pekan 9 (Posisi #6 dengan 16 poin)
+      persibRank: persibInStandings?.rank ?? 6,
       persibPoints: persibInStandings?.points ?? 16,
       persibGD: persibInStandings?.gd ?? 6,
       topClubs: calculatedStandings.slice(0, 5),
@@ -340,7 +340,8 @@ ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
    - #2 Dewa United (20 poin)
    - #3 Bali United (19 poin)
    - #4 Madura United (19 poin)
-   - #5 PERSIB Bandung (16 poin - 9 main: 5 menang, 1 seri, 3 kalah, gol 16-10 [+6])
+   - #5 Persita Tangerang (18 poin)
+   - #6 PERSIB Bandung (16 poin - 9 main: 5 menang, 1 seri, 3 kalah, gol 16-10 [+6])
 4. RIWAYAT 9 LAGA RESMI PERSIB SUPER LEAGUE 2026/2027:
    - P1: PERSIB 3-1 Persijap Jepara (M)
    - P2: Madura United 2-1 PERSIB (K)
