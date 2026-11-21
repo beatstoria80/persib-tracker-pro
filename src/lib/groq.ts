@@ -354,7 +354,7 @@ ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
    - P9: Java United 2-1 PERSIB (K)
 5. ASIA 2026/2027:
    - ACL Two Grup E: PERSIB Juara Grup E rekor 100% (4 main, 4 menang, 12 poin, lolos 16 Besar Asia).
-   - Shopee Cup Grup B: PERSIB pemuncak klasemen Grup B (2 main, 2 menang, 6 poin, gol 9-1).
+   - Shopee Cup Grup B: PERSIB pemuncak klasemen Grup B (2 main, 2 menang, 6 poin, gol 9-1). Laga terdekat Shopee Cup: MD3 tandang vs Lion City Sailors (10 Des 2026, 19:30 WIB), disusul Super Big Match MD4 vs Johor Darul Ta'zim (17 Des 2026, 19:00 WIB).
 Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kesiapan Big Match Pekan 10 besok Minggu 22 November 2026 dan dominasi musim 2026/2027 tanpa basa-basi atau simbol markdown.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {

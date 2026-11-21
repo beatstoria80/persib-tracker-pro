@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v16 (Rectified Super League 2026/2027 Official Standings Matrix & Rank Telemetry)
-const CACHE_NAME = 'persib-tracker-pwa-v16';
+// PERSIB TRACKER - PWA Service Worker v17 (Synchronized Shopee Cup 2026/2027 Group B Schedule & Opponents)
+const CACHE_NAME = 'persib-tracker-pwa-v17';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
