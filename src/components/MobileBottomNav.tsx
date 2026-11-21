@@ -12,30 +12,34 @@ export function MobileBottomNav() {
   const { mode, activeHub, setActiveHub } = useClubTracker();
   const isPro = mode === 'pro';
 
-  // REFACTOR: 4 Hub Navigation Items with Authentic Bola + Chat Icon (No AI Slop)
-  const navItems: { id: ActiveHub; label: string; icon: React.ReactNode; badge?: string }[] = [
+  // REFACTOR: 4 Hub Navigation Items with dedicated /chat route & dashboard tabs
+  const navItems: { id: ActiveHub; label: string; icon: React.ReactNode; badge?: string; route: string }[] = [
     {
       id: 'match-center',
       label: 'Matches',
       icon: <Trophy className="w-4.5 h-4.5" />,
       badge: '#6',
+      route: '/',
     },
     {
       id: 'roster',
       label: 'Roster',
       icon: <Users className="w-4.5 h-4.5" />,
+      route: '/',
     },
     {
       id: 'transparency',
       label: 'Club FFP',
       icon: <Building2 className="w-4.5 h-4.5" />,
       badge: '94%',
+      route: '/',
     },
     {
       id: 'ai-chat',
       label: 'Ai Chat',
       icon: <SoccerChatIcon className="w-4.5 h-4.5 text-cyan-400" />,
       badge: 'LIVE',
+      route: '/chat',
     },
   ];
 
@@ -53,15 +57,22 @@ export function MobileBottomNav() {
           }`}
         >
         {navItems.map((item) => {
-          const isActive = pathname === '/chat' ? item.id === 'ai-chat' : activeHub === item.id;
+          const isActive = pathname === '/chat' ? item.id === 'ai-chat' : (activeHub === item.id && pathname !== '/chat');
           return (
             <button
               type="button"
               key={item.id}
               onClick={() => {
-                setActiveHub(item.id);
-                if (pathname === '/chat' && item.id !== 'ai-chat') {
-                  router.push('/');
+                if (item.id === 'ai-chat') {
+                  setActiveHub('ai-chat');
+                  if (pathname !== '/chat') {
+                    router.push('/chat');
+                  }
+                } else {
+                  setActiveHub(item.id);
+                  if (pathname !== '/') {
+                    router.push('/');
+                  }
                 }
               }}
               className={`relative flex items-center gap-1.5 py-2 px-2.5 sm:px-3 rounded-full transition-all duration-200 active:scale-95 ${

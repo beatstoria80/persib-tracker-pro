@@ -8,7 +8,6 @@ import { InstallPwaPrompt } from '@/components/InstallPwaPrompt';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
-import { PersibAiChatWindow } from '@/components/HubAiChat/PersibAiChatWindow';
 import { VideoLoadingSplash } from '@/components/VideoLoadingSplash';
 import { PwaInstallModal } from '@/components/PwaInstallModal';
 import { LiveTelemetryWidget } from '@/components/LiveTelemetryWidget';
@@ -16,7 +15,7 @@ import { SponsorshipFooter } from '@/components/SponsorshipFooter';
 import { Smartphone, CheckCircle2 } from 'lucide-react';
 
 export default function HomePage() {
-  const { mode, activeHub, setActiveHub, activeTournament, syncFeedback, fixtures } = useClubTracker();
+  const { mode, activeHub, activeTournament, syncFeedback, fixtures } = useClubTracker();
   const isPro = mode === 'pro';
 
   // REFACTOR: State pemicu transisi rise element UI/UX bertingkat (staggered cascade) setelah video splash selesai
@@ -108,20 +107,15 @@ export default function HomePage() {
         {/* Scrollable Main Mobile Hub Content - Stage 3 High Impact Rise with Sheen */}
         <main className={`flex-1 px-4 sm:px-5 py-3 pb-36 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
           <div>
-            {activeHub === 'match-center' && <MatchCenter />}
+            {(activeHub === 'match-center' || activeHub === 'ai-chat') && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}
             {activeHub === 'transparency' && <CorporateTransparency />}
-            {activeHub === 'ai-chat' && (
-              <PersibAiChatWindow onClose={() => setActiveHub('match-center')} />
-            )}
           </div>
 
-          {/* REFACTOR: Official Sponsorship & Partner Footer Section (Suppressed in dedicated AI chat window) */}
-          {activeHub !== 'ai-chat' && (
-            <div className="mt-4">
-              <SponsorshipFooter />
-            </div>
-          )}
+          {/* REFACTOR: Official Sponsorship & Partner Footer Section */}
+          <div className="mt-4">
+            <SponsorshipFooter />
+          </div>
         </main>
       </div>
 

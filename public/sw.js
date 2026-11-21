@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v21 (Window-Style AI Tactical Chat & Dedicated /chat Route)
-const CACHE_NAME = 'persib-tracker-pwa-v21';
+// PERSIB TRACKER - PWA Service Worker v22 (Isolated Dedicated /chat Page & Pure Minimalist Feed)
+const CACHE_NAME = 'persib-tracker-pwa-v22';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
