@@ -311,11 +311,10 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
               )}
 
               <div
-                className={`max-w-[88%] sm:max-w-[82%] rounded-2xl p-3.5 text-xs leading-relaxed shadow-lg relative group ${
-                  isUser
-                    ? 'bg-blue-600 text-white rounded-br-none font-medium'
-                    : 'bg-[#121826] border border-white/10 text-slate-200 rounded-bl-none'
-                }`}
+                className={`max-w-[88%] sm:max-w-[82%] rounded-2xl p-3.5 text-xs leading-relaxed shadow-lg relative group ${isUser
+                  ? 'bg-blue-600 text-white rounded-br-none font-medium'
+                  : 'bg-[#121826] border border-white/10 text-slate-200 rounded-bl-none'
+                  }`}
               >
                 {/* Category Badge for AI Messages */}
                 {!isUser && m.category && (
@@ -450,11 +449,10 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
           <button
             type="submit"
             disabled={!input.trim() || isLoading}
-            className={`p-2.5 rounded-xl transition-all active:scale-95 shadow-md flex items-center justify-center shrink-0 ${
-              input.trim() && !isLoading
-                ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/40 cursor-pointer'
-                : 'bg-white/5 text-slate-500 cursor-not-allowed'
-            }`}
+            className={`p-2.5 rounded-xl transition-all active:scale-95 shadow-md flex items-center justify-center shrink-0 ${input.trim() && !isLoading
+              ? 'bg-blue-600 hover:bg-blue-500 text-white shadow-blue-600/40 cursor-pointer'
+              : 'bg-white/5 text-slate-500 cursor-not-allowed'
+              }`}
           >
             <Send className="w-4 h-4" />
           </button>

@@ -51,7 +51,11 @@ export default function PlayerVideoProfilePage() {
   // REFACTOR: Authentic player video resolution without forced default fallback
   const videoSource =
     activePlayer.videoUrl ||
-    (activePlayer.id.includes('reijnders')
+    (activePlayer.id.includes('uilliam')
+      ? '/uilliam.mp4'
+      : activePlayer.id.includes('menalo')
+      ? '/menalo.mp4'
+      : activePlayer.id.includes('reijnders')
       ? '/Reijnders.mp4'
       : activePlayer.id.includes('klok')
       ? '/Klok.mp4'

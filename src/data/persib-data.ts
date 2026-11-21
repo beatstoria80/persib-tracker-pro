@@ -912,6 +912,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€500K (Rp 8.7 M)',
     contractUntil: '31 Mei 2028',
     verifiedData: true,
+    videoUrl: '/menalo.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/316047-1605122508.jpg',
     fitness: {
       status: 'fit',
@@ -983,6 +984,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€500K (Rp 8.7 M)',
     contractUntil: '31 Mei 2028',
     verifiedData: true,
+    videoUrl: '/uilliam.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/547009-1789636337.png',
     fitness: {
       status: 'fit',

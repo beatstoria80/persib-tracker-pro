@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v26 (Natural AI chat response, 20% player profile card opacity, Reijnders & Klok videos)
-const CACHE_NAME = 'persib-tracker-pwa-v26';
+// PERSIB TRACKER - PWA Service Worker v27 (Added Uilliam Barros & Luka Menalo HD video profiles)
+const CACHE_NAME = 'persib-tracker-pwa-v27';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
