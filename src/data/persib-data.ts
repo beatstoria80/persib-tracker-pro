@@ -1250,6 +1250,8 @@ export function getPlayerAvatar(idOrName: string): string {
   // Competitor Key Players
   if (lower.includes('ciro')) return PLAYER_AVATARS['ciro-77'];
   if (lower.includes('gustavo')) return PLAYER_AVATARS['gustavo-70'];
+  if (lower.includes('yance')) return PLAYER_AVATARS['yance-23'];
+  if (lower.includes('yakob')) return PLAYER_AVATARS['yakob-11'];
   if (lower.includes('mamut')) return PLAYER_AVATARS['mamut-9'];
   if (lower.includes('ridho')) return PLAYER_AVATARS['ridho-5'];
   if (lower.includes('witan')) return PLAYER_AVATARS['witan-78'];
@@ -1591,7 +1593,7 @@ export const OPPONENT_SQUADS_REGISTRY: Record<string, { startingXI: ClubPlayerPr
       { id: 'bu-sub-11b', name: 'Yabes Roni', number: 11, position: 'FW (RW)', nationality: 'Indonesia', marketValue: 'Rp 2.8 M', avatarUrl: 'https://ui-avatars.com/api/?name=Yabes+Roni&background=dc2626&color=ffffff&bold=true&size=256', isStarting: false, fitnessPercentage: 100, rating: 8.0, keyStat: 'Akselerasi Super Sub', tacticalRole: 'Impact Winger' },
     ],
   },
-  // REFACTOR: Skuad autentik Java United (Lawan Pekan 9 Super League 2026/2027)
+  // REFACTOR: Skuad autentik Java United (Lawan Pekan 9 Super League 2026/2027) - Ciro Alves, Gustavo Almeida & Sayuri bersaudara
   'Java United': {
     startingXI: [
       { id: 'ju-30', name: 'Miswar Saputra', number: 30, position: 'GK', nationality: 'Indonesia', marketValue: 'Rp 3.5 M', avatarUrl: 'https://ui-avatars.com/api/?name=Miswar+Saputra&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: true, fitnessPercentage: 100, rating: 8.4, keyStat: '5 Saves vs Persib di Jatidiri', tacticalRole: 'Shot Stopper Sentral', pitchX: 90, pitchY: 50 },
@@ -1601,13 +1603,14 @@ export const OPPONENT_SQUADS_REGISTRY: Record<string, { startingXI: ClubPlayerPr
       { id: 'ju-15', name: 'Haykal Alhafiz', number: 15, position: 'DF (LB)', nationality: 'Indonesia', marketValue: 'Rp 3.8 M', avatarUrl: 'https://ui-avatars.com/api/?name=Haykal+Alhafiz&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: true, fitnessPercentage: 97, rating: 8.3, keyStat: 'Kecepatan Sayap Kiri Muda', tacticalRole: 'Attacking Fullback Kiri', pitchX: 74, pitchY: 18 },
       { id: 'ju-21', name: 'Boubakary Diarra', number: 21, position: 'MF (DM)', nationality: 'Prancis', marketValue: 'Rp 6.0 M', avatarUrl: 'https://ui-avatars.com/api/?name=Boubakary+Diarra&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: true, fitnessPercentage: 100, rating: 9.0, keyStat: 'Intersep Tangguh & Sirkulasi Bola', tacticalRole: 'Holding Pivot Sentral', pitchX: 62, pitchY: 50 },
       { id: 'ju-19', name: 'Alfeandra Dewangga', number: 19, position: 'MF (CM/CB)', nationality: 'Indonesia', marketValue: 'Rp 5.0 M', avatarUrl: 'https://ui-avatars.com/api/?name=Alfeandra+Dewangga&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: true, fitnessPercentage: 100, rating: 8.6, keyStat: 'Spesialis Lemparan Jauh & Free-kick', tacticalRole: 'Gelandang Bertahan Fleksibel', pitchX: 56, pitchY: 66 },
-      { id: 'ju-7', name: 'Taisei Marukawa', number: 7, position: 'MF (AM)', nationality: 'Jepang', marketValue: 'Rp 6.5 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/648128-1739596182.png', isStarting: true, fitnessPercentage: 100, rating: 9.3, keyStat: 'Gol Spektakuler Menit 78 vs Persib', tacticalRole: 'Playmaker Kreatif Penentu Kemenangan', pitchX: 54, pitchY: 34 },
-      { id: 'ju-17', name: 'Gali Freitas', number: 17, position: 'FW (RW)', nationality: 'Timor Leste', marketValue: 'Rp 5.5 M', avatarUrl: 'https://ui-avatars.com/api/?name=Gali+Freitas&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: true, fitnessPercentage: 100, rating: 9.2, keyStat: 'Gol Cepat Menit 14 vs Persib', tacticalRole: 'Winger Kilat Serangan Balik', pitchX: 38, pitchY: 82 },
-      { id: 'ju-9', name: 'Evandro Brandao', number: 9, position: 'FW (CF)', nationality: 'Angola', marketValue: 'Rp 4.5 M', avatarUrl: 'https://ui-avatars.com/api/?name=Evandro+Brandao&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: true, fitnessPercentage: 96, rating: 8.5, keyStat: 'Penahan Bola & Duel Kotak Penalti', tacticalRole: 'Target Man Lini Depan', pitchX: 35, pitchY: 50 },
-      { id: 'ju-29', name: 'Riyan Ardiansyah', number: 29, position: 'FW (LW)', nationality: 'Indonesia', marketValue: 'Rp 3.5 M', avatarUrl: 'https://ui-avatars.com/api/?name=Riyan+Ardiansyah&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: true, fitnessPercentage: 97, rating: 8.2, keyStat: 'Akselerasi Sayap Vertikal', tacticalRole: 'Winger Penusuk Garis Samping', pitchX: 38, pitchY: 18 },
+      { id: 'ju-23', name: 'Yance Sayuri', number: 23, position: 'MF (LM)', nationality: 'Indonesia', marketValue: 'Rp 4.8 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/902976-1721036300.jpg', isStarting: true, fitnessPercentage: 100, rating: 9.1, keyStat: 'Assist Krusial Menit 76 vs Persib', tacticalRole: 'Winger Sayap Kiri Lincah & Crossing Akurat', pitchX: 54, pitchY: 24 },
+      { id: 'ju-77', name: 'Ciro Alves', number: 77, position: 'FW (RW)', nationality: 'Brasil', marketValue: 'Rp 6.0 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/81458-1758703896.jpg', isStarting: true, fitnessPercentage: 100, rating: 9.4, keyStat: 'Gol Pembuka Menit 34 vs Persib', tacticalRole: 'Inverted Winger Penusuk & Eksekutor Free-kick', pitchX: 38, pitchY: 82 },
+      { id: 'ju-70', name: 'Gustavo Almeida', number: 70, position: 'FW (CF)', nationality: 'Brasil', marketValue: 'Rp 7.0 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/686044-1680375322.jpeg', isStarting: true, fitnessPercentage: 100, rating: 9.5, keyStat: 'Gol Penentu Kemenangan Menit 76', tacticalRole: 'Target Man Predator Kotak Penalti', pitchX: 35, pitchY: 50 },
+      { id: 'ju-11', name: 'Yakob Sayuri', number: 11, position: 'FW (LW)', nationality: 'Indonesia', marketValue: 'Rp 4.8 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/684755-1680375306.jpeg', isStarting: true, fitnessPercentage: 98, rating: 8.9, keyStat: 'Sprint Cepat 34.2 km/jam & Dribel', tacticalRole: 'Winger Sayap Kanan Eksplosif', pitchX: 38, pitchY: 18 },
     ],
     substitutes: [
       { id: 'ju-sub-1', name: 'Adi Satryo', number: 1, position: 'GK', nationality: 'Indonesia', marketValue: 'Rp 3.2 M', avatarUrl: 'https://ui-avatars.com/api/?name=Adi+Satryo&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: false, fitnessPercentage: 100, rating: 8.0, keyStat: 'Kiper Timnas Indonesia Pelapis', tacticalRole: 'Kiper Cadangan' },
+      { id: 'ju-sub-9', name: 'Adilson Silva', number: 9, position: 'FW (CF)', nationality: 'Portugal', marketValue: 'Rp 4.2 M', avatarUrl: 'https://ui-avatars.com/api/?name=Adilson+Silva&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: false, fitnessPercentage: 100, rating: 8.2, keyStat: 'Super Sub Penyerang', tacticalRole: 'Finisher Kotak Penalti Pelapis' },
       { id: 'ju-sub-11', name: 'Tri Setiawan', number: 11, position: 'MF (CM)', nationality: 'Indonesia', marketValue: 'Rp 2.8 M', avatarUrl: 'https://ui-avatars.com/api/?name=Tri+Setiawan&background=3b82f6&color=ffffff&bold=true&size=256', isStarting: false, fitnessPercentage: 100, rating: 7.7, keyStat: 'Gelandang Energik', tacticalRole: 'Rotasi Lini Tengah' },
     ],
   },
@@ -1828,25 +1831,25 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
     venue: 'Stadion Jatidiri, Semarang',
     status: 'FINISHED',
     highlights: [
-      'Menit 14\': Gol kilat Java United lewat counter-attack cepat Gali Freitas menembus tiang dekat',
-      'Menit 41\': Gol penyama kedudukan berkelas Mariano Peralta menyambut umpan terobosan Marc Klok 1-1',
-      'Menit 78\': Gol penentu Java United dicetak Taisei Marukawa lewat tembakan melengkung sudut atas 2-1',
-      'Persib Bandung mengakhiri 9 pekan dengan 16 poin (5 Menang, 1 Seri, 3 Kalah) di peringkat #5',
+      'Menit 34\': Gol pembuka Java United dicetak oleh Ciro Alves lewat tembakan keras mendatar 1-0',
+      'Menit 58\': Gol penyeimbang berkelas Mariano Peralta menyambut umpan terobosan Marc Klok 1-1',
+      'Menit 76\': Gol penentu kemenangan Java United dicetak Gustavo Almeida memaksimalkan umpan silang Yance Sayuri 2-1',
+      'Persib Bandung mengakhiri 9 pekan dengan 16 poin sebelum bangkit mengalahkan Bali United 2-1 di Pekan 10',
     ],
     events: [
       { minute: "1'", type: 'chance', text: 'Kick-off babak pertama Java United vs PERSIB Bandung di Stadion Jatidiri' },
-      { minute: "14'", type: 'goal', text: 'Gol Java United! Sepakan mendatar Gali Freitas membobol gawang 1-0' },
-      { minute: "41'", type: 'goal', text: 'GOOOL PERSIB! Mariano Peralta menyamakan skor 1-1 dengan placing dingin!' },
-      { minute: "45+2'", type: 'chance', text: 'Turun minum: Java United 1 - 1 PERSIB Bandung' },
-      { minute: "78'", type: 'goal', text: 'Gol Java United! Tembakan keras Taisei Marukawa merubah skor menjadi 2-1' },
+      { minute: "34'", type: 'goal', text: 'Gol Java United! Sepakan keras mendatar Ciro Alves membobol gawang 1-0' },
+      { minute: "45+2'", type: 'chance', text: 'Turun minum: Java United 1 - 0 PERSIB Bandung' },
+      { minute: "58'", type: 'goal', text: 'GOOOL PERSIB! Mariano Peralta menyamakan kedudukan 1-1 lewat placing akurat!' },
+      { minute: "76'", type: 'goal', text: 'Gol Java United! Sundulan tajam Gustavo Almeida menuntaskan crossing Yance Sayuri 2-1' },
       { minute: "86'", type: 'chance', text: 'Peluang emas sundulan Balša Sekulić diselamatkan kiper Miswar Saputra' },
       { minute: "90+4'", type: 'chance', text: 'Peluit panjang! Java United 2 - 1 PERSIB Bandung (FT)' },
     ],
     detailedEvents: [
-      { minute: "14'", type: 'goal', team: 'home', player: 'Gali Freitas', detail: 'Akselerasi Serangan Balik Kilat' },
-      { minute: "41'", type: 'goal', team: 'away', player: 'Mariano Peralta', assistBy: 'Marc Klok', detail: 'Placing Akurat Menyusur Tiang Jauh' },
-      { minute: "55'", type: 'yellow_card', team: 'home', player: 'Boubakary Diarra', detail: 'Tekel Menahan Serangan Balik' },
-      { minute: "78'", type: 'goal', team: 'home', player: 'Taisei Marukawa', detail: 'Sepakan Keras Melengkung Kaki Kanan' },
+      { minute: "34'", type: 'goal', team: 'home', player: 'Ciro Alves', detail: 'Sepakan Keras Kaki Kanan Sudut Gawang' },
+      { minute: "42'", type: 'yellow_card', team: 'home', player: 'Boubakary Diarra', detail: 'Tekel Menahan Serangan Balik' },
+      { minute: "58'", type: 'goal', team: 'away', player: 'Mariano Peralta', assistBy: 'Marc Klok', detail: 'Placing Akurat Menyusur Tiang Jauh' },
+      { minute: "76'", type: 'goal', team: 'home', player: 'Gustavo Almeida', assistBy: 'Yance Sayuri', detail: 'Sundulan Kepala Tajam Menyambut Crossing' },
       { minute: "82'", type: 'yellow_card', team: 'away', player: 'Marc Klok', detail: 'Protes Terhadap Keputusan Wasit' },
     ],
     statsSummary: {
@@ -3193,7 +3196,7 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'PERSIB 2 - 1 Borneo FC (GBLA)',
-      lastMeetingDate: 'Musim 2024/2025',
+      lastMeetingDate: 'Musim 2026/2027',
       totalWinsVsPersib: 4,
       drawsVsPersib: 4,
       lossesVsPersib: 6,
@@ -3229,7 +3232,7 @@ export const OFFICIAL_CLUB_PROFILES_2026_2027: Record<string, ClubAnalysisProfil
     ],
     headToHeadVsPersib: {
       lastMeetingScore: 'PERSIB 2 - 1 Borneo FC',
-      lastMeetingDate: '2024',
+      lastMeetingDate: 'Musim 2026/2027',
       totalWinsVsPersib: 4,
       drawsVsPersib: 4,
       lossesVsPersib: 6,

@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v7 (Synchronized Real-Time Stats & Scores)
-const CACHE_NAME = 'persib-tracker-pwa-v7';
+// PERSIB TRACKER - PWA Service Worker v8 (Purged 2024/25 Relics & Validated Match Stats)
+const CACHE_NAME = 'persib-tracker-pwa-v8';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
