@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v9 (Synchronized ACL Two & Shopee Cup 2026/2027)
-const CACHE_NAME = 'persib-tracker-pwa-v9';
+// PERSIB TRACKER - PWA Service Worker v10 (Rectified Pekan 10 Scheduled & Real-time Standings)
+const CACHE_NAME = 'persib-tracker-pwa-v10';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

@@ -507,31 +507,31 @@ export function ClubIntelligenceView({
                 Statistik Super League 2026/2027
               </span>
               <span className="text-xs font-black text-blue-600 dark:text-cyan-400 font-mono">
-                Peringkat #{standingRow?.rank ?? 3}
+                Peringkat #{standingRow?.rank ?? 5}
               </span>
             </div>
 
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center text-xs">
               <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-400 font-bold block uppercase">Main (MP)</span>
-                <span className="text-lg font-mono font-black">{standingRow?.played ?? 10} Laga</span>
+                <span className="text-lg font-mono font-black">{standingRow?.played ?? 9} Laga</span>
               </div>
               <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-400 font-bold block uppercase">Total Poin</span>
                 <span className="text-lg font-mono font-black text-blue-600 dark:text-cyan-400">
-                  {standingRow?.points ?? 19}
+                  {standingRow?.points ?? 16}
                 </span>
               </div>
               <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-400 font-bold block uppercase">Gol (GF:GA)</span>
                 <span className="text-lg font-mono font-black">
-                  {standingRow?.gf ?? 18} : {standingRow?.ga ?? 11}
+                  {standingRow?.gf ?? 16} : {standingRow?.ga ?? 10}
                 </span>
               </div>
               <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-800">
                 <span className="text-[10px] text-slate-400 font-bold block uppercase">Selisih Gol</span>
                 <span className="text-lg font-mono font-black text-emerald-500">
-                  {(standingRow?.gd ?? 7) > 0 ? `+${standingRow?.gd ?? 7}` : standingRow?.gd ?? 7}
+                  {(standingRow?.gd ?? 6) > 0 ? `+${standingRow?.gd ?? 6}` : standingRow?.gd ?? 6}
                 </span>
               </div>
             </div>
