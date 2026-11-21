@@ -331,16 +331,17 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   // If valid Groq API key is configured, enhance bulletin with Groq LPU inference
   if (apiKey && !apiKey.startsWith('gsk_fjb3E')) {
     try {
-      // REFACTOR: Pedoman data valid resmi sebagai acuan inferensi Groq AI (PT LIB, ileague.id, persib.co.id, Shopee Cup)
-      const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League & Shopee Cup 2026/2027 resmi dengan pedoman data valid terverifikasi (sumber: ileague.id, ligaindonesiabaru.com, persib.co.id, ASEAN Club Championship).
+      // REFACTOR: Pedoman data valid resmi sebagai acuan inferensi Groq AI (PT LIB, ileague.id, persib.co.id, AFC ACL Two, Shopee Cup)
+      const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League, ACL Two, dan Shopee Cup 2026/2027 resmi dengan pedoman data valid terverifikasi (sumber: ileague.id, ligaindonesiabaru.com, the-afc.com, persib.co.id, ASEAN Club Championship).
 PEDOMAN DATA VALID:
 - Musim aktif: Super League 2026/2027 (Pekan 10 selesai, menuju Pekan 11).
 - Peringkat Persib Super League: #3 (10 laga, 6 menang, 1 seri, 3 kalah, 19 poin, selisih gol +7).
 - Hasil Terkini Super League: PERSIB Bandung 2 - 1 Bali United (21 November 2026, Stadion GBLA).
 - Laga Mendatang Terdekat: Persita Tangerang vs PERSIB Bandung (Pekan 11, Minggu, 29 November 2026, 19:00 WIB, Indomilk Arena).
-- Shopee Cup 2026/2027 Grup B: PERSIB Bandung memuncaki klasemen Grup B (2 laga, 2 menang, 6 poin, gol 9-1 [+8]) setelah menang 6-0 atas Shan United (19 Nov 2026).
+- AFC Champions League Two (ACL Two) 2026/2027 Grup E: PERSIB Bandung memuncaki klasemen dengan rekor sempurna 100% menang (4 laga, 4 menang, 12 poin, gol 7-1 [+6]), mengunci gelar Juara Grup E dan resmi lolos ke Babak 16 Besar Asia setelah mengalahkan Melbourne Victory (2-0 di Bandung, 1-2 di Melbourne), FC Seoul (0-1 di Seoul), dan The Cong-Viettel (2-0 di Bandung).
+- Shopee Cup 2026/2027 Grup B: PERSIB Bandung memuncaki klasemen Grup B (2 laga, 2 menang, 6 poin, gol 9-1 [+8]) setelah menang comeback 1-3 atas Port FC di Bangkok dan membantai Shan United 6-0 di GBLA (19 Nov 2026).
 - Papan Atas Super League: #1 Persija (24 poin), #2 Dewa United (21 poin), #3 PERSIB Bandung (19 poin), #4 Bali United (19 poin), #5 Madura United (19 poin).
-Keluarkan 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kompetisi dan pergerakan klasemen ini tanpa basa-basi atau markdown.`;
+Keluarkan 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai performa multi-kompetisi ini tanpa basa-basi atau markdown.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',

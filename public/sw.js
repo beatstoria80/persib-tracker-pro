@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v8 (Purged 2024/25 Relics & Validated Match Stats)
-const CACHE_NAME = 'persib-tracker-pwa-v8';
+// PERSIB TRACKER - PWA Service Worker v9 (Synchronized ACL Two & Shopee Cup 2026/2027)
+const CACHE_NAME = 'persib-tracker-pwa-v9';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
