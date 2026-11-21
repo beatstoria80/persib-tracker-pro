@@ -736,6 +736,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€1.2M (Rp 20.8 M)',
     contractUntil: '31 Mei 2028',
     verifiedData: true,
+    videoUrl: '/haye.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/178219-1707214741.jpg',
     fitness: {
       status: 'fit',
