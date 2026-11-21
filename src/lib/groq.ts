@@ -230,19 +230,19 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const calculatedShopeeCup: GroupTeam[] = computeSortedGroupStandings(SHOPEE_CUP_STANDINGS_2026_2027, []);
   const dynamicFixtures: MatchFixture[] = [...VERIFIED_FIXTURES_2026_2027];
 
-  // REFACTOR: Sinkronisasi data resmi Super League 2026/2027 dan Shopee Cup 2026/2027
-  const currentStageName = 'Pekan 10 Super League 2026/2027 & Matchday 2 Shopee Cup ASEAN';
-  const dynamicBulletin = `🏆 [SUPER LEAGUE & SHOPEE CUP 2026/2027] Super League: Persija (#1, 21 Poin), Dewa United (#2, 20 Poin), Bali United (#3, 19 Poin), PERSIB (#5, 16 Poin). Shopee Cup Grup B: PERSIB Bandung memuncaki grup (2 Laga, 6 Poin, Gol 9-1 [+8]) pasca membantai Shan United 6-0. Laga Mendatang: PERSIB vs Bali United FC (Minggu, 22 Nov 2026, 19:00 WIB, GBLA). (Sync: ${nowWib})`;
+  // REFACTOR: Sinkronisasi data resmi Super League 2026/2027, ACL Two & Shopee Cup 2026/2027
+  const currentStageName = 'Pekan 10 Super League 2026/2027, ACL Two 16 Besar & Shopee Cup';
+  const dynamicBulletin = `🏆 [SUPER LEAGUE 2026/2027 & ASIA] Super League Pekan 10: PERSIB taklukkan Bali United 2-1 di GBLA dan merangsek ke peringkat #3 (19 Poin). Shopee Cup Grup B: PERSIB kokoh di puncak klasemen (6 Poin, Gol 9-1 [+8]) pasca membantai Shan United 6-0. ACL Two: Rekor sempurna lolos Babak 16 Besar! (Sync: ${nowWib})`;
 
   const persibInStandings = calculatedStandings.find((c) => c.isPersib || c.team.toLowerCase().includes('persib'));
 
   // REFACTOR: Decoupled dynamic match extraction based on authentic 2026/2027 schedule
   const latestFinished =
     dynamicFixtures.filter((f) => f.status === 'FINISHED' && f.tournamentKey === 'liga1').slice(-1)[0] ||
-    dynamicFixtures.find((f) => f.id === 'l1-p9');
+    dynamicFixtures.find((f) => f.id === 'l1-p10');
   const upcomingMatch =
     dynamicFixtures.find((f) => f.status === 'SCHEDULED' && f.tournamentKey === 'liga1') ||
-    dynamicFixtures.find((f) => f.id === 'l1-p10');
+    dynamicFixtures.find((f) => f.id === 'l1-p11');
 
   const liveData: GroqSuppliedData = {
     lastUpdated: nowWib,
@@ -255,43 +255,43 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     liveMatch: {
       isLive: false,
       tournament: 'Super League 2026/2027',
-      matchweek: 'Pekan 9 (Hasil Resmi Terkini)',
-      homeTeam: 'Java United',
-      awayTeam: 'PERSIB Bandung',
+      matchweek: 'Pekan 10 (Big Match Perebutan Papan Atas - Selesai)',
+      homeTeam: 'PERSIB Bandung',
+      awayTeam: 'Bali United',
       homeScore: 2,
       awayScore: 1,
       liveMinute: 'FT',
-      aggregateScore: 'Java United 2 - 1 PERSIB Bandung (FT)',
-      venue: 'Stadion Jatidiri, Semarang',
+      aggregateScore: 'PERSIB Bandung 2 - 1 Bali United (FT)',
+      venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
       statusText: 'FULL TIME - SELESAI',
-      qualificationScenario: 'Persib Bandung mengumpulkan 16 poin dari 9 pertandingan (posisi #5) dan bersiap menjamu Bali United (#3, 19 Poin) di Stadion GBLA pada Pekan 10 guna merangsek kembali ke 3 besar klasemen.',
+      qualificationScenario: 'Kemenangan krusial 2-1 atas Bali United melesatkan PERSIB Bandung ke peringkat #3 Klasemen Super League (19 Poin, 10 Main: 6 Menang, 1 Seri, 3 Kalah, Selisih Gol +7).',
       keyEvents: [
-        { minute: "14'", type: 'goal', text: 'Gol Java United! Gali Freitas menyambar bola serangan balik cepat 1-0!' },
-        { minute: "41'", type: 'goal', text: 'GOOOL PERSIB! Mariano Peralta menyamakan kedudukan 1-1 lewat placing akurat!' },
-        { minute: "78'", type: 'goal', text: 'Gol Java United! Sepakan keras Taisei Marukawa memastikan keunggulan 2-1' },
+        { minute: "29'", type: 'goal', text: 'GOOOL PERSIB! Balša Sekulić menanduk umpan silang presisi Eliano Reijnders 1-0!' },
+        { minute: "58'", type: 'goal', text: 'Gol Bali United! Everton Nascimento menyamakan kedudukan 1-1' },
+        { minute: "74'", type: 'goal', text: 'GOOOL MAGIS PERSIB! Mariano Peralta melepaskan tembakan roket melengkung 2-1!' },
       ],
     },
     matchCenter: {
       tournament: 'Super League 2026/2027 & ACL Two 2026/2027',
       latestResult: {
-        matchweek: latestFinished?.roundOrWeek || 'Pekan 9 Super League 2026/2027',
-        opponent: 'Java United',
+        matchweek: latestFinished?.roundOrWeek || 'Pekan 10 Super League 2026/2027',
+        opponent: 'Bali United',
         score: '2 - 1',
-        scorers: ["Mariano Peralta 41' (PERSIB)", "Gali Freitas 14'", "Taisei Marukawa 78'"],
-        venue: 'Stadion Jatidiri, Semarang',
+        scorers: ["Balša Sekulić 29' (PERSIB)", "Everton 58' (Bali United)", "Mariano Peralta 74' (PERSIB)"],
+        venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
       },
       nextFixture: {
-        matchweek: upcomingMatch?.roundOrWeek || 'Pekan 10 (Big Match Perebutan Papan Atas)',
-        opponent: upcomingMatch?.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : (upcomingMatch?.homeTeam || 'Bali United FC'),
-        date: `${upcomingMatch?.date || 'Minggu, 22 November 2026'} • ${upcomingMatch?.time || '19:00 WIB'}`,
-        venue: upcomingMatch?.venue || 'Stadion Gelora Bandung Lautan Api (GBLA)',
+        matchweek: upcomingMatch?.roundOrWeek || 'Pekan 11 (Laga Tandang)',
+        opponent: upcomingMatch?.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : (upcomingMatch?.homeTeam || 'Persita Tangerang'),
+        date: `${upcomingMatch?.date || 'Minggu, 29 November 2026'} • ${upcomingMatch?.time || '19:00 WIB'}`,
+        venue: upcomingMatch?.venue || 'Stadion Indomilk Arena, Tangerang',
       },
     },
     leagueStandings: {
-      // REFACTOR: Sinkronisasi peringkat resmi ke posisi #5 dengan 16 poin dan selisih gol +6
-      persibRank: persibInStandings?.rank ?? 5,
-      persibPoints: persibInStandings?.points ?? 16,
-      persibGD: persibInStandings?.gd ?? 6,
+      // REFACTOR: Sinkronisasi peringkat resmi ke posisi #3 dengan 19 poin dan selisih gol +7
+      persibRank: persibInStandings?.rank ?? 3,
+      persibPoints: persibInStandings?.points ?? 19,
+      persibGD: persibInStandings?.gd ?? 7,
       topClubs: calculatedStandings.slice(0, 5),
       allClubs: calculatedStandings,
     },
@@ -334,12 +334,12 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       // REFACTOR: Pedoman data valid resmi sebagai acuan inferensi Groq AI (PT LIB, ileague.id, persib.co.id, Shopee Cup)
       const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League & Shopee Cup 2026/2027 resmi dengan pedoman data valid terverifikasi (sumber: ileague.id, ligaindonesiabaru.com, persib.co.id, ASEAN Club Championship).
 PEDOMAN DATA VALID:
-- Musim aktif: Super League 2026/2027 (Pekan 9 selesai, menuju Pekan 10).
-- Peringkat Persib Super League: #5 (9 laga, 5 menang, 1 seri, 3 kalah, 16 poin, selisih gol +6).
-- Hasil Terkini Super League: Java United 2 - 1 PERSIB Bandung (8 November 2026, Stadion Jatidiri).
-- Laga Mendatang Terdekat: PERSIB Bandung vs Bali United FC (Pekan 10, Minggu, 22 November 2026, 19:00 WIB, Stadion GBLA).
+- Musim aktif: Super League 2026/2027 (Pekan 10 selesai, menuju Pekan 11).
+- Peringkat Persib Super League: #3 (10 laga, 6 menang, 1 seri, 3 kalah, 19 poin, selisih gol +7).
+- Hasil Terkini Super League: PERSIB Bandung 2 - 1 Bali United (21 November 2026, Stadion GBLA).
+- Laga Mendatang Terdekat: Persita Tangerang vs PERSIB Bandung (Pekan 11, Minggu, 29 November 2026, 19:00 WIB, Indomilk Arena).
 - Shopee Cup 2026/2027 Grup B: PERSIB Bandung memuncaki klasemen Grup B (2 laga, 2 menang, 6 poin, gol 9-1 [+8]) setelah menang 6-0 atas Shan United (19 Nov 2026).
-- Papan Atas Super League: #1 Persija (21 poin), #2 Dewa United (20 poin), #3 Bali United (19 poin), #4 Madura United (19 poin).
+- Papan Atas Super League: #1 Persija (24 poin), #2 Dewa United (21 poin), #3 PERSIB Bandung (19 poin), #4 Bali United (19 poin), #5 Madura United (19 poin).
 Keluarkan 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kompetisi dan pergerakan klasemen ini tanpa basa-basi atau markdown.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {

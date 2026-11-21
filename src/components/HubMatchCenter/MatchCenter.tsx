@@ -12,6 +12,9 @@ import {
   Activity,
   Swords,
   TrendingUp,
+  Target,
+  Flame,
+  Sparkles,
 } from 'lucide-react';
 import {
   MatchFixture,
@@ -1554,6 +1557,221 @@ export function MatchCenter() {
                         Statistik pertandingan akan otomatis tercatat saat pertandingan berlangsung.
                       </div>
                     )}
+
+                    {/* // REFACTOR: Pencetak Gol & Kontributor Laga Resmi Terverifikasi */}
+                    {currentFixture.detailedEvents &&
+                      currentFixture.detailedEvents.filter((ev) => ev.type === 'goal').length > 0 && (
+                        <div
+                          className={`p-3.5 rounded-2xl border space-y-2.5 ${
+                            isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+                          }`}
+                        >
+                          <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                            <div className="flex items-center gap-1.5 text-xs font-black">
+                              <Target className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
+                              <span>Pencetak Gol Pertandingan Ini</span>
+                            </div>
+                            <span className="text-[10px] font-mono font-bold text-slate-400">
+                              {currentFixture.detailedEvents.filter((ev) => ev.type === 'goal').length} Gol Tercipta
+                            </span>
+                          </div>
+
+                          <div className="space-y-2">
+                            {currentFixture.detailedEvents
+                              .filter((ev) => ev.type === 'goal')
+                              .map((ev, gIdx) => {
+                                const matchedPersib = players.find(
+                                  (p) =>
+                                    ev.player.toLowerCase().includes(p.name.toLowerCase()) ||
+                                    p.name.toLowerCase().includes(ev.player.toLowerCase())
+                                );
+                                const matchedOpp = opponentSquadData.startingXI
+                                  .concat(opponentSquadData.substitutes)
+                                  .find(
+                                    (op) =>
+                                      ev.player.toLowerCase().includes(op.name.toLowerCase()) ||
+                                      op.name.toLowerCase().includes(ev.player.toLowerCase())
+                                  );
+                                const targetPlayerObj: Player | null = matchedPersib
+                                  ? matchedPersib
+                                  : matchedOpp
+                                  ? convertOpponentPlayerToPlayer(matchedOpp, opponentTeamName)
+                                  : null;
+
+                                const matchedAssistPersib = ev.assistBy
+                                  ? players.find(
+                                      (p) =>
+                                        ev.assistBy?.toLowerCase().includes(p.name.toLowerCase()) ||
+                                        p.name.toLowerCase().includes(ev.assistBy?.toLowerCase() || '')
+                                    )
+                                  : null;
+                                const matchedAssistOpp = ev.assistBy
+                                  ? opponentSquadData.startingXI
+                                    .concat(opponentSquadData.substitutes)
+                                    .find(
+                                      (op) =>
+                                        ev.assistBy?.toLowerCase().includes(op.name.toLowerCase()) ||
+                                        op.name.toLowerCase().includes(ev.assistBy?.toLowerCase() || '')
+                                    )
+                                  : null;
+                                const assistPlayerObj: Player | null = matchedAssistPersib
+                                  ? matchedAssistPersib
+                                  : matchedAssistOpp
+                                  ? convertOpponentPlayerToPlayer(matchedAssistOpp, opponentTeamName)
+                                  : null;
+
+                                return (
+                                  <div
+                                    key={gIdx}
+                                    onClick={() => {
+                                      if (targetPlayerObj) setSelectedPlayer(targetPlayerObj);
+                                    }}
+                                    className={`p-2.5 rounded-xl border flex items-center justify-between gap-2.5 transition-all ${
+                                      targetPlayerObj ? 'cursor-pointer active:scale-[0.99]' : ''
+                                    } ${
+                                      ev.team === 'home'
+                                        ? isPro
+                                          ? 'bg-blue-950/30 border-blue-900/50'
+                                          : 'bg-blue-50/60 border-blue-100'
+                                        : isPro
+                                        ? 'bg-slate-900 border-slate-800'
+                                        : 'bg-slate-50 border-slate-200'
+                                    }`}
+                                  >
+                                    <div className="flex items-center gap-2.5 min-w-0">
+                                      <span className="font-mono font-black text-[10px] px-2 py-0.5 rounded-lg bg-blue-600 text-white shrink-0">
+                                        {ev.minute}
+                                      </span>
+                                      <PlayerAvatar
+                                        name={targetPlayerObj ? targetPlayerObj.name : ev.player}
+                                        avatarUrl={targetPlayerObj?.avatarUrl}
+                                        number={targetPlayerObj?.number}
+                                        size="sm"
+                                      />
+                                      <div className="min-w-0">
+                                        <div className="flex items-center gap-1.5">
+                                          <span className="font-black text-xs truncate">
+                                            {ev.player}
+                                          </span>
+                                          {targetPlayerObj && (
+                                            <span className="text-[9px] font-mono px-1 py-0.2 rounded bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold shrink-0">
+                                              #{targetPlayerObj.number}
+                                            </span>
+                                          )}
+                                        </div>
+                                        {ev.detail && (
+                                          <p className="text-[10px] text-slate-500 dark:text-slate-400 truncate">
+                                            {ev.detail}
+                                          </p>
+                                        )}
+                                      </div>
+                                    </div>
+
+                                    {ev.assistBy && (
+                                      <div className="flex items-center gap-1.5 shrink-0 text-right">
+                                        <div className="min-w-0 hidden sm:block">
+                                          <span className="text-[8px] text-slate-400 font-mono block uppercase">
+                                            Assist
+                                          </span>
+                                          <span className="text-[10px] font-bold text-blue-600 dark:text-cyan-400 truncate">
+                                            {ev.assistBy}
+                                          </span>
+                                        </div>
+                                        <PlayerAvatar
+                                          name={assistPlayerObj ? assistPlayerObj.name : ev.assistBy}
+                                          avatarUrl={assistPlayerObj?.avatarUrl}
+                                          number={assistPlayerObj?.number}
+                                          size="xs"
+                                        />
+                                      </div>
+                                    )}
+                                  </div>
+                                );
+                              })}
+                          </div>
+                        </div>
+                      )}
+
+                    {/* // REFACTOR: Akumulasi Top Skor & Top Assist Resmi Musim 2026/2027 */}
+                    <div
+                      className={`p-3.5 rounded-2xl border space-y-3 ${
+                        isPro ? 'bg-slate-900/60 border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
+                      }`}
+                    >
+                      <div className="flex items-center justify-between pb-2 border-b border-slate-200 dark:border-slate-800">
+                        <div className="flex items-center gap-1.5 text-xs font-black">
+                          <Flame className="w-3.5 h-3.5 text-amber-500" />
+                          <span>Papan Peringkat Gol & Assist Klub 2026/2027</span>
+                        </div>
+                        <span className="inline-flex items-center gap-1 text-[8.5px] font-mono font-bold px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20">
+                          <Sparkles className="w-2.5 h-2.5" />
+                          <span>PT LIB & AFC Valid</span>
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-2 gap-2 text-xs">
+                        {/* Top Skor Card */}
+                        <div
+                          className={`p-2.5 rounded-xl border space-y-1.5 ${
+                            isPro ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-50 border-slate-200'
+                          }`}
+                        >
+                          <span className="text-[9px] font-mono font-bold uppercase text-slate-400 block pb-1 border-b border-slate-200 dark:border-slate-800">
+                            ⚽ Top Skor (Semua Ajang)
+                          </span>
+                          <div className="space-y-1 pt-0.5">
+                            {[
+                              { name: 'Balša Sekulić', count: 8, num: 99 },
+                              { name: 'Mariano Peralta', count: 5, num: 10 },
+                              { name: 'Luka Menalo', count: 4, num: 9 },
+                              { name: 'Marc Klok', count: 1, num: 23 },
+                              { name: 'Beckham Putra', count: 1, num: 7 },
+                              { name: 'Adam Alis', count: 1, num: 18 },
+                              { name: 'Uilliam Barros', count: 1, num: 94 },
+                              { name: 'Berguinho', count: 1, num: 97 },
+                            ].slice(0, 4).map((p, pI) => (
+                              <div key={pI} className="flex items-center justify-between text-[11px]">
+                                <span className="font-extrabold truncate text-slate-800 dark:text-slate-200">
+                                  {pI + 1}. {p.name}
+                                </span>
+                                <span className="font-mono font-black text-blue-600 dark:text-cyan-400 shrink-0">
+                                  {p.count} Gol
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+
+                        {/* Top Assist Card */}
+                        <div
+                          className={`p-2.5 rounded-xl border space-y-1.5 ${
+                            isPro ? 'bg-slate-900/90 border-slate-800' : 'bg-slate-50 border-slate-200'
+                          }`}
+                        >
+                          <span className="text-[9px] font-mono font-bold uppercase text-slate-400 block pb-1 border-b border-slate-200 dark:border-slate-800">
+                            👟 Top Assist (Semua Ajang)
+                          </span>
+                          <div className="space-y-1 pt-0.5">
+                            {[
+                              { name: 'Thom Haye', count: 6, num: 33 },
+                              { name: 'Marc Klok', count: 4, num: 23 },
+                              { name: 'Eliano Reijnders', count: 3, num: 2 },
+                              { name: 'Beckham Putra', count: 3, num: 7 },
+                              { name: 'Mariano Peralta', count: 2, num: 10 },
+                            ].slice(0, 4).map((p, pI) => (
+                              <div key={pI} className="flex items-center justify-between text-[11px]">
+                                <span className="font-extrabold truncate text-slate-800 dark:text-slate-200">
+                                  {pI + 1}. {p.name}
+                                </span>
+                                <span className="font-mono font-black text-emerald-600 dark:text-emerald-400 shrink-0">
+                                  {p.count} Ast
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 )}
 

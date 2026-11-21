@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v6 (Network-First for Live UI Updates)
-const CACHE_NAME = 'persib-tracker-pwa-v6';
+// PERSIB TRACKER - PWA Service Worker v7 (Synchronized Real-Time Stats & Scores)
+const CACHE_NAME = 'persib-tracker-pwa-v7';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

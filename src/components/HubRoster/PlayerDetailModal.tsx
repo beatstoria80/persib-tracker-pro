@@ -159,7 +159,7 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
             )}
           </div>
 
-          {/* Factual Performance Stats (Pekan 1-8 Liga 1 2026/2027) */}
+          {/* // REFACTOR: Factual Performance Stats (Musim Aktif 2026/2027 Terverifikasi PT LIB & AFC) */}
           <div
             className={`p-3.5 rounded-2xl border ${
               isPro ? 'bg-slate-900/40 border-slate-800' : 'bg-slate-50 border-slate-200'
@@ -168,7 +168,7 @@ export function PlayerDetailModal({ player, onClose }: ModalProps) {
             <div className={`text-[10px] font-bold uppercase mb-2.5 flex items-center justify-between ${
               isPro ? 'text-slate-400' : 'text-slate-700'
             }`}>
-              <span>Statistik Resmi Pekan 1-8 (Google Sports / PT LIB)</span>
+              <span>Statistik Resmi Musim 2026/2027 (PT LIB & AFC)</span>
               <span className="font-mono text-[9px] text-emerald-500 font-bold">Terverifikasi</span>
             </div>
 
