@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v22 (Isolated Dedicated /chat Page & Pure Minimalist Feed)
-const CACHE_NAME = 'persib-tracker-pwa-v22';
+// PERSIB TRACKER - PWA Service Worker v23 (Groq AI Model Fixed to openai/gpt-oss-120b with Dynamic Multi-Category Intelligence)
+const CACHE_NAME = 'persib-tracker-pwa-v23';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

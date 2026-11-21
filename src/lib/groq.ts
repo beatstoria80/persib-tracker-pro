@@ -218,7 +218,7 @@ function computeSortedGroupStandings(
  */
 export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const apiKey = process.env.GROQ_API_KEY;
-  const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+  const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
   const startTime = Date.now();
 
   const nowWib =
@@ -327,7 +327,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   };
 
   // If valid Groq API key is configured, enhance bulletin with Groq LPU inference
-  if (apiKey && !apiKey.startsWith('gsk_fjb3E')) {
+  if (apiKey && apiKey.length > 20 && !apiKey.includes('placeholder')) {
     try {
       // REFACTOR: Pedoman data valid resmi sebagai acuan inferensi Groq AI (PT LIB, ileague.id, persib.co.id, AFC ACL Two, Shopee Cup)
       // REFACTOR: Pedoman data valid mutlak resmi 2026/2027 (PT LIB / ileague.id, AFC, ASEAN Club Championship)

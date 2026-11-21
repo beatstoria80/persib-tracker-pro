@@ -22,11 +22,22 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // Default factual engine response (AHA/ACSM structured analog)
+    // Default factual engine response (for context, category & actionable tips)
     const engineResponse: PersibAiChatMessage = PersibIntelligenceEngine.generateResponse(userMessage);
 
     const apiKey = process.env.GROQ_API_KEY || '';
-    const model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile';
+    const primaryModel = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
+
+    // Verified active Groq models in prioritized order
+    const candidateModels = [
+      primaryModel,
+      'openai/gpt-oss-120b',
+      'openai/gpt-oss-20b',
+      'qwen/qwen3.8-27b',
+    ];
+
+    // Remove duplicates while preserving order
+    const uniqueModels = Array.from(new Set(candidateModels));
 
     // System prompt with absolute factual ground truth for 2026/2027
     const systemPrompt = `Kamu adalah "PERSIB AI TACTICAL INTELLIGENCE", asisten AI resmi paling cerdas dan terpercaya untuk Bobotoh pendukung PERSIB Bandung pada MUSIM AKTIF 2026/2027.
@@ -58,46 +69,50 @@ PEDOMAN UTAMA & DATA VALID RESMI 2026/2027:
 
 FORMAT JAWABAN:
 - Berbahasa Indonesia ramah, profesional, taktis, dan penuh semangat Maung Bandung 🔵.
-- Gunakan format markdown bersih (bullet points, bolding) agar nyaman dibaca di layar mobile smartphone.`;
+- Gunakan format markdown bersih (bullet points, bolding) agar nyaman dibaca di layar mobile smartphone.
+- Jika pengguna menyapa atau bertanya umum, jawab dengan ramah dan tawarkan bantuan seputar jadwal laga terdekat (kontra Bali United 22 Nov 2026), klasemen, atau pemain.`;
 
-    if (apiKey && !apiKey.startsWith('gsk_fjb3E_dummy')) {
-      try {
-        const messagesToSend = [
-          { role: 'system', content: systemPrompt },
-          ...conversationHistory.slice(-6),
-          { role: 'user', content: userMessage },
-        ];
+    if (apiKey) {
+      const messagesToSend = [
+        { role: 'system', content: systemPrompt },
+        ...conversationHistory.slice(-6),
+        { role: 'user', content: userMessage },
+      ];
 
-        const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${apiKey}`,
-          },
-          body: JSON.stringify({
-            model,
-            messages: messagesToSend,
-            temperature: 0.25,
-            max_tokens: 800,
-          }),
-        });
+      // Try candidate models in cascading sequence
+      for (const m of uniqueModels) {
+        try {
+          const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${apiKey}`,
+            },
+            body: JSON.stringify({
+              model: m,
+              messages: messagesToSend,
+              temperature: 0.25,
+              max_tokens: 800,
+            }),
+          });
 
-        if (response.ok) {
-          const data = await response.json();
-          const replyText = data.choices?.[0]?.message?.content;
-          if (replyText && typeof replyText === 'string') {
-            return NextResponse.json({
-              success: true,
-              reply: replyText.trim(),
-              category: engineResponse.category,
-              actionableTips: engineResponse.actionableTips,
-              metricsContext: engineResponse.metricsContext,
-              provider: 'groq-llama-3.3-70b-versatile',
-            });
+          if (response.ok) {
+            const data = await response.json();
+            const replyText = data.choices?.[0]?.message?.content;
+            if (replyText && typeof replyText === 'string') {
+              return NextResponse.json({
+                success: true,
+                reply: replyText.trim(),
+                category: engineResponse.category,
+                actionableTips: engineResponse.actionableTips,
+                metricsContext: engineResponse.metricsContext,
+                provider: `groq-${m}`,
+              });
+            }
           }
+        } catch {
+          // Continue to next candidate model
         }
-      } catch {
-        // Fall back gracefully to internal verified engine
       }
     }
 

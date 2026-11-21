@@ -386,6 +386,88 @@ Maung Bandung mencetak sejarah baru sebagai klub Indonesia dengan performa palin
     }
 
     // =========================================================================
+    // KATEGORI 7: SALAM, SAPAAN & PERKENALAN (TIDAK BOLEH TEMPLATE LOOPING)
+    // =========================================================================
+    if (
+      q.includes('halo') ||
+      q.includes('hai') ||
+      q.includes('hello') ||
+      q.includes('tes') ||
+      q.includes('test') ||
+      q.includes('coba') ||
+      q.includes('sampurasun') ||
+      q.includes('pagi') ||
+      q.includes('siang') ||
+      q.includes('sore') ||
+      q.includes('malam') ||
+      q.includes('siapa kamu') ||
+      q.includes('bisa apa')
+    ) {
+      const text = `**Rampés, Bobotoh!** 🔵⚽💬
+
+Saya adalah **Persib Tactical Intelligence Assistant**, asisten AI resmi yang siap menjawab segala pertanyaan Bobotoh seputar **PERSIB Bandung musim 2026/2027**.
+
+🔥 Informasi Hangat Hari Ini:
+* ⚔️ **Laga Mendatang**: Super Big Match Pekan 10 Super League kontra **Bali United FC** besok **Minggu, 22 November 2026 pukul 19:00 WIB** di GBLA!
+* 📊 **Klasemen**: PERSIB berada di peringkat #6 (16 Poin). Kemenangan besok malam akan melesatkan Maung Bandung ke posisi 3 besar menyamai Bali United (19 Poin).
+* 🌏 **Kompetisi Asia**: PERSIB memuncaki Grup B Shopee Cup (6 Poin, Gol 9-1) dan mengunci tiket 16 Besar ACL Two dengan rekor 100% menang!
+
+Tanyakan apa saja seputar taktik Bojan Hodak, kondisi pemain, atau jadwal berikutnya!`;
+
+      return {
+        id: 'msg-' + Date.now(),
+        sender: 'ai',
+        text,
+        timestamp: timeStr,
+        category: 'general',
+        actionableTips: [
+          'Gunakan topik rekomendasi di atas untuk informasi instan satu sentuhan.',
+          'Ketik pertanyaan bebas seperti "Siapa pelatih Persib?" atau "Kapan lawan JDT?".',
+          'Sistem terhubung langsung ke Groq AI berkecepatan tinggi.'
+        ],
+        metricsContext: defaultMetrics,
+      };
+    }
+
+    // =========================================================================
+    // KATEGORI 8: HASIL & PERTANDINGAN TERAKHIR (SUPER LEAGUE & ASIA)
+    // =========================================================================
+    if (
+      q.includes('hasil') ||
+      q.includes('skor') ||
+      q.includes('terakhir') ||
+      q.includes('kemarin') ||
+      q.includes('menang') ||
+      q.includes('rekor')
+    ) {
+      const text = `Berikut rekap hasil pertandingan resmi **PERSIB Bandung Musim 2026/2027**:
+
+🏆 Hasil Laga Terkini:
+1. **Shopee Cup (MD2 - 19 Nov 2026)**:
+   - **PERSIB Bandung 6 - 0 Shan United** (Pesta gol di hadapan Bobotoh, mengokohkan posisi #1 Grup B).
+2. **Super League (Pekan 9 - 14 Nov 2026)**:
+   - **Arema FC 1 - 2 PERSIB Bandung** (Kemenangan krusial tandang berkat gol Mariano Peralta dan Thom Haye).
+3. **ACL Two (MD4 - 6 Nov 2026)**:
+   - **PERSIB Bandung 2 - 1 Melbourne Victory** (Rekor sempurna 100% menang 4 kali, memastikan tiket Babak 16 Besar Asia!).
+
+Semua fokus tim saat ini tercurah pada laga krusial kontra Bali United besok malam (22 Nov 2026) di GBLA!`;
+
+      return {
+        id: 'msg-' + Date.now(),
+        sender: 'ai',
+        text,
+        timestamp: timeStr,
+        category: 'match',
+        actionableTips: [
+          'Tren performa PERSIB sedang menanjak dengan 3 kemenangan beruntun di semua kompetisi.',
+          'Catatan defensif solid dengan kebobolan rata-rata di bawah 1 gol per laga.',
+          'Detail kartu pertandingan lengkap dapat dilihat di Match Center aplikasi.'
+        ],
+        metricsContext: defaultMetrics,
+      };
+    }
+
+    // =========================================================================
     // DEFAULT: REKOMENDASI PINTAR BOBOTOH 2026/2027
     // =========================================================================
     const text = `Sampurasun, Bobotoh! 🔵⚽💬
