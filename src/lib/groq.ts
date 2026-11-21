@@ -330,17 +330,31 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   if (apiKey && !apiKey.startsWith('gsk_fjb3E')) {
     try {
       // REFACTOR: Pedoman data valid resmi sebagai acuan inferensi Groq AI (PT LIB, ileague.id, persib.co.id, AFC ACL Two, Shopee Cup)
-      // REFACTOR: Pedoman data valid resmi sebagai acuan inferensi Groq AI (PT LIB, ileague.id, the-afc.com, persib.co.id, Shopee Cup)
-      const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League, ACL Two, dan Shopee Cup 2026/2027 resmi dengan pedoman data valid terverifikasi (sumber: ileague.id, ligaindonesiabaru.com, the-afc.com, persib.co.id, ASEAN Club Championship).
-PEDOMAN DATA VALID:
-- Musim aktif: Super League 2026/2027 (Pekan 9 telah selesai, HARI INI menjelang kick-off Big Match Pekan 10).
-- Laga Pekan 10 BELUM DIMAINKAN: PERSIB Bandung vs Bali United FC dijadwalkan malam ini Sabtu, 21 November 2026 pukul 19:00 WIB di Stadion GBLA. DILARANG membuat skor akhir atau menyimpulkan laga ini telah selesai!
-- Peringkat Persib Super League Faktual Saat Ini: #5 (9 laga: 5 menang, 1 seri, 3 kalah, 16 poin, selisih gol 16-10 [+6]).
-- Hasil Laga Terakhir Super League: Java United 2 - 1 PERSIB Bandung (Pekan 9, 08 November 2026 di Jatidiri).
-- Papan Atas Super League Saat Ini (Pekan 9): #1 Persija (21 poin), #2 Dewa United (20 poin), #3 Bali United (19 poin), #4 Madura United (19 poin), #5 PERSIB Bandung (16 poin).
-- AFC Champions League Two (ACL Two) 2026/2027 Grup E: PERSIB Bandung memuncaki klasemen dengan rekor sempurna 100% menang (4 laga, 4 menang, 12 poin, gol 7-1 [+6]), mengunci gelar Juara Grup E dan resmi lolos ke Babak 16 Besar Asia setelah mengalahkan Melbourne Victory (2-0 di Bandung, 1-2 di Melbourne), FC Seoul (0-1 di Seoul), dan The Cong-Viettel (2-0 di Bandung).
-- Shopee Cup 2026/2027 Grup B: PERSIB Bandung memuncaki klasemen Grup B (2 laga, 2 menang, 6 poin, gol 9-1 [+8]) setelah menang comeback 1-3 atas Port FC di Bangkok dan membantai Shan United 6-0 di GBLA (19 Nov 2026).
-Keluarkan 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai persiapan laga akbar Pekan 10 malam ini dan dominasi multi-kompetisi ini tanpa basa-basi atau markdown.`;
+      // REFACTOR: Pedoman data valid mutlak resmi 2026/2027 (PT LIB / ileague.id, AFC, ASEAN Club Championship)
+      const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League, ACL Two, dan Shopee Cup resmi untuk MUSIM AKTIF 2026/2027 (sumber valid: ileague.id, the-afc.com, persib.co.id).
+ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
+1. LARANGAN KERAS: DILARANG MENGGUNAKAN ATAU MENYEBUT DATA ARTEFAK MUSIM 2024/2025 ATAUPUN 2025/2026! Seluruh analisis HANYA untuk musim aktif 2026/2027.
+2. JADWAL RESMI HARI INI: Pekan 10 Super League 2026/2027 antara PERSIB Bandung vs Bali United FC di Stadion GBLA dijadwalkan malam ini (Sabtu, 21 November 2026 pukul 19:00 WIB) dan BELUM DIMAINKAN (STATUS: SCHEDULED). DILARANG MENYATAKAN LAGA INI TELAH SELESAI ATAU MENGARANG SKOR AKHIR!
+3. KLASEMEN RESMI (9 PEKAN SELESAI):
+   - #1 Persija (21 poin)
+   - #2 Dewa United (20 poin)
+   - #3 Bali United (19 poin)
+   - #4 Madura United (19 poin)
+   - #5 PERSIB Bandung (16 poin - 9 main: 5 menang, 1 seri, 3 kalah, gol 16-10 [+6])
+4. RIWAYAT 9 LAGA RESMI PERSIB SUPER LEAGUE 2026/2027:
+   - P1: PERSIB 2-0 PSBS Biak (M)
+   - P2: Dewa United 2-1 PERSIB (K)
+   - P3: PERSIB 2-1 Persik (M)
+   - P4: Persija 2-1 PERSIB (K)
+   - P5: PERSIB 1-1 PSM (S)
+   - P6: Semen Padang 1-2 PERSIB (M)
+   - P7: Garudayaksa 1-2 PERSIB (M)
+   - P8: PERSIB 4-0 Isenmulang Kalteng (M)
+   - P9: Java United 2-1 PERSIB (K)
+5. ASIA 2026/2027:
+   - ACL Two Grup E: PERSIB Juara Grup E rekor 100% (4 main, 4 menang, 12 poin, lolos 16 Besar Asia).
+   - Shopee Cup Grup B: PERSIB pemuncak klasemen Grup B (2 main, 2 menang, 6 poin, gol 9-1).
+Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kesiapan Big Match Pekan 10 malam ini dan dominasi musim 2026/2027 tanpa basa-basi atau simbol markdown.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',

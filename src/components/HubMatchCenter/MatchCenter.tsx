@@ -211,7 +211,7 @@ export function MatchCenter() {
       ? tournamentFixtures.find((f) => f.id === 'shopee-26-md2-ft') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')
       : activeTournament === 'acl2'
       ? tournamentFixtures.find((f) => f.id === 'acl2-26-md4-live') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')
-      : tournamentFixtures.find((f) => f.id === 'l1-p9') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')) ||
+      : tournamentFixtures.find((f) => f.id === 'l1-p10') || tournamentFixtures.find((f) => f.id === 'l1-p9') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')) ||
     [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED' || f.status === 'SCHEDULED') ||
     tournamentFixtures[0] ||
     fixtures[0];
@@ -306,7 +306,7 @@ export function MatchCenter() {
               ? 'Puncak Grup B'
               : activeTournament === 'acl2'
               ? 'Juara Grup E'
-              : `Peringkat #${persibStanding?.rank || 3}`}
+              : `Peringkat #${persibStanding?.rank || 5}`}
           </span>
         </div>
 
