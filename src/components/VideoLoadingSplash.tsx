@@ -7,24 +7,53 @@ interface VideoLoadingSplashProps {
   onFinish?: () => void;
 }
 
+const SPLASH_SESSION_KEY = 'persib_opening_splash_seen_v1';
+
 export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+  // REFACTOR: Check sessionStorage so mobile refresh never loops or traps user in opening video
+  const [alreadyShown] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return sessionStorage.getItem(SPLASH_SESSION_KEY) === 'true';
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  });
+
+  const [isVisible, setIsVisible] = useState<boolean>(!alreadyShown);
   const [isFading, setIsFading] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleDismiss = useCallback(() => {
+    try {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
+      }
+    } catch {
+      // Ignore storage errors in private browsing
+    }
     if (isFading) return;
     setIsFading(true);
     // REFACTOR: Trigger onFinish synchronously with fade-out so underlying elements rise up in cross-fade sync
     if (onFinish) onFinish();
     setTimeout(() => {
       setIsVisible(false);
-    }, 550);
+    }, 400);
   }, [isFading, onFinish]);
 
+  // If already shown in session, notify parent immediately on mount
+  useEffect(() => {
+    if (alreadyShown && onFinish) {
+      onFinish();
+    }
+  }, [alreadyShown, onFinish]);
+
   const attemptPlay = useCallback(() => {
+    if (alreadyShown) return;
     const v = videoRef.current;
     if (!v) return;
 
@@ -43,26 +72,28 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       playPromise
         .then(() => {
           setAutoplayBlocked(false);
+          try {
+            sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
+          } catch {}
         })
         .catch(() => {
           // Autoplay restricted by mobile OS battery saver / user gesture requirement
           setAutoplayBlocked(true);
         });
     }
-  }, []);
+  }, [alreadyShown]);
 
   useEffect(() => {
+    if (alreadyShown) return;
     attemptPlay();
 
-    // Safety fallback: If video fails to load after 8s, allow user to enter app
+    // REFACTOR: Rapid safety fallback: If video stalls or is blocked after 3.2s, dismiss automatically so mobile users are never trapped
     const fallbackTimer = setTimeout(() => {
-      if (!isPlaying) {
-        handleDismiss();
-      }
-    }, 8000);
+      handleDismiss();
+    }, 3200);
 
     return () => clearTimeout(fallbackTimer);
-  }, [attemptPlay, isPlaying, handleDismiss]);
+  }, [alreadyShown, attemptPlay, handleDismiss]);
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
@@ -77,6 +108,9 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const handleVideoPlaying = () => {
     setIsPlaying(true);
     setAutoplayBlocked(false);
+    try {
+      sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
+    } catch {}
   };
 
   const handleManualPlayTap = (e: React.MouseEvent) => {
@@ -96,19 +130,20 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     }
   };
 
-  if (!isVisible) return null;
+  if (alreadyShown || !isVisible) return null;
 
   return (
     <div
       role="dialog"
       aria-label="Layar Pemuatan Persib Tracker"
+      onClick={handleDismiss}
       style={{ backgroundColor: '#050811' }}
-      className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none transition-all duration-500 ease-out ${
+      className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer transition-all duration-400 ease-out ${
         isFading ? 'opacity-0 scale-105 filter blur-xs pointer-events-none' : 'opacity-100 scale-100 filter blur-0'
       }`}
     >
       {/* REFACTOR: Video animasi sinematik baru 'Stadium Scene Logo Animation' layar penuh */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden bg-black">
+      <div className="absolute inset-0 w-full h-full overflow-hidden bg-black pointer-events-none">
         <video
           ref={videoRef}
           autoPlay
@@ -118,6 +153,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           onPlaying={handleVideoPlaying}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
+          onError={handleDismiss}
           style={{ backgroundColor: '#000000' }}
           className="w-full h-full object-cover object-center"
         >
@@ -133,7 +169,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
             e.stopPropagation();
             handleDismiss();
           }}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-950/70 hover:bg-blue-900 active:scale-95 backdrop-blur-md border border-cyan-400/30 text-white text-[11px] font-bold shadow-lg transition-all"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-950/80 hover:bg-blue-900 active:scale-95 backdrop-blur-md border border-cyan-400/40 text-white text-[11px] font-bold shadow-lg transition-all"
         >
           <span>Lewati</span>
           <ArrowRight className="w-3.5 h-3.5 text-cyan-400" />
@@ -154,8 +190,10 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         </div>
       )}
 
-      {/* REFACTOR: UI UX copy teks, progress bar shape, dan label 'Kecepatan 1.0x' dihilangkan seluruhnya agar video tampil sinematik & bersih */}
-      <div className="relative z-10 w-full p-4 pointer-events-none" />
+      {/* REFACTOR: Tap anywhere hint at bottom */}
+      <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 flex justify-center text-center">
+        <span className="text-[10px] text-slate-400/60 font-medium">Ketuk di mana saja untuk lanjut</span>
+      </div>
     </div>
   );
 }

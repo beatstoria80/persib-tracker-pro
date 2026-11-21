@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v14 (Rectified Pekan 10 Schedule to 22 Nov 2026 - Pure 2026/2027 Verification)
-const CACHE_NAME = 'persib-tracker-pwa-v14';
+// PERSIB TRACKER - PWA Service Worker v15 (Fixed Mobile Opening Video Refresh Loop & Session Storage Guards)
+const CACHE_NAME = 'persib-tracker-pwa-v15';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

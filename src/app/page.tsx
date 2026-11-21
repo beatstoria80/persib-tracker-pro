@@ -19,7 +19,17 @@ export default function HomePage() {
   const isPro = mode === 'pro';
 
   // REFACTOR: State pemicu transisi rise element UI/UX bertingkat (staggered cascade) setelah video splash selesai
-  const [hasEnteredApp, setHasEnteredApp] = useState<boolean>(false);
+  // Inisialisasi dari sessionStorage agar refresh di mobile tidak mengulang loop video
+  const [hasEnteredApp, setHasEnteredApp] = useState<boolean>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        return sessionStorage.getItem('persib_opening_splash_seen_v1') === 'true';
+      } catch {
+        return false;
+      }
+    }
+    return false;
+  });
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
   // REFACTOR: Tournament-aware resolution: LIVE -> tournament key match -> scheduled / latest finished
@@ -40,12 +50,11 @@ export default function HomePage() {
       {/* PWA Video Splash & Loading Screen on Smartphone Launch */}
       <VideoLoadingSplash onFinish={() => setHasEnteredApp(true)} />
 
-      {/* REFACTOR: Outer container strictly hidden until video opening finishes - Zero main page flash before video */}
+      {/* REFACTOR: App container rendered directly without display:none to guarantee instant responsiveness on mobile refresh */}
       <div
-        style={{ display: hasEnteredApp ? 'flex' : 'none' }}
-        className={`min-h-screen w-full justify-center items-start transition-colors duration-200 ${
+        className={`min-h-screen w-full flex justify-center items-start transition-opacity duration-300 ${
           isPro ? 'bg-[#080B11]' : 'bg-[#EDF2F7]'
-        }`}
+        } ${hasEnteredApp ? 'opacity-100' : 'opacity-100'}`}
       >
       {/* Desktop Helper Notice */}
       <div className="hidden xl:flex fixed left-10 top-12 flex-col gap-2 max-w-xs text-xs pointer-events-none">
