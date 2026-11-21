@@ -268,7 +268,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€1.0M (Rp 17.4 M)',
     contractUntil: '31 Mei 2028',
     verifiedData: true,
-    videoUrl: '/Sandy_Wals.mp4',
+    videoUrl: '/Sandy_Walsh.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/187329-1705489109.jpg',
     fitness: {
       status: 'fit',

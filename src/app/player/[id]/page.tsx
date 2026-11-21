@@ -45,11 +45,11 @@ export default function PlayerVideoProfilePage() {
     }
   };
 
-  // Authentic player video resolution (Sandy Walsh, Mariano Peralta, or default)
+  // REFACTOR: Authentic player video resolution (Sandy Walsh, Mariano Peralta, or default)
   const videoSource =
     activePlayer.videoUrl ||
     (activePlayer.id.includes('walsh')
-      ? '/Sandy_Wals.mp4'
+      ? '/Sandy_Walsh.mp4'
       : activePlayer.id.includes('peralta')
       ? '/peralta.mp4'
       : '/peralta.mp4');
