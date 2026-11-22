@@ -216,10 +216,7 @@ export default function PlayerVideoProfilePage() {
                   </div>
                 </div>
 
-                <div className="flex flex-col items-end gap-1.5">
-                  <span className="px-2.5 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-600/80 text-white border border-blue-400/40">
-                    {activePlayer.squadRole === 'starting' ? 'Starter Utama' : 'Pemain Cadangan'}
-                  </span>
+                <div className="text-right shrink-0">
                   <span className="text-[10px] font-mono text-slate-400">
                     s.d. {activePlayer.contractUntil}
                   </span>

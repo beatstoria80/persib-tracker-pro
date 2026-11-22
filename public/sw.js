@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v31 (Strict separated tournament scorers: Liga 1, ACL Two, Shopee Cup 2026/2027)
-const CACHE_NAME = 'persib-tracker-pwa-v31';
+// PERSIB TRACKER - PWA Service Worker v32 (Clean player card UI without starter role capsule)
+const CACHE_NAME = 'persib-tracker-pwa-v32';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
