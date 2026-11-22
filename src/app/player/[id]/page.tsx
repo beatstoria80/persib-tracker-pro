@@ -146,7 +146,7 @@ export default function PlayerVideoProfilePage() {
             <button
               type="button"
               onClick={() => setIsExpanded(true)}
-              className="w-full flex items-center justify-between p-3.5 px-4 rounded-2xl bg-slate-950/20 hover:bg-slate-900/30 backdrop-blur-md border border-white/20 shadow-2xl transition-all duration-300 group active:scale-[0.98]"
+              className="w-full flex items-center justify-between p-3.5 px-4 rounded-2xl bg-slate-950/75 hover:bg-slate-900/85 backdrop-blur-xl border border-white/20 shadow-2xl transition-all duration-300 group active:scale-[0.98]"
               aria-label="Buka Profil Lengkap Pemain"
             >
               <div className="flex items-center gap-3 min-w-0">
@@ -162,8 +162,8 @@ export default function PlayerVideoProfilePage() {
                       <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 inline shrink-0" />
                     )}
                   </div>
-                  <div className="text-[11px] text-slate-300 font-medium truncate mt-0.5">
-                    <span className="text-blue-400 font-bold">{activePlayer.position}</span> • {activePlayer.stats.goals} Gol • {activePlayer.stats.assists} Ast • Rating <strong className="text-amber-400">{activePlayer.stats.rating}</strong>
+                  <div className="text-[11px] text-slate-200 font-medium truncate mt-0.5">
+                    <span className="text-cyan-300 font-black">{activePlayer.position}</span> • {activePlayer.stats.goals} Gol • {activePlayer.stats.assists} Ast • Rating <strong className="text-amber-400 font-black">{activePlayer.stats.rating}</strong>
                   </div>
                 </div>
               </div>
@@ -174,90 +174,109 @@ export default function PlayerVideoProfilePage() {
           </div>
         )}
 
-        {/* REFACTOR: Risen Profile Sheet (Expanded details & squad carousel) */}
+        {/* REFACTOR: Risen Profile Sheet (Spacious layout, high-contrast, zero-collision) */}
         {isExpanded && (
           <div
-            className="relative z-20 px-4 pb-6 pt-2 flex flex-col gap-3 max-h-[82vh] overflow-y-auto no-scrollbar animate-sheet-rise"
-            style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 20px)' }}
+            className="relative z-20 px-4 pb-6 pt-2 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto no-scrollbar animate-sheet-rise"
+            style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)' }}
           >
             {/* Minimalist Collapse Handle without capsule or copy text */}
-            <div className="flex justify-center -mb-1">
+            <div className="flex justify-center pb-1">
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="p-1.5 text-white/70 hover:text-white transition-colors active:scale-90"
+                className="p-2 text-white/80 hover:text-cyan-300 transition-colors active:scale-90"
                 aria-label="Tutup sheet profil"
               >
-                <ChevronDown className="w-6 h-6 text-white/80 hover:text-cyan-400" />
+                <ChevronDown className="w-7 h-7 text-white/90 drop-shadow" />
               </button>
             </div>
 
-            {/* Main Player Identification Card (20% Opacity) */}
-            <div className="p-4 rounded-3xl bg-slate-950/20 backdrop-blur-md border border-white/15 shadow-2xl space-y-3">
-              <div className="flex items-start justify-between">
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
-                    <span className="font-mono font-black text-2xl text-cyan-400 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)]">
-                      #{activePlayer.number}
-                    </span>
-                    <h1 className="text-xl font-black tracking-tight text-white flex items-center gap-1.5">
-                      {activePlayer.name}
+            {/* Main Player Identification Card (High-Contrast Frosted Glass - Zero Collisions) */}
+            <div className="p-5 rounded-[28px] bg-slate-950/80 backdrop-blur-xl border border-white/20 shadow-2xl space-y-4">
+              {/* Row 1: Player Number + Name + Verified Badge on left, Contract Pill on right */}
+              <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10">
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <span className="font-mono font-black text-2xl sm:text-3xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0">
+                    #{activePlayer.number}
+                  </span>
+                  <div className="min-w-0">
+                    <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5 truncate">
+                      <span className="truncate">{activePlayer.name}</span>
                       {activePlayer.verifiedData && (
-                        <ShieldCheck className="w-4 h-4 text-cyan-400 inline shrink-0" />
+                        <ShieldCheck className="w-5 h-5 text-cyan-400 shrink-0" />
                       )}
                     </h1>
                   </div>
-                  <div className="text-xs text-slate-300 font-medium">
-                    {activePlayer.fullName} • <span className="font-bold text-blue-400">{activePlayer.position}</span> ({activePlayer.age} thn)
-                  </div>
-                  <div className="text-[11px] text-slate-400">
-                    {activePlayer.nationality} • Nilai Pasar: <strong className="text-emerald-400 font-semibold">{activePlayer.marketValue}</strong>
-                  </div>
                 </div>
 
-                <div className="text-right shrink-0">
-                  <span className="text-[10px] font-mono text-slate-400">
+                {/* Contract Badge with High-Contrast Pill */}
+                <div className="shrink-0 text-right">
+                  <span className="inline-block px-2.5 py-1 rounded-full text-[10.5px] font-mono font-bold bg-cyan-500/15 text-cyan-200 border border-cyan-400/35 whitespace-nowrap shadow-xs">
                     s.d. {activePlayer.contractUntil}
                   </span>
                 </div>
               </div>
 
-              {/* Quick Performance Indicators Grid */}
-              <div className="grid grid-cols-4 gap-2 pt-2 border-t border-white/10 text-center font-mono">
-                <div className="p-2 rounded-xl bg-white/5 border border-white/10">
-                  <span className="text-[9px] text-slate-400 block font-sans uppercase">Gol</span>
-                  <span className="text-base font-black text-cyan-400">{activePlayer.stats.goals}</span>
-                </div>
-                <div className="p-2 rounded-xl bg-white/5 border border-white/10">
-                  <span className="text-[9px] text-slate-400 block font-sans uppercase">Assist</span>
-                  <span className="text-base font-black text-blue-400">{activePlayer.stats.assists}</span>
-                </div>
-                <div className="p-2 rounded-xl bg-white/5 border border-white/10">
-                  <span className="text-[9px] text-slate-400 block font-sans uppercase">Main</span>
-                  <span className="text-base font-black text-white">{activePlayer.stats.appearances}</span>
-                </div>
-                <div className="p-2 rounded-xl bg-white/5 border border-white/10">
-                  <span className="text-[9px] text-slate-400 block font-sans uppercase">Rating</span>
-                  <span className="text-base font-black text-amber-400">{activePlayer.stats.rating}</span>
+              {/* Row 2: Full Name, Position Pill, and Age */}
+              <div className="flex items-center gap-2 flex-wrap text-xs text-slate-100 font-semibold">
+                <span className="text-slate-200 font-bold">{activePlayer.fullName}</span>
+                <span className="text-white/40">•</span>
+                <span className="px-2.5 py-0.5 rounded-md text-[10.5px] font-black uppercase tracking-wider bg-blue-600 text-white font-mono shadow-xs">
+                  {activePlayer.position}
+                </span>
+                <span className="text-white/40">•</span>
+                <span className="text-slate-200 font-medium">Usia {activePlayer.age} Tahun</span>
+              </div>
+
+              {/* Row 3: Nationality & Market Value */}
+              <div className="flex items-center justify-between gap-2 text-xs text-slate-200 flex-wrap pt-1 border-t border-white/10">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-slate-300 font-medium">{activePlayer.nationality}</span>
+                  <span className="text-white/30">•</span>
+                  <span className="text-slate-300">Nilai Pasar:</span>
+                  <strong className="text-emerald-300 font-extrabold text-sm">{activePlayer.marketValue}</strong>
                 </div>
               </div>
 
-              {/* Tactical Brief */}
-              <div className="text-[11px] text-slate-300 leading-relaxed bg-blue-950/20 backdrop-blur-xs p-2.5 rounded-xl border border-blue-500/20">
-                <span className="text-blue-400 font-bold block text-[10px] uppercase font-mono mb-0.5">
-                  Peran Taktikal Bojan Hodak:
+              {/* Row 4: Quick Performance Indicators Grid (High Contrast & Legible) */}
+              <div className="grid grid-cols-4 gap-2.5 pt-2 text-center font-mono">
+                <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                  <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Gol</span>
+                  <span className="text-lg sm:text-xl font-black text-cyan-300">{activePlayer.stats.goals}</span>
+                </div>
+                <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                  <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Assist</span>
+                  <span className="text-lg sm:text-xl font-black text-blue-300">{activePlayer.stats.assists}</span>
+                </div>
+                <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                  <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Main</span>
+                  <span className="text-lg sm:text-xl font-black text-white">{activePlayer.stats.appearances}</span>
+                </div>
+                <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                  <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Rating</span>
+                  <span className="text-lg sm:text-xl font-black text-amber-300">{activePlayer.stats.rating}</span>
+                </div>
+              </div>
+
+              {/* Row 5: Tactical Brief Box with Vibrant Contrast */}
+              <div className="text-xs text-slate-100 leading-relaxed bg-gradient-to-r from-blue-950/70 via-slate-900/70 to-blue-950/70 backdrop-blur-md p-3.5 rounded-2xl border border-cyan-500/35 shadow-sm space-y-1">
+                <span className="text-cyan-300 font-black block text-[11px] uppercase font-mono tracking-wider">
+                  ⚡ Peran Taktikal Bojan Hodak:
                 </span>
-                {activePlayer.fitness.notes || 'Pemain kunci dalam skema multi-kompetisi PERSIB Bandung 2026/2027.'}
+                <p className="font-medium text-slate-100 text-[11.5px] leading-relaxed">
+                  {activePlayer.fitness.notes || 'Pemain kunci dalam skema multi-kompetisi PERSIB Bandung 2026/2027.'}
+                </p>
               </div>
             </div>
 
             {/* Horizontal Roster Carousel Selector */}
-            <div className="space-y-1.5">
+            <div className="space-y-2 pt-1">
               <div className="flex items-center justify-between px-1">
-                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-slate-400">
+                <span className="text-xs font-mono font-bold uppercase tracking-wider text-slate-200">
                   Pilih Pemain Skuad Lainnya
                 </span>
-                <span className="text-[10px] text-cyan-400 font-bold">
+                <span className="text-[11px] text-cyan-300 font-extrabold bg-cyan-500/15 border border-cyan-400/30 px-2 py-0.5 rounded-full font-mono">
                   {OFFICIAL_SQUAD_2026_2027.length} Pemain
                 </span>
               </div>
@@ -274,13 +293,13 @@ export default function PlayerVideoProfilePage() {
                         setIsExpanded(false);
                         router.replace(`/player/${player.id}`);
                       }}
-                      className={`flex items-center gap-2 px-2.5 py-1.5 rounded-2xl border transition-all shrink-0 active:scale-95 ${
+                      className={`flex items-center gap-2.5 px-3 py-2 rounded-2xl border transition-all shrink-0 active:scale-95 shadow-md ${
                         isSelected
-                          ? 'bg-blue-600/80 border-cyan-400 text-white shadow-lg shadow-blue-600/40 ring-2 ring-cyan-400/50'
-                          : 'bg-slate-900/40 backdrop-blur-xs border-white/10 text-slate-300 hover:bg-slate-800/60'
+                          ? 'bg-blue-600 border-cyan-300 text-white shadow-blue-600/50 ring-2 ring-cyan-400'
+                          : 'bg-slate-950/80 backdrop-blur-md border-white/20 text-slate-200 hover:border-cyan-400/50 hover:bg-slate-900'
                       }`}
                     >
-                      <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-white/40 shrink-0 bg-slate-900 shadow-md">
+                      <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-white/50 shrink-0 bg-slate-900 shadow-sm">
                         <img
                           src={avatar}
                           alt={player.name}
@@ -292,10 +311,10 @@ export default function PlayerVideoProfilePage() {
                         />
                       </div>
                       <div className="text-left font-mono">
-                        <div className="text-[11px] font-black leading-none text-white">
+                        <div className="text-xs font-black leading-tight text-white">
                           #{player.number} {player.name}
                         </div>
-                        <div className="text-[9px] text-slate-300 mt-0.5 font-sans font-medium">
+                        <div className="text-[9.5px] text-cyan-200 mt-0.5 font-sans font-bold">
                           {player.position}
                         </div>
                       </div>
