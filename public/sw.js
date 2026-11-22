@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v32 (Clean player card UI without starter role capsule)
-const CACHE_NAME = 'persib-tracker-pwa-v32';
+// PERSIB TRACKER - PWA Service Worker v33 (Fixed squad carousel player avatars with direct loading & fallback)
+const CACHE_NAME = 'persib-tracker-pwa-v33';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

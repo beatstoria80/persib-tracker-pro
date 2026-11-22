@@ -6,6 +6,9 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: false,
   },
+  images: {
+    unoptimized: true,
+  },
   headers: async () => [
     {
       source: "/manifest.json",

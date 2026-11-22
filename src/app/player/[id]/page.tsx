@@ -1,7 +1,6 @@
 'use client';
 
 import React, { useState, useRef } from 'react';
-import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { OFFICIAL_SQUAD_2026_2027, getPlayerAvatar } from '@/data/persib-data';
 import {
@@ -266,7 +265,7 @@ export default function PlayerVideoProfilePage() {
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
                 {OFFICIAL_SQUAD_2026_2027.map((player) => {
                   const isSelected = player.id === activePlayer.id;
-                  const avatar = getPlayerAvatar(player.name);
+                  const avatar = player.avatarUrl || getPlayerAvatar(player.id) || getPlayerAvatar(player.name);
                   return (
                     <button
                       type="button"
@@ -278,20 +277,22 @@ export default function PlayerVideoProfilePage() {
                       className={`flex items-center gap-2 px-2.5 py-1.5 rounded-2xl border transition-all shrink-0 active:scale-95 ${
                         isSelected
                           ? 'bg-blue-600/80 border-cyan-400 text-white shadow-lg shadow-blue-600/40 ring-2 ring-cyan-400/50'
-                          : 'bg-slate-900/20 backdrop-blur-xs border-white/10 text-slate-300 hover:bg-slate-800/40'
+                          : 'bg-slate-900/40 backdrop-blur-xs border-white/10 text-slate-300 hover:bg-slate-800/60'
                       }`}
                     >
-                      <div className="relative w-7 h-7 rounded-full overflow-hidden border border-white/30 shrink-0">
-                        <Image
+                      <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-white/40 shrink-0 bg-slate-900 shadow-md">
+                        <img
                           src={avatar}
                           alt={player.name}
-                          width={28}
-                          height={28}
-                          className="w-full h-full object-cover"
+                          referrerPolicy="no-referrer"
+                          className="w-full h-full object-cover object-top select-none"
+                          onError={(e) => {
+                            (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(player.name)}&background=0284c7&color=ffffff&bold=true&size=128`;
+                          }}
                         />
                       </div>
                       <div className="text-left font-mono">
-                        <div className="text-[11px] font-black leading-none">
+                        <div className="text-[11px] font-black leading-none text-white">
                           #{player.number} {player.name}
                         </div>
                         <div className="text-[9px] text-slate-300 mt-0.5 font-sans font-medium">
