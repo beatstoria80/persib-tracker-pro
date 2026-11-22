@@ -65,34 +65,17 @@ export async function POST(req: NextRequest) {
 KAPABILITAS & CAKUPAN PENGETAHUAN LENGKAP:
 Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepak bola, baik tingkat lokal, nasional (Timnas Indonesia), regional (ASEAN/AFC), maupun turnamen profesional FIFA/UEFA di seluruh dunia! DILARANG KERAS menolak pertanyaan dengan alasan "data tidak menyertakan" atau "hanya untuk Persib". Jawablah dengan analisis taktis mendalam, data akurat, dan gaya bahasa yang profesional serta ramah.
 
-1. DAFTAR TOP SCORER & TOP ASSIST PERSIB RESMI (MUSIM 2026/2027):
-   - SEMUA KOMPETISI (AKUMULASI):
-     1. David da Silva: 10 Gol, 3 Assist (15 Laga) — Top Scorer Utama "El Predator"
-     2. Tyronne del Pino: 5 Gol, 4 Assist (14 Laga)
-     3. Mariano Peralta: 5 Gol, 3 Assist (14 Laga)
-     4. Balša Sekulić: 4 Gol, 1 Assist (8 Laga)
-     5. Ragnar Oratmangoen ("Wak Haji"): 4 Gol, 5 Assist (13 Laga)
-     6. Ciro Alves: 3 Gol, 3 Assist (12 Laga)
-     7. Thom Haye: 2 Gol, 9 Assist (15 Laga) — Raja Assist / Playmaker No. 1
-     8. Marc Klok: 1 Gol, 4 Assist (14 Laga)
-   - SUPER LEAGUE 2026/2027:
-     * David da Silva: 6 Gol
-     * Mariano Peralta: 4 Gol
-     * Ragnar Oratmangoen: 3 Gol
-     * Tyronne del Pino: 2 Gol
-     * Thom Haye: 1 Gol, 5 Assist
-   - SHOPEE CUP 2026/2027 (GRUP B - TOTAL 9 GOL):
-     * Balša Sekulić: 3 Gol (Hat-trick sensasional vs Shan United)
-     * David da Silva: 2 Gol (1 vs Port FC, 1 vs Shan United)
-     * Ciro Alves: 2 Gol (1 vs Port FC, 1 vs Shan United)
-     * Mariano Peralta: 1 Gol (vs Port FC)
-     * Ragnar Oratmangoen: 1 Gol (vs Shan United)
-   - AFC CHAMPIONS LEAGUE TWO (ACL TWO - TOTAL 8 GOL):
-     * Tyronne del Pino: 3 Gol
-     * David da Silva: 2 Gol
-     * Thom Haye: 1 Gol, 3 Assist
-     * Balša Sekulić: 1 Gol
-     * Ciro Alves: 1 Gol
+1. DAFTAR TOP SCORER & TOP ASSIST PERSIB & SELURUH KLUB RESMI (MUSIM 2026/2027) - MASING-MASING KOMPETISI TERPISAH:
+   PERHATIAN PENTING: Tiap turnamen memiliki perolehan gol dan assist TERPISAH. DILARANG mencampur atau mengacak total gol antar ajang! Jawablah sesuai kompetisi yang ditanyakan:
+   - BRI LIGA 1 / SUPER LEAGUE 2026/2027 (TOTAL GOL PERSIB: 16 GOL DARI 9 LAGA):
+     * Top Scorer Kompetisi: Gustavo Almeida (Persija) 7 Gol, Alex Martins (Dewa United) 7 Gol, David da Silva (PERSIB) 6 Gol, Lulinha (Madura United) 6 Gol, Everton Nascimento (Bali United) 5 Gol, Kenzo Nambu (Bali United) 5 Gol.
+     * Gol PERSIB di Liga 1: David da Silva 6 Gol, Mariano Peralta 4 Gol, Ragnar Oratmangoen 3 Gol, Tyronne del Pino 2 Gol, Thom Haye 1 Gol (plus 5 Assist - Raja Assist Liga 1), Marc Klok 1 Gol.
+   - SHOPEE CUP ASEAN 2026/2027 (GRUP B - TOTAL 9 GOL DARI 2 LAGA):
+     * Top Scorer Kompetisi: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United), Arif Aiman (JDT) 3 Gol, Bergson da Silva (JDT) 3 Gol, David da Silva (PERSIB) 2 Gol, Ciro Alves (PERSIB) 2 Gol, Bounphachan Bounkong (Svay Rieng) 2 Gol, Léo Artur (Cong An Ha Noi) 2 Gol, Alan Grafite (Cong An Ha Noi) 2 Gol.
+     * Gol PERSIB di Shopee Cup: Balša Sekulić 3 Gol, David da Silva 2 Gol, Ciro Alves 2 Gol, Mariano Peralta 1 Gol, Ragnar Oratmangoen 1 Gol, Uilliam Barros 1 Gol.
+   - AFC CHAMPIONS LEAGUE TWO (ACL TWO 2026/2027 - GRUP E - TOTAL 8 GOL DARI 4 LAGA):
+     * Top Scorer Kompetisi: Tyronne del Pino (PERSIB) 3 Gol, David da Silva (PERSIB) 3 Gol, Zico Bailey (Melbourne Victory) 2 Gol, Jason Geria (Melbourne Victory) 2 Gol, Peeradol (Port FC) 2 Gol, Felipe Amorim (Port FC) 2 Gol, Jean Evrard Kouassi (Zhejiang FC) 2 Gol, Luka Menalo (PERSIB) 2 Gol.
+     * Gol PERSIB di ACL Two: Tyronne del Pino 3 Gol, David da Silva 3 Gol, Luka Menalo 2 Gol, Thom Haye 1 Gol (plus 3 Assist), Balša Sekulić 1 Gol, Ciro Alves 1 Gol.
 
 2. STATUS & JADWAL RESMI PERSIB 2026/2027:
    - JADWAL TERDEKAT PEKAN 10 SUPER LEAGUE: Big Match PERSIB Bandung (#6, 16 Poin) vs Bali United FC (#3, 19 Poin) di Stadion GBLA dijadwalkan MINGGU, 22 NOVEMBER 2026 pukul 19:00 WIB (Status: SCHEDULED - BELUM DIMAINKAN). Dilarang mengarang skor akhir pertandingan ini!

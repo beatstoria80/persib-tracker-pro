@@ -276,7 +276,7 @@ export function MatchCenter() {
 
   // Sub-Page Navigation Tabs: Laga (featured), Jadwal (schedule), Klasemen (standings), Taktik (lineup), Top Skor (scorers)
   const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup' | 'scorers'>('featured');
-  const [scorerTournamentFilter, setScorerTournamentFilter] = useState<'all' | 'liga1' | 'shopee' | 'acl2'>('all');
+  const [scorerTournamentFilter, setScorerTournamentFilter] = useState<'liga1' | 'acl2' | 'shopee'>('liga1');
   const [scorerScopeFilter, setScorerScopeFilter] = useState<'all' | 'persib'>('all');
   // REFACTOR: Decouple from hardcoded 'l1-p8' string. Null allows dynamic auto-selection of active/latest match
   const [selectedFixtureId, setSelectedFixtureId] = useState<string | null>(null);
@@ -3020,7 +3020,7 @@ export function MatchCenter() {
                   </h3>
                 </div>
                 <p className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5">
-                  Statistik gol & assist resmi seluruh ajang kompetisi PERSIB 2026/2027
+                  Statistik gol & assist resmi terpisah per kompetisi musim 2026/2027 (Liga 1, ACL Two, Shopee Cup)
                 </p>
               </div>
 
@@ -3029,18 +3029,17 @@ export function MatchCenter() {
               </span>
             </div>
 
-            {/* Tournament Selector Pills */}
+            {/* Tournament Selector Pills - Masing-masing Kompetisi Terpisah (Tanpa Akumulasi Campuran) */}
             <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
               {[
-                { id: 'all', label: 'Semua Event (Akumulasi)' },
-                { id: 'liga1', label: 'Super League' },
-                { id: 'shopee', label: 'Shopee Cup' },
-                { id: 'acl2', label: 'ACL Two' },
+                { id: 'liga1', label: 'BRI Liga 1 (Super League)' },
+                { id: 'acl2', label: 'ACL Two (Asia)' },
+                { id: 'shopee', label: 'Shopee Cup (ASEAN)' },
               ].map((t) => (
                 <button
                   key={t.id}
                   type="button"
-                  onClick={() => setScorerTournamentFilter(t.id as 'all' | 'liga1' | 'shopee' | 'acl2')}
+                  onClick={() => setScorerTournamentFilter(t.id as 'liga1' | 'acl2' | 'shopee')}
                   className={`px-3 py-1.5 rounded-full text-[10.5px] font-extrabold whitespace-nowrap transition-all border shrink-0 ${
                     scorerTournamentFilter === t.id
                       ? 'bg-blue-600 text-white border-blue-500 shadow-sm'
@@ -3108,15 +3107,19 @@ export function MatchCenter() {
                   >
                     <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block">Total Gol Tim</span>
                     <div className="text-xl font-black font-mono text-blue-600 dark:text-cyan-400 mt-0.5">
-                      {scorerTournamentFilter === 'all'
-                        ? '33'
-                        : scorerTournamentFilter === 'liga1'
-                        ? '16'
-                        : scorerTournamentFilter === 'shopee'
-                        ? '9'
-                        : '8'}
+                      {scorerTournamentFilter === 'liga1'
+                        ? '16 Gol'
+                        : scorerTournamentFilter === 'acl2'
+                        ? '8 Gol'
+                        : '9 Gol'}
                     </div>
-                    <span className="text-[9px] text-slate-400 font-medium">Musim 2026/27</span>
+                    <span className="text-[9px] text-slate-400 font-medium">
+                      {scorerTournamentFilter === 'liga1'
+                        ? '9 Laga (Super League)'
+                        : scorerTournamentFilter === 'acl2'
+                        ? '4 Laga (Grup E Asia)'
+                        : '2 Laga (Grup B ASEAN)'}
+                    </span>
                   </div>
 
                   <div
@@ -3140,10 +3143,14 @@ export function MatchCenter() {
                   >
                     <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block">Raja Assist</span>
                     <div className="text-xl font-black font-mono text-emerald-500 mt-0.5">
-                      {scorerTournamentFilter === 'all' ? '9 Ast' : scorerTournamentFilter === 'liga1' ? '5 Ast' : '3 Ast'}
+                      {scorerTournamentFilter === 'liga1' ? '5 Ast' : scorerTournamentFilter === 'acl2' ? '3 Ast' : '2 Ast'}
                     </div>
                     <span className="text-[9px] text-slate-400 font-medium truncate block">
-                      Thom Haye (#33)
+                      {scorerTournamentFilter === 'liga1'
+                        ? 'Thom Haye (#33)'
+                        : scorerTournamentFilter === 'acl2'
+                        ? 'Thom Haye (#33)'
+                        : 'Arif Aiman / Beckham'}
                     </span>
                   </div>
                 </div>
@@ -3167,7 +3174,7 @@ export function MatchCenter() {
                       <div className="text-center mb-3">
                         <span className="text-[10px] font-mono uppercase font-black tracking-wider text-amber-500 flex items-center justify-center gap-1">
                           <Crown className="w-3.5 h-3.5" />
-                          PODIUM GOLDEN BOOT ({scorerScopeFilter === 'persib' ? 'PERSIB' : 'SELURUH KLUB'})
+                          PODIUM GOLDEN BOOT {scorerTournamentFilter === 'liga1' ? 'BRI LIGA 1' : scorerTournamentFilter === 'acl2' ? 'ACL TWO' : 'SHOPEE CUP'} ({scorerScopeFilter === 'persib' ? 'PERSIB' : 'SELURUH KLUB'})
                         </span>
                       </div>
 
@@ -3280,7 +3287,7 @@ export function MatchCenter() {
                 >
                   <div className="flex items-center justify-between gap-2 mb-3">
                     <span className="text-xs font-black uppercase tracking-wider text-slate-900 dark:text-white">
-                      Daftar Lengkap Pencetak Gol ({scorerScopeFilter === 'persib' ? 'Khusus PERSIB' : 'Seluruh Klub'})
+                      Daftar Pencetak Gol {scorerTournamentFilter === 'liga1' ? 'BRI Liga 1 (Super League)' : scorerTournamentFilter === 'acl2' ? 'AFC Champions League Two' : 'Shopee Cup ASEAN'} ({scorerScopeFilter === 'persib' ? 'Khusus PERSIB' : 'Seluruh Klub'})
                     </span>
                     <span className="text-[10px] font-mono text-slate-400">
                       Peringkat & Efisiensi

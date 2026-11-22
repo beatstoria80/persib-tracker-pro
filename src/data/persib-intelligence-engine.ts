@@ -147,30 +147,31 @@ export class PersibIntelligenceEngine {
       q.includes('golden boot') ||
       q.includes('raja gol')
     ) {
-      const text = `Berikut adalah **Daftar Resmi Top Scorer & Top Assist PERSIB Bandung Musim 2026/2027** di semua ajang kompetisi:
+      const text = `Berikut adalah Daftar Resmi Top Scorer & Top Assist PERSIB Bandung Musim 2026/2027 terpisah untuk masing-masing ajang kompetisi:
 
-🥇 **Top Scorer Akumulasi (Semua Ajang Kompetisi)**:
-1. ⚽ **David da Silva** — **10 Gol, 3 Assist** (15 Laga | Super League: 6, Shopee Cup: 2, ACL Two: 2)
-2. ⚽ **Tyronne del Pino** — **5 Gol, 4 Assist** (14 Laga | ACL Two: 3, Super League: 2)
-3. ⚽ **Mariano Peralta** — **5 Gol, 3 Assist** (14 Laga | Super League: 4, Shopee Cup: 1)
-4. ⚽ **Balša Sekulić** — **4 Gol, 1 Assist** (8 Laga | Shopee Cup: 3, ACL Two: 1)
-5. ⚽ **Ragnar Oratmangoen ("Wak Haji")** — **4 Gol, 5 Assist** (13 Laga | Super League: 3, Shopee Cup: 1)
-6. ⚽ **Ciro Alves** — **3 Gol, 3 Assist** (12 Laga | Shopee Cup: 2, ACL Two: 1)
-7. ⚽ **Thom Haye** — **2 Gol, 9 Assist** (15 Laga | Super League: 1, ACL Two: 1)
+1. BRI LIGA 1 / SUPER LEAGUE (Total 16 Gol):
+- David da Silva: 6 Gol (Top Scorer Persib di Liga 1)
+- Mariano Peralta: 4 Gol
+- Ragnar Oratmangoen: 3 Gol
+- Tyronne del Pino: 2 Gol
+- Thom Haye: 1 Gol, 5 Assist (Raja Assist Liga 1)
+- Marc Klok: 1 Gol, 2 Assist
 
----
+2. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Total 8 Gol):
+- Tyronne del Pino: 3 Gol (Top Scorer Persib di Asia)
+- David da Silva: 3 Gol
+- Luka Menalo: 2 Gol, 1 Assist
+- Thom Haye: 1 Gol, 3 Assist (Playmaker No. 1)
+- Balša Sekulić: 1 Gol
+- Ciro Alves: 1 Gol, 1 Assist
 
-🎯 **Raja Assist (Playmaker Terbanyak 2026/2027)**:
-* 👑 **Thom Haye (#33)**: **9 Assist** (Super League: 5, ACL Two: 3, Shopee Cup: 1) — Metronom paling kreatif di Asia Tenggara!
-* 🥈 **Ragnar Oratmangoen (#77)**: **5 Assist**
-* 🥉 **Marc Klok (#23)**: **4 Assist**
-
----
-
-🏆 **Distribusi Gol per Kompetisi**:
-* **Super League 2026/2027**: 16 Gol total (David da Silva 6, Peralta 4, Ragnar 3, Tyronne 2, Haye 1)
-* **Shopee Cup (Grup B)**: 9 Gol total (Sekulić 3 [Hat-trick vs Shan], David 2, Ciro 2, Peralta 1, Ragnar 1)
-* **ACL Two (Grup E)**: 8 Gol total (Tyronne 3, David 2, Haye 1, Sekulić 1, Ciro 1)`;
+3. SHOPEE CUP ASEAN (Total 9 Gol):
+- Balša Sekulić: 3 Gol (Hat-trick sensasional vs Shan United)
+- David da Silva: 2 Gol
+- Ciro Alves: 2 Gol
+- Mariano Peralta: 1 Gol, 1 Assist
+- Ragnar Oratmangoen: 1 Gol, 1 Assist
+- Uilliam Barros: 1 Gol, 1 Assist`;
 
       return {
         id: 'msg-' + Date.now(),

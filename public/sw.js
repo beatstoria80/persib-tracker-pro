@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v30 (Mobile text wrap fix, clean sub-badge layout & multi-club top scorers)
-const CACHE_NAME = 'persib-tracker-pwa-v30';
+// PERSIB TRACKER - PWA Service Worker v31 (Strict separated tournament scorers: Liga 1, ACL Two, Shopee Cup 2026/2027)
+const CACHE_NAME = 'persib-tracker-pwa-v31';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
