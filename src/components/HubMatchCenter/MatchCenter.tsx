@@ -5,6 +5,10 @@ import { useClubTracker } from '@/context/ClubTrackerContext';
 import {
   MapPin,
   ChevronRight,
+  ChevronDown,
+  ChevronUp,
+  Minimize2,
+  Maximize2,
   Trophy,
   Calendar,
   BarChart2,
@@ -281,6 +285,10 @@ export function MatchCenter() {
   // REFACTOR: Decouple from hardcoded 'l1-p8' string. Null allows dynamic auto-selection of active/latest match
   const [selectedFixtureId, setSelectedFixtureId] = useState<string | null>(null);
   const [scheduleFilter, setScheduleFilter] = useState<'all' | 'upcoming' | 'finished'>('all');
+  // Minimize & Density controls to prevent mobile scrolling fatigue
+  const [isScheduleMinimized, setIsScheduleMinimized] = useState<boolean>(true);
+  const [scheduleViewDensity, setScheduleViewDensity] = useState<'compact' | 'full'>('full');
+  const [isStandingsMinimized, setIsStandingsMinimized] = useState<boolean>(true);
   // REFACTOR: AAA-grade expanded match center tabs with opponent squad, tactical duels, spatial pitch, and momentum
   const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'lineups' | 'duels' | 'pitch' | 'stats' | 'highlights'>('events');
   const [selectedClubForIntel, setSelectedClubForIntel] = useState<string | null>(null);
@@ -325,6 +333,28 @@ export function MatchCenter() {
     if (scheduleFilter === 'finished') return fix.status === 'FINISHED';
     return true;
   });
+
+  // Dynamic minimized slice centering around active match or top matches to eliminate scroll fatigue
+  const displayedSchedule = React.useMemo(() => {
+    if (!isScheduleMinimized) {
+      return filteredSchedule;
+    }
+    if (scheduleFilter === 'all') {
+      const activeIdx = filteredSchedule.findIndex((f) => f.id === currentFixture.id);
+      if (activeIdx !== -1) {
+        const start = Math.max(0, activeIdx - 2);
+        return filteredSchedule.slice(start, start + 6);
+      }
+      return filteredSchedule.slice(0, 6);
+    }
+    if (scheduleFilter === 'finished') {
+      return filteredSchedule.slice(-5);
+    }
+    if (scheduleFilter === 'upcoming') {
+      return filteredSchedule.slice(0, 5);
+    }
+    return filteredSchedule.slice(0, 6);
+  }, [filteredSchedule, isScheduleMinimized, scheduleFilter, currentFixture.id]);
 
   const startingXI: Player[] = players.filter((p: Player) => p.squadRole === 'starting');
   const substitutes: Player[] = players.filter((p: Player) => p.squadRole === 'substitute');
@@ -1950,14 +1980,14 @@ export function MatchCenter() {
       {matchViewTab === 'schedule' && (
         <div className="space-y-3.5">
           {/* Header & Filter Controls */}
-          <div className="flex items-center justify-between pb-1">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 pb-1">
             <div>
               <h3 className="text-sm font-black tracking-tight">Kalender & Jadwal Laga</h3>
               <p className="text-[11px] text-slate-400">
                 Pertandingan yang telah dilalui & jadwal yang akan dihadapi
               </p>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1 self-start sm:self-auto">
               <button
                 onClick={() => setScheduleFilter('all')}
                 className={`px-2.5 py-1 rounded-lg text-[10px] font-bold transition-all ${
@@ -2003,122 +2033,284 @@ export function MatchCenter() {
             </div>
           </div>
 
-          {/* List of Match Cards */}
-          <div className="space-y-3">
-            {filteredSchedule.map((fix: MatchFixture) => {
-              const isFinished = fix.status === 'FINISHED';
-              const parsedRound = parseRoundAndExtra(fix.roundOrWeek);
-
-              return (
-                <div
-                  key={fix.id}
-                  onClick={() => {
-                    setSelectedFixtureId(fix.id);
-                    setMatchViewTab('featured');
-                  }}
-                  className={`p-4 rounded-3xl border transition-all cursor-pointer active:scale-[0.99] ${
-                    (selectedFixtureId ? selectedFixtureId === fix.id : currentFixture.id === fix.id)
-                      ? isPro
-                        ? 'bg-[#181D2A] border-cyan-500/50 ring-1 ring-cyan-500/30'
-                        : 'bg-blue-50/70 border-blue-400 ring-1 ring-blue-300'
-                      : isPro
-                      ? 'bg-[#121620] border-slate-800 hover:border-slate-700'
-                      : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
-                  }`}
+          {/* Sub-Bar: View Density Switcher & Minimization Status (Anti Capek Scroll) */}
+          <div className="flex items-center justify-between gap-2 p-2 rounded-2xl bg-slate-100/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 text-[11px]">
+            <div className="flex items-center gap-2 min-w-0">
+              <span className="font-mono text-[10px] font-bold text-slate-500 dark:text-slate-400 truncate">
+                {isScheduleMinimized ? `Diperkecil: ${displayedSchedule.length} dari ${filteredSchedule.length} laga` : `Lengkap: ${filteredSchedule.length} laga`}
+              </span>
+              {filteredSchedule.length > 6 && (
+                <button
+                  onClick={() => setIsScheduleMinimized(!isScheduleMinimized)}
+                  className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-blue-500/10 text-blue-600 dark:text-cyan-400 hover:bg-blue-500/20 transition-colors shrink-0"
                 >
-                  {/* Top Status & Date Header - Clean Sub-Badge Layout */}
-                  <div className="pb-2.5 mb-2 border-b border-slate-200 dark:border-slate-800">
-                    <div className="flex items-start justify-between gap-2">
-                      <div className="min-w-0 flex-1">
-                        <span className="text-slate-400 font-mono font-bold text-[10.5px] block leading-tight">
-                          {parsedRound.mainText}
+                  {isScheduleMinimized ? 'Buka Semua' : 'Perkecil'}
+                </button>
+              )}
+            </div>
+
+            <div className="flex items-center gap-1 shrink-0">
+              <button
+                onClick={() => setScheduleViewDensity('compact')}
+                className={`px-2 py-0.5 rounded-lg text-[9.5px] font-bold transition-all flex items-center gap-1 ${
+                  scheduleViewDensity === 'compact'
+                    ? isPro
+                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                      : 'bg-blue-600 text-white shadow-2xs'
+                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
+                }`}
+                title="Tampilan ringkas padat anti scroll panjang"
+              >
+                <Minimize2 className="w-3 h-3" />
+                Mode Ringkas
+              </button>
+              <button
+                onClick={() => setScheduleViewDensity('full')}
+                className={`px-2 py-0.5 rounded-lg text-[9.5px] font-bold transition-all flex items-center gap-1 ${
+                  scheduleViewDensity === 'full'
+                    ? isPro
+                      ? 'bg-cyan-500/20 text-cyan-300 border border-cyan-500/30'
+                      : 'bg-blue-600 text-white shadow-2xs'
+                    : 'text-slate-400 hover:text-slate-600 dark:hover:text-slate-200'
+                }`}
+                title="Tampilan kartu detail lengkap"
+              >
+                <Maximize2 className="w-3 h-3" />
+                Kartu Detail
+              </button>
+            </div>
+          </div>
+
+          {/* List of Matches: Either High-Density Compact Rows OR Full Rich Cards */}
+          {scheduleViewDensity === 'compact' ? (
+            <div className="space-y-1.5">
+              {displayedSchedule.map((fix: MatchFixture) => {
+                const isFinished = fix.status === 'FINISHED';
+                const isCurrent = (selectedFixtureId ? selectedFixtureId === fix.id : currentFixture.id === fix.id);
+                const parsedRound = parseRoundAndExtra(fix.roundOrWeek);
+
+                return (
+                  <div
+                    key={fix.id}
+                    onClick={() => {
+                      setSelectedFixtureId(fix.id);
+                      setMatchViewTab('featured');
+                    }}
+                    className={`px-3 py-2 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-2 active:scale-[0.99] select-none ${
+                      isCurrent
+                        ? isPro
+                          ? 'bg-[#181D2A] border-cyan-500/60 ring-1 ring-cyan-500/30'
+                          : 'bg-blue-50/80 border-blue-400 ring-1 ring-blue-300'
+                        : isPro
+                        ? 'bg-[#121620] border-slate-800/80 hover:border-slate-700'
+                        : 'bg-white border-slate-200 hover:border-slate-300 shadow-2xs'
+                    }`}
+                  >
+                    {/* Left: Round Pill & Date */}
+                    <div className="shrink-0 w-[64px]">
+                      <span className="font-mono font-black text-[10px] text-slate-400 dark:text-slate-400 truncate block">
+                        {parsedRound.mainText}
+                      </span>
+                      <span className="text-[9px] text-slate-500 dark:text-slate-400 block font-mono truncate">
+                        {fix.date ? fix.date.replace(/\s+202[0-9]/, '').trim() : ''}
+                      </span>
+                    </div>
+
+                    {/* Center: Matchup (Home vs Away) */}
+                    <div className="flex-1 min-w-0 flex items-center justify-center gap-1.5 px-1">
+                      <div className="flex-1 flex items-center justify-end gap-1.5 min-w-0">
+                        <span
+                          className={`text-[11px] truncate text-right ${
+                            fix.homeTeam.includes('PERSIB')
+                              ? 'font-black text-blue-600 dark:text-cyan-400'
+                              : 'font-semibold text-slate-800 dark:text-slate-200'
+                          }`}
+                        >
+                          {fix.homeTeam.replace(' FC', '')}
                         </span>
-                        {parsedRound.subBadge && (
-                          <div className="mt-1">
-                            <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/25 px-2 py-0.5 rounded-md">
-                              🔥 {parsedRound.subBadge}
-                            </span>
-                          </div>
+                        <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+                          <ClubThumb name={fix.homeTeam} logoUrl={fix.homeLogo} />
+                        </div>
+                      </div>
+
+                      <span className="text-[9.5px] font-bold text-slate-400 shrink-0">vs</span>
+
+                      <div className="flex-1 flex items-center justify-start gap-1.5 min-w-0">
+                        <div className="w-4 h-4 shrink-0 flex items-center justify-center">
+                          <ClubThumb name={fix.awayTeam} logoUrl={fix.awayLogo} />
+                        </div>
+                        <span
+                          className={`text-[11px] truncate text-left ${
+                            fix.awayTeam.includes('PERSIB')
+                              ? 'font-black text-blue-600 dark:text-cyan-400'
+                              : 'font-semibold text-slate-800 dark:text-slate-200'
+                          }`}
+                        >
+                          {fix.awayTeam.replace(' FC', '')}
+                        </span>
+                      </div>
+                    </div>
+
+                    {/* Right: Score or Schedule Time */}
+                    <div className="shrink-0 text-right w-[60px]">
+                      {isFinished ? (
+                        <span className="font-mono font-black text-xs px-2 py-0.5 rounded-md bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 border border-emerald-500/20 inline-block text-center min-w-[42px]">
+                          {fix.homeScore} - {fix.awayScore}
+                        </span>
+                      ) : (
+                        <span className="font-mono font-bold text-[10px] px-2 py-0.5 rounded-md bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20 inline-block text-center min-w-[42px]">
+                          {fix.time || 'TBA'}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {displayedSchedule.map((fix: MatchFixture) => {
+                const isFinished = fix.status === 'FINISHED';
+                const parsedRound = parseRoundAndExtra(fix.roundOrWeek);
+
+                return (
+                  <div
+                    key={fix.id}
+                    onClick={() => {
+                      setSelectedFixtureId(fix.id);
+                      setMatchViewTab('featured');
+                    }}
+                    className={`p-4 rounded-3xl border transition-all cursor-pointer active:scale-[0.99] ${
+                      (selectedFixtureId ? selectedFixtureId === fix.id : currentFixture.id === fix.id)
+                        ? isPro
+                          ? 'bg-[#181D2A] border-cyan-500/50 ring-1 ring-cyan-500/30'
+                          : 'bg-blue-50/70 border-blue-400 ring-1 ring-blue-300'
+                        : isPro
+                        ? 'bg-[#121620] border-slate-800 hover:border-slate-700'
+                        : 'bg-white border-slate-200 hover:border-slate-300 shadow-xs'
+                    }`}
+                  >
+                    {/* Top Status & Date Header - Clean Sub-Badge Layout */}
+                    <div className="pb-2.5 mb-2 border-b border-slate-200 dark:border-slate-800">
+                      <div className="flex items-start justify-between gap-2">
+                        <div className="min-w-0 flex-1">
+                          <span className="text-slate-400 font-mono font-bold text-[10.5px] block leading-tight">
+                            {parsedRound.mainText}
+                          </span>
+                          {parsedRound.subBadge && (
+                            <div className="mt-1">
+                              <span className="inline-flex items-center gap-1 text-[9px] font-black uppercase tracking-wider text-amber-600 dark:text-amber-400 bg-amber-500/10 border border-amber-500/25 px-2 py-0.5 rounded-md">
+                                🔥 {parsedRound.subBadge}
+                              </span>
+                            </div>
+                          )}
+                        </div>
+
+                        <div className="shrink-0 text-right">
+                          <span
+                            className={`inline-block px-2.5 py-1 rounded-full font-mono font-black text-[9.5px] whitespace-nowrap shadow-2xs ${
+                              isFinished
+                                ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-800'
+                                : 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200 border border-amber-300/60 dark:border-amber-800'
+                            }`}
+                          >
+                            {isFinished ? 'SELESAI (FT)' : formatCardDate(fix.date, fix.time)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Teams & Score / Schedule (Mobile-First Sofascore Format - Zero Ellipsis) */}
+                    <div className="py-1.5 space-y-2.5">
+                      {/* Home Club */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                          <ClubThumb name={fix.homeTeam} logoUrl={fix.homeLogo} />
+                          <span
+                            className={`text-xs leading-tight ${
+                              fix.homeTeam.includes('PERSIB')
+                                ? 'font-black text-blue-600 dark:text-cyan-400'
+                                : 'font-bold text-slate-900 dark:text-slate-100'
+                            }`}
+                          >
+                            {fix.homeTeam}
+                          </span>
+                        </div>
+                        {isFinished ? (
+                          <span className="font-mono font-black text-sm text-slate-950 dark:text-white shrink-0 pl-2">
+                            {fix.homeScore}
+                          </span>
+                        ) : (
+                          <span className="font-mono text-xs text-slate-400 shrink-0 pl-2">-</span>
                         )}
                       </div>
 
-                      <div className="shrink-0 text-right">
-                        <span
-                          className={`inline-block px-2.5 py-1 rounded-full font-mono font-black text-[9.5px] whitespace-nowrap shadow-2xs ${
-                            isFinished
-                              ? 'bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 border border-emerald-300/60 dark:border-emerald-800'
-                              : 'bg-amber-100 text-amber-900 dark:bg-amber-950 dark:text-amber-200 border border-amber-300/60 dark:border-amber-800'
-                          }`}
-                        >
-                          {isFinished ? 'SELESAI (FT)' : formatCardDate(fix.date, fix.time)}
-                        </span>
+                      {/* Away Club */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2.5 min-w-0 pr-2">
+                          <ClubThumb name={fix.awayTeam} logoUrl={fix.awayLogo} />
+                          <span
+                            className={`text-xs leading-tight ${
+                              fix.awayTeam.includes('PERSIB')
+                                ? 'font-black text-blue-600 dark:text-cyan-400'
+                                : 'font-bold text-slate-900 dark:text-slate-100'
+                            }`}
+                          >
+                            {fix.awayTeam}
+                          </span>
+                        </div>
+                        {isFinished ? (
+                          <span className="font-mono font-black text-sm text-slate-950 dark:text-white shrink-0 pl-2">
+                            {fix.awayScore}
+                          </span>
+                        ) : (
+                          <span className="font-mono text-xs text-slate-400 shrink-0 pl-2">-</span>
+                        )}
                       </div>
                     </div>
-                  </div>
 
-                  {/* Teams & Score / Schedule (Mobile-First Sofascore Format - Zero Ellipsis) */}
-                  <div className="py-1.5 space-y-2.5">
-                    {/* Home Club */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                        <ClubThumb name={fix.homeTeam} logoUrl={fix.homeLogo} />
-                        <span
-                          className={`text-xs leading-tight ${
-                            fix.homeTeam.includes('PERSIB')
-                              ? 'font-black text-blue-600 dark:text-cyan-400'
-                              : 'font-bold text-slate-900 dark:text-slate-100'
-                          }`}
-                        >
-                          {fix.homeTeam}
-                        </span>
+                    {/* Venue and Action - Concise Venue Display */}
+                    <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[10.5px]">
+                      <div className="flex items-center gap-1.5 text-slate-400 min-w-0 pr-2">
+                        <MapPin className="w-3.5 h-3.5 shrink-0 text-blue-500" />
+                        <span className="truncate">{simplifyVenueName(fix.venue)}</span>
                       </div>
-                      {isFinished ? (
-                        <span className="font-mono font-black text-sm text-slate-950 dark:text-white shrink-0 pl-2">
-                          {fix.homeScore}
-                        </span>
-                      ) : (
-                        <span className="font-mono text-xs text-slate-400 shrink-0 pl-2">-</span>
-                      )}
-                    </div>
-
-                    {/* Away Club */}
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2.5 min-w-0 pr-2">
-                        <ClubThumb name={fix.awayTeam} logoUrl={fix.awayLogo} />
-                        <span
-                          className={`text-xs leading-tight ${
-                            fix.awayTeam.includes('PERSIB')
-                              ? 'font-black text-blue-600 dark:text-cyan-400'
-                              : 'font-bold text-slate-900 dark:text-slate-100'
-                          }`}
-                        >
-                          {fix.awayTeam}
-                        </span>
-                      </div>
-                      {isFinished ? (
-                        <span className="font-mono font-black text-sm text-slate-950 dark:text-white shrink-0 pl-2">
-                          {fix.awayScore}
-                        </span>
-                      ) : (
-                        <span className="font-mono text-xs text-slate-400 shrink-0 pl-2">-</span>
-                      )}
+                      <span className="text-blue-600 dark:text-cyan-400 font-extrabold shrink-0 flex items-center gap-0.5">
+                        Lihat Detail <ChevronRight className="w-3 h-3" />
+                      </span>
                     </div>
                   </div>
+                );
+              })}
+            </div>
+          )}
 
-                  {/* Venue and Action - Concise Venue Display */}
-                  <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-[10.5px]">
-                    <div className="flex items-center gap-1.5 text-slate-400 min-w-0 pr-2">
-                      <MapPin className="w-3.5 h-3.5 shrink-0 text-blue-500" />
-                      <span className="truncate">{simplifyVenueName(fix.venue)}</span>
-                    </div>
-                    <span className="text-blue-600 dark:text-cyan-400 font-extrabold shrink-0 flex items-center gap-0.5">
-                      Lihat Detail <ChevronRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          {/* Bottom Expand / Minimize Toggle Button */}
+          {filteredSchedule.length > 5 && (
+            <div className="pt-2 text-center">
+              <button
+                onClick={() => setIsScheduleMinimized(!isScheduleMinimized)}
+                className={`w-full py-2.5 px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 border transition-all active:scale-[0.99] ${
+                  isPro
+                    ? 'bg-slate-900/90 hover:bg-slate-800 border-slate-800 text-cyan-400 shadow-md'
+                    : 'bg-white hover:bg-blue-50 border-blue-200 text-blue-700 shadow-xs'
+                }`}
+              >
+                {isScheduleMinimized ? (
+                  <>
+                    <ChevronDown className="w-4 h-4 text-blue-500 shrink-0" />
+                    <span>Tampilkan Seluruh Laga ({filteredSchedule.length} Pertandingan Lengkap)</span>
+                    <span className="text-[10px] font-mono opacity-60">+{filteredSchedule.length - displayedSchedule.length} Laga</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronUp className="w-4 h-4 text-blue-500 shrink-0" />
+                    <span>Perkecil Tampilan Laga (Mode Minimalis - Anti Capek Scroll)</span>
+                  </>
+                )}
+              </button>
+            </div>
+          )}
         </div>
       )}
 
@@ -2444,7 +2636,7 @@ export function MatchCenter() {
                     </tr>
                   </thead>
                   <tbody>
-                    {liga1Standings.map((row: LeagueStandingRow) => (
+                    {(isStandingsMinimized ? liga1Standings.slice(0, 6) : liga1Standings).map((row: LeagueStandingRow) => (
                       <tr
                         key={row.team}
                         onClick={() => setSelectedClubForIntel(row.team)}
@@ -2500,6 +2692,32 @@ export function MatchCenter() {
                     ))}
                   </tbody>
                 </table>
+              )}
+
+              {/* Bottom Expand / Minimize Toggle Button for Liga 1 Standings Table */}
+              {liga1Standings.length > 6 && (
+                <div className="p-2.5 border-t border-slate-200 dark:border-slate-800/80 text-center bg-slate-50/50 dark:bg-slate-900/40">
+                  <button
+                    onClick={() => setIsStandingsMinimized(!isStandingsMinimized)}
+                    className={`w-full py-2 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-1.5 border transition-all active:scale-[0.99] ${
+                      isPro
+                        ? 'bg-slate-800/80 hover:bg-slate-800 border-slate-700 text-slate-200'
+                        : 'bg-white hover:bg-slate-100 border-slate-300 text-slate-700 shadow-2xs'
+                    }`}
+                  >
+                    {isStandingsMinimized ? (
+                      <>
+                        <ChevronDown className="w-3.5 h-3.5 text-blue-500" />
+                        <span>Tampilkan Seluruh 18 Klub Klasemen (12 Klub Lainnya)</span>
+                      </>
+                    ) : (
+                      <>
+                        <ChevronUp className="w-3.5 h-3.5 text-blue-500" />
+                        <span>Perkecil Klasemen (Top 6 Papan Atas Saja)</span>
+                      </>
+                    )}
+                  </button>
+                </div>
               )}
             </div>
           </div>

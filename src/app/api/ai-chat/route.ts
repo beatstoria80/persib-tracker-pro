@@ -5,7 +5,7 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 // REFACTOR: Strips raw AI-generated tokens (** for bold, _ for italics, and <br> tags) to ensure human, clean output
-export function cleanAiResponseText(rawText: string): string {
+function cleanAiResponseText(rawText: string): string {
   if (!rawText) return '';
   return rawText
     // Replace <br>, <br/>, <br /> with newline
