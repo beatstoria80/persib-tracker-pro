@@ -39,7 +39,7 @@ export default function ChatDedicatedPage() {
       id: 'init-1',
       sender: 'ai',
       text:
-        '**Sampurasun, Bobotoh!** ⚽💬\n\nSelamat datang di **Persib Chat** resmi musim **2026/2027**.\n\nTanyakan apa saja seputar:\n* 🏆 **Hasil Pekan 10:** PERSIB 2 - 1 Bali United (Kemenangan krusial melesatkan Maung Bandung ke Peringkat 3 Besar!)\n* 📅 **Jadwal Pekan 11:** Persita Tangerang vs PERSIB (Minggu, 29 Nov 2026, 19:00 WIB di Indomilk Arena)\n* 📊 **Klasemen:** Posisi PERSIB di Super League (#3, 19 Poin) & Puncak Shopee Cup (#1, 6 Poin)\n* ⭐ **ACL Two Asia:** Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n* 📋 **Taktik & Skuad:** Racikan Bojan Hodak, Thom Haye, Sandy Walsh, David da Silva, Ragnar, dan Peralta.\n\nSilakan pilih topik cepat di atas atau ketik pertanyaan langsung!',
+        '**Sampurasun, Bobotoh!** ⚽💬\n\nSelamat datang di **Persib Chat** resmi musim **2026/2027**.\n\nTanyakan apa saja seputar:\n* 🏆 **Hasil Pekan 10:** PERSIB 2 - 1 Bali United (Kemenangan krusial melesatkan Maung Bandung ke Peringkat 3 Besar!)\n* 📅 **Jadwal Pekan 11:** Persita Tangerang vs PERSIB (Minggu, 29 Nov 2026, 19:00 WIB di Indomilk Arena)\n* 📊 **Klasemen:** Posisi PERSIB di Super League (#3, 19 Poin) & Puncak Shopee Cup (#1, 6 Poin)\n* ⭐ **ACL Two Asia:** Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n* 📋 **Taktik & Skuad:** Racikan Bojan Hodak, Thom Haye, Sandy Walsh, Luka Menalo, Balša Sekulić, Ragnar, dan Peralta.\n\nSilakan pilih topik cepat di atas atau ketik pertanyaan langsung!',
       timestamp: 'Baru saja',
       category: 'general',
       actionableTips: [

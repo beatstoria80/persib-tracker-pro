@@ -232,7 +232,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
 
   // REFACTOR: Sinkronisasi data faktual Super League 2026/2027 (Pekan 10 tuntas: PERSIB 2 - 1 Bali United)
   const currentStageName = 'Pekan 10 Super League 2026/2027 Tuntas: PERSIB 2 - 1 Bali United';
-  const dynamicBulletin = `🏆 [SUPER LEAGUE PEKAN 10] PERSIB Bandung menang 2-1 atas Bali United di GBLA! Gol Balša Sekulić & sundulan David da Silva lesatkan Maung Bandung ke Peringkat 3 Klasemen (19 Poin). Fokus berikutnya: Pekan 11 tandang ke Indomilk Arena vs Persita Tangerang! (Sync: ${nowWib})`;
+  const dynamicBulletin = `🏆 [SUPER LEAGUE PEKAN 10] PERSIB Bandung menang 2-1 atas Bali United di GBLA! Gol Balša Sekulić & sundulan Luka Menalo lesatkan Maung Bandung ke Peringkat 3 Klasemen (19 Poin). Fokus berikutnya: Pekan 11 tandang ke Indomilk Arena vs Persita Tangerang! (Sync: ${nowWib})`;
 
   const persibInStandings = calculatedStandings.find((c) => c.isPersib || c.team.toLowerCase().includes('persib'));
 
@@ -271,7 +271,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       keyEvents: [
         { minute: "18'", type: 'goal', text: 'GOOOL! Balša Sekulić menyontek umpan silang akurat Thom Haye ke sudut gawang 1-0!' },
         { minute: "41'", type: 'goal', text: 'Gol Bali United! Privat Mbarga menuntaskan serangan balik cepat 1-1.' },
-        { minute: "67'", type: 'goal', text: 'GOOOL KEPALA EMAS! David da Silva menyambar sepak pojok melengkung Thom Haye 2-1!' },
+        { minute: "67'", type: 'goal', text: 'GOOOL KEPALA EMAS! Luka Menalo menyambar sepak pojok melengkung Thom Haye 2-1!' },
         { minute: "90+4'", type: 'chance', text: 'Peluit panjang berbunyi! FULL TIME: PERSIB Bandung 2 - 1 Bali United. 3 poin krusial melesatkan Maung Bandung ke peringkat 3 klasemen!' },
       ],
     },
@@ -281,7 +281,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
         matchweek: latestFinished?.roundOrWeek || 'Pekan 10 Super League 2026/2027',
         opponent: 'Bali United',
         score: '2 - 1',
-        scorers: ["Balša Sekulić 18' (PERSIB)", "Privat Mbarga 41' (Bali United)", "David da Silva 67' (PERSIB)"],
+        scorers: ["Balša Sekulić 18' (PERSIB)", "Privat Mbarga 41' (Bali United)", "Luka Menalo 67' (PERSIB)"],
         venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
       },
       nextFixture: {
@@ -342,7 +342,7 @@ ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
 1. LARANGAN KERAS: DILARANG MENGGUNAKAN ATAU MENYEBUT DATA ARTEFAK MUSIM 2024/2025 ATAUPUN 2025/2026! Seluruh analisis HANYA untuk musim aktif 2026/2027.
 2. STATUS RESMI HASIL PEKAN 10 & KLASEMEN TERKINI:
    - Super Big Match Super League Pekan 10 antara PERSIB Bandung vs Bali United FC di Stadion GBLA telah SELESAI (FULL TIME).
-   - Skor Akhir: PERSIB Bandung 2 - 1 Bali United FC (Balša Sekulić 18', David da Silva 67' | Privat Mbarga 41').
+   - Skor Akhir: PERSIB Bandung 2 - 1 Bali United FC (Balša Sekulić 18', Luka Menalo 67' | Privat Mbarga 41').
    - Kemenangan ini melesatkan Maung Bandung ke peringkat 3 klasemen Super League 2026/2027!
 3. KLASEMEN RESMI (10 PEKAN SELESAI):
    - #1 Persija (21 poin)

@@ -68,18 +68,18 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
 1. DAFTAR TOP SCORER & TOP ASSIST PERSIB & SELURUH KLUB RESMI (MUSIM 2026/2027) - MASING-MASING KOMPETISI TERPISAH:
    PERHATIAN PENTING: Tiap turnamen memiliki perolehan gol dan assist TERPISAH. DILARANG mencampur atau mengacak total gol antar ajang! Jawablah sesuai kompetisi yang ditanyakan:
    - BRI LIGA 1 / SUPER LEAGUE 2026/2027 (TOTAL GOL PERSIB: 18 GOL DARI 10 LAGA):
-     * Top Scorer Kompetisi: David da Silva (PERSIB) 7 Gol, Gustavo Almeida (Persija) 7 Gol, Alex Martins (Dewa United) 7 Gol, Lulinha (Madura United) 6 Gol, Everton Nascimento (Bali United) 5 Gol, Kenzo Nambu (Bali United) 5 Gol.
-     * Gol PERSIB di Liga 1: David da Silva 7 Gol, Mariano Peralta 4 Gol, Ragnar Oratmangoen 3 Gol, Tyronne del Pino 2 Gol, Balša Sekulić 1 Gol, Thom Haye 1 Gol (plus 7 Assist - Raja Assist Terdepan Liga 1), Marc Klok 1 Gol.
+     * Top Scorer Kompetisi: Gustavo Almeida (Persija) 7 Gol, Alex Martins (Dewa United) 7 Gol, Lulinha (Madura United) 6 Gol, Balša Sekulić (PERSIB) 5 Gol, Everton Nascimento (Bali United) 5 Gol, Kenzo Nambu (Bali United) 5 Gol, Mariano Peralta (PERSIB) 4 Gol.
+     * Gol PERSIB di Liga 1: Balša Sekulić 5 Gol, Mariano Peralta 4 Gol, Ragnar Oratmangoen 3 Gol, Luka Menalo 3 Gol, Thom Haye 1 Gol (plus 7 Assist - Raja Assist Terdepan Liga 1), Marc Klok 1 Gol, Beckham Putra 1 Gol.
    - SHOPEE CUP ASEAN 2026/2027 (GRUP B - TOTAL 9 GOL DARI 2 LAGA):
-     * Top Scorer Kompetisi: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United), Arif Aiman (JDT) 3 Gol, Bergson da Silva (JDT) 3 Gol, David da Silva (PERSIB) 2 Gol, Ciro Alves (PERSIB) 2 Gol, Bounphachan Bounkong (Svay Rieng) 2 Gol, Léo Artur (Cong An Ha Noi) 2 Gol, Alan Grafite (Cong An Ha Noi) 2 Gol.
-     * Gol PERSIB di Shopee Cup: Balša Sekulić 3 Gol, David da Silva 2 Gol, Ciro Alves 2 Gol, Mariano Peralta 1 Gol, Ragnar Oratmangoen 1 Gol, Uilliam Barros 1 Gol.
+     * Top Scorer Kompetisi: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United), Arif Aiman (JDT) 3 Gol, Bergson da Silva (JDT) 3 Gol, Luka Menalo (PERSIB) 2 Gol, Mariano Peralta (PERSIB) 2 Gol, Bounphachan Bounkong (Svay Rieng) 2 Gol, Léo Artur (Cong An Ha Noi) 2 Gol, Alan Grafite (Cong An Ha Noi) 2 Gol.
+     * Gol PERSIB di Shopee Cup: Balša Sekulić 3 Gol, Luka Menalo 2 Gol, Mariano Peralta 2 Gol, Berguinho 1 Gol, Uilliam Barros 1 Gol.
    - AFC CHAMPIONS LEAGUE TWO (ACL TWO 2026/2027 - GRUP E - TOTAL 8 GOL DARI 4 LAGA):
-     * Top Scorer Kompetisi: Tyronne del Pino (PERSIB) 3 Gol, David da Silva (PERSIB) 3 Gol, Zico Bailey (Melbourne Victory) 2 Gol, Jason Geria (Melbourne Victory) 2 Gol, Peeradol (Port FC) 2 Gol, Felipe Amorim (Port FC) 2 Gol, Jean Evrard Kouassi (Zhejiang FC) 2 Gol, Luka Menalo (PERSIB) 2 Gol.
-     * Gol PERSIB di ACL Two: Tyronne del Pino 3 Gol, David da Silva 3 Gol, Luka Menalo 2 Gol, Thom Haye 1 Gol (plus 3 Assist), Balša Sekulić 1 Gol, Ciro Alves 1 Gol.
+     * Top Scorer Kompetisi: Luka Menalo (PERSIB) 3 Gol, Balša Sekulić (PERSIB) 2 Gol, Tyronne del Pino (PERSIB) 2 Gol, Zico Bailey (Melbourne Victory) 2 Gol, Jason Geria (Melbourne Victory) 2 Gol, Peeradol (Port FC) 2 Gol, Felipe Amorim (Port FC) 2 Gol, Jean Evrard Kouassi (Zhejiang FC) 2 Gol, Thom Haye (PERSIB) 1 Gol.
+     * Gol PERSIB di ACL Two: Luka Menalo 3 Gol, Balša Sekulić 2 Gol, Tyronne del Pino 2 Gol, Thom Haye 1 Gol (plus 3 Assist).
 
 2. STATUS RESMI HASIL LAGA, JADWAL & KLASEMEN PERSIB 2026/2027:
    - HASIL AKHIR PEKAN 10 SUPER LEAGUE: PERSIB Bandung 2 - 1 Bali United FC (FULL TIME SELESAI di Stadion GBLA).
-     * Pencetak Gol: Balša Sekulić (18') & David da Silva (67') | Bali United: Privat Mbarga (41').
+     * Pencetak Gol: Balša Sekulić (18') & Luka Menalo (67') | Bali United: Privat Mbarga (41').
      * Assist PERSIB: Thom Haye memborong 2 assist matang.
      * Dampak Hasil: Kemenangan ini resmi mengantar PERSIB Bandung melesat ke posisi 3 besar klasemen sementara dengan 19 poin, unggul head-to-head langsung atas Bali United!
    - KLASEMEN SUPER LEAGUE PEKAN 10 RESMI:
@@ -100,7 +100,7 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
      * MD5: PKR Svay Rieng vs PERSIB — 25 Feb 2027, 19:00 WIB (Kamboja)
      * MD6: PERSIB vs Cong An Ha Noi — 4 Mar 2027, 19:00 WIB (GBLA)
    - ACL TWO GRUP E: Rekor 100% menang sempurna (4 main, 4 menang, 12 poin, gol 8-2) resmi lolos ke Babak 16 Besar Asia.
-   - TOKOH KUNCI: Pelatih Bojan Hodak, Asisten Igor Tolic, Thom Haye (#33), Sandy Walsh (#6), Ragnar Oratmangoen (#77), Mariano Peralta (#10), Balša Sekulić (#99), David da Silva (#19), Marc Klok (#23), Kevin Mendoza (#1).
+   - TOKOH KUNCI: Pelatih Bojan Hodak, Asisten Igor Tolic, Thom Haye (#33), Sandy Walsh (#6), Ragnar Oratmangoen (#77), Mariano Peralta (#10), Balša Sekulić (#99), Luka Menalo (#9), Marc Klok (#23), Kevin Mendoza (#1).
 
 3. PENGETAHUAN SEPAK BOLA DUNIA & FIFA:
    - Turnamen FIFA: FIFA World Cup (Sejarah juara, rekor, edisi 2026 dengan 48 tim di AS/Kanada/Meksiko), FIFA Club World Cup (Format baru 32 klub), Piala Dunia Antarklub.

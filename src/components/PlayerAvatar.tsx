@@ -23,13 +23,16 @@ export function PlayerAvatar({
   className = '',
 }: PlayerAvatarProps) {
   const [retryStage, setRetryStage] = useState<number>(0);
+  const [hasFailed, setHasFailed] = useState<boolean>(false);
   const rawSrc = avatarUrl || getPlayerAvatar(name);
 
   // Fallback cascade: direct Transfermarkt/Custom -> UI Avatars high-res with official styling
   const getSrc = () => {
     if (retryStage === 0 && rawSrc) return rawSrc;
-    // Guaranteed high-res photo fallback so UI frame is NEVER empty
-    return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0284c7&color=ffffff&bold=true&size=256`;
+    if (retryStage === 1) {
+      return `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=0284c7&color=ffffff&bold=true&size=256`;
+    }
+    return '';
   };
 
   const currentSrc = getSrc();
@@ -63,7 +66,7 @@ export function PlayerAvatar({
           : 'bg-gradient-to-br from-blue-800 via-blue-950 to-slate-950 shadow-blue-900/30'
       } ${className}`}
     >
-      {currentSrc ? (
+      {currentSrc && !hasFailed ? (
         <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
           <img
             src={currentSrc}
@@ -71,7 +74,11 @@ export function PlayerAvatar({
             referrerPolicy="no-referrer"
             className="w-full h-full object-contain select-none transition-all duration-300 scale-[0.88] origin-bottom drop-shadow-sm"
             onError={() => {
-              if (retryStage < 2) setRetryStage((prev) => prev + 1);
+              if (retryStage === 0) {
+                setRetryStage(1);
+              } else {
+                setHasFailed(true);
+              }
             }}
             loading="lazy"
           />

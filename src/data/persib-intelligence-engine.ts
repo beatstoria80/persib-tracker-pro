@@ -157,29 +157,26 @@ export class PersibIntelligenceEngine {
       const text = `Berikut adalah Daftar Resmi Top Scorer & Top Assist PERSIB Bandung Musim 2026/2027 terpisah untuk masing-masing ajang kompetisi:
 
 1. BRI LIGA 1 / SUPER LEAGUE (Total 18 Gol dari 10 Laga):
-- David da Silva: 7 Gol (Top Scorer Memimpin Liga 1)
+- Balša Sekulić: 5 Gol (Top Scorer Persib di Super League)
 - Mariano Peralta: 4 Gol
 - Ragnar Oratmangoen: 3 Gol
-- Tyronne del Pino: 2 Gol
-- Balša Sekulić: 1 Gol
+- Luka Menalo: 3 Gol
 - Thom Haye: 1 Gol, 7 Assist (Raja Assist Tak Tertandingi Liga 1)
 - Marc Klok: 1 Gol, 2 Assist
+- Beckham Putra: 1 Gol
 
 2. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Total 8 Gol):
-- Tyronne del Pino: 3 Gol (Top Scorer Persib di Asia)
-- David da Silva: 3 Gol
-- Luka Menalo: 2 Gol, 1 Assist
+- Luka Menalo: 3 Gol (Top Scorer Persib di Asia)
+- Balša Sekulić: 2 Gol
+- Tyronne del Pino: 2 Gol
 - Thom Haye: 1 Gol, 3 Assist (Playmaker No. 1)
-- Balša Sekulić: 1 Gol
-- Ciro Alves: 1 Gol, 1 Assist
 
 3. SHOPEE CUP ASEAN (Total 9 Gol):
 - Balša Sekulić: 3 Gol (Hat-trick sensasional vs Shan United)
-- David da Silva: 2 Gol
-- Ciro Alves: 2 Gol
-- Mariano Peralta: 1 Gol, 1 Assist
-- Ragnar Oratmangoen: 1 Gol, 1 Assist
-- Uilliam Barros: 1 Gol, 1 Assist`;
+- Luka Menalo: 2 Gol
+- Mariano Peralta: 2 Gol
+- Berguinho: 1 Gol
+- Uilliam Barros: 1 Gol`;
 
       return {
         id: 'msg-' + Date.now(),
@@ -189,7 +186,7 @@ export class PersibIntelligenceEngine {
         category: 'squad',
         actionableTips: [
           'Buka tab "Top Skor" di Match Center untuk melihat visual podium sepatu emas interaktif.',
-          'David da Silva kini bertengger di puncak daftar top scorer Super League dengan 7 gol.',
+          'Balša Sekulić memimpin daftar pencetak gol PERSIB di Super League dengan 5 gol.',
           'Thom Haye mencatatkan total 10 assist di seluruh kompetisi resmi musim 2026/2027.'
         ],
         metricsContext: defaultMetrics,
@@ -238,14 +235,14 @@ export class PersibIntelligenceEngine {
 * 41' ⚽ **Gol Bali United!** Privat Mbarga menuntaskan transisi serangan balik cepat (1-1).
 * 45+2' ⏱️ **Turun Minum (HT)**: PERSIB Bandung 1 - 1 Bali United di hadapan Bobotoh GBLA.
 * 58' 🔁 **Substitusi Taktis**: Bojan Hodak memasukkan Mariano Peralta menggantikan Beckham Putra.
-* 67' ⚽ **GOOOL KEPALA EMAS!** David da Silva menyambar sepak pojok melengkung Thom Haye (2-1) yang mengunci 3 poin kemenangan!
+* 67' ⚽ **GOOOL KEPALA EMAS!** Luka Menalo menyambar sepak pojok melengkung Thom Haye (2-1) yang mengunci 3 poin kemenangan!
 * 90+4' ⏱️ **Peluit Panjang FT**: Kemenangan 2-1 mengantarkan PERSIB melesat ke peringkat 3 klasemen sementara!
 
 ---
 
 🔥 Dampak Klasemen & Taktikal:
 * Raihan 3 poin emas membuat Maung Bandung mengumpulkan 19 poin (unggul head-to-head langsung atas Bali United).
-* Duo predator Balša Sekulić dan David da Silva tampil mematikan memanfaatkan visi permainan kelas dunia Thom Haye.`;
+* Balša Sekulić dan Luka Menalo tampil mematikan memanfaatkan visi permainan kelas dunia Thom Haye.`;
       } else {
         text = `Berikut jadwal resmi pertandingan terdekat **PERSIB Bandung di Super League 2026/2027**:
 
@@ -260,7 +257,7 @@ export class PersibIntelligenceEngine {
 
 🎯 Misi Taktikal Bojan Hodak:
 1. **Lanjutkan Tren Kemenangan**: Mengamankan 3 poin tandang di Indomilk Arena untuk terus menekan Persija (21 poin) dan Dewa United (20 poin) di puncak klasemen.
-2. **Kesiapan Skuad**: David da Silva, Thom Haye, Sandy Walsh, dan Kevin Mendoza dalam kondisi bugar 100%.
+2. **Kesiapan Skuad**: Balša Sekulić, Luka Menalo, Thom Haye, Sandy Walsh, dan Kevin Mendoza dalam kondisi bugar 100%.
 3. **Fokus Lanjutan**: Usai Pekan 11, Maung Bandung akan melakoni Super Big Match Pekan 12 kontra Persebaya (6 Des 2026) dan lawatan Shopee Cup ke markas Lion City Sailors (10 Des 2026).`;
       }
 
@@ -273,7 +270,7 @@ export class PersibIntelligenceEngine {
         actionableTips: isPastMatchQuery
           ? [
               'Kemenangan atas Bali United menegaskan dominasi rekor kandang tak terkalahkan di GBLA.',
-              'David da Silva kini bertengger di puncak daftar top scorer Super League dengan 7 gol.',
+              'Balša Sekulić dan Luka Menalo menjadi tumpuan ketajaman Maung Bandung di lini serang.',
               'Persiapan fokus langsung dialihkan ke laga tandang Pekan 11 kontra Persita Tangerang.'
             ]
           : [
@@ -579,7 +576,7 @@ Tanyakan apa saja seputar taktik Bojan Hodak, kondisi pemain, atau jadwal beriku
 
 🏆 Hasil Laga Terkini:
 1. **Super League (Pekan 10 - 22 Nov 2026)**:
-   - **PERSIB Bandung 2 - 1 Bali United FC** (Kemenangan krusial di GBLA berkat gol Balša Sekulić dan David da Silva).
+   - **PERSIB Bandung 2 - 1 Bali United FC** (Kemenangan krusial di GBLA berkat gol Balša Sekulić dan Luka Menalo).
 2. **Shopee Cup (MD2 - 19 Nov 2026)**:
    - **PERSIB Bandung 6 - 0 Shan United** (Pesta gol di hadapan Bobotoh, mengokohkan posisi #1 Grup B).
 3. **ACL Two (MD4 - 6 Nov 2026)**:

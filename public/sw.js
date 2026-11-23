@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v36 (Official Full-Time Pekan 10 & Rank 3 Super League Update)
-const CACHE_NAME = 'persib-tracker-pwa-v36';
+// PERSIB TRACKER - PWA Service Worker v38 (Official 2026/2027 Squad Registry & Robust Avatars)
+const CACHE_NAME = 'persib-tracker-pwa-v38';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
