@@ -1223,13 +1223,20 @@ export function getPlayerAvatar(idOrName: string): string {
   if (PLAYER_AVATARS[idOrName]) return PLAYER_AVATARS[idOrName];
 
   const lower = idOrName.toLowerCase();
+  const normalized = idOrName
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase();
+
   for (const [key, url] of Object.entries(PLAYER_AVATARS)) {
-    if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower)) {
+    const normKey = key.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    if (lower.includes(key.toLowerCase()) || key.toLowerCase().includes(lower) || normalized.includes(normKey)) {
       return url;
     }
   }
 
   // Fallbacks
+  if (normalized.includes('sekulic') || lower.includes('sekulic') || normalized.includes('balsa') || lower.includes('balsa')) return PLAYER_AVATARS['sekulic-99'];
   if (lower.includes('haye')) return PLAYER_AVATARS['haye-33'];
   if (lower.includes('klok')) return PLAYER_AVATARS['klok-23'];
   if (lower.includes('beckham')) return PLAYER_AVATARS['beckham-7'];
@@ -1237,7 +1244,6 @@ export function getPlayerAvatar(idOrName: string): string {
   if (lower.includes('uilliam')) return PLAYER_AVATARS['uilliam-94'];
   if (lower.includes('menalo')) return PLAYER_AVATARS['menalo-9'];
   if (lower.includes('berguinho')) return PLAYER_AVATARS['berguinho-97'];
-  if (lower.includes('sekulic')) return PLAYER_AVATARS['sekulic-99'];
   if (lower.includes('ragnar') || lower.includes('oratmangoen')) return PLAYER_AVATARS['ragnar-77'];
   if (lower.includes('reijnders') || lower.includes('eliano')) return PLAYER_AVATARS['reijnders-2'];
   if (lower.includes('walsh') || lower.includes('sandy')) return PLAYER_AVATARS['walsh-6'];
@@ -4769,7 +4775,7 @@ export const TOP_SCORERS_2026_2027: Record<'liga1' | 'acl2' | 'shopee', TopScore
       clubLogo: 'https://upload.wikimedia.org/wikipedia/id/8/83/Persib_Bandung_logo.svg',
       isPersib: true,
       position: 'CF (Striker)',
-      avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/458514-1737430530.png',
+      avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/455594-1726732569.png',
       matches: 2,
       goals: 3,
       assists: 1,
@@ -5099,7 +5105,7 @@ export const TOP_SCORERS_2026_2027: Record<'liga1' | 'acl2' | 'shopee', TopScore
       clubLogo: 'https://upload.wikimedia.org/wikipedia/id/8/83/Persib_Bandung_logo.svg',
       isPersib: true,
       position: 'CF (Striker)',
-      avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/458514-1737430530.png',
+      avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/455594-1726732569.png',
       matches: 4,
       goals: 2,
       assists: 1,

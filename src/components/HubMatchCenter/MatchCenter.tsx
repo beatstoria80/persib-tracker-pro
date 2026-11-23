@@ -765,72 +765,72 @@ export function MatchCenter() {
 
               {/* Match Intelligence Navigation Switcher (6 Comprehensive AAA Sub-tabs) */}
               <div className="mt-4 pt-3.5 border-t border-slate-200 dark:border-slate-800">
-                <div className="grid grid-cols-3 sm:grid-cols-6 gap-1 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-center mb-3.5">
+                <div className="flex items-center gap-1.5 p-1 rounded-2xl bg-slate-100 dark:bg-slate-900 border border-slate-200 dark:border-slate-800 overflow-x-auto no-scrollbar mb-3.5">
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('events')}
-                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
+                    className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'events'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span className="truncate">⚽ Gol & Kartu</span>
+                    <span>⚽ Gol & Kartu</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('lineups')}
-                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
+                    className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'lineups'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span className="truncate">👥 Skuad & XI</span>
+                    <span>👥 Skuad & XI</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('duels')}
-                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
+                    className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'duels'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span className="truncate">⚔️ Duel 1v1</span>
+                    <span>⚔️ Duel 1v1</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('pitch')}
-                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
+                    className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'pitch'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span className="truncate">🗺️ Formasi 2D</span>
+                    <span>🗺️ Formasi 2D</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('stats')}
-                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
+                    className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'stats'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span className="truncate">📊 Statistik</span>
+                    <span>📊 Statistik</span>
                   </button>
                   <button
                     type="button"
                     onClick={() => setHeroDetailTab('highlights')}
-                    className={`py-1.5 px-0.5 sm:px-1 rounded-xl text-[9px] sm:text-[10px] font-black transition-all flex items-center justify-center gap-0.5 sm:gap-1 whitespace-nowrap overflow-hidden ${
+                    className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'highlights'
                         ? 'bg-blue-600 text-white shadow-sm'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
                   >
-                    <span className="truncate">💡 Catatan</span>
+                    <span>💡 Catatan</span>
                   </button>
                 </div>
 
@@ -1281,25 +1281,25 @@ export function MatchCenter() {
                         return (
                           <div
                             key={duel.id || dIdx}
-                            className={`p-3.5 rounded-2xl border transition-all ${
+                            className={`w-full overflow-hidden p-3 sm:p-3.5 rounded-2xl border transition-all ${
                               isPro
                                 ? 'bg-slate-900/60 border-slate-800'
                                 : 'bg-slate-50/80 border-slate-200 shadow-xs'
                             }`}
                           >
-                            <div className="flex items-center justify-between pb-2 mb-3 border-b border-slate-200 dark:border-slate-800">
-                              <span className="text-xs font-black tracking-tight">{duel.title}</span>
-                              <span className="text-[9px] font-mono px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-cyan-300 font-bold uppercase">
+                            <div className="flex items-start sm:items-center justify-between gap-2 pb-2 mb-3 border-b border-slate-200 dark:border-slate-800">
+                              <span className="text-xs font-black tracking-tight flex-1 min-w-0">{duel.title}</span>
+                              <span className="text-[8.5px] font-mono px-2 py-0.5 rounded-full bg-blue-100 dark:bg-blue-950 text-blue-800 dark:text-cyan-300 font-bold uppercase shrink-0 whitespace-nowrap">
                                 {duel.zone}
                               </span>
                             </div>
 
                             {/* Dual Clash Fighters Visual */}
-                            <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center justify-between gap-1.5 sm:gap-2 w-full min-w-0">
                               {/* Persib Fighter */}
                               <div
                                 onClick={() => { if (matchedPersib) setSelectedPlayer(matchedPersib); }}
-                                className={`flex-1 p-2 rounded-xl border flex items-center gap-2 cursor-pointer transition-all ${
+                                className={`flex-1 min-w-0 p-2 sm:p-2.5 rounded-xl border flex items-center gap-1.5 sm:gap-2 cursor-pointer transition-all overflow-hidden ${
                                   isPro ? 'bg-slate-900/90 border-blue-800/60 hover:border-cyan-400' : 'bg-white border-blue-200 hover:border-blue-400'
                                 }`}
                               >
@@ -1308,19 +1308,21 @@ export function MatchCenter() {
                                   avatarUrl={duel.persibPlayer.avatarUrl}
                                   number={duel.persibPlayer.number}
                                   position={duel.persibPlayer.position.includes('CB') || duel.persibPlayer.position.includes('DF') ? 'DF' : duel.persibPlayer.position.includes('MF') ? 'MF' : 'FW'}
-                                  size="sm"
+                                  size="xs"
                                 />
-                                <div className="min-w-0 flex-1">
-                                  <div className="text-xs font-black truncate">{duel.persibPlayer.name}</div>
-                                  <div className="text-[10px] font-mono text-blue-600 dark:text-cyan-400 font-bold">
+                                <div className="min-w-0 flex-1 overflow-hidden">
+                                  <div className="text-[11px] sm:text-xs font-black truncate leading-tight" title={duel.persibPlayer.name}>
+                                    {duel.persibPlayer.name}
+                                  </div>
+                                  <div className="text-[9.5px] font-mono text-blue-600 dark:text-cyan-400 font-bold truncate mt-0.5">
                                     #{duel.persibPlayer.number} • {duel.persibPlayer.position}
                                   </div>
                                 </div>
                               </div>
 
                               {/* VS Center Pillar */}
-                              <div className="shrink-0 flex flex-col items-center px-1">
-                                <span className="w-7 h-7 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-mono font-black text-[10px] text-slate-700 dark:text-slate-300">
+                              <div className="shrink-0 flex flex-col items-center px-0.5">
+                                <span className="w-6 h-6 rounded-full bg-slate-200 dark:bg-slate-800 flex items-center justify-center font-mono font-black text-[9px] text-slate-700 dark:text-slate-300 shadow-xs">
                                   VS
                                 </span>
                               </div>
@@ -1328,7 +1330,7 @@ export function MatchCenter() {
                               {/* Opponent Fighter */}
                               <div
                                 onClick={() => { if (oppAsPlayer) setSelectedPlayer(oppAsPlayer); }}
-                                className={`flex-1 p-2 rounded-xl border flex items-center gap-2 cursor-pointer transition-all ${
+                                className={`flex-1 min-w-0 p-2 sm:p-2.5 rounded-xl border flex items-center gap-1.5 sm:gap-2 cursor-pointer transition-all overflow-hidden ${
                                   isPro ? 'bg-slate-900/90 border-red-800/60 hover:border-red-400' : 'bg-white border-red-200 hover:border-red-400'
                                 }`}
                               >
@@ -1337,11 +1339,13 @@ export function MatchCenter() {
                                   avatarUrl={duel.opponentPlayer.avatarUrl}
                                   number={duel.opponentPlayer.number}
                                   position={duel.opponentPlayer.position.includes('CB') || duel.opponentPlayer.position.includes('DF') ? 'DF' : duel.opponentPlayer.position.includes('MF') ? 'MF' : 'FW'}
-                                  size="sm"
+                                  size="xs"
                                 />
-                                <div className="min-w-0 flex-1 text-right sm:text-left">
-                                  <div className="text-xs font-black truncate">{duel.opponentPlayer.name}</div>
-                                  <div className="text-[10px] font-mono text-red-500 font-bold">
+                                <div className="min-w-0 flex-1 overflow-hidden text-left">
+                                  <div className="text-[11px] sm:text-xs font-black truncate leading-tight" title={duel.opponentPlayer.name}>
+                                    {duel.opponentPlayer.name}
+                                  </div>
+                                  <div className="text-[9.5px] font-mono text-red-500 font-bold truncate mt-0.5">
                                     #{duel.opponentPlayer.number} • {duel.opponentPlayer.position}
                                   </div>
                                 </div>
@@ -3472,16 +3476,30 @@ export function MatchCenter() {
                   </div>
 
                   <div
-                    className={`p-3 rounded-2xl border text-center ${
+                    className={`p-3 rounded-2xl border text-center flex flex-col items-center justify-between ${
                       isPro ? 'bg-[#121620] border-slate-800' : 'bg-white border-slate-200 shadow-2xs'
                     }`}
                   >
                     <span className="text-[10px] font-mono uppercase font-bold text-slate-400 block">Top Scorer #1</span>
-                    <div className="text-xl font-black font-mono text-amber-500 mt-0.5">
-                      {topScorer ? `${topScorer.goals} Gol` : '-'}
+                    <div className="flex items-center justify-center gap-2 my-1">
+                      {topScorer && (
+                        <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-amber-400 shrink-0 shadow-md">
+                          <img
+                            src={topScorer.avatarUrl || getPlayerAvatar(topScorer.playerId || topScorer.playerName)}
+                            alt={topScorer.playerName}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              (e.target as HTMLImageElement).src = getPlayerAvatar(topScorer.playerName);
+                            }}
+                          />
+                        </div>
+                      )}
+                      <div className="text-xl font-black font-mono text-amber-500">
+                        {topScorer ? `${topScorer.goals} Gol` : '-'}
+                      </div>
                     </div>
-                    <span className="text-[9px] text-slate-400 font-medium truncate block">
-                      {topScorer ? `${topScorer.playerName.split(' ')[0]} (${topScorer.clubName.replace('PERSIB Bandung', 'PERSIB')})` : '-'}
+                    <span className="text-[9px] text-slate-400 font-medium truncate block max-w-full">
+                      {topScorer ? `${topScorer.playerName} (${topScorer.clubName.replace('PERSIB Bandung', 'PERSIB')})` : '-'}
                     </span>
                   </div>
 
@@ -3674,11 +3692,11 @@ export function MatchCenter() {
 
                           <div className="w-8 h-8 rounded-full overflow-hidden shrink-0 border border-slate-200 dark:border-slate-700">
                             <img
-                              src={sc.avatarUrl || getPlayerAvatar(sc.playerName)}
+                              src={sc.avatarUrl || getPlayerAvatar(sc.playerId || sc.playerName)}
                               alt={sc.playerName}
                               className="w-full h-full object-cover"
                               onError={(e) => {
-                                (e.target as HTMLImageElement).src = `https://ui-avatars.com/api/?name=${encodeURIComponent(sc.playerName)}&background=0284c7&color=ffffff&bold=true`;
+                                (e.target as HTMLImageElement).src = getPlayerAvatar(sc.playerId || sc.playerName);
                               }}
                             />
                           </div>
