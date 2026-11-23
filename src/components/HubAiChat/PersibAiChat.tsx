@@ -22,12 +22,19 @@ function cleanAiResponseText(rawText: string): string {
   if (!rawText) return '';
   return rawText
     .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/\*\*(.*?)\*\*/g, '$1')
+    // Remove markdown bold asterisks **text** -> text across multiple lines
+    .replace(/\*\*([\s\S]*?)\*\*/g, '$1')
+    // Remove any leftover double asterisks
     .replace(/\*\*/g, '')
+    // Remove italic single asterisks *text* -> text when wrapping words
+    .replace(/(^|\s)\*([^*\n]+)\*(?=\s|$|[.,!?:;])/g, '$1$2')
+    // Remove markdown italic underscores _text_ -> text
     .replace(/(^|\s)_([^_]+)_(?=\s|$|[.,!?:;])/g, '$1$2')
     .replace(/_([^_]+)_/g, '$1')
     .replace(/(^|\s)_(?=\S)|(?<=\S)_(?=\s|$)/g, '$1')
+    // Remove markdown header tags
     .replace(/^#{1,6}\s+/gm, '')
+    // Normalize excessive newlines
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
@@ -52,11 +59,11 @@ function getLocalWibTimeString(): string {
 }
 
 const QUICK_PROMPTS = [
-  { label: 'Laga Terdekat Pekan 10', icon: Trophy, prompt: 'Kapan laga terdekat Persib di Liga 1 Pekan 10 dan lawannya siapa?' },
-  { label: 'Jadwal Shopee Cup Grup B', icon: Calendar, prompt: 'Bagaimana jadwal lengkap Persib Bandung di Shopee Cup 2026/2027 Grup B?' },
-  { label: 'Klasemen Super League', icon: Shield, prompt: 'Di peringkat berapa Persib saat ini di klasemen Super League dan berapa poinnya?' },
-  { label: 'Status di ACL Two', icon: Zap, prompt: 'Bagaimana hasil dan posisi Persib Bandung di AFC Champions League Two (ACL Two)?' },
-  { label: 'Profil Haye & Sandy Walsh', icon: HelpCircle, prompt: 'Bisa jelaskan profil dan peran Thom Haye serta Sandy Walsh di Persib?' },
+  { label: 'Hasil Pekan 10 (2-1 Bali Utd)', icon: Trophy, prompt: 'Bagaimana ulasan hasil akhir kemenangan 2-1 Persib atas Bali United di Pekan 10?' },
+  { label: 'Jadwal Pekan 11 vs Persita', icon: Calendar, prompt: 'Kapan jadwal laga Pekan 11 Persita Tangerang vs PERSIB Bandung di Indomilk Arena?' },
+  { label: 'Klasemen Super League (#4)', icon: Shield, prompt: 'Di peringkat berapa Persib saat ini di klasemen Super League dan berapa poinnya?' },
+  { label: 'Status ACL Two 16 Besar', icon: Zap, prompt: 'Bagaimana status kelolosan Persib Bandung ke Babak 16 Besar ACL Two?' },
+  { label: 'Taktik Bojan Hodak & Skuad', icon: HelpCircle, prompt: 'Bisa jelaskan taktik Bojan Hodak dan peran pilar seperti Thom Haye, Sandy Walsh, Luka Menalo, Balša Sekulić, Ragnar, dan Peralta?' },
 ];
 
 export function PersibAiChat() {
@@ -68,7 +75,7 @@ export function PersibAiChat() {
       id: 'init-1',
       role: 'assistant',
       content:
-        'Sampurasun, Bobotoh! ⚽💬\n\nSaya adalah Persib & Global Football Chat Assistant resmi musim 2026/2027.\n\nTanyakan apa saja tentang:\n• 🏆 Jadwal & Hasil Laga: Super League, ACL Two, & Shopee Cup\n• 📊 Klasemen: Peringkat terkini Super League & Grup B Asia\n• 🎯 Top Scorer & Assist: Mariano Peralta, Luka Menalo, Balša Sekulić, dan Thom Haye\n• 👥 Pemain & Taktik: Thom Haye, Sandy Walsh, Ragnar, Klok, Reijnders, dan racikan Bojan Hodak\n\nSilakan pilih topik cepat di bawah atau ketik pertanyaan Anda!',
+        'Sampurasun, Bobotoh! ⚽💬\n\nSelamat datang di Persib Chat resmi musim 2026/2027.\n\nTanyakan apa saja seputar:\n• 🏆 Hasil Pekan 10: PERSIB 2 - 1 Bali United (Comeback kilat Peralta 79\' & Menalo 81\' amankan 19 poin di papan atas!)\n• 📅 Jadwal Pekan 11: Persita Tangerang vs PERSIB (Minggu, 29 Nov 2026, 19:00 WIB di Indomilk Arena)\n• 📊 Klasemen: Posisi PERSIB di Super League (#4, 19 Poin) & Puncak Shopee Cup (#1, 6 Poin)\n• ⭐ ACL Two Asia: Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n• 📋 Taktik & Skuad: Racikan Bojan Hodak, Thom Haye, Sandy Walsh, Luka Menalo, Balša Sekulić, Ragnar, dan Peralta.\n\nSilakan pilih topik cepat di bawah atau ketik pertanyaan langsung!',
       timestamp: 'Baru saja',
     },
   ]);

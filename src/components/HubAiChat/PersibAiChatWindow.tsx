@@ -26,12 +26,19 @@ function cleanAiResponseText(rawText: string): string {
   if (!rawText) return '';
   return rawText
     .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/\*\*(.*?)\*\*/g, '$1')
+    // Remove markdown bold asterisks **text** -> text across multiple lines
+    .replace(/\*\*([\s\S]*?)\*\*/g, '$1')
+    // Remove any leftover double asterisks
     .replace(/\*\*/g, '')
+    // Remove italic single asterisks *text* -> text when wrapping words
+    .replace(/(^|\s)\*([^*\n]+)\*(?=\s|$|[.,!?:;])/g, '$1$2')
+    // Remove markdown italic underscores _text_ -> text
     .replace(/(^|\s)_([^_]+)_(?=\s|$|[.,!?:;])/g, '$1$2')
     .replace(/_([^_]+)_/g, '$1')
     .replace(/(^|\s)_(?=\S)|(?<=\S)_(?=\s|$)/g, '$1')
+    // Remove markdown header tags
     .replace(/^#{1,6}\s+/gm, '')
+    // Normalize excessive newlines
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
@@ -62,7 +69,7 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
       id: 'init-1',
       sender: 'ai',
       text:
-        'Sampurasun, Bobotoh! ⚽💬\n\nSelamat datang di Persib & Global Football Tactical Intelligence resmi musim 2026/2027.\n\nTanyakan apa saja seputar:\n• 🎯 Top Scorer & Raja Assist: Rekor gol Balša Sekulić, Mariano Peralta, Luka Menalo, Uilliam Barros, serta 10 assist Thom Haye\n• ⚔️ Big Match Pekan 10: Kontra Bali United (Kemenangan 2-1 di GBLA)\n• 📊 Klasemen & Skor: Super League (#4, 19 Poin) & Puncak Grup B Shopee Cup (#1, 6 Poin)\n• ⭐ ACL Two Asia: Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n• 🌍 Sepak Bola Dunia & FIFA: Piala Dunia, Liga Champions, Timnas Indonesia, taktik modern & regulasi IFAB\n\nSilakan pilih topik rekomendasi di atas atau ketik pertanyaan langsung!',
+        'Sampurasun, Bobotoh! ⚽💬\n\nSelamat datang di Persib Chat resmi musim 2026/2027.\n\nTanyakan apa saja seputar:\n• 🏆 Hasil Pekan 10: PERSIB 2 - 1 Bali United (Comeback kilat Peralta 79\' & Menalo 81\' amankan 19 poin di papan atas!)\n• 📅 Jadwal Pekan 11: Persita Tangerang vs PERSIB (Minggu, 29 Nov 2026, 19:00 WIB di Indomilk Arena)\n• 📊 Klasemen: Posisi PERSIB di Super League (#4, 19 Poin) & Puncak Shopee Cup (#1, 6 Poin)\n• ⭐ ACL Two Asia: Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n• 📋 Taktik & Skuad: Racikan Bojan Hodak, Thom Haye, Sandy Walsh, Luka Menalo, Balša Sekulić, Ragnar, dan Peralta.\n\nSilakan pilih topik cepat di atas atau ketik pertanyaan langsung!',
       timestamp: 'Baru saja',
       category: 'general',
       actionableTips: [
@@ -73,9 +80,9 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
       metricsContext: {
         leagueRank: 4,
         points: 19,
-        matchRecord: '9 Main: 5M 1S 3K (+6 SG)',
-        nextOpponent: 'Bali United FC',
-        nextMatchDate: 'Minggu, 22 Nov 2026 (19:00 WIB)',
+        matchRecord: '10 Main: 6M 1S 3K (+7 SG)',
+        nextOpponent: 'Persita Tangerang',
+        nextMatchDate: 'Minggu, 29 Nov 2026 (19:00 WIB)',
         shopeeRank: 1,
         aclStatus: 'Juara Grup E (16 Besar)',
       },

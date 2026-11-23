@@ -10,9 +10,12 @@ function cleanAiResponseText(rawText: string): string {
   return rawText
     // Replace <br>, <br/>, <br /> with newline
     .replace(/<br\s*\/?>/gi, '\n')
-    // Remove markdown bold asterisks **text** -> text
-    .replace(/\*\*(.*?)\*\*/g, '$1')
+    // Remove markdown bold asterisks **text** -> text across multiple lines
+    .replace(/\*\*([\s\S]*?)\*\*/g, '$1')
+    // Remove any leftover double asterisks
     .replace(/\*\*/g, '')
+    // Remove italic single asterisks *text* -> text when wrapping words
+    .replace(/(^|\s)\*([^*\n]+)\*(?=\s|$|[.,!?:;])/g, '$1$2')
     // Remove markdown italic underscores _text_ -> text
     .replace(/(^|\s)_([^_]+)_(?=\s|$|[.,!?:;])/g, '$1$2')
     .replace(/_([^_]+)_/g, '$1')
@@ -136,7 +139,7 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
 
 FORMAT & GAYA JAWABAN:
 - Berbahasa Indonesia fasih, tajam, profesional, berbasis data nyata, dan antusias 🔵.
-- HINDARI SIMBOL MARKDOWN KAKU: DILARANG menggunakan tanda bintang ganda (**) untuk penekanan, garis bawah (_) untuk cetak miring, atau tag html (<br>) di dalam teks respons. Tuliskan teks secara alami, bersih, dan mudah dibaca tanpa simbol-simbol tersebut.
+- HINDARI SIMBOL MARKDOWN KAKU: DILARANG menggunakan tanda bintang ganda (**) untuk penekanan/bold, garis bawah (_) untuk cetak miring, atau tag html (<br>) di dalam teks respons. HILANGKAN SEMUA TANDA BACA ASTERISK GANDA (**) AGAR TEKS RAPIH. Tuliskan teks secara alami, bersih, rapi, dan mudah dibaca tanpa simbol ** tersebut.
 - Jika ditanya tentang Persib, hubungkan dengan performa musim 2026/2027. Jika ditanya tentang sepak bola internasional/FIFA, berikan fakta komprehensif tanpa ragu.`;
 
     if (apiKey) {

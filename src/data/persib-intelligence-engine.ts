@@ -14,12 +14,19 @@ export function cleanAiResponseText(rawText: string): string {
   if (!rawText) return '';
   return rawText
     .replace(/<br\s*\/?>/gi, '\n')
-    .replace(/\*\*(.*?)\*\*/g, '$1')
+    // Remove markdown bold asterisks **text** -> text across multiple lines
+    .replace(/\*\*([\s\S]*?)\*\*/g, '$1')
+    // Remove any leftover double asterisks
     .replace(/\*\*/g, '')
+    // Remove italic single asterisks *text* -> text when wrapping words
+    .replace(/(^|\s)\*([^*\n]+)\*(?=\s|$|[.,!?:;])/g, '$1$2')
+    // Remove markdown italic underscores _text_ -> text
     .replace(/(^|\s)_([^_]+)_(?=\s|$|[.,!?:;])/g, '$1$2')
     .replace(/_([^_]+)_/g, '$1')
     .replace(/(^|\s)_(?=\S)|(?<=\S)_(?=\s|$)/g, '$1')
+    // Remove markdown header tags
     .replace(/^#{1,6}\s+/gm, '')
+    // Normalize excessive newlines
     .replace(/\n{3,}/g, '\n\n')
     .trim();
 }
