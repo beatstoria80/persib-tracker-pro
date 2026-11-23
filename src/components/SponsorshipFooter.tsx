@@ -85,7 +85,7 @@ export function SponsorshipFooter() {
         {/* Brand Headline */}
         <div className="text-left mb-2.5">
           <h4 className="text-sm font-black tracking-tight text-slate-950 dark:text-white">
-            NINOC (ninoc.co)
+            Ninoc Enterprise
           </h4>
           <p className="text-[11px] text-slate-500 dark:text-slate-400 leading-tight mt-0.5">
             Official Merchandise & Digital Creative Partner PERSIB TRACKER PRO

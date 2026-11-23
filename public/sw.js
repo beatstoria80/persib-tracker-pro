@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v50 (Official Authentic Super League 2026/2027 Roster & Goalkeeper Profile Update)
-const CACHE_NAME = 'persib-tracker-pwa-v50';
+// PERSIB TRACKER - PWA Service Worker v51 (Official Authentic Super League 2026/2027 Roster & UI Polish)
+const CACHE_NAME = 'persib-tracker-pwa-v51';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

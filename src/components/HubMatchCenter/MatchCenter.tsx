@@ -1542,12 +1542,15 @@ export function MatchCenter() {
                     {/* Live Momentum Timeline Bar Chart */}
                     {currentFixture.liveMomentumTimeline && currentFixture.liveMomentumTimeline.length > 0 && (
                       <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-1.5 text-xs font-black">
-                            <TrendingUp className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400" />
-                            <span>Grafik Momentum Tekanan Laga (90 Menit)</span>
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="flex items-center gap-1.5 text-xs font-black min-w-0">
+                            <TrendingUp className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0" />
+                            <span className="truncate">Momentum Laga</span>
+                            <span className="px-1.5 py-0.5 rounded text-[8.5px] font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-cyan-400 border border-blue-500/20 shrink-0">
+                              90&apos;
+                            </span>
                           </div>
-                          <div className="flex items-center gap-2 text-[9px] font-mono font-bold">
+                          <div className="flex items-center gap-2 text-[9px] font-mono font-bold shrink-0">
                             <span className="flex items-center gap-1 text-blue-600 dark:text-cyan-400">
                               <span className="w-2 h-2 rounded-full bg-blue-600" />
                               Persib
