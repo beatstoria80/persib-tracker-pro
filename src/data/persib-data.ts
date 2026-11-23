@@ -165,6 +165,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€400K (Rp 6.95 M)',
     contractUntil: '31 Mei 2028',
     verifiedData: true,
+    videoUrl: '/Mutombo.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/341394-1691393324.png',
     fitness: {
       status: 'fit',
@@ -200,6 +201,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€300K (Rp 5.22 M)',
     contractUntil: '31 Mei 2027',
     verifiedData: true,
+    videoUrl: '/Cesar.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/347019-1789636445.png',
     fitness: {
       status: 'fit',
@@ -306,6 +308,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€400K (Rp 6.95 M)',
     contractUntil: '31 Mei 2027',
     verifiedData: true,
+    videoUrl: '/Loncar.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/366287-1726213691.png',
     fitness: {
       status: 'fit',
@@ -370,6 +373,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€400K (Rp 6.95 M)',
     contractUntil: '31 Mei 2027',
     verifiedData: true,
+    videoUrl: '/Matricardi.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/283585-1691671463.png',
     fitness: {
       status: 'fit',

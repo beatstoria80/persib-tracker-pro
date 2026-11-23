@@ -84,6 +84,14 @@ export default function PlayerVideoProfilePage() {
       ? '/Sandy_Walsh.mp4'
       : activePlayer.id.includes('peralta')
       ? '/peralta.mp4'
+      : activePlayer.id.includes('loncar')
+      ? '/Loncar.mp4'
+      : activePlayer.id.includes('cesar') || activePlayer.id.includes('caesar')
+      ? '/Cesar.mp4'
+      : activePlayer.id.includes('matricardi')
+      ? '/Matricardi.mp4'
+      : activePlayer.id.includes('mutombo')
+      ? '/Mutombo.mp4'
       : undefined);
 
   return (
