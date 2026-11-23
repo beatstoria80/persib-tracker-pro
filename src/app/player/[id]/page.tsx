@@ -46,8 +46,13 @@ export default function PlayerVideoProfilePage() {
         p.id.toLowerCase().includes(normalizedRoute) ||
         p.name.toLowerCase().includes(routeId.toLowerCase()) ||
         p.name.toLowerCase().includes(normalizedRoute) ||
+        p.number.toString() === routeId.trim() ||
         (routeId.toLowerCase().includes('gatuko') && p.id.includes('notsuda')) ||
-        (routeId.toLowerCase().includes('gakuto') && p.id.includes('notsuda'))
+        (routeId.toLowerCase().includes('gakuto') && p.id.includes('notsuda')) ||
+        (routeId.toLowerCase().includes('rhaka') && p.id.includes('rakha')) ||
+        (routeId.toLowerCase().includes('syafaka') && p.id.includes('rakha')) ||
+        (routeId.toLowerCase().includes('teja') && p.id.includes('teja')) ||
+        (routeId.toLowerCase().includes('fitrah') && p.id.includes('fitrah'))
     ) ||
     OFFICIAL_SQUAD_2026_2027.find((p) => p.id === 'peralta-10') ||
     OFFICIAL_SQUAD_2026_2027[0];
@@ -201,7 +206,15 @@ export default function PlayerVideoProfilePage() {
                     )}
                   </div>
                   <div className="text-[11px] text-slate-200 font-medium truncate mt-0.5">
-                    <span className="text-cyan-300 font-black">{activePlayer.position}</span> • {activePlayer.stats.goals} Gol • {activePlayer.stats.assists} Ast • Rating <strong className="text-amber-400 font-black">{activePlayer.stats.rating}</strong>
+                    {activePlayer.position === 'GK' ? (
+                      <>
+                        <span className="text-amber-300 font-black">{activePlayer.position}</span> • {activePlayer.stats.appearances} Laga • {activePlayer.stats.interceptions} Penyelamatan • Rating <strong className="text-amber-400 font-black">{activePlayer.stats.rating}</strong>
+                      </>
+                    ) : (
+                      <>
+                        <span className="text-cyan-300 font-black">{activePlayer.position}</span> • {activePlayer.stats.goals} Gol • {activePlayer.stats.assists} Ast • Rating <strong className="text-amber-400 font-black">{activePlayer.stats.rating}</strong>
+                      </>
+                    )}
                   </div>
                 </div>
               </div>
@@ -279,22 +292,45 @@ export default function PlayerVideoProfilePage() {
 
               {/* Row 4: Quick Performance Indicators Grid (High Contrast & Legible) */}
               <div className="grid grid-cols-4 gap-2.5 pt-2 text-center font-mono">
-                <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                  <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Gol</span>
-                  <span className="text-lg sm:text-xl font-black text-cyan-300">{activePlayer.stats.goals}</span>
-                </div>
-                <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                  <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Assist</span>
-                  <span className="text-lg sm:text-xl font-black text-blue-300">{activePlayer.stats.assists}</span>
-                </div>
-                <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                  <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Main</span>
-                  <span className="text-lg sm:text-xl font-black text-white">{activePlayer.stats.appearances}</span>
-                </div>
-                <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                  <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Rating</span>
-                  <span className="text-lg sm:text-xl font-black text-amber-300">{activePlayer.stats.rating}</span>
-                </div>
+                {activePlayer.position === 'GK' ? (
+                  <>
+                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Save</span>
+                      <span className="text-lg sm:text-xl font-black text-amber-300">{activePlayer.stats.interceptions}</span>
+                    </div>
+                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Umpan</span>
+                      <span className="text-lg sm:text-xl font-black text-cyan-300">{activePlayer.stats.passAccuracy}%</span>
+                    </div>
+                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Main</span>
+                      <span className="text-lg sm:text-xl font-black text-white">{activePlayer.stats.appearances}</span>
+                    </div>
+                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Rating</span>
+                      <span className="text-lg sm:text-xl font-black text-amber-300">{activePlayer.stats.rating}</span>
+                    </div>
+                  </>
+                ) : (
+                  <>
+                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Gol</span>
+                      <span className="text-lg sm:text-xl font-black text-cyan-300">{activePlayer.stats.goals}</span>
+                    </div>
+                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Assist</span>
+                      <span className="text-lg sm:text-xl font-black text-blue-300">{activePlayer.stats.assists}</span>
+                    </div>
+                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Main</span>
+                      <span className="text-lg sm:text-xl font-black text-white">{activePlayer.stats.appearances}</span>
+                    </div>
+                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Rating</span>
+                      <span className="text-lg sm:text-xl font-black text-amber-300">{activePlayer.stats.rating}</span>
+                    </div>
+                  </>
+                )}
               </div>
 
               {/* Row 5: Tactical Brief Box with Vibrant Contrast */}
