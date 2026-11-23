@@ -292,6 +292,7 @@ export function MatchCenter() {
   // REFACTOR: AAA-grade expanded match center tabs with opponent squad, tactical duels, spatial pitch, and momentum
   const [heroDetailTab, setHeroDetailTab] = useState<'events' | 'lineups' | 'duels' | 'pitch' | 'stats' | 'highlights'>('events');
   const [selectedClubForIntel, setSelectedClubForIntel] = useState<string | null>(null);
+  const [selectedMomentumIdx, setSelectedMomentumIdx] = useState<number | null>(null);
   const [heroLineupFilter, setHeroLineupFilter] = useState<'all' | 'persib' | 'opponent'>('all');
   const [taktikClashMode, setTaktikClashMode] = useState<'dual' | 'persib' | 'opponent'>('dual');
 
@@ -1540,78 +1541,205 @@ export function MatchCenter() {
                 {heroDetailTab === 'stats' && (
                   <div className="space-y-3.5">
                     {/* Live Momentum Timeline Bar Chart */}
-                    {currentFixture.liveMomentumTimeline && currentFixture.liveMomentumTimeline.length > 0 && (
-                      <div className="p-3.5 rounded-2xl bg-slate-50/80 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 space-y-2">
-                        <div className="flex items-center justify-between gap-2">
-                          <div className="flex items-center gap-1.5 text-xs font-black min-w-0">
-                            <TrendingUp className="w-3.5 h-3.5 text-blue-600 dark:text-cyan-400 shrink-0" />
-                            <span className="truncate">Momentum Laga</span>
-                            <span className="px-1.5 py-0.5 rounded text-[8.5px] font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-cyan-400 border border-blue-500/20 shrink-0">
-                              90&apos;
-                            </span>
+                    {currentFixture.liveMomentumTimeline && currentFixture.liveMomentumTimeline.length > 0 && (() => {
+                      const timeline = currentFixture.liveMomentumTimeline;
+                      const activePoint =
+                        (selectedMomentumIdx !== null && timeline[selectedMomentumIdx]) ||
+                        timeline.find((p) => p.minute === 81) ||
+                        timeline[timeline.length - 1];
+                      const activeIdx = timeline.findIndex((p) => p.minute === activePoint?.minute);
+
+                      // Calculate average pressure
+                      const avgPersib = Math.round(
+                        timeline.reduce((acc, curr) => acc + curr.persibPressure, 0) / timeline.length
+                      );
+                      const avgOpponent = 100 - avgPersib;
+
+                      return (
+                        <div className="p-3.5 sm:p-4 rounded-2xl bg-slate-50/90 dark:bg-slate-900/75 border border-slate-200 dark:border-slate-800 space-y-3 shadow-xs">
+                          {/* Header Bar */}
+                          <div className="flex items-center justify-between gap-2">
+                            <div className="flex items-center gap-1.5 text-xs font-black min-w-0">
+                              <TrendingUp className="w-4 h-4 text-blue-600 dark:text-cyan-400 shrink-0" />
+                              <span className="truncate">Momentum Laga</span>
+                              <span className="px-1.5 py-0.5 rounded text-[8.5px] font-mono font-bold bg-blue-500/10 text-blue-600 dark:text-cyan-400 border border-blue-500/20 shrink-0">
+                                90&apos;
+                              </span>
+                            </div>
+                            <div className="flex items-center gap-2 text-[9px] font-mono font-bold shrink-0">
+                              <span className="flex items-center gap-1 text-blue-600 dark:text-cyan-400">
+                                <span className="w-2 h-2 rounded-full bg-blue-600" />
+                                Persib {avgPersib}%
+                              </span>
+                              <span className="flex items-center gap-1 text-rose-500">
+                                <span className="w-2 h-2 rounded-full bg-rose-500" />
+                                {opponentTeamName} {avgOpponent}%
+                              </span>
+                            </div>
                           </div>
-                          <div className="flex items-center gap-2 text-[9px] font-mono font-bold shrink-0">
-                            <span className="flex items-center gap-1 text-blue-600 dark:text-cyan-400">
-                              <span className="w-2 h-2 rounded-full bg-blue-600" />
-                              Persib
-                            </span>
-                            <span className="flex items-center gap-1 text-red-500">
-                              <span className="w-2 h-2 rounded-full bg-red-500" />
-                              {opponentTeamName}
-                            </span>
+
+                          {/* Graphical Visual Zone Indicator */}
+                          <div className="relative pt-6 pb-2">
+                            {/* Visual Zone labels */}
+                            <div className="absolute top-0 left-0 right-0 flex justify-between text-[8px] font-mono font-bold uppercase tracking-wider text-slate-400 dark:text-slate-500 pointer-events-none px-1">
+                              <span className="text-blue-500/80">▲ Dominasi PERSIB</span>
+                              <span className="text-rose-500/80">▼ Tekanan Lawan</span>
+                            </div>
+
+                            {/* Momentum Bars Container */}
+                            <div className="h-28 w-full flex items-center justify-between gap-1 border-y border-dashed border-slate-300 dark:border-slate-700/60 relative bg-slate-100/40 dark:bg-slate-950/40 rounded-xl px-1.5">
+                              {/* Center Baseline Zero Line */}
+                              <div className="absolute top-1/2 left-0 right-0 h-[1.5px] bg-slate-300 dark:bg-slate-700 pointer-events-none z-0" />
+
+                              {/* Half-time Divider Line at 45' */}
+                              <div className="absolute top-1 bottom-1 left-1/2 -translate-x-1/2 w-[1px] bg-slate-300/60 dark:bg-slate-800 pointer-events-none z-0 flex flex-col justify-between items-center">
+                                <span className="text-[7.5px] font-mono font-bold text-slate-400 -mt-2.5 bg-slate-50 dark:bg-slate-900 px-1 rounded">HT</span>
+                              </div>
+
+                              {timeline.map((pt, pIdx) => {
+                                const diff = pt.persibPressure - pt.opponentPressure;
+                                const isPositive = diff >= 0;
+                                const heightPct = Math.min(100, Math.max(22, Math.abs(diff) * 1.2));
+                                const isCurrentActive = pIdx === activeIdx;
+
+                                const isGoal = pt.highlight && (pt.highlight.includes('Gol') || pt.highlight.includes('GOOOL'));
+                                const isRedCard = pt.highlight && (pt.highlight.includes('Kartu Merah') || pt.highlight.includes('🟥'));
+
+                                return (
+                                  <button
+                                    key={pIdx}
+                                    type="button"
+                                    onClick={() => setSelectedMomentumIdx(pIdx)}
+                                    title={`Menit ${pt.minute}': Persib ${pt.persibPressure}% vs ${opponentTeamName} ${pt.opponentPressure}%`}
+                                    className={`flex-1 flex flex-col items-center justify-center h-full relative group cursor-pointer transition-transform active:scale-95 z-10 ${
+                                      isCurrentActive ? 'scale-105' : 'hover:opacity-90'
+                                    }`}
+                                  >
+                                    {/* Event Badge above or below bar */}
+                                    {isGoal && (
+                                      <span className="absolute -top-3 text-[10px] animate-bounce z-20 drop-shadow-md">
+                                        ⚽
+                                      </span>
+                                    )}
+                                    {isRedCard && (
+                                      <span className="absolute -top-3 text-[10px] animate-pulse z-20 drop-shadow-md">
+                                        🟥
+                                      </span>
+                                    )}
+
+                                    {/* Bar Graphic with sophisticated styling */}
+                                    <div className="h-full w-full flex flex-col justify-center items-center py-1">
+                                      {isPositive ? (
+                                        <div className="h-1/2 w-full flex items-end justify-center">
+                                          <div
+                                            className={`w-full max-w-[16px] rounded-t-md transition-all ${
+                                              isCurrentActive
+                                                ? 'bg-gradient-to-t from-blue-600 to-cyan-400 ring-2 ring-cyan-300 shadow-[0_0_12px_rgba(34,211,238,0.5)]'
+                                                : 'bg-gradient-to-t from-blue-700 to-blue-500 group-hover:from-blue-600 group-hover:to-cyan-400'
+                                            }`}
+                                            style={{ height: `${heightPct}%` }}
+                                          />
+                                        </div>
+                                      ) : (
+                                        <div className="h-1/2 w-full flex items-start justify-center">
+                                          <div
+                                            className={`w-full max-w-[16px] rounded-b-md transition-all ${
+                                              isCurrentActive
+                                                ? 'bg-gradient-to-b from-rose-600 to-red-400 ring-2 ring-rose-400 shadow-[0_0_12px_rgba(244,63,94,0.5)]'
+                                                : 'bg-gradient-to-b from-rose-600 to-red-600 group-hover:from-rose-500 group-hover:to-red-400'
+                                            }`}
+                                            style={{ height: `${heightPct}%` }}
+                                          />
+                                        </div>
+                                      )}
+                                    </div>
+
+                                    {/* Minute Marker Tick */}
+                                    <span
+                                      className={`text-[8.5px] font-mono font-bold mt-1 leading-none ${
+                                        isCurrentActive
+                                          ? 'text-cyan-400 font-black scale-110'
+                                          : 'text-slate-400 group-hover:text-slate-200'
+                                      }`}
+                                    >
+                                      {pt.minute}&apos;
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </div>
                           </div>
-                        </div>
 
-                        {/* Momentum Bars */}
-                        <div className="h-24 w-full flex items-center justify-between gap-0.5 pt-4 pb-2 border-b border-slate-200 dark:border-slate-800 relative">
-                          {/* Center Zero Line */}
-                          <div className="absolute top-1/2 left-0 right-0 h-[1px] bg-slate-300 dark:bg-slate-700 pointer-events-none" />
-
-                          {currentFixture.liveMomentumTimeline.map((pt, pIdx) => {
-                            const diff = pt.persibPressure - pt.opponentPressure;
-                            const isPositive = diff >= 0;
-                            const heightPct = Math.min(100, Math.max(20, Math.abs(diff)));
-
-                            return (
-                              <div
-                                key={pIdx}
-                                title={`Menit ${pt.minute}': ${pt.highlight || (isPositive ? `Persib Menekan (${pt.persibPressure}%)` : `${opponentTeamName} Menekan (${pt.opponentPressure}%)`)}`}
-                                className="flex-1 flex flex-col items-center justify-center h-full relative group cursor-pointer"
-                              >
-                                {pt.highlight && (
-                                  <span className="absolute -top-3 text-[10px] animate-bounce z-10">
-                                    {pt.highlight.includes('Gol') ? '⚽' : pt.highlight.includes('Kartu') ? '🟨' : '⚡'}
+                          {/* Interactive Tactical Insight Card for the selected minute */}
+                          {activePoint && (
+                            <div className="p-3 rounded-xl bg-white dark:bg-slate-950/80 border border-slate-200 dark:border-cyan-500/30 shadow-xs space-y-2 transition-all animate-fade-in">
+                              <div className="flex items-center justify-between gap-2">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping shrink-0" />
+                                  <span className="font-mono font-black text-xs text-slate-950 dark:text-cyan-300">
+                                    Fase Menit {activePoint.minute}&apos;
                                   </span>
-                                )}
-                                <div className="h-full w-full flex flex-col justify-center">
-                                  {isPositive ? (
-                                    <div className="h-1/2 flex items-end">
-                                      <div
-                                        className="w-full bg-blue-600 group-hover:bg-cyan-400 rounded-t-xs transition-all"
-                                        style={{ height: `${heightPct}%` }}
-                                      />
-                                    </div>
-                                  ) : (
-                                    <div className="h-1/2 flex items-start">
-                                      <div
-                                        className="w-full bg-red-500 group-hover:bg-red-400 rounded-b-xs transition-all"
-                                        style={{ height: `${heightPct}%` }}
-                                      />
-                                    </div>
-                                  )}
+                                </div>
+                                <span
+                                  className={`text-[9.5px] font-bold font-mono px-2 py-0.5 rounded-full border ${
+                                    activePoint.persibPressure >= 70
+                                      ? 'bg-cyan-500/15 text-cyan-400 border-cyan-400/40'
+                                      : activePoint.persibPressure > 50
+                                      ? 'bg-blue-500/15 text-blue-400 border-blue-400/30'
+                                      : activePoint.persibPressure === 50
+                                      ? 'bg-slate-500/15 text-slate-400 border-slate-400/30'
+                                      : 'bg-rose-500/15 text-rose-400 border-rose-400/40'
+                                  }`}
+                                >
+                                  {activePoint.persibPressure >= 70
+                                    ? '⚡ Dominasi Serangan Penuh'
+                                    : activePoint.persibPressure > 50
+                                    ? 'Persib Menguasai Lini'
+                                    : activePoint.persibPressure === 50
+                                    ? 'Duel Berimbang Netral'
+                                    : 'Tekanan Serangan Lawan'}
+                                </span>
+                              </div>
+
+                              {/* Dual Pressure Meter */}
+                              <div className="space-y-1">
+                                <div className="flex justify-between text-[10px] font-mono font-bold">
+                                  <span className="text-blue-600 dark:text-cyan-400">
+                                    PERSIB {activePoint.persibPressure}%
+                                  </span>
+                                  <span className="text-rose-500">
+                                    {opponentTeamName} {activePoint.opponentPressure}%
+                                  </span>
+                                </div>
+                                <div className="h-2 w-full bg-slate-200 dark:bg-slate-800 rounded-full overflow-hidden flex">
+                                  <div
+                                    className="bg-gradient-to-r from-blue-600 to-cyan-400 h-full transition-all duration-300"
+                                    style={{ width: `${activePoint.persibPressure}%` }}
+                                  />
+                                  <div
+                                    className="bg-gradient-to-r from-rose-500 to-red-600 h-full transition-all duration-300"
+                                    style={{ width: `${activePoint.opponentPressure}%` }}
+                                  />
                                 </div>
                               </div>
-                            );
-                          })}
-                        </div>
 
-                        <div className="flex items-center justify-between text-[9px] font-mono text-slate-400">
-                          <span>0&apos; Kick-Off</span>
-                          <span>45&apos; HT</span>
-                          <span>90&apos; Full-Time</span>
+                              {/* Tactical Narrative Callout */}
+                              {activePoint.highlight && (
+                                <p className="text-[11px] leading-snug text-slate-600 dark:text-slate-300 font-medium pt-0.5">
+                                  {activePoint.highlight}
+                                </p>
+                              )}
+                            </div>
+                          )}
+
+                          <div className="flex items-center justify-between text-[8px] font-mono text-slate-400 pt-0.5 px-0.5">
+                            <span>0&apos; Kick-Off</span>
+                            <span>💡 Ketuk pilar menit untuk rincian taktik</span>
+                            <span>90+&apos; Selesai</span>
+                          </div>
                         </div>
-                      </div>
-                    )}
+                      );
+                    })()}
 
                     {/* Sofascore Dual-Bar Comparison */}
                     {currentFixture.statsSummary ? (
