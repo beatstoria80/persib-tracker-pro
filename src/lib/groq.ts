@@ -246,6 +246,18 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
 
   const activeLiveFixture = dynamicFixtures.find((f) => f.status === 'LIVE');
   const isCurrentlyLive = Boolean(activeLiveFixture);
+  const currentHeroMatch = activeLiveFixture || latestFinished || dynamicFixtures[0];
+
+  const heroEvents = (currentHeroMatch?.events && currentHeroMatch.events.length > 0)
+    ? currentHeroMatch.events.map((ev) => ({ minute: ev.minute, type: ev.type, text: ev.text }))
+    : [
+        { minute: "45+2'", type: 'chance' as const, text: 'Turun minum (Half-time): PERSIB Bandung 0 - 0 Bali United, duel sengit di GBLA.' },
+        { minute: "66'", type: 'goal' as const, text: 'Gol Bali United! Marko Dugandžić menyambar bola rebound sepakan bebas Teppei Yachida 0-1.' },
+        { minute: "79'", type: 'goal' as const, text: 'GOOOL! Mariano Peralta menyamakan kedudukan 1-1 menerima umpan matang Luka Menalo!' },
+        { minute: "81'", type: 'goal' as const, text: 'GOOOL COMEBACK 2 MENIT! Luka Menalo membalikkan skor menjadi 2-1 membakar GBLA!' },
+        { minute: "86'", type: 'card' as const, text: 'Kartu Merah! Mariano Peralta diusir wasit, PERSIB bertahan heroik dengan 10 pemain!' },
+        { minute: "90+6'", type: 'chance' as const, text: 'Peluit panjang! FULL TIME: PERSIB Bandung 2 - 1 Bali United. 3 poin krusial diamankan!' },
+      ];
 
   const liveData: GroqSuppliedData = {
     lastUpdated: nowWib,
@@ -257,39 +269,36 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     currentStageName,
     liveMatch: {
       isLive: isCurrentlyLive,
-      tournament: 'Super League 2026/2027',
-      matchweek: 'Pekan 10 (Laga Kandang - Selesai)',
-      homeTeam: 'PERSIB Bandung',
-      awayTeam: 'Bali United',
-      homeScore: 2,
-      awayScore: 1,
-      liveMinute: 'FT',
-      aggregateScore: 'PERSIB Bandung 2 - 1 Bali United FC (FT)',
-      venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
-      statusText: 'SELESAI (FULL TIME) - PERSIB 2 - 1 BALI UNITED',
-      qualificationScenario: 'Kemenangan comeback dramatis 2-1 atas Bali United di Stadion GBLA membawa PERSIB Bandung mengoleksi 19 poin dari 10 laga, menempel ketat papan atas klasemen Super League 2026/2027.',
-      keyEvents: [
-        { minute: "45+2'", type: 'chance', text: 'Turun minum (Half-time): PERSIB Bandung 0 - 0 Bali United, duel sengit di GBLA.' },
-        { minute: "66'", type: 'goal', text: 'Gol Bali United! Marko Dugandžić menyambar bola rebound sepakan bebas Teppei Yachida 0-1.' },
-        { minute: "79'", type: 'goal', text: 'GOOOL! Mariano Peralta menyamakan kedudukan 1-1 menerima umpan matang Luka Menalo!' },
-        { minute: "81'", type: 'goal', text: 'GOOOL COMEBACK 2 MENIT! Luka Menalo membalikkan skor menjadi 2-1 membakar GBLA!' },
-        { minute: "86'", type: 'card', text: 'Kartu Merah! Mariano Peralta diusir wasit, PERSIB bertahan heroik dengan 10 pemain!' },
-        { minute: "90+6'", type: 'chance', text: 'Peluit panjang! FULL TIME: PERSIB Bandung 2 - 1 Bali United. 3 poin krusial diamankan!' },
-      ],
+      tournament: currentHeroMatch.tournament || 'Super League 2026/2027',
+      matchweek: currentHeroMatch.roundOrWeek || 'Pekan 10 (Laga Kandang - Selesai)',
+      homeTeam: currentHeroMatch.homeTeam,
+      awayTeam: currentHeroMatch.awayTeam,
+      homeScore: currentHeroMatch.homeScore,
+      awayScore: currentHeroMatch.awayScore,
+      liveMinute: isCurrentlyLive ? (currentHeroMatch.time || 'LIVE') : 'FT',
+      aggregateScore: `${currentHeroMatch.homeTeam} ${currentHeroMatch.homeScore} - ${currentHeroMatch.awayScore} ${currentHeroMatch.awayTeam} (${isCurrentlyLive ? 'LIVE' : 'FT'})`,
+      venue: currentHeroMatch.venue,
+      statusText: isCurrentlyLive
+        ? `SEDANG BERLANGSUNG (LIVE) - ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}`
+        : `SELESAI (FULL TIME) - ${currentHeroMatch.homeTeam} ${currentHeroMatch.homeScore} - ${currentHeroMatch.awayScore} ${currentHeroMatch.awayTeam}`,
+      qualificationScenario: currentHeroMatch.aggregateScore || `Hasil laga resmi ${currentHeroMatch.roundOrWeek} mengamankan perolehan poin penting di klasemen kompetisi 2026/2027.`,
+      keyEvents: heroEvents,
     },
     matchCenter: {
       tournament: 'Super League 2026/2027 & Asia',
       latestResult: {
         matchweek: latestFinished?.roundOrWeek || 'Pekan 10 Super League 2026/2027',
-        opponent: 'Bali United',
-        score: '2 - 1',
-        scorers: ["Marko Dugandžić 66' (Bali United)", "Mariano Peralta 79' (PERSIB)", "Luka Menalo 81' (PERSIB) [KM: Peralta 86']"],
-        venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
+        opponent: latestFinished ? (latestFinished.homeTeam.includes('PERSIB') ? latestFinished.awayTeam : latestFinished.homeTeam) : 'Bali United',
+        score: latestFinished ? `${latestFinished.homeScore} - ${latestFinished.awayScore}` : '2 - 1',
+        scorers: (latestFinished?.highlights && latestFinished.highlights.length > 0)
+          ? latestFinished.highlights
+          : ["Marko Dugandžić 66' (Bali United)", "Mariano Peralta 79' (PERSIB)", "Luka Menalo 81' (PERSIB) [KM: Peralta 86']"],
+        venue: latestFinished?.venue || 'Stadion Gelora Bandung Lautan Api (GBLA)',
       },
       nextFixture: {
         matchweek: upcomingMatch?.roundOrWeek || 'Pekan 11 (Laga Tandang)',
-        opponent: 'Persita Tangerang',
-        date: `${upcomingMatch?.date || '29 November 2026'} • ${upcomingMatch?.time || '19:00 WIB'}`,
+        opponent: upcomingMatch ? (upcomingMatch.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : upcomingMatch.homeTeam) : 'Persita Tangerang',
+        date: upcomingMatch ? `${upcomingMatch.date} • ${upcomingMatch.time}` : '29 November 2026 • 19:00 WIB',
         venue: upcomingMatch?.venue || 'Stadion Indomilk Arena, Tangerang',
       },
     },

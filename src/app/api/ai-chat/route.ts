@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PersibIntelligenceEngine, PersibAiChatMessage } from '@/data/persib-intelligence-engine';
+import { VERIFIED_FIXTURES_2026_2027 } from '@/data/persib-data';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -62,6 +63,23 @@ export async function POST(req: NextRequest) {
     // Remove duplicates while preserving order
     const uniqueModels = Array.from(new Set(candidateModels));
 
+    // Dynamic live fixtures & schedule feed from database
+    const liveMatchNow = VERIFIED_FIXTURES_2026_2027.find((f) => f.status === 'LIVE');
+    const recentFinished = VERIFIED_FIXTURES_2026_2027.filter((f) => f.status === 'FINISHED').slice(-3);
+    const nextUpcoming = VERIFIED_FIXTURES_2026_2027.filter((f) => f.status === 'SCHEDULED').slice(0, 5);
+
+    const liveMatchFeed = liveMatchNow
+      ? `SEDANG BERLANGSUNG LIVE: ${liveMatchNow.roundOrWeek} (${liveMatchNow.tournament}): ${liveMatchNow.homeTeam} ${liveMatchNow.homeScore} - ${liveMatchNow.awayScore} ${liveMatchNow.awayTeam} (Waktu: ${liveMatchNow.time || 'LIVE'}) di ${liveMatchNow.venue}. Pertandingan sedang berjalan saat ini!`
+      : `Tidak ada laga yang sedang berjalan LIVE saat ini. Laga resmi terakhir telah rampung dan tim sedang mempersiapkan jadwal terdekat berikutnya.`;
+
+    const recentResultsFeed = recentFinished
+      .map((f) => `* ${f.roundOrWeek} (${f.tournament}): ${f.homeTeam} ${f.homeScore} - ${f.awayScore} ${f.awayTeam} (FT di ${f.venue})`)
+      .join('\n     ');
+
+    const upcomingScheduleFeed = nextUpcoming
+      .map((f) => `* ${f.roundOrWeek} (${f.tournament}): ${f.homeTeam} vs ${f.awayTeam} (${f.date} pukul ${f.time} di ${f.venue})`)
+      .join('\n     ');
+
     // REFACTOR: Comprehensive Global Football & Persib Tactical Intelligence system prompt
     const systemPrompt = `Kamu adalah "PERSIB & GLOBAL FOOTBALL TACTICAL INTELLIGENCE", ensiklopedia sepak bola dunia dan asisten resmi paling cerdas, taktis, dan otoritatif untuk Bobotoh pendukung PERSIB Bandung serta seluruh penggemar sepak bola profesional internasional.
 
@@ -104,7 +122,13 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
      11. #99 Balša Sekulić (Montenegro, Penyerang Tengah)
      * PERINGATAN HUKUM: Pemain masa lalu seperti David da Silva, Ciro Alves, Tyronne del Pino, Federico Barba, Kevin Ray Mendoza, Nick Kuipers, Alberto Rodriguez, Stefano Beltrame, Mateo Kocijan, Mailson Lima SUDAH TIDAK BERMAIN DI PERSIB 2026/2027! JANGAN PERNAH sebut mereka sebagai pemain Persib!
 
-2. STATUS RESMI HASIL LAGA, JADWAL & KLASEMEN PERSIB 2026/2027:
+2. STATUS RESMI HASIL LAGA, JADWAL & KLASEMEN PERSIB 2026/2027 (DYNAMIC LIVE & SCHEDULE FEED):
+   - FEED LAGA LIVE SAAT INI:
+     ${liveMatchFeed}
+   - HASIL LAGA RESMI TERKINI YANG TELAH RAMPUNG:
+     ${recentResultsFeed}
+   - JADWAL RESMI PERTANDINGAN MENDATANG:
+     ${upcomingScheduleFeed}
    - HASIL AKHIR PEKAN 10 SUPER LEAGUE: PERSIB Bandung 2 - 1 Bali United FC (FULL TIME SELESAI di Stadion GBLA).
      * Jalannya Gol: Marko Dugandžić (Bali United 66'), Mariano Peralta (PERSIB 79'), Luka Menalo (PERSIB 81').
      * Kartu Merah: Mariano Peralta (PERSIB 86' - kartu merah langsung), Maung Bandung bertahan heroik dengan 10 pemain hingga menit 90+6.
