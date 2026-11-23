@@ -62,7 +62,7 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
       id: 'init-1',
       sender: 'ai',
       text:
-        'Sampurasun, Bobotoh! ⚽💬\n\nSelamat datang di Persib & Global Football Tactical Intelligence resmi musim 2026/2027.\n\nTanyakan apa saja seputar:\n• 🎯 Top Scorer & Raja Assist: Rekor gol David da Silva, Tyronne, Peralta, Sekulić, serta 9 assist Thom Haye\n• ⚔️ Big Match Pekan 10: Kontra Bali United (Minggu, 22 Nov 2026, 19:00 WIB di GBLA)\n• 📊 Klasemen & Skor: Super League (#6, 16 Poin) & Puncak Grup B Shopee Cup (#1, 6 Poin)\n• ⭐ ACL Two Asia: Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n• 🌍 Sepak Bola Dunia & FIFA: Piala Dunia, Liga Champions, Timnas Indonesia, taktik modern & regulasi IFAB\n\nSilakan pilih topik rekomendasi di atas atau ketik pertanyaan langsung!',
+        'Sampurasun, Bobotoh! ⚽💬\n\nSelamat datang di Persib & Global Football Tactical Intelligence resmi musim 2026/2027.\n\nTanyakan apa saja seputar:\n• 🎯 Top Scorer & Raja Assist: Rekor gol Balša Sekulić, Mariano Peralta, Luka Menalo, Uilliam Barros, serta 10 assist Thom Haye\n• ⚔️ Big Match Pekan 10: Kontra Bali United (Kemenangan 2-1 di GBLA)\n• 📊 Klasemen & Skor: Super League (#4, 19 Poin) & Puncak Grup B Shopee Cup (#1, 6 Poin)\n• ⭐ ACL Two Asia: Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n• 🌍 Sepak Bola Dunia & FIFA: Piala Dunia, Liga Champions, Timnas Indonesia, taktik modern & regulasi IFAB\n\nSilakan pilih topik rekomendasi di atas atau ketik pertanyaan langsung!',
       timestamp: 'Baru saja',
       category: 'general',
       actionableTips: [
@@ -71,8 +71,8 @@ export function PersibAiChatWindow({ onClose, isStandalonePage = false }: Persib
         'Gunakan tombol copy di setiap jawaban untuk membagikan ke sesama Bobotoh.',
       ],
       metricsContext: {
-        leagueRank: 6,
-        points: 16,
+        leagueRank: 4,
+        points: 19,
         matchRecord: '9 Main: 5M 1S 3K (+6 SG)',
         nextOpponent: 'Bali United FC',
         nextMatchDate: 'Minggu, 22 Nov 2026 (19:00 WIB)',

@@ -167,7 +167,7 @@ export class PersibIntelligenceEngine {
 2. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Total 8 Gol):
 - Luka Menalo: 3 Gol (Top Scorer Persib di Asia)
 - Balša Sekulić: 2 Gol
-- Tyronne del Pino: 2 Gol
+- Mariano Peralta: 2 Gol
 - Thom Haye: 1 Gol, 3 Assist (Playmaker No. 1)
 
 3. SHOPEE CUP ASEAN (Total 9 Gol):
@@ -510,6 +510,60 @@ Maung Bandung mencetak sejarah baru sebagai klub Indonesia dengan performa palin
           'Kunjungi halaman Video Profil Pemain di tab Roster untuk menyaksikan video aksi looping un-cropped.',
           'Kombinasi pemain naturalisasi Timnas dan talenta asing menjadikan PERSIB tim paling bernilai di Asia Tenggara.',
           'Kontrak Thom Haye dan Sandy Walsh terikat resmi hingga akhir musim 2028.'
+        ],
+        metricsContext: defaultMetrics,
+      };
+    }
+
+    // =========================================================================
+    // KATEGORI 6.5: DAFTAR RESMI 11 PEMAIN ASING PERSIB 2026/2027
+    // =========================================================================
+    if (
+      q.includes('pemain asing') ||
+      q.includes('legion asing') ||
+      q.includes('legiun asing') ||
+      q.includes('asing') ||
+      q.includes('impor') ||
+      q.includes('mutombo') ||
+      q.includes('cesar') ||
+      q.includes('loncar') ||
+      q.includes('matricardi') ||
+      q.includes('guaycochea') ||
+      q.includes('notsuda') ||
+      q.includes('berguinho') ||
+      q.includes('menalo') ||
+      q.includes('uilliam') ||
+      q.includes('david da silva')
+    ) {
+      const text = `Daftar Resmi **11 Pemain Asing PERSIB Bandung Musim 2026/2027**:
+
+Berikut adalah 11 pilar legiun asing resmi yang terdaftar membela PERSIB Bandung di Super League & Asia:
+
+1. **#3 Gabriel Mutombo** (Prancis) — Bek Tengah
+2. **#4 Júlio César** (Brasil) — Bek Tengah
+3. **#22 Danijel Lončar** (Kroasia) — Bek Tengah
+4. **#48 Patricio Matricardi** (Argentina) — Bek Tengah
+5. **#8 Luciano Guaycochea** (Argentina) — Gelandang Serang
+6. **#17 Gakuto Notsuda** (Jepang) — Gelandang Tengah
+7. **#97 Berguinho (Rosembergne da Silva)** (Brasil) — Gelandang Serang / Sayap
+8. **#9 Luka Menalo** (Bosnia-Herzegovina / Kroasia) — Sayap Kiri
+9. **#10 Mariano Peralta** (Argentina) — Sayap Kanan
+10. **#94 Uilliam Barros** (Brasil) — Penyerang Tengah
+11. **#99 Balša Sekulić** (Montenegro) — Penyerang Tengah
+
+⚠️ **Catatan Penting Integritas Data**:
+Pemain-pemain masa lalu seperti David da Silva, Ciro Alves, Tyronne del Pino, Federico Barba, Kevin Ray Mendoza, Nick Kuipers, Alberto Rodriguez, Stefano Beltrame, maupun Mateo Kocijan **SUDAH TIDAK LAGI BERMAIN UNTUK PERSIB** di musim 2026/2027. Selain ke-11 nama resmi di atas, tidak ada pemain asing lain di skuad Persib saat ini.`;
+
+      return {
+        id: 'msg-' + Date.now(),
+        sender: 'ai',
+        text: cleanAiResponseText(text),
+        timestamp: timeStr,
+        category: 'squad',
+        actionableTips: [
+          'Hanya 11 pemain asing ini yang terdaftar secara sah di PSSI Super League & AFC.',
+          'Buka tab Roster di aplikasi untuk melihat statistik dan video aksi pemain asing.',
+          'Pemain seperti Thom Haye, Sandy Walsh, Eliano Reijnders, dan Ragnar Oratmangoen berstatus WNI (Naturalisasi Timnas Indonesia).'
         ],
         metricsContext: defaultMetrics,
       };

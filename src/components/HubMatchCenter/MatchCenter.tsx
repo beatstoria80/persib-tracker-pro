@@ -309,7 +309,7 @@ export function MatchCenter() {
     (tacticalPlaybook && tacticalPlaybook[0]) || {
       step: 1,
       label: 'Fase 1: Double Pivot Build-up (Haye & Klok Maestro)',
-      description: 'Thom Haye turun menjemput bola di antara bek tengah Barba & Matricardi.',
+      description: 'Thom Haye turun menjemput bola di antara bek tengah Mutombo & Matricardi.',
       ballPos: { x: 34, y: 50 },
       playerPositions: [],
     };
@@ -3611,7 +3611,7 @@ export function MatchCenter() {
               {[
                 { name: 'Thom Haye', num: 33, role: 'Playmaker Maestro', assists: 9, matches: 15, key: 'Umpan Kunci No. 1' },
                 { name: 'Ragnar Oratmangoen', num: 77, role: 'Winger Kilat', assists: 5, matches: 13, key: 'Dribel & Cutback' },
-                { name: 'Tyronne del Pino', num: 10, role: 'Gelandang Serang', assists: 4, matches: 14, key: 'Through Pass' },
+                { name: 'Mariano Peralta', num: 10, role: 'Sayap Kanan', assists: 4, matches: 14, key: 'Crossing & Cut-inside' },
                 { name: 'Marc Klok', num: 23, role: 'Kapten Tim', assists: 4, matches: 14, key: 'Set Piece & Crossing' },
               ].map((pm) => (
                 <div
