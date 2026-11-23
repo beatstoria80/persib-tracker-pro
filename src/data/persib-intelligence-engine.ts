@@ -9,6 +9,8 @@
  * - Data Finansial, FFP & Tata Kelola PT Persib Bandung Bermartabat (PT PBB)
  */
 
+import { VERIFIED_FIXTURES_2026_2027 } from './persib-data';
+
 // REFACTOR: Global response sanitizer stripping raw AI formatting tokens (*, **, _, <br>)
 export function cleanAiResponseText(rawText: string): string {
   if (!rawText) return '';
@@ -135,13 +137,26 @@ export class PersibIntelligenceEngine {
 
     const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
 
+    // Dynamic fixtures feed from authentic schedule
+    const latestFinished =
+      VERIFIED_FIXTURES_2026_2027.filter((f) => f.status === 'FINISHED' && f.tournamentKey === 'liga1').slice(-1)[0] ||
+      VERIFIED_FIXTURES_2026_2027.find((f) => f.id === 'l1-p10');
+    const upcomingMatch =
+      VERIFIED_FIXTURES_2026_2027.find((f) => f.status === 'SCHEDULED' && f.tournamentKey === 'liga1') ||
+      VERIFIED_FIXTURES_2026_2027.find((f) => f.id === 'l1-p11');
+    const activeLiveFixture = VERIFIED_FIXTURES_2026_2027.find((f) => f.status === 'LIVE');
+
     // Metrik Default Musim Aktif 2026/2027 (Pasca Pekan 10 Selesai)
     const defaultMetrics = {
-      leagueRank: 3,
+      leagueRank: 4,
       points: 19,
       matchRecord: '10 Main: 6M 1S 3K (Gol 18-11 [+7])',
-      nextOpponent: 'Persita Tangerang',
-      nextMatchDate: 'Minggu, 29 November 2026 (19:00 WIB)',
+      nextOpponent: upcomingMatch
+        ? (upcomingMatch.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : upcomingMatch.homeTeam)
+        : 'Persita Tangerang',
+      nextMatchDate: upcomingMatch
+        ? `${upcomingMatch.date} (${upcomingMatch.time})`
+        : 'Minggu, 29 November 2026 (19:00 WIB)',
       shopeeRank: 1,
       aclStatus: 'Juara Grup E (Lolos 16 Besar Asia)',
     };
@@ -225,46 +240,50 @@ export class PersibIntelligenceEngine {
         q.includes('skor akhir');
 
       let text = '';
-      if (isPastMatchQuery) {
-        text = `🏆 **HASIL AKHIR RESMI SUPER LEAGUE PEKAN 10 (2026/2027)**
+      if (activeLiveFixture) {
+        text = `🚨 LAGA SEDANG BERLANGSUNG LIVE: ${activeLiveFixture.roundOrWeek} (${activeLiveFixture.tournament})
+
+⚔️ Informasi Pertandingan Langsung:
+• Pertandingan: ${activeLiveFixture.homeTeam} vs ${activeLiveFixture.awayTeam}
+• Skor Sementara: ${activeLiveFixture.homeScore} - ${activeLiveFixture.awayScore}
+• Waktu/Menit: ${activeLiveFixture.time || 'LIVE'}
+• Stadion: ${activeLiveFixture.venue}
+• Status: SEDANG BERLANGSUNG (LIVE)
+
+Pantau pembaruan peristiwa laga real-time di Match Center aplikasi!`;
+      } else if (isPastMatchQuery && latestFinished) {
+        const highlightsText =
+          latestFinished.highlights && latestFinished.highlights.length > 0
+            ? latestFinished.highlights.map((h) => `• ${h}`).join('\n')
+            : `• Skor Akhir: ${latestFinished.homeTeam} ${latestFinished.homeScore} - ${latestFinished.awayScore} ${latestFinished.awayTeam}`;
+        text = `🏆 HASIL AKHIR RESMI: ${latestFinished.roundOrWeek} (${latestFinished.tournament})
 
 ⚔️ Pertandingan Telah Selesai (Full Time):
-* **Laga**: **PERSIB Bandung 2 - 1 Bali United FC**
-* 📅 **Tanggal**: Minggu, 22 November 2026
-* 🏟️ **Stadion**: Gelora Bandung Lautan Api (GBLA), Gedebage, Bandung
-* 📌 **Status**: **FINISHED (FULL TIME)**
+• Laga: ${latestFinished.homeTeam} ${latestFinished.homeScore} - ${latestFinished.awayScore} ${latestFinished.awayTeam}
+• Tanggal: ${latestFinished.date}
+• Stadion: ${latestFinished.venue}
+• Status: SELESAI (FULL TIME)
 
----
-
-⚽ Linimasa Gol & Momen Krusial:
-* 45+2' ⏱️ **Turun Minum (HT)**: PERSIB Bandung 0 - 0 Bali United, duel sengit lini tengah di hadapan puluhan ribu Bobotoh.
-* 66' ⚽ **Gol Bali United!** Marko Dugandžić (0-1) menyambar bola rebound hasil tendangan bebas Teppei Yachida yang ditepis Teja Paku Alam.
-* 79' ⚽ **GOOOL PENYEIMBANG!** Mariano Peralta (1-1) menyamakan kedudukan menuntaskan umpan terobosan cerdik Luka Menalo!
-* 81' ⚽ **GOOOL REMONTADA KILAT 2 MENIT!** Luka Menalo (2-1) melepaskan tembakan keras mendatar berbelok membakar Stadion GBLA!
-* 86' 🟥 **KARTU MERAH!** Mariano Peralta diganjar kartu merah langsung oleh wasit, PERSIB bertahan heroik dengan 10 pemain.
-* 90+6' ⏱️ **Peluit Panjang FT**: Kemenangan comeback dramatis 2-1 mengunci 19 poin di posisi 4 klasemen!
-
----
+⚽ Linimasa Momen Krusial:
+${highlightsText}
 
 🔥 Dampak Klasemen & Taktikal:
-* Koleksi 19 poin menempatkan PERSIB di posisi 4 klasemen sementara, bersaing ketat dengan Bali United (#3, 19 poin), Dewa United (#2, 20 poin), dan Persija (#1, 22 poin).
-* Mariano Peralta dan Luka Menalo menjadi duet pahlawan kebangkitan kilat 2 menit racikan Bojan Hodak.`;
-      } else {
-        text = `Berikut jadwal resmi pertandingan terdekat **PERSIB Bandung di Super League 2026/2027**:
+Koleksi 19 poin menempatkan PERSIB di posisi 4 klasemen sementara Super League 2026/2027, menempel ketat papan atas!`;
+      } else if (upcomingMatch) {
+        const oppName = upcomingMatch.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : upcomingMatch.homeTeam;
+        text = `Berikut jadwal resmi pertandingan terdekat PERSIB Bandung di ${upcomingMatch.tournament}:
 
-⚔️ Pertandingan Terdekat (Pekan 11):
-* **Laga**: **Persita Tangerang vs PERSIB Bandung (Laga Tandang)**
-* 📅 **Hari/Tanggal**: **Minggu, 29 November 2026**
-* ⏰ **Waktu Kick-off**: **19:00 WIB** (Laga Malam)
-* 🏟️ **Stadion**: Indomilk Arena, Tangerang
-* 📌 **Status**: **SCHEDULED** (Laga Mendatang)
-
----
+⚔️ Pertandingan Terdekat (${upcomingMatch.roundOrWeek}):
+• Laga: ${upcomingMatch.homeTeam} vs ${upcomingMatch.awayTeam} (${upcomingMatch.homeTeam.includes('PERSIB') ? 'Laga Kandang' : 'Laga Tandang'})
+• Hari/Tanggal: ${upcomingMatch.date}
+• Waktu Kick-off: ${upcomingMatch.time} WIB
+• Stadion: ${upcomingMatch.venue}
+• Status: SCHEDULED (Laga Mendatang)
 
 🎯 Misi Taktikal Bojan Hodak:
-1. **Lanjutkan Tren Kemenangan**: Mengamankan 3 poin tandang di Indomilk Arena untuk terus menekan Persija (22 poin), Dewa United (20 poin), dan Bali United (19 poin).
-2. **Kesiapan Skuad**: Balša Sekulić, Luka Menalo, Thom Haye, Sandy Walsh, dan Kevin Mendoza dalam kondisi bugar 100% (Peralta absen akibat suspensi kartu merah).
-3. **Fokus Lanjutan**: Usai Pekan 11, Maung Bandung akan melakoni Super Big Match Pekan 12 kontra Persebaya (6 Des 2026) dan lawatan Shopee Cup ke markas Lion City Sailors (10 Des 2026).`;
+1. Lanjutkan Tren Kemenangan: Mengamankan 3 poin tandang demi terus menekan Persija (22 poin), Dewa United (20 poin), dan Bali United (19 poin).
+2. Kesiapan Skuad: Balša Sekulić, Luka Menalo, Thom Haye, Sandy Walsh, dan Teja Paku Alam dalam kondisi bugar 100% (Peralta absen suspensi kartu merah).
+3. Fokus Lanjutan: Usai Pekan 11, Maung Bandung akan melakoni Super Big Match Pekan 12 kontra Persebaya (6 Des 2026) dan lawatan Shopee Cup ke markas Lion City Sailors (10 Des 2026).`;
       }
 
       return {
