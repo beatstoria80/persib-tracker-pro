@@ -230,24 +230,22 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const calculatedShopeeCup: GroupTeam[] = computeSortedGroupStandings(SHOPEE_CUP_STANDINGS_2026_2027, []);
   const dynamicFixtures: MatchFixture[] = [...VERIFIED_FIXTURES_2026_2027];
 
-  // REFACTOR: Sinkronisasi data faktual Super League 2026/2027 (setelah Pekan 9, menjelang Big Match Pekan 10 besok Minggu, 22 November 2026)
-  const currentStageName = 'Menjelang Big Match Pekan 10 Super League 2026/2027 Kontra Bali United (22 November 2026)';
-  const dynamicBulletin = `🏆 [SUPER LEAGUE 2026/2027 & ASIA] Super League Pekan 10: PERSIB Bandung (#6, 16 Poin) fokus persiapan akhir jelang Big Match krusial kontra Bali United FC (#3, 19 Poin) di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB. Shopee Cup Grup B: PERSIB kokoh di puncak klasemen (6 Poin, Gol 9-1 [+8]) pasca membantai Shan United 6-0. ACL Two: Rekor 100% menang mengunci tiket Babak 16 Besar Asia! (Sync: ${nowWib})`;
+  // REFACTOR: Sinkronisasi data faktual Super League 2026/2027 (Pekan 10 tuntas: PERSIB 2 - 1 Bali United)
+  const currentStageName = 'Pekan 10 Super League 2026/2027 Tuntas: PERSIB 2 - 1 Bali United';
+  const dynamicBulletin = `🏆 [SUPER LEAGUE PEKAN 10] PERSIB Bandung menang 2-1 atas Bali United di GBLA! Gol Balša Sekulić & sundulan David da Silva lesatkan Maung Bandung ke Peringkat 3 Klasemen (19 Poin). Fokus berikutnya: Pekan 11 tandang ke Indomilk Arena vs Persita Tangerang! (Sync: ${nowWib})`;
 
   const persibInStandings = calculatedStandings.find((c) => c.isPersib || c.team.toLowerCase().includes('persib'));
 
   // REFACTOR: Decoupled dynamic match extraction based on authentic 2026/2027 schedule
   const latestFinished =
     dynamicFixtures.filter((f) => f.status === 'FINISHED' && f.tournamentKey === 'liga1').slice(-1)[0] ||
-    dynamicFixtures.find((f) => f.id === 'l1-p9');
+    dynamicFixtures.find((f) => f.id === 'l1-p10');
   const upcomingMatch =
     dynamicFixtures.find((f) => f.status === 'SCHEDULED' && f.tournamentKey === 'liga1') ||
-    dynamicFixtures.find((f) => f.id === 'l1-p10');
+    dynamicFixtures.find((f) => f.id === 'l1-p11');
 
-  const activeLiveFixture =
-    dynamicFixtures.find((f) => f.status === 'LIVE') ||
-    dynamicFixtures.find((f) => f.id === 'l1-p10');
-  const isCurrentlyLive = activeLiveFixture?.status === 'LIVE';
+  const activeLiveFixture = dynamicFixtures.find((f) => f.status === 'LIVE');
+  const isCurrentlyLive = Boolean(activeLiveFixture);
 
   const liveData: GroqSuppliedData = {
     lastUpdated: nowWib,
@@ -259,48 +257,38 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     currentStageName,
     liveMatch: {
       isLive: isCurrentlyLive,
-      tournament: activeLiveFixture?.tournament || 'Super League 2026/2027',
-      matchweek: activeLiveFixture?.roundOrWeek || 'Pekan 10 (Laga Kandang - Super Big Match)',
-      homeTeam: activeLiveFixture?.homeTeam || 'PERSIB Bandung',
-      awayTeam: activeLiveFixture?.awayTeam || 'Bali United',
-      homeScore: activeLiveFixture?.homeScore ?? 2,
-      awayScore: activeLiveFixture?.awayScore ?? 1,
-      liveMinute: activeLiveFixture?.liveMinute || "74'",
-      aggregateScore: isCurrentlyLive
-        ? `Super League Pekan 10 (Live: ${activeLiveFixture?.homeScore ?? 2} - ${activeLiveFixture?.awayScore ?? 1})`
-        : 'Kick-off Minggu, 22 November 2026 (19:00 WIB)',
-      venue: activeLiveFixture?.venue || 'Stadion Gelora Bandung Lautan Api (GBLA)',
-      statusText: isCurrentlyLive
-        ? `🔴 LIVE MATCH - SEDANG BERLANGSUNG (${activeLiveFixture?.liveMinute || "74'"})`
-        : 'SCHEDULED - MINGGU, 22 NOV 2026 (19:00 WIB)',
-      qualificationScenario: isCurrentlyLive
-        ? 'Super Big Match Pekan 10: PERSIB Bandung memimpin 2-1 atas Bali United. Tambahan 3 poin akan melesatkan Maung Bandung ke peringkat 3 besar Super League dengan 19 poin menyamai Bali United.'
-        : 'Super Big Match Pekan 10: PERSIB Bandung (#6, 16 Poin) menyambut Bali United (#3, 19 Poin) di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB. Kemenangan akan membawa Maung Bandung menyamai perolehan 19 poin Serdadu Tridatu di papan atas.',
-      keyEvents:
-        activeLiveFixture?.events && activeLiveFixture.events.length > 0
-          ? activeLiveFixture.events
-          : [
-              {
-                minute: 'Pre-Match',
-                type: 'chance',
-                text: 'Skuad Bojan Hodak mematangkan taktik akhir jelang Super Big Match kontra Bali United di Stadion GBLA.',
-              },
-            ],
+      tournament: 'Super League 2026/2027',
+      matchweek: 'Pekan 10 (Laga Kandang - Selesai)',
+      homeTeam: 'PERSIB Bandung',
+      awayTeam: 'Bali United',
+      homeScore: 2,
+      awayScore: 1,
+      liveMinute: 'FT',
+      aggregateScore: 'PERSIB Bandung 2 - 1 Bali United FC (FT)',
+      venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
+      statusText: 'SELESAI (FULL TIME) - PERSIB 2 - 1 BALI UNITED',
+      qualificationScenario: 'Kemenangan dramatis 2-1 atas Bali United di Stadion GBLA melesatkan PERSIB Bandung ke peringkat 3 besar Super League dengan 19 poin (unggul head-to-head atas Bali United).',
+      keyEvents: [
+        { minute: "18'", type: 'goal', text: 'GOOOL! Balša Sekulić menyontek umpan silang akurat Thom Haye ke sudut gawang 1-0!' },
+        { minute: "41'", type: 'goal', text: 'Gol Bali United! Privat Mbarga menuntaskan serangan balik cepat 1-1.' },
+        { minute: "67'", type: 'goal', text: 'GOOOL KEPALA EMAS! David da Silva menyambar sepak pojok melengkung Thom Haye 2-1!' },
+        { minute: "90+4'", type: 'chance', text: 'Peluit panjang berbunyi! FULL TIME: PERSIB Bandung 2 - 1 Bali United. 3 poin krusial melesatkan Maung Bandung ke peringkat 3 klasemen!' },
+      ],
     },
     matchCenter: {
       tournament: 'Super League 2026/2027 & Asia',
       latestResult: {
-        matchweek: latestFinished?.roundOrWeek || 'Pekan 9 Super League 2026/2027',
-        opponent: 'Java United',
+        matchweek: latestFinished?.roundOrWeek || 'Pekan 10 Super League 2026/2027',
+        opponent: 'Bali United',
         score: '2 - 1',
-        scorers: ["Ciro Alves 34' (Java United)", "Mariano Peralta 58' (PERSIB)", "Gustavo Almeida 76' (Java United)"],
-        venue: 'Stadion Jatidiri, Semarang',
+        scorers: ["Balša Sekulić 18' (PERSIB)", "Privat Mbarga 41' (Bali United)", "David da Silva 67' (PERSIB)"],
+        venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
       },
       nextFixture: {
-        matchweek: upcomingMatch?.roundOrWeek || 'Pekan 10 (Laga Kandang - Super Big Match)',
-        opponent: 'Bali United',
-        date: `${upcomingMatch?.date || 'Minggu, 22 November 2026'} • ${upcomingMatch?.time || '19:00 WIB'}`,
-        venue: upcomingMatch?.venue || 'Stadion Gelora Bandung Lautan Api (GBLA)',
+        matchweek: upcomingMatch?.roundOrWeek || 'Pekan 11 (Laga Tandang)',
+        opponent: 'Persita Tangerang',
+        date: `${upcomingMatch?.date || '29 November 2026'} • ${upcomingMatch?.time || '19:00 WIB'}`,
+        venue: upcomingMatch?.venue || 'Stadion Indomilk Arena, Tangerang',
       },
     },
     leagueStandings: {
@@ -352,19 +340,18 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League, ACL Two, dan Shopee Cup resmi untuk MUSIM AKTIF 2026/2027 (sumber valid: ileague.id, the-afc.com, persib.co.id).
 ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
 1. LARANGAN KERAS: DILARANG MENGGUNAKAN ATAU MENYEBUT DATA ARTEFAK MUSIM 2024/2025 ATAUPUN 2025/2026! Seluruh analisis HANYA untuk musim aktif 2026/2027.
-2. STATUS RESMI PEKAN 10 & REALTIME IN-MATCH TRACKING ENGINE:
-   - Super Big Match Super League Pekan 10 antara PERSIB Bandung vs Bali United FC di Stadion GBLA.
-   - Status: LIVE IN-MATCH ONGOING (Menit 74', Skor: PERSIB 2 - 1 Bali United; gol Balša Sekulić 18', Privat Mbarga 41', David da Silva 67').
-   - Jika konteks jadwal pra-laga ditanyakan, kick-off tertera Minggu 22 November 2026 pukul 19:00 WIB di GBLA.
-   - Sajikan telemetri keunggulan 2-1 Maung Bandung, intensitas pressing Bojan Hodak, dan dampaknya melesatkan Persib ke posisi 3 besar (19 Poin).
-3. KLASEMEN RESMI (9 PEKAN SELESAI & PROYEKSI LIVE):
+2. STATUS RESMI HASIL PEKAN 10 & KLASEMEN TERKINI:
+   - Super Big Match Super League Pekan 10 antara PERSIB Bandung vs Bali United FC di Stadion GBLA telah SELESAI (FULL TIME).
+   - Skor Akhir: PERSIB Bandung 2 - 1 Bali United FC (Balša Sekulić 18', David da Silva 67' | Privat Mbarga 41').
+   - Kemenangan ini melesatkan Maung Bandung ke peringkat 3 klasemen Super League 2026/2027!
+3. KLASEMEN RESMI (10 PEKAN SELESAI):
    - #1 Persija (21 poin)
    - #2 Dewa United (20 poin)
-   - #3 Bali United (19 poin)
-   - #4 Madura United (19 poin)
-   - #5 Persita Tangerang (18 poin)
-   - #6 PERSIB Bandung (16 poin - 9 main: 5 menang, 1 seri, 3 kalah, gol 16-10 [+6]; proyeksi kemenangan live: 19 poin menyamai posisi 3 besar).
-4. RIWAYAT 9 LAGA RESMI PERSIB SUPER LEAGUE 2026/2027:
+   - #3 PERSIB Bandung (19 poin - 10 main: 6 menang, 1 seri, 3 kalah, gol 18-11 [+7], unggul H2H atas Bali United)
+   - #4 Bali United (19 poin - 10 main: 6M 1S 3K, gol 27-11 [+16])
+   - #5 Madura United (19 poin - 10 main: 6M 1S 3K, gol 16-11 [+5])
+   - #6 Persita Tangerang (18 poin - 9 main)
+4. RIWAYAT 10 LAGA RESMI PERSIB SUPER LEAGUE 2026/2027:
    - P1: PERSIB 3-1 Persijap Jepara (M)
    - P2: Madura United 2-1 PERSIB (K)
    - P3: PERSIB 2-0 Bhayangkara FC (M)
@@ -374,10 +361,13 @@ ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
    - P7: Garudayaksa 1-2 PERSIB (M)
    - P8: PERSIB 4-0 Isenmulang Kalteng (M)
    - P9: Java United 2-1 PERSIB (K)
-5. ASIA 2026/2027:
+   - P10: PERSIB 2-1 Bali United (M)
+5. JADWAL TERDEKAT BERIKUTNYA:
+   - Super League Pekan 11: Persita Tangerang vs PERSIB Bandung di Stadion Indomilk Arena, Minggu 29 November 2026 pukul 19:00 WIB.
+6. ASIA 2026/2027:
    - ACL Two Grup E: PERSIB Juara Grup E rekor 100% (4 main, 4 menang, 12 poin, lolos 16 Besar Asia).
    - Shopee Cup Grup B: PERSIB pemuncak klasemen Grup B (2 main, 2 menang, 6 poin, gol 9-1). Laga terdekat Shopee Cup: MD3 tandang vs Lion City Sailors (10 Des 2026, 19:30 WIB), disusul Super Big Match MD4 vs Johor Darul Ta'zim (17 Des 2026, 19:00 WIB).
-Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai dinamika realtime laga Pekan 10 kontra Bali United dan dominasi musim 2026/2027 tanpa basa-basi atau simbol markdown.`;
+Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kemenangan 2-1 Pekan 10 atas Bali United, lonjakan ke posisi 3 besar, dan persiapan Pekan 11 vs Persita tanpa basa-basi atau simbol markdown.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',

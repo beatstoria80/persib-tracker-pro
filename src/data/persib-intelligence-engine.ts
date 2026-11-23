@@ -52,11 +52,18 @@ export interface QuickPrompt {
 
 export const PERSIB_QUICK_PROMPTS: QuickPrompt[] = [
   {
-    id: 'p-live-match',
-    label: '🔴 Live Match & Kick-Off',
+    id: 'p-pekan10-ft',
+    label: 'Hasil Pekan 10 (2-1 Bali Utd)',
     category: 'match',
-    icon: '⚡',
-    question: 'Bagaimana update skor realtime dan jalannya pertandingan Persib vs Bali United saat ini?',
+    icon: '🏆',
+    question: 'Bagaimana ulasan hasil akhir kemenangan 2-1 Persib atas Bali United di Pekan 10?',
+  },
+  {
+    id: 'p-pekan11-jadwal',
+    label: 'Jadwal Pekan 11 vs Persita',
+    category: 'match',
+    icon: '⚔️',
+    question: 'Kapan jadwal laga terdekat Persib di Super League Pekan 11 melawan Persita Tangerang?',
   },
   {
     id: 'p-top-scorer',
@@ -66,18 +73,11 @@ export const PERSIB_QUICK_PROMPTS: QuickPrompt[] = [
     question: 'Siapa saja daftar pencetak gol terbanyak (top scorer) dan raja assist Persib di semua event musim 2026/2027?',
   },
   {
-    id: 'p-bali-united',
-    label: 'Jadwal & Taktik vs Bali United',
-    category: 'match',
-    icon: '⚔️',
-    question: 'Kapan jadwal kick-off resmi Persib di Super League Pekan 10 dan bagaimana persiapan taktis Bojan Hodak?',
-  },
-  {
     id: 'p-klasemen-liga',
-    label: 'Klasemen Super League 2026/2027',
+    label: 'Klasemen Peringkat 3 Super League',
     category: 'standing',
     icon: '📊',
-    question: 'Di posisi berapa Persib di klasemen sementara Super League dan berapa jarak poin dengan peringkat atas?',
+    question: 'Di posisi berapa Persib di klasemen sementara Super League pasca kemenangan Pekan 10?',
   },
   {
     id: 'p-shopee-cup',
@@ -128,13 +128,13 @@ export class PersibIntelligenceEngine {
 
     const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
 
-    // Metrik Default Musim Aktif 2026/2027
+    // Metrik Default Musim Aktif 2026/2027 (Pasca Pekan 10 Selesai)
     const defaultMetrics = {
-      leagueRank: 6,
-      points: 16,
-      matchRecord: '9 Main: 5M 1S 3K (Gol 16-10 [+6])',
-      nextOpponent: 'Bali United FC',
-      nextMatchDate: 'Minggu, 22 November 2026 (19:00 WIB)',
+      leagueRank: 3,
+      points: 19,
+      matchRecord: '10 Main: 6M 1S 3K (Gol 18-11 [+7])',
+      nextOpponent: 'Persita Tangerang',
+      nextMatchDate: 'Minggu, 29 November 2026 (19:00 WIB)',
       shopeeRank: 1,
       aclStatus: 'Juara Grup E (Lolos 16 Besar Asia)',
     };
@@ -156,12 +156,13 @@ export class PersibIntelligenceEngine {
     ) {
       const text = `Berikut adalah Daftar Resmi Top Scorer & Top Assist PERSIB Bandung Musim 2026/2027 terpisah untuk masing-masing ajang kompetisi:
 
-1. BRI LIGA 1 / SUPER LEAGUE (Total 16 Gol):
-- David da Silva: 6 Gol (Top Scorer Persib di Liga 1)
+1. BRI LIGA 1 / SUPER LEAGUE (Total 18 Gol dari 10 Laga):
+- David da Silva: 7 Gol (Top Scorer Memimpin Liga 1)
 - Mariano Peralta: 4 Gol
 - Ragnar Oratmangoen: 3 Gol
 - Tyronne del Pino: 2 Gol
-- Thom Haye: 1 Gol, 5 Assist (Raja Assist Liga 1)
+- Balša Sekulić: 1 Gol
+- Thom Haye: 1 Gol, 7 Assist (Raja Assist Tak Tertandingi Liga 1)
 - Marc Klok: 1 Gol, 2 Assist
 
 2. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Total 8 Gol):
@@ -188,89 +189,79 @@ export class PersibIntelligenceEngine {
         category: 'squad',
         actionableTips: [
           'Buka tab "Top Skor" di Match Center untuk melihat visual podium sepatu emas interaktif.',
-          'David da Silva memimpin perburuan Golden Boot internal dengan rata-rata 0.67 gol per pertandingan.',
-          'Thom Haye mencatatkan efisiensi konversi umpan kunci tertinggi (88.4%) di kompetisi AFC.'
+          'David da Silva kini bertengger di puncak daftar top scorer Super League dengan 7 gol.',
+          'Thom Haye mencatatkan total 10 assist di seluruh kompetisi resmi musim 2026/2027.'
         ],
         metricsContext: defaultMetrics,
       };
     }
 
     // =========================================================================
-    // KATEGORI 1: JADWAL RESMI & REALTIME KICK-OFF / IN-MATCH TRACKER (PEKAN 10)
+    // KATEGORI 1: HASIL RESMI PEKAN 10 & JADWAL LAGA MENDATANG PEKAN 11
     // =========================================================================
     if (
       q.includes('bali united') ||
       q.includes('pekan 10') ||
+      q.includes('pekan 11') ||
+      q.includes('persita') ||
       q.includes('laga terdekat') ||
-      q.includes('besok') ||
-      q.includes('kick off') ||
-      q.includes('kick-off') ||
-      q.includes('skor') ||
-      q.includes('score') ||
-      q.includes('live') ||
-      q.includes('menit') ||
-      q.includes('update laga') ||
-      (q.includes('jadwal') && (q.includes('liga') || q.includes('super league') || q.includes('gbla') || q.includes('kandang') || q.includes('persib')))
+      q.includes('pertandingan berikutnya') ||
+      q.includes('lawan siapa') ||
+      q.includes('jadwal') ||
+      q.includes('hasil laga') ||
+      q.includes('hasil akhir') ||
+      q.includes('skor akhir') ||
+      q.includes('skor')
     ) {
-      const isLiveQuery =
-        q.includes('live') ||
-        q.includes('skor') ||
-        q.includes('score') ||
-        q.includes('realtime') ||
-        q.includes('real-time') ||
-        q.includes('kick off') ||
-        q.includes('kick-off') ||
-        q.includes('menit') ||
-        q.includes('sedang main') ||
-        q.includes('sedang bertanding') ||
-        q.includes('berlangsung') ||
-        q.includes('cetak gol') ||
-        q.includes('jalannya laga') ||
-        q.includes('update laga');
+      const isPastMatchQuery =
+        q.includes('bali united') ||
+        q.includes('pekan 10') ||
+        q.includes('kemarin') ||
+        q.includes('tadi malam') ||
+        q.includes('hasil akhir') ||
+        q.includes('skor akhir');
 
       let text = '';
-      if (isLiveQuery) {
-        text = `🔴 **LIVE MATCH TELEMETRY (REALTIME IN-MATCH)**
+      if (isPastMatchQuery) {
+        text = `🏆 **HASIL AKHIR RESMI SUPER LEAGUE PEKAN 10 (2026/2027)**
 
-⚔️ Pertandingan Sedang Berlangsung:
+⚔️ Pertandingan Telah Selesai (Full Time):
 * **Laga**: **PERSIB Bandung 2 - 1 Bali United FC**
-* ⏱️ **Menit Laga**: **Menit 74' (Babak Kedua Berjalan)**
-* 🏟️ **Stadion**: Gelora Bandung Lautan Api (GBLA), Bandung
-* 📌 **Status**: **LIVE - SEDANG BERLANGSUNG**
+* 📅 **Tanggal**: Minggu, 22 November 2026
+* 🏟️ **Stadion**: Gelora Bandung Lautan Api (GBLA), Gedebage, Bandung
+* 📌 **Status**: **FINISHED (FULL TIME)**
 
 ---
 
-⚽ Linimasa Peristiwa Utama (Live Match Events):
-* 18' ⚽ **GOOOL PERSIB!** Balša Sekulić menyontek umpan silang akurat Thom Haye ke sudut gawang (1-0)!
+⚽ Linimasa Gol & Momen Krusial:
+* 18' ⚽ **GOOOL PERSIB!** Balša Sekulić mencocor umpan silang akurat Thom Haye ke sudut gawang (1-0).
 * 41' ⚽ **Gol Bali United!** Privat Mbarga menuntaskan transisi serangan balik cepat (1-1).
 * 45+2' ⏱️ **Turun Minum (HT)**: PERSIB Bandung 1 - 1 Bali United di hadapan Bobotoh GBLA.
 * 58' 🔁 **Substitusi Taktis**: Bojan Hodak memasukkan Mariano Peralta menggantikan Beckham Putra.
-* 67' ⚽ **GOOOL KEPALA EMAS!** David da Silva menyambar sepak pojok melengkung Thom Haye (2-1) yang mengguncang GBLA!
-* 71' 🟨 **Kartu Kuning**: Ricky Fajrin menjatuhkan Ragnar Oratmangoen yang melakukan akselerasi solo run.
+* 67' ⚽ **GOOOL KEPALA EMAS!** David da Silva menyambar sepak pojok melengkung Thom Haye (2-1) yang mengunci 3 poin kemenangan!
+* 90+4' ⏱️ **Peluit Panjang FT**: Kemenangan 2-1 mengantarkan PERSIB melesat ke peringkat 3 klasemen sementara!
 
 ---
 
-🔥 Statistik & Dinamika Lapangan:
-* **Penguasaan Bola**: PERSIB 58% — 42% Bali United
-* **Tembakan (On Target)**: 15 (7) — 8 (3)
-* **Akurasi Umpan**: 87% — 81%
-* **Dampak Klasemen**: Keunggulan 2-1 ini melesatkan PERSIB ke posisi 3 besar Super League dengan perolehan 19 poin menyamai Bali United!`;
+🔥 Dampak Klasemen & Taktikal:
+* Raihan 3 poin emas membuat Maung Bandung mengumpulkan 19 poin (unggul head-to-head langsung atas Bali United).
+* Duo predator Balša Sekulić dan David da Silva tampil mematikan memanfaatkan visi permainan kelas dunia Thom Haye.`;
       } else {
-        text = `Berikut detail resmi dan analisis jelang **Super Big Match Super League Pekan 10 (2026/2027)**:
+        text = `Berikut jadwal resmi pertandingan terdekat **PERSIB Bandung di Super League 2026/2027**:
 
-⚔️ Pertandingan Terdekat:
-* **Laga**: **PERSIB Bandung (#6, 16 Poin) vs Bali United FC (#3, 19 Poin)**
-* 📅 **Hari/Tanggal**: **Minggu, 22 November 2026**
+⚔️ Pertandingan Terdekat (Pekan 11):
+* **Laga**: **Persita Tangerang vs PERSIB Bandung (Laga Tandang)**
+* 📅 **Hari/Tanggal**: **Minggu, 29 November 2026**
 * ⏰ **Waktu Kick-off**: **19:00 WIB** (Laga Malam)
-* 🏟️ **Stadion**: Gelora Bandung Lautan Api (GBLA), Gedebage, Bandung
-* 📌 **Status**: **LIVE / KICK-OFF RESMI** (Pantau update skor langsung dan menit pertandingan secara realtime).
+* 🏟️ **Stadion**: Indomilk Arena, Tangerang
+* 📌 **Status**: **SCHEDULED** (Laga Mendatang)
 
 ---
 
-🔥 Signifikansi Taktikal & Klasemen:
-1. **Peluang Lonjakan Klasemen**: Kemenangan 3 poin di hadapan Bobotoh akan membuat Maung Bandung mengumpulkan 19 poin, melompat langsung ke posisi 3 besar Super League.
-2. **Kondisi Skuad**: Trio pilar Thom Haye, Sandy Walsh, dan Marc Klok dalam kondisi bugar 100% didukung striker predator David da Silva dan Balša Sekulić.
-3. **Head to Head & Mentalitas**: Rekor tak terkalahkan di kandang GBLA menjadi modal krusial menghadapi agresivitas lini serang Serdadu Tridatu.`;
+🎯 Misi Taktikal Bojan Hodak:
+1. **Lanjutkan Tren Kemenangan**: Mengamankan 3 poin tandang di Indomilk Arena untuk terus menekan Persija (21 poin) dan Dewa United (20 poin) di puncak klasemen.
+2. **Kesiapan Skuad**: David da Silva, Thom Haye, Sandy Walsh, dan Kevin Mendoza dalam kondisi bugar 100%.
+3. **Fokus Lanjutan**: Usai Pekan 11, Maung Bandung akan melakoni Super Big Match Pekan 12 kontra Persebaya (6 Des 2026) dan lawatan Shopee Cup ke markas Lion City Sailors (10 Des 2026).`;
       }
 
       return {
@@ -279,22 +270,18 @@ export class PersibIntelligenceEngine {
         text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'match',
-        actionableTips: isLiveQuery
+        actionableTips: isPastMatchQuery
           ? [
-              'David da Silva dan Balša Sekulić tampil tajam memanfaatkan kreativitas Thom Haye.',
-              'Pertahanan Sandy Walsh dan Patricio Matricardi solid meredam serangan balik sayap Bali United.',
-              'Pantau widget live telemetry di dashboard untuk update menit per menit.'
+              'Kemenangan atas Bali United menegaskan dominasi rekor kandang tak terkalahkan di GBLA.',
+              'David da Silva kini bertengger di puncak daftar top scorer Super League dengan 7 gol.',
+              'Persiapan fokus langsung dialihkan ke laga tandang Pekan 11 kontra Persita Tangerang.'
             ]
           : [
-              'Dukung langsung di GBLA atau saksikan siaran langsung resmi mulai pukul 18:30 WIB.',
-              'Waspadai serangan balik cepat Bali United melalui transisi sayap di 15 menit awal babak pertama.',
-              'Pantau Live Telemetry Widget di dashboard aplikasi untuk update taktis berkala saat kick-off.'
+              'Saksikan siaran langsung resmi laga tandang vs Persita mulai pukul 18:30 WIB.',
+              'Waspadai skema transisi cepat Pendekar Cisadane di kandang Indomilk Arena.',
+              'Pantau widget telemetri pertandingan di aplikasi untuk update susunan pemain jelang kick-off.'
             ],
-        metricsContext: {
-          ...defaultMetrics,
-          points: isLiveQuery ? 19 : defaultMetrics.points,
-          leagueRank: isLiveQuery ? 3 : defaultMetrics.leagueRank,
-        },
+        metricsContext: defaultMetrics,
       };
     }
 
@@ -308,21 +295,21 @@ export class PersibIntelligenceEngine {
       !q.includes('acl') &&
       !q.includes('asia')
     ) {
-      const text = `Berikut adalah **Klasemen Resmi Super League 2026/2027** pasca rampungnya seluruh pertandingan Pekan 9:
+      const text = `Berikut adalah **Klasemen Resmi Super League 2026/2027** pasca rampungnya pertandingan Pekan 10:
 
 📊 Papan Atas Super League 2026/2027:
-1. **Persija Jakarta** — 21 Poin (Main 9: 6M 3S 0K | Selisih Gol +9)
-2. **Dewa United** — 20 Poin (Main 10: 6M 2S 2K | Selisih Gol +7)
-3. **Bali United** — 19 Poin (Main 9: 6M 1S 2K | Selisih Gol +6)
-4. **Madura United** — 19 Poin (Main 10: 6M 1S 3K | Selisih Gol +5)
-5. **Persita Tangerang** — 18 Poin (Main 9: 5M 3S 1K | Selisih Gol +4)
-6. 🔵 **PERSIB Bandung** — **16 Poin** (Main 9: 5M 1S 3K | Gol 16-10 [+6])
+1. **Persija Jakarta** — 21 Poin (Main 9: 7M 0S 2K | Selisih Gol +11)
+2. **Dewa United** — 20 Poin (Main 10: 6M 2S 2K | Selisih Gol +3)
+3. 🔵 **PERSIB Bandung** — **19 Poin** (Main 10: 6M 1S 3K | Gol 18-11 [+7], Unggul Head-to-Head atas Bali United)
+4. **Bali United** — 19 Poin (Main 10: 6M 1S 3K | Gol 27-11 [+16])
+5. **Madura United** — 19 Poin (Main 10: 6M 1S 3K | Gol 16-11 [+5])
+6. **Persita Tangerang** — 18 Poin (Main 9: 5M 3S 1K | Selisih Gol +7)
 
 ---
 
 💡 Catatan Analis Taktis:
-* PERSIB menyimpan tabungan 1 pertandingan lebih sedikit dibandingkan Dewa United dan Madura United.
-* Tambahan 3 poin kontra Bali United besok malam (22 Nov 2026) akan merapatkan selisih poin ke puncak klasemen menjadi hanya 2 angka!`;
+* Kemenangan 2-1 atas Bali United di GBLA berhasil melesatkan PERSIB Bandung langsung ke posisi 3 besar klasemen.
+* Jarak dengan pemuncak klasemen Persija kini hanya tersisa 2 poin, membuka peluang besar perebutan takhta juara!`;
 
       return {
         id: 'msg-' + Date.now(),
@@ -331,9 +318,9 @@ export class PersibIntelligenceEngine {
         timestamp: timeStr,
         category: 'standing',
         actionableTips: [
-          'Kemenangan atas Bali United berpotensi mengangkat PERSIB langsung ke posisi 3 besar.',
-          'Produktivitas gol PERSIB (16 gol) merupakan salah satu yang tertinggi di Super League.',
-          'Gunakan filter Klasemen di Match Center untuk simulasi skenario perolehan poin pekan ini.'
+          'PERSIB berada di posisi prima jalur perebutan gelar juara Super League 2026/2027.',
+          'Produktivitas gol PERSIB (18 gol) menjadi salah satu lini serang paling mematikan di liga.',
+          'Gunakan filter Klasemen di Match Center untuk simulasi skenario poin Pekan 11.'
         ],
         metricsContext: defaultMetrics,
       };
@@ -555,8 +542,9 @@ Maung Bandung mencetak sejarah baru sebagai klub Indonesia dengan performa palin
 Saya adalah **Persib Tactical Intelligence Assistant**, asisten AI resmi yang siap menjawab segala pertanyaan Bobotoh seputar **PERSIB Bandung musim 2026/2027**.
 
 🔥 Informasi Hangat Hari Ini:
-* ⚔️ **Laga Mendatang**: Super Big Match Pekan 10 Super League kontra **Bali United FC** besok **Minggu, 22 November 2026 pukul 19:00 WIB** di GBLA!
-* 📊 **Klasemen**: PERSIB berada di peringkat #6 (16 Poin). Kemenangan besok malam akan melesatkan Maung Bandung ke posisi 3 besar menyamai Bali United (19 Poin).
+* 🏆 **Hasil Laga Terkini**: Super Big Match Pekan 10 Super League tuntas dengan kemenangan dramatis **PERSIB Bandung 2 - 1 Bali United FC** di GBLA!
+* 📊 **Klasemen**: PERSIB melesat ke peringkat #3 besar (19 Poin, unggul head-to-head langsung atas Bali United).
+* ⚔️ **Laga Mendatang**: Pekan 11 tandang kontra **Persita Tangerang** (Minggu, 29 November 2026 pukul 19:00 WIB di Indomilk Arena).
 * 🌏 **Kompetisi Asia**: PERSIB memuncaki Grup B Shopee Cup (6 Poin, Gol 9-1) dan mengunci tiket 16 Besar ACL Two dengan rekor 100% menang!
 
 Tanyakan apa saja seputar taktik Bojan Hodak, kondisi pemain, atau jadwal berikutnya!`;
@@ -590,14 +578,14 @@ Tanyakan apa saja seputar taktik Bojan Hodak, kondisi pemain, atau jadwal beriku
       const text = `Berikut rekap hasil pertandingan resmi **PERSIB Bandung Musim 2026/2027**:
 
 🏆 Hasil Laga Terkini:
-1. **Shopee Cup (MD2 - 19 Nov 2026)**:
+1. **Super League (Pekan 10 - 22 Nov 2026)**:
+   - **PERSIB Bandung 2 - 1 Bali United FC** (Kemenangan krusial di GBLA berkat gol Balša Sekulić dan David da Silva).
+2. **Shopee Cup (MD2 - 19 Nov 2026)**:
    - **PERSIB Bandung 6 - 0 Shan United** (Pesta gol di hadapan Bobotoh, mengokohkan posisi #1 Grup B).
-2. **Super League (Pekan 9 - 14 Nov 2026)**:
-   - **Arema FC 1 - 2 PERSIB Bandung** (Kemenangan krusial tandang berkat gol Mariano Peralta dan Thom Haye).
 3. **ACL Two (MD4 - 6 Nov 2026)**:
    - **PERSIB Bandung 2 - 1 Melbourne Victory** (Rekor sempurna 100% menang 4 kali, memastikan tiket Babak 16 Besar Asia!).
 
-Semua fokus tim saat ini tercurah pada laga krusial kontra Bali United besok malam (22 Nov 2026) di GBLA!`;
+Semua fokus tim saat ini tercurah pada laga tandang krusial kontra Persita Tangerang (Pekan 11, 29 Nov 2026) di Indomilk Arena!`;
 
       return {
         id: 'msg-' + Date.now(),
@@ -673,10 +661,11 @@ Silakan ajukan pertanyaan spesifik mengenai turnamen internasional, profil klub 
 Berikut panduan terpadu seputar seluruh agenda dan performa resmi **PERSIB Bandung Musim 2026/2027**:
 
 🎯 Ringkasan Agenda & Posisi Maung Bandung:
-1. **Laga Terdekat**: Super Big Match Pekan 10 Super League kontra **Bali United FC** pada **Minggu, 22 November 2026, 19:00 WIB** di GBLA.
-2. **Klasemen Domestik**: PERSIB di peringkat ke-6 dengan **16 Poin** (selisih 3 angka dari 3 besar).
-3. **Shopee Cup (Grup B)**: Kokoh di **Puncak Klasemen** (6 Poin, Selisih Gol +8). Laga berikutnya vs Lion City Sailors (10 Des 2026).
-4. **ACL Two (Asia)**: Resmi menyegel status **Juara Grup E** dengan rekor kemenangan 100% (12 Poin) menuju Babak 16 Besar Asia.
+1. **Hasil Terkini**: Kemenangan gemilang 2 - 1 atas **Bali United FC** di GBLA (Pekan 10 Super League).
+2. **Klasemen Domestik**: PERSIB melesat ke peringkat ke-3 dengan **19 Poin** (hanya terpaut 2 poin dari puncak klasemen).
+3. **Laga Terdekat**: Pekan 11 Super League kontra **Persita Tangerang** pada **Minggu, 29 November 2026, 19:00 WIB** di Indomilk Arena.
+4. **Shopee Cup (Grup B)**: Kokoh di **Puncak Klasemen** (6 Poin, Selisih Gol +8). Laga berikutnya vs Lion City Sailors (10 Des 2026).
+5. **ACL Two (Asia)**: Resmi menyegel status **Juara Grup E** dengan rekor kemenangan 100% (12 Poin) menuju Babak 16 Besar Asia.
 
 Silakan ajukan pertanyaan spesifik seputar taktik Bojan Hodak, kondisi pemain, atau jadwal laga mendatang!`;
 
