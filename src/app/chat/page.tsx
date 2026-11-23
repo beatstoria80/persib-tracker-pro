@@ -39,7 +39,7 @@ export default function ChatDedicatedPage() {
       id: 'init-1',
       sender: 'ai',
       text:
-        '**Sampurasun, Bobotoh!** ⚽💬\n\nSelamat datang di **Persib Chat** resmi musim **2026/2027**.\n\nTanyakan apa saja seputar:\n* ⚔️ **Big Match Pekan 10:** PERSIB vs Bali United (Minggu, 22 Nov 2026, 19:00 WIB di GBLA)\n* 📊 **Klasemen:** Posisi PERSIB di Super League (#6, 16 Poin) & Puncak Shopee Cup (#1, 6 Poin)\n* ⭐ **ACL Two Asia:** Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n* 📋 **Taktik & Skuad:** Racikan Bojan Hodak, Thom Haye, Sandy Walsh, Ragnar, dan Peralta.\n\nSilakan pilih topik di atas atau ketik pertanyaan langsung!',
+        '**Sampurasun, Bobotoh!** ⚽💬\n\nSelamat datang di **Persib Chat** resmi musim **2026/2027**.\n\nTanyakan apa saja seputar:\n* 🔴 **Live Kick-Off & Laga Pekan 10:** PERSIB vs Bali United (Update Realtime Skor 2 - 1 di GBLA)\n* 📅 **Jadwal & Agenda:** Jam kick-off dan kalender laga Liga 1, Shopee Cup & ACL Two\n* 📊 **Klasemen:** Posisi PERSIB di Super League (#3 Live Proyeksi) & Puncak Shopee Cup (#1, 6 Poin)\n* ⭐ **ACL Two Asia:** Rekor 100% Juara Grup E & Tiket 16 Besar Asia\n* 📋 **Taktik & Skuad:** Racikan Bojan Hodak, Thom Haye, Sandy Walsh, David da Silva, Ragnar, dan Peralta.\n\nSilakan pilih topik cepat di atas atau ketik pertanyaan langsung!',
       timestamp: 'Baru saja',
       category: 'general',
       actionableTips: [

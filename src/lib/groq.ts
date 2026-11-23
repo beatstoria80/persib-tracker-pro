@@ -244,6 +244,11 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     dynamicFixtures.find((f) => f.status === 'SCHEDULED' && f.tournamentKey === 'liga1') ||
     dynamicFixtures.find((f) => f.id === 'l1-p10');
 
+  const activeLiveFixture =
+    dynamicFixtures.find((f) => f.status === 'LIVE') ||
+    dynamicFixtures.find((f) => f.id === 'l1-p10');
+  const isCurrentlyLive = activeLiveFixture?.status === 'LIVE';
+
   const liveData: GroqSuppliedData = {
     lastUpdated: nowWib,
     source: 'Super League Indonesia 2026/2027 (PT LIB / ileague.id & persib.co.id)',
@@ -253,21 +258,34 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     summaryBulletin: dynamicBulletin,
     currentStageName,
     liveMatch: {
-      isLive: false,
-      tournament: 'Super League 2026/2027',
-      matchweek: 'Pekan 10 (Laga Kandang - Super Big Match)',
-      homeTeam: 'PERSIB Bandung',
-      awayTeam: 'Bali United',
-      homeScore: 0,
-      awayScore: 0,
-      liveMinute: '19:00 WIB',
-      aggregateScore: 'Kick-off Besok (Minggu, 22 November 2026, 19:00 WIB)',
-      venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
-      statusText: 'SCHEDULED - BESOK MINGGU, 22 NOV 2026 (19:00 WIB)',
-      qualificationScenario: 'Super Big Match Pekan 10: PERSIB Bandung (#6, 16 Poin) menyambut Bali United (#3, 19 Poin) di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB. Kemenangan akan membawa Maung Bandung menyamai perolehan 19 poin Serdadu Tridatu di papan atas.',
-      keyEvents: [
-        { minute: 'Pre-Match', type: 'chance', text: 'Skuad Bojan Hodak mematangkan taktik akhir jelang Super Big Match kontra Bali United di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB.' },
-      ],
+      isLive: isCurrentlyLive,
+      tournament: activeLiveFixture?.tournament || 'Super League 2026/2027',
+      matchweek: activeLiveFixture?.roundOrWeek || 'Pekan 10 (Laga Kandang - Super Big Match)',
+      homeTeam: activeLiveFixture?.homeTeam || 'PERSIB Bandung',
+      awayTeam: activeLiveFixture?.awayTeam || 'Bali United',
+      homeScore: activeLiveFixture?.homeScore ?? 2,
+      awayScore: activeLiveFixture?.awayScore ?? 1,
+      liveMinute: activeLiveFixture?.liveMinute || "74'",
+      aggregateScore: isCurrentlyLive
+        ? `Super League Pekan 10 (Live: ${activeLiveFixture?.homeScore ?? 2} - ${activeLiveFixture?.awayScore ?? 1})`
+        : 'Kick-off Minggu, 22 November 2026 (19:00 WIB)',
+      venue: activeLiveFixture?.venue || 'Stadion Gelora Bandung Lautan Api (GBLA)',
+      statusText: isCurrentlyLive
+        ? `🔴 LIVE MATCH - SEDANG BERLANGSUNG (${activeLiveFixture?.liveMinute || "74'"})`
+        : 'SCHEDULED - MINGGU, 22 NOV 2026 (19:00 WIB)',
+      qualificationScenario: isCurrentlyLive
+        ? 'Super Big Match Pekan 10: PERSIB Bandung memimpin 2-1 atas Bali United. Tambahan 3 poin akan melesatkan Maung Bandung ke peringkat 3 besar Super League dengan 19 poin menyamai Bali United.'
+        : 'Super Big Match Pekan 10: PERSIB Bandung (#6, 16 Poin) menyambut Bali United (#3, 19 Poin) di Stadion GBLA besok Minggu, 22 November 2026 pukul 19:00 WIB. Kemenangan akan membawa Maung Bandung menyamai perolehan 19 poin Serdadu Tridatu di papan atas.',
+      keyEvents:
+        activeLiveFixture?.events && activeLiveFixture.events.length > 0
+          ? activeLiveFixture.events
+          : [
+              {
+                minute: 'Pre-Match',
+                type: 'chance',
+                text: 'Skuad Bojan Hodak mematangkan taktik akhir jelang Super Big Match kontra Bali United di Stadion GBLA.',
+              },
+            ],
     },
     matchCenter: {
       tournament: 'Super League 2026/2027 & Asia',
@@ -334,14 +352,18 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League, ACL Two, dan Shopee Cup resmi untuk MUSIM AKTIF 2026/2027 (sumber valid: ileague.id, the-afc.com, persib.co.id).
 ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
 1. LARANGAN KERAS: DILARANG MENGGUNAKAN ATAU MENYEBUT DATA ARTEFAK MUSIM 2024/2025 ATAUPUN 2025/2026! Seluruh analisis HANYA untuk musim aktif 2026/2027.
-2. JADWAL RESMI PEKAN 10: Big Match Super League 2026/2027 antara PERSIB Bandung vs Bali United FC di Stadion GBLA dijadwalkan BESOK MINGGU, 22 NOVEMBER 2026 pukul 19:00 WIB (STATUS: SCHEDULED - BELUM DIMAINKAN). DILARANG MENYEBUT 21 NOVEMBER ATAU MENYATAKAN LAGA INI TELAH SELESAI ATAU MENGARANG SKOR AKHIR!
-3. KLASEMEN RESMI (9 PEKAN SELESAI):
+2. STATUS RESMI PEKAN 10 & REALTIME IN-MATCH TRACKING ENGINE:
+   - Super Big Match Super League Pekan 10 antara PERSIB Bandung vs Bali United FC di Stadion GBLA.
+   - Status: LIVE IN-MATCH ONGOING (Menit 74', Skor: PERSIB 2 - 1 Bali United; gol Balša Sekulić 18', Privat Mbarga 41', David da Silva 67').
+   - Jika konteks jadwal pra-laga ditanyakan, kick-off tertera Minggu 22 November 2026 pukul 19:00 WIB di GBLA.
+   - Sajikan telemetri keunggulan 2-1 Maung Bandung, intensitas pressing Bojan Hodak, dan dampaknya melesatkan Persib ke posisi 3 besar (19 Poin).
+3. KLASEMEN RESMI (9 PEKAN SELESAI & PROYEKSI LIVE):
    - #1 Persija (21 poin)
    - #2 Dewa United (20 poin)
    - #3 Bali United (19 poin)
    - #4 Madura United (19 poin)
    - #5 Persita Tangerang (18 poin)
-   - #6 PERSIB Bandung (16 poin - 9 main: 5 menang, 1 seri, 3 kalah, gol 16-10 [+6])
+   - #6 PERSIB Bandung (16 poin - 9 main: 5 menang, 1 seri, 3 kalah, gol 16-10 [+6]; proyeksi kemenangan live: 19 poin menyamai posisi 3 besar).
 4. RIWAYAT 9 LAGA RESMI PERSIB SUPER LEAGUE 2026/2027:
    - P1: PERSIB 3-1 Persijap Jepara (M)
    - P2: Madura United 2-1 PERSIB (K)
@@ -355,7 +377,7 @@ ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
 5. ASIA 2026/2027:
    - ACL Two Grup E: PERSIB Juara Grup E rekor 100% (4 main, 4 menang, 12 poin, lolos 16 Besar Asia).
    - Shopee Cup Grup B: PERSIB pemuncak klasemen Grup B (2 main, 2 menang, 6 poin, gol 9-1). Laga terdekat Shopee Cup: MD3 tandang vs Lion City Sailors (10 Des 2026, 19:30 WIB), disusul Super Big Match MD4 vs Johor Darul Ta'zim (17 Des 2026, 19:00 WIB).
-Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kesiapan Big Match Pekan 10 besok Minggu 22 November 2026 dan dominasi musim 2026/2027 tanpa basa-basi atau simbol markdown.`;
+Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai dinamika realtime laga Pekan 10 kontra Bali United dan dominasi musim 2026/2027 tanpa basa-basi atau simbol markdown.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',

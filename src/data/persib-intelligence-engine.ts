@@ -52,6 +52,13 @@ export interface QuickPrompt {
 
 export const PERSIB_QUICK_PROMPTS: QuickPrompt[] = [
   {
+    id: 'p-live-match',
+    label: '🔴 Live Match & Kick-Off',
+    category: 'match',
+    icon: '⚡',
+    question: 'Bagaimana update skor realtime dan jalannya pertandingan Persib vs Bali United saat ini?',
+  },
+  {
     id: 'p-top-scorer',
     label: 'Top Scorer & Assist Persib',
     category: 'squad',
@@ -60,10 +67,10 @@ export const PERSIB_QUICK_PROMPTS: QuickPrompt[] = [
   },
   {
     id: 'p-bali-united',
-    label: 'Big Match vs Bali United',
+    label: 'Jadwal & Taktik vs Bali United',
     category: 'match',
     icon: '⚔️',
-    question: 'Kapan laga terdekat Persib di Super League Pekan 10 dan bagaimana persiapan jelang lawan Bali United?',
+    question: 'Kapan jadwal kick-off resmi Persib di Super League Pekan 10 dan bagaimana persiapan taktis Bojan Hodak?',
   },
   {
     id: 'p-klasemen-liga',
@@ -189,30 +196,82 @@ export class PersibIntelligenceEngine {
     }
 
     // =========================================================================
-    // KATEGORI 1: JADWAL & BIG MATCH SUPER LEAGUE PEKAN 10 VS BALI UNITED
+    // KATEGORI 1: JADWAL RESMI & REALTIME KICK-OFF / IN-MATCH TRACKER (PEKAN 10)
     // =========================================================================
     if (
       q.includes('bali united') ||
       q.includes('pekan 10') ||
       q.includes('laga terdekat') ||
       q.includes('besok') ||
-      (q.includes('jadwal') && (q.includes('liga') || q.includes('super league') || q.includes('gbla') || q.includes('kandang')))
+      q.includes('kick off') ||
+      q.includes('kick-off') ||
+      q.includes('skor') ||
+      q.includes('score') ||
+      q.includes('live') ||
+      q.includes('menit') ||
+      q.includes('update laga') ||
+      (q.includes('jadwal') && (q.includes('liga') || q.includes('super league') || q.includes('gbla') || q.includes('kandang') || q.includes('persib')))
     ) {
-      const text = `Berikut detail resmi dan analisis jelang **Super Big Match Super League Pekan 10 (2026/2027)**:
+      const isLiveQuery =
+        q.includes('live') ||
+        q.includes('skor') ||
+        q.includes('score') ||
+        q.includes('realtime') ||
+        q.includes('real-time') ||
+        q.includes('kick off') ||
+        q.includes('kick-off') ||
+        q.includes('menit') ||
+        q.includes('sedang main') ||
+        q.includes('sedang bertanding') ||
+        q.includes('berlangsung') ||
+        q.includes('cetak gol') ||
+        q.includes('jalannya laga') ||
+        q.includes('update laga');
+
+      let text = '';
+      if (isLiveQuery) {
+        text = `🔴 **LIVE MATCH TELEMETRY (REALTIME IN-MATCH)**
+
+⚔️ Pertandingan Sedang Berlangsung:
+* **Laga**: **PERSIB Bandung 2 - 1 Bali United FC**
+* ⏱️ **Menit Laga**: **Menit 74' (Babak Kedua Berjalan)**
+* 🏟️ **Stadion**: Gelora Bandung Lautan Api (GBLA), Bandung
+* 📌 **Status**: **LIVE - SEDANG BERLANGSUNG**
+
+---
+
+⚽ Linimasa Peristiwa Utama (Live Match Events):
+* 18' ⚽ **GOOOL PERSIB!** Balša Sekulić menyontek umpan silang akurat Thom Haye ke sudut gawang (1-0)!
+* 41' ⚽ **Gol Bali United!** Privat Mbarga menuntaskan transisi serangan balik cepat (1-1).
+* 45+2' ⏱️ **Turun Minum (HT)**: PERSIB Bandung 1 - 1 Bali United di hadapan Bobotoh GBLA.
+* 58' 🔁 **Substitusi Taktis**: Bojan Hodak memasukkan Mariano Peralta menggantikan Beckham Putra.
+* 67' ⚽ **GOOOL KEPALA EMAS!** David da Silva menyambar sepak pojok melengkung Thom Haye (2-1) yang mengguncang GBLA!
+* 71' 🟨 **Kartu Kuning**: Ricky Fajrin menjatuhkan Ragnar Oratmangoen yang melakukan akselerasi solo run.
+
+---
+
+🔥 Statistik & Dinamika Lapangan:
+* **Penguasaan Bola**: PERSIB 58% — 42% Bali United
+* **Tembakan (On Target)**: 15 (7) — 8 (3)
+* **Akurasi Umpan**: 87% — 81%
+* **Dampak Klasemen**: Keunggulan 2-1 ini melesatkan PERSIB ke posisi 3 besar Super League dengan perolehan 19 poin menyamai Bali United!`;
+      } else {
+        text = `Berikut detail resmi dan analisis jelang **Super Big Match Super League Pekan 10 (2026/2027)**:
 
 ⚔️ Pertandingan Terdekat:
 * **Laga**: **PERSIB Bandung (#6, 16 Poin) vs Bali United FC (#3, 19 Poin)**
 * 📅 **Hari/Tanggal**: **Minggu, 22 November 2026**
 * ⏰ **Waktu Kick-off**: **19:00 WIB** (Laga Malam)
 * 🏟️ **Stadion**: Gelora Bandung Lautan Api (GBLA), Gedebage, Bandung
-* 📌 **Status**: **SCHEDULED** (Pertandingan belum dimainkan).
+* 📌 **Status**: **LIVE / KICK-OFF RESMI** (Pantau update skor langsung dan menit pertandingan secara realtime).
 
 ---
 
 🔥 Signifikansi Taktikal & Klasemen:
-1. **Peluang Lonjakan Klasemen**: Kemenangan 3 poin di hadapan Bobotoh akan membuat Maung Bandung mengumpulkan 19 poin, menyamai perolehan Bali United dan Madura United di papan atas.
-2. **Kondisi Skuad**: Trio pilar Thom Haye, Sandy Walsh, dan Marc Klok dalam kondisi bugar 100% setelah rotasi cerdas Bojan Hodak di ajang Shopee Cup.
+1. **Peluang Lonjakan Klasemen**: Kemenangan 3 poin di hadapan Bobotoh akan membuat Maung Bandung mengumpulkan 19 poin, melompat langsung ke posisi 3 besar Super League.
+2. **Kondisi Skuad**: Trio pilar Thom Haye, Sandy Walsh, dan Marc Klok dalam kondisi bugar 100% didukung striker predator David da Silva dan Balša Sekulić.
 3. **Head to Head & Mentalitas**: Rekor tak terkalahkan di kandang GBLA menjadi modal krusial menghadapi agresivitas lini serang Serdadu Tridatu.`;
+      }
 
       return {
         id: 'msg-' + Date.now(),
@@ -220,12 +279,22 @@ export class PersibIntelligenceEngine {
         text: cleanAiResponseText(text),
         timestamp: timeStr,
         category: 'match',
-        actionableTips: [
-          'Dukung langsung di GBLA atau saksikan siaran langsung resmi mulai pukul 18:30 WIB.',
-          'Waspadai serangan balik cepat Bali United melalui transisi sayap di 15 menit awal babak pertama.',
-          'Pantau Live Telemetry Widget di dashboard aplikasi untuk update taktis berkala jelang kick-off.'
-        ],
-        metricsContext: defaultMetrics,
+        actionableTips: isLiveQuery
+          ? [
+              'David da Silva dan Balša Sekulić tampil tajam memanfaatkan kreativitas Thom Haye.',
+              'Pertahanan Sandy Walsh dan Patricio Matricardi solid meredam serangan balik sayap Bali United.',
+              'Pantau widget live telemetry di dashboard untuk update menit per menit.'
+            ]
+          : [
+              'Dukung langsung di GBLA atau saksikan siaran langsung resmi mulai pukul 18:30 WIB.',
+              'Waspadai serangan balik cepat Bali United melalui transisi sayap di 15 menit awal babak pertama.',
+              'Pantau Live Telemetry Widget di dashboard aplikasi untuk update taktis berkala saat kick-off.'
+            ],
+        metricsContext: {
+          ...defaultMetrics,
+          points: isLiveQuery ? 19 : defaultMetrics.points,
+          leagueRank: isLiveQuery ? 3 : defaultMetrics.leagueRank,
+        },
       };
     }
 

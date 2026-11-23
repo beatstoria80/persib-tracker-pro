@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v34 (High-contrast, zero-collision player profile card UI)
-const CACHE_NAME = 'persib-tracker-pwa-v34';
+// PERSIB TRACKER - PWA Service Worker v35 (Realtime Kick-Off & Dynamic In-Match Tracking Engine)
+const CACHE_NAME = 'persib-tracker-pwa-v35';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
