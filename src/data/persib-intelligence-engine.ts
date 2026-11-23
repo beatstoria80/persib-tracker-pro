@@ -596,6 +596,47 @@ Pemain-pemain masa lalu seperti David da Silva, Ciro Alves, Tyronne del Pino, Fe
     }
 
     // =========================================================================
+    // KATEGORI 6.6: DAFTAR RESMI PENJAGA GAWANG (GOAL KEEPER) PERSIB 2026/2027
+    // =========================================================================
+    if (
+      q.includes('kiper') ||
+      q.includes('penjaga gawang') ||
+      q.includes('goal keeper') ||
+      q.includes('goalkeeper') ||
+      q.includes('goal-keeper') ||
+      q.includes('teja') ||
+      q.includes('rhaka') ||
+      q.includes('syafaka') ||
+      q.includes('fitrah') ||
+      q.includes('mendoza')
+    ) {
+      const text = `Daftar Resmi **Penjaga Gawang (Goal Keeper) PERSIB Bandung Musim 2026/2027**:
+
+Berikut adalah 3 penjaga gawang resmi berstatus Lokal yang mengawal gawang Maung Bandung:
+
+1. **#14 Teja Paku Alam** — Status: Lokal (Kiper Utama)
+2. **#60 Muhammad Rhaka Syafaka** — Status: Lokal (Kiper Muda)
+3. **#81 Fitrah Maulana** — Status: Lokal (Kiper Muda Timnas U-23)
+
+⚠️ **Catatan Penting Penjaga Gawang**:
+Kiper masa lalu seperti Kevin Ray Mendoza, Fitrul Dwi Rustapa, Reky Rahayu, maupun Sheva Sanggasi **SUDAH TIDAK LAGI BERMAIN UNTUK PERSIB** di musim 2026/2027. Gawang PERSIB sepenuhnya dipercayakan secara tangguh kepada 3 kiper lokal di atas.`;
+
+      return {
+        id: 'msg-' + Date.now(),
+        sender: 'ai',
+        text: cleanAiResponseText(text),
+        timestamp: timeStr,
+        category: 'squad',
+        actionableTips: [
+          'Teja Paku Alam (#14) berposisi sebagai kiper utama dengan statistik kebobolan minim di Super League.',
+          'Muhammad Rhaka Syafaka (#60) dan Fitrah Maulana (#81) merupakan aset masa depan binaan akademi dan Timnas muda.',
+          'Seluruh 3 kiper resmi Persib musim 2026/2027 berstatus pemain lokal Indonesia.'
+        ],
+        metricsContext: defaultMetrics,
+      };
+    }
+
+    // =========================================================================
     // KATEGORI 7: SALAM, SAPAAN & PERKENALAN (TIDAK BOLEH TEMPLATE LOOPING)
     // =========================================================================
     if (

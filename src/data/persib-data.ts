@@ -50,8 +50,8 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
   },
   {
     id: 'rakha-60',
-    name: 'Rhaka Syafaka',
-    fullName: 'Muhammad Rakha Syafaka Bilhuda',
+    name: 'Muhammad Rhaka Syafaka',
+    fullName: 'Muhammad Rhaka Syafaka',
     number: 60,
     position: 'GK',
     category: 'academy',
@@ -61,11 +61,11 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€50K (Rp 870 Jt)',
     contractUntil: '31 Mei 2029',
     verifiedData: true,
-    avatarUrl: 'https://ui-avatars.com/api/?name=Rhaka+Bintang&background=0284c7&color=ffffff&bold=true&size=256',
+    avatarUrl: 'https://ui-avatars.com/api/?name=Muhammad+Rhaka+Syafaka&background=0284c7&color=ffffff&bold=true&size=256',
     fitness: {
       status: 'fit',
       percentage: 100,
-      notes: 'Kiper muda potensial binaan Akademi Persib U-18 berpostur jangkung.',
+      notes: 'Kiper muda potensial binaan Akademi Persib nomor punggung 60.',
     },
     stats: {
       minutesPlayed: 90,
@@ -579,6 +579,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€400K (Rp 6.95 M)',
     contractUntil: '31 Mei 2027',
     verifiedData: true,
+    videoUrl: '/Gatuko.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/218277-1758466151.jpg',
     fitness: {
       status: 'fit',
@@ -1149,7 +1150,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
 export const PLAYER_AVATARS: Record<string, string> = {
   // GK
   'teja-14': 'https://img.a.transfermarkt.technology/portrait/header/474524-1737430429.png',
-  'rakha-60': 'https://ui-avatars.com/api/?name=Rhaka+Bintang&background=0284c7&color=ffffff&bold=true&size=256',
+  'rakha-60': 'https://ui-avatars.com/api/?name=Muhammad+Rhaka+Syafaka&background=0284c7&color=ffffff&bold=true&size=256',
   'fitrah-81': 'https://img.a.transfermarkt.technology/portrait/header/1221253-1737430465.png',
   'fitrah-98': 'https://img.a.transfermarkt.technology/portrait/header/1221253-1737430465.png',
 
@@ -1253,7 +1254,7 @@ export function getPlayerAvatar(idOrName: string): string {
   if (lower.includes('adam') || lower.includes('alis')) return PLAYER_AVATARS['adam-18'];
   if (lower.includes('nazriel') || lower.includes('alfaro')) return PLAYER_AVATARS['nazriel-19'];
   if (lower.includes('teja') || lower.includes('alam')) return PLAYER_AVATARS['teja-14'];
-  if (lower.includes('rakha') || lower.includes('rhaka')) return PLAYER_AVATARS['rakha-60'];
+  if (lower.includes('rakha') || lower.includes('rhaka') || lower.includes('syafaka')) return PLAYER_AVATARS['rakha-60'];
   if (lower.includes('fitrah')) return PLAYER_AVATARS['fitrah-81'];
   if (lower.includes('saddil') || lower.includes('ramdani')) return PLAYER_AVATARS['saddil-67'];
   if (lower.includes('ikwan') || lower.includes('tanamal')) return PLAYER_AVATARS['ikwan-40'];

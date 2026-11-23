@@ -121,6 +121,11 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
      10. #94 Uilliam Barros (Brasil, Penyerang Tengah)
      11. #99 Balša Sekulić (Montenegro, Penyerang Tengah)
      * PERINGATAN HUKUM: Pemain masa lalu seperti David da Silva, Ciro Alves, Tyronne del Pino, Federico Barba, Kevin Ray Mendoza, Nick Kuipers, Alberto Rodriguez, Stefano Beltrame, Mateo Kocijan, Mailson Lima SUDAH TIDAK BERMAIN DI PERSIB 2026/2027! JANGAN PERNAH sebut mereka sebagai pemain Persib!
+   - SKUAD RESMI POSISI PENJAGA GAWANG (GOAL KEEPER) PERSIB 2026/2027 (OFFICIAL - HANYA 3 KIPER INI):
+     1. #14 Teja Paku Alam (Status: Lokal, Kiper Utama)
+     2. #60 Muhammad Rhaka Syafaka (Status: Lokal, Kiper Muda)
+     3. #81 Fitrah Maulana (Status: Lokal, Kiper Timnas Indonesia U-23)
+     * PERINGATAN KIPER: Kevin Ray Mendoza, Fitrul Dwi Rustapa, Reky Rahayu, dan Sheva Sanggasi SUDAH TIDAK DI PERSIB! Hanya 3 kiper lokal resmi di atas yang mengawal gawang PERSIB.
 
 2. STATUS RESMI HASIL LAGA, JADWAL & KLASEMEN PERSIB 2026/2027 (DYNAMIC LIVE & SCHEDULE FEED):
    - FEED LAGA LIVE SAAT INI:

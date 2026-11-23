@@ -34,10 +34,20 @@ export default function PlayerVideoProfilePage() {
   const router = useRouter();
   const routeId = (params?.id as string) || 'peralta-10';
 
+  const normalizedRoute = routeId.toLowerCase().replace('caesar', 'cesar');
+
   // REFACTOR: Derive active player directly from routeId without setState-in-effect
   const activePlayer =
     OFFICIAL_SQUAD_2026_2027.find(
-      (p) => p.id.toLowerCase() === routeId.toLowerCase() || p.id.includes(routeId)
+      (p) =>
+        p.id.toLowerCase() === routeId.toLowerCase() ||
+        p.id.toLowerCase() === normalizedRoute ||
+        p.id.toLowerCase().includes(routeId.toLowerCase()) ||
+        p.id.toLowerCase().includes(normalizedRoute) ||
+        p.name.toLowerCase().includes(routeId.toLowerCase()) ||
+        p.name.toLowerCase().includes(normalizedRoute) ||
+        (routeId.toLowerCase().includes('gatuko') && p.id.includes('notsuda')) ||
+        (routeId.toLowerCase().includes('gakuto') && p.id.includes('notsuda'))
     ) ||
     OFFICIAL_SQUAD_2026_2027.find((p) => p.id === 'peralta-10') ||
     OFFICIAL_SQUAD_2026_2027[0];
@@ -92,6 +102,8 @@ export default function PlayerVideoProfilePage() {
       ? '/Matricardi.mp4'
       : activePlayer.id.includes('mutombo')
       ? '/Mutombo.mp4'
+      : activePlayer.id.includes('notsuda') || activePlayer.id.includes('gatuko') || activePlayer.id.includes('gakuto')
+      ? '/Gatuko.mp4'
       : undefined);
 
   return (
