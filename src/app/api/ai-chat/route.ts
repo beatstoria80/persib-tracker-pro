@@ -70,6 +70,17 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
    - BRI LIGA 1 / SUPER LEAGUE 2026/2027 (TOTAL GOL PERSIB: 18 GOL DARI 10 LAGA):
      * Top Scorer Kompetisi: Alexander Jeremejeff (Persija) 7 Gol, Alex Martins Ferreira (Persebaya) 7 Gol, Lulinha (Madura United) 6 Gol, Teppei Yachida (Bali United) 6 Gol, Mariano Peralta (PERSIB) 5 Gol, Marko Dugandžić (Bali United) 5 Gol, Balša Sekulić (PERSIB) 4 Gol, Luka Menalo (PERSIB) 4 Gol, Alexandre Ramalingom (Persita) 4 Gol, Ragnar Oratmangoen (PERSIB) 3 Gol.
      * Gol PERSIB di Liga 1: Mariano Peralta 5 Gol, Balša Sekulić 4 Gol, Luka Menalo 4 Gol, Ragnar Oratmangoen 3 Gol, Thom Haye 1 Gol (plus 7 Assist - Raja Assist Terdepan Liga 1), Marc Klok 1 Gol.
+   - BINTANG & SKUAD RESMI KLUB LAWAN LIGA 1 2026/2027 (JANGAN TERTUKAR DENGAN DATA MUSIM LALU):
+     * Persija Jakarta: Alexander Jeremejeff (#9 CF - 7 Gol), Rizky Ridho (#5 CB), Radovan Pankov (#4 CB), Denis Kolinger (#3 CB), Kwon Chang-hoon (#10 AM), Witan Sulaeman (#78).
+     * Dewa United: Denilson Junior (#9 CF), Taisei Marukawa (#11 LW), Alexis Messidoro (#10 AM), Nick Kuipers (#2 CB), Damion Lowe (#3 CB), Sonny Stevens (#92 GK), Pelatih Osmar Loss.
+     * Bali United: Marko Dugandžić (#9 CF - 5 Gol), Teppei Yachida (#8 AM - 6 Gol), Thijmen Goppel (#7 RW), Mike Hauptmeijer (#1 GK), Brandon Wilson (#6 DM), Pelatih Johnny Jansen.
+     * Persebaya: Alex Martins Ferreira (#9 CF - 7 Gol), Francisco Rivera (#10 AM), Yuran Fernandes (#4 CB), Ernando Ari (#21 GK), Ramadhan Sananta (#99 CF), Saddil Ramdani (#67).
+     * Persita: Alexandre Ramalingom (#90 CF - 4 Gol), Éber Bessa (#10 AM), Rayco Rodríguez (#7 RW), Javlon Guseynov (#19 CB), Pelatih Carlos Pena.
+     * Madura United: Lulinha (#11 LW - 6 Gol), Jordy Wehrmann (#6 DM), Pedro Monteiro (#4 CB), Maxuel Cassio (#9 CF).
+     * Arema FC: Dalberto Luan (#94 CF - 6 Gol), Charles Lokolingoy (#11 RW), Wiliam Marcilio (#10 AM), Lucas Frigeri (#31 GK).
+     * Bhayangkara Presisi: Matias Mier (#10 AM), Ilija Spasojević (#9 CF), Dendy Sulistyawan (#22 RW), Anderson Salles (#4 CB).
+     * PSS Sleman: Hokky Caraka (#9 CF), Alan Bernardon (#1 GK 201 cm), Chang-jin Moon (#10 AM), Cleberson (#4 CB).
+     * Malut United: Yakob Sayuri (#2 RW), Yance Sayuri (#23 LB), Wahyu Prasetyo (#4 CB), Diego Martinez (#9 CF).
    - SHOPEE CUP ASEAN 2026/2027 (GRUP B - TOTAL 9 GOL DARI 2 LAGA):
      * Top Scorer Kompetisi: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United), Arif Aiman (JDT) 3 Gol, Bergson da Silva (JDT) 3 Gol, Luka Menalo (PERSIB) 2 Gol, Mariano Peralta (PERSIB) 2 Gol, Bounphachan Bounkong (Svay Rieng) 2 Gol, Léo Artur (Cong An Ha Noi) 2 Gol, Alan Grafite (Cong An Ha Noi) 2 Gol.
      * Gol PERSIB di Shopee Cup: Balša Sekulić 3 Gol, Luka Menalo 2 Gol, Mariano Peralta 2 Gol, Berguinho 1 Gol, Uilliam Barros 1 Gol.

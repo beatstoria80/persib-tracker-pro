@@ -294,18 +294,18 @@ export class PersibIntelligenceEngine {
       const text = `Berikut adalah **Klasemen Resmi Super League 2026/2027** pasca rampungnya pertandingan Pekan 10:
 
 📊 Papan Atas Super League 2026/2027:
-1. **Persija Jakarta** — 21 Poin (Main 9: 7M 0S 2K | Selisih Gol +11)
+1. **Persija Jakarta** — 22 Poin (Main 10: 7M 1S 2K | Selisih Gol +12)
 2. **Dewa United** — 20 Poin (Main 10: 6M 2S 2K | Selisih Gol +3)
-3. 🔵 **PERSIB Bandung** — **19 Poin** (Main 10: 6M 1S 3K | Gol 18-11 [+7], Unggul Head-to-Head atas Bali United)
-4. **Bali United** — 19 Poin (Main 10: 6M 1S 3K | Gol 27-11 [+16])
+3. **Bali United** — 19 Poin (Main 10: 6M 1S 3K | Gol 27-11 [+16])
+4. 🔵 **PERSIB Bandung** — **19 Poin** (Main 10: 6M 1S 3K | Gol 18-11 [+7])
 5. **Madura United** — 19 Poin (Main 10: 6M 1S 3K | Gol 16-11 [+5])
 6. **Persita Tangerang** — 18 Poin (Main 9: 5M 3S 1K | Selisih Gol +7)
 
 ---
 
 💡 Catatan Analis Taktis:
-* Kemenangan 2-1 atas Bali United di GBLA berhasil melesatkan PERSIB Bandung langsung ke posisi 3 besar klasemen.
-* Jarak dengan pemuncak klasemen Persija kini hanya tersisa 2 poin, membuka peluang besar perebutan takhta juara!`;
+* Kemenangan comeback heroik 2-1 atas Bali United di GBLA melesatkan PERSIB mengunci 19 poin di peringkat 4 klasemen, menempel ketat Bali United (#3) dan Dewa United (#2, 20 poin).
+* Jarak dengan pemuncak klasemen Persija (22 poin) kini terpaut 3 poin, membuka persaingan gelar juara semakin panas!`;
 
       return {
         id: 'msg-' + Date.now(),

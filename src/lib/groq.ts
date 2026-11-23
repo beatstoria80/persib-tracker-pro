@@ -352,7 +352,19 @@ ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
    - #4 PERSIB Bandung (19 poin - 10 main: 6 menang, 1 seri, 3 kalah, gol 18-11 [+7])
    - #5 Madura United (19 poin - 10 main: 6M 1S 3K, gol 16-11 [+5])
    - #6 Persita Tangerang (18 poin - 9 main)
-4. RIWAYAT 10 LAGA RESMI PERSIB SUPER LEAGUE 2026/2027:
+4. TOP SCORER & BINTANG RESMI LIGA 1 2026/2027:
+   - Alexander Jeremejeff (Persija - 7 Gol)
+   - Alex Martins Ferreira (Persebaya - 7 Gol)
+   - Lulinha (Madura United - 6 Gol)
+   - Teppei Yachida (Bali United - 6 Gol)
+   - Mariano Peralta (PERSIB - 5 Gol)
+   - Marko Dugandžić (Bali United - 5 Gol)
+   - Balša Sekulić (PERSIB - 4 Gol)
+   - Luka Menalo (PERSIB - 4 Gol)
+   - Alexandre Ramalingom (Persita - 4 Gol)
+   - Taisei Marukawa (Dewa United - 3 Gol + 5 Assist)
+   - Thom Haye (PERSIB - 1 Gol + 7 Assist)
+5. RIWAYAT 10 LAGA RESMI PERSIB SUPER LEAGUE 2026/2027:
    - P1: PERSIB 3-1 Persijap Jepara (M)
    - P2: Madura United 2-1 PERSIB (K)
    - P3: PERSIB 2-0 Bhayangkara FC (M)
@@ -363,12 +375,12 @@ ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
    - P8: PERSIB 4-0 Isenmulang Kalteng (M)
    - P9: Java United 2-1 PERSIB (K)
    - P10: PERSIB 2-1 Bali United (M)
-5. JADWAL TERDEKAT BERIKUTNYA:
+6. JADWAL TERDEKAT BERIKUTNYA:
    - Super League Pekan 11: Persita Tangerang vs PERSIB Bandung di Stadion Indomilk Arena, Minggu 29 November 2026 pukul 19:00 WIB.
-6. ASIA 2026/2027:
+7. ASIA 2026/2027:
    - ACL Two Grup E: PERSIB Juara Grup E rekor 100% (4 main, 4 menang, 12 poin, lolos 16 Besar Asia).
    - Shopee Cup Grup B: PERSIB pemuncak klasemen Grup B (2 main, 2 menang, 6 poin, gol 9-1). Laga terdekat Shopee Cup: MD3 tandang vs Lion City Sailors (10 Des 2026, 19:30 WIB), disusul Super Big Match MD4 vs Johor Darul Ta'zim (17 Des 2026, 19:00 WIB).
-Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kemenangan 2-1 Pekan 10 atas Bali United, lonjakan ke posisi 3 besar, dan persiapan Pekan 11 vs Persita tanpa basa-basi atau simbol markdown.`;
+Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kemenangan 2-1 Pekan 10 atas Bali United, penguncian 19 poin di peringkat 4 klasemen, dan persiapan Pekan 11 vs Persita tanpa basa-basi atau simbol markdown.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
