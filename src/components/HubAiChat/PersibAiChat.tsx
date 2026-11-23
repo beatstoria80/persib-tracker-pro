@@ -68,7 +68,7 @@ export function PersibAiChat() {
       id: 'init-1',
       role: 'assistant',
       content:
-        'Sampurasun, Bobotoh! ⚽💬\n\nSaya adalah Persib & Global Football Chat Assistant resmi musim 2026/2027.\n\nTanyakan apa saja tentang:\n• 🏆 Jadwal & Hasil Laga: Super League, ACL Two, & Shopee Cup\n• 📊 Klasemen: Peringkat terkini Super League & Grup B Asia\n• 🎯 Top Scorer & Assist: David da Silva, Tyronne, Peralta, Sekulić, dan Thom Haye\n• 👥 Pemain & Taktik: Thom Haye, Sandy Walsh, Ragnar, Klok, Reijnders, dan racikan Bojan Hodak\n\nSilakan pilih topik cepat di bawah atau ketik pertanyaan Anda!',
+        'Sampurasun, Bobotoh! ⚽💬\n\nSaya adalah Persib & Global Football Chat Assistant resmi musim 2026/2027.\n\nTanyakan apa saja tentang:\n• 🏆 Jadwal & Hasil Laga: Super League, ACL Two, & Shopee Cup\n• 📊 Klasemen: Peringkat terkini Super League & Grup B Asia\n• 🎯 Top Scorer & Assist: Mariano Peralta, Luka Menalo, Balša Sekulić, dan Thom Haye\n• 👥 Pemain & Taktik: Thom Haye, Sandy Walsh, Ragnar, Klok, Reijnders, dan racikan Bojan Hodak\n\nSilakan pilih topik cepat di bawah atau ketik pertanyaan Anda!',
       timestamp: 'Baru saja',
     },
   ]);

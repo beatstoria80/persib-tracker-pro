@@ -157,13 +157,12 @@ export class PersibIntelligenceEngine {
       const text = `Berikut adalah Daftar Resmi Top Scorer & Top Assist PERSIB Bandung Musim 2026/2027 terpisah untuk masing-masing ajang kompetisi:
 
 1. BRI LIGA 1 / SUPER LEAGUE (Total 18 Gol dari 10 Laga):
-- Balša Sekulić: 5 Gol (Top Scorer Persib di Super League)
-- Mariano Peralta: 4 Gol
+- Mariano Peralta: 5 Gol (Top Scorer Persib di Super League)
+- Balša Sekulić: 4 Gol
+- Luka Menalo: 4 Gol
 - Ragnar Oratmangoen: 3 Gol
-- Luka Menalo: 3 Gol
 - Thom Haye: 1 Gol, 7 Assist (Raja Assist Tak Tertandingi Liga 1)
 - Marc Klok: 1 Gol, 2 Assist
-- Beckham Putra: 1 Gol
 
 2. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Total 8 Gol):
 - Luka Menalo: 3 Gol (Top Scorer Persib di Asia)
@@ -231,18 +230,18 @@ export class PersibIntelligenceEngine {
 ---
 
 ⚽ Linimasa Gol & Momen Krusial:
-* 18' ⚽ **GOOOL PERSIB!** Balša Sekulić mencocor umpan silang akurat Thom Haye ke sudut gawang (1-0).
-* 41' ⚽ **Gol Bali United!** Privat Mbarga menuntaskan transisi serangan balik cepat (1-1).
-* 45+2' ⏱️ **Turun Minum (HT)**: PERSIB Bandung 1 - 1 Bali United di hadapan Bobotoh GBLA.
-* 58' 🔁 **Substitusi Taktis**: Bojan Hodak memasukkan Mariano Peralta menggantikan Beckham Putra.
-* 67' ⚽ **GOOOL KEPALA EMAS!** Luka Menalo menyambar sepak pojok melengkung Thom Haye (2-1) yang mengunci 3 poin kemenangan!
-* 90+4' ⏱️ **Peluit Panjang FT**: Kemenangan 2-1 mengantarkan PERSIB melesat ke peringkat 3 klasemen sementara!
+* 45+2' ⏱️ **Turun Minum (HT)**: PERSIB Bandung 0 - 0 Bali United, duel sengit lini tengah di hadapan puluhan ribu Bobotoh.
+* 66' ⚽ **Gol Bali United!** Marko Dugandžić (0-1) menyambar bola rebound hasil tendangan bebas Teppei Yachida yang ditepis Teja Paku Alam.
+* 79' ⚽ **GOOOL PENYEIMBANG!** Mariano Peralta (1-1) menyamakan kedudukan menuntaskan umpan terobosan cerdik Luka Menalo!
+* 81' ⚽ **GOOOL REMONTADA KILAT 2 MENIT!** Luka Menalo (2-1) melepaskan tembakan keras mendatar berbelok membakar Stadion GBLA!
+* 86' 🟥 **KARTU MERAH!** Mariano Peralta diganjar kartu merah langsung oleh wasit, PERSIB bertahan heroik dengan 10 pemain.
+* 90+6' ⏱️ **Peluit Panjang FT**: Kemenangan comeback dramatis 2-1 mengunci 19 poin di posisi 4 klasemen!
 
 ---
 
 🔥 Dampak Klasemen & Taktikal:
-* Raihan 3 poin emas membuat Maung Bandung mengumpulkan 19 poin (unggul head-to-head langsung atas Bali United).
-* Balša Sekulić dan Luka Menalo tampil mematikan memanfaatkan visi permainan kelas dunia Thom Haye.`;
+* Koleksi 19 poin menempatkan PERSIB di posisi 4 klasemen sementara, bersaing ketat dengan Bali United (#3, 19 poin), Dewa United (#2, 20 poin), dan Persija (#1, 22 poin).
+* Mariano Peralta dan Luka Menalo menjadi duet pahlawan kebangkitan kilat 2 menit racikan Bojan Hodak.`;
       } else {
         text = `Berikut jadwal resmi pertandingan terdekat **PERSIB Bandung di Super League 2026/2027**:
 
@@ -256,8 +255,8 @@ export class PersibIntelligenceEngine {
 ---
 
 🎯 Misi Taktikal Bojan Hodak:
-1. **Lanjutkan Tren Kemenangan**: Mengamankan 3 poin tandang di Indomilk Arena untuk terus menekan Persija (21 poin) dan Dewa United (20 poin) di puncak klasemen.
-2. **Kesiapan Skuad**: Balša Sekulić, Luka Menalo, Thom Haye, Sandy Walsh, dan Kevin Mendoza dalam kondisi bugar 100%.
+1. **Lanjutkan Tren Kemenangan**: Mengamankan 3 poin tandang di Indomilk Arena untuk terus menekan Persija (22 poin), Dewa United (20 poin), dan Bali United (19 poin).
+2. **Kesiapan Skuad**: Balša Sekulić, Luka Menalo, Thom Haye, Sandy Walsh, dan Kevin Mendoza dalam kondisi bugar 100% (Peralta absen akibat suspensi kartu merah).
 3. **Fokus Lanjutan**: Usai Pekan 11, Maung Bandung akan melakoni Super Big Match Pekan 12 kontra Persebaya (6 Des 2026) dan lawatan Shopee Cup ke markas Lion City Sailors (10 Des 2026).`;
       }
 
@@ -269,8 +268,8 @@ export class PersibIntelligenceEngine {
         category: 'match',
         actionableTips: isPastMatchQuery
           ? [
-              'Kemenangan atas Bali United menegaskan dominasi rekor kandang tak terkalahkan di GBLA.',
-              'Balša Sekulić dan Luka Menalo menjadi tumpuan ketajaman Maung Bandung di lini serang.',
+              'Kemenangan comeback dramatis atas Bali United menegaskan mental juara Maung Bandung di GBLA.',
+              'Mariano Peralta dan Luka Menalo menjadi motor kemenangan comeback 2 menit.',
               'Persiapan fokus langsung dialihkan ke laga tandang Pekan 11 kontra Persita Tangerang.'
             ]
           : [
@@ -576,7 +575,7 @@ Tanyakan apa saja seputar taktik Bojan Hodak, kondisi pemain, atau jadwal beriku
 
 🏆 Hasil Laga Terkini:
 1. **Super League (Pekan 10 - 22 Nov 2026)**:
-   - **PERSIB Bandung 2 - 1 Bali United FC** (Kemenangan krusial di GBLA berkat gol Balša Sekulić dan Luka Menalo).
+   - **PERSIB Bandung 2 - 1 Bali United FC** (Kemenangan comeback dramatis 2 menit di GBLA berkat gol Mariano Peralta 79' dan Luka Menalo 81' membalas gol Marko Dugandžić 66').
 2. **Shopee Cup (MD2 - 19 Nov 2026)**:
    - **PERSIB Bandung 6 - 0 Shan United** (Pesta gol di hadapan Bobotoh, mengokohkan posisi #1 Grup B).
 3. **ACL Two (MD4 - 6 Nov 2026)**:

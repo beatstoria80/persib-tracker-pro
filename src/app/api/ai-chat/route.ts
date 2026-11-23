@@ -68,8 +68,8 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
 1. DAFTAR TOP SCORER & TOP ASSIST PERSIB & SELURUH KLUB RESMI (MUSIM 2026/2027) - MASING-MASING KOMPETISI TERPISAH:
    PERHATIAN PENTING: Tiap turnamen memiliki perolehan gol dan assist TERPISAH. DILARANG mencampur atau mengacak total gol antar ajang! Jawablah sesuai kompetisi yang ditanyakan:
    - BRI LIGA 1 / SUPER LEAGUE 2026/2027 (TOTAL GOL PERSIB: 18 GOL DARI 10 LAGA):
-     * Top Scorer Kompetisi: Gustavo Almeida (Persija) 7 Gol, Alex Martins (Dewa United) 7 Gol, Lulinha (Madura United) 6 Gol, Balša Sekulić (PERSIB) 5 Gol, Everton Nascimento (Bali United) 5 Gol, Kenzo Nambu (Bali United) 5 Gol, Mariano Peralta (PERSIB) 4 Gol.
-     * Gol PERSIB di Liga 1: Balša Sekulić 5 Gol, Mariano Peralta 4 Gol, Ragnar Oratmangoen 3 Gol, Luka Menalo 3 Gol, Thom Haye 1 Gol (plus 7 Assist - Raja Assist Terdepan Liga 1), Marc Klok 1 Gol, Beckham Putra 1 Gol.
+     * Top Scorer Kompetisi: Alexander Jeremejeff (Persija) 7 Gol, Alex Martins Ferreira (Persebaya) 7 Gol, Lulinha (Madura United) 6 Gol, Teppei Yachida (Bali United) 6 Gol, Mariano Peralta (PERSIB) 5 Gol, Marko Dugandžić (Bali United) 5 Gol, Balša Sekulić (PERSIB) 4 Gol, Luka Menalo (PERSIB) 4 Gol, Alexandre Ramalingom (Persita) 4 Gol, Ragnar Oratmangoen (PERSIB) 3 Gol.
+     * Gol PERSIB di Liga 1: Mariano Peralta 5 Gol, Balša Sekulić 4 Gol, Luka Menalo 4 Gol, Ragnar Oratmangoen 3 Gol, Thom Haye 1 Gol (plus 7 Assist - Raja Assist Terdepan Liga 1), Marc Klok 1 Gol.
    - SHOPEE CUP ASEAN 2026/2027 (GRUP B - TOTAL 9 GOL DARI 2 LAGA):
      * Top Scorer Kompetisi: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United), Arif Aiman (JDT) 3 Gol, Bergson da Silva (JDT) 3 Gol, Luka Menalo (PERSIB) 2 Gol, Mariano Peralta (PERSIB) 2 Gol, Bounphachan Bounkong (Svay Rieng) 2 Gol, Léo Artur (Cong An Ha Noi) 2 Gol, Alan Grafite (Cong An Ha Noi) 2 Gol.
      * Gol PERSIB di Shopee Cup: Balša Sekulić 3 Gol, Luka Menalo 2 Gol, Mariano Peralta 2 Gol, Berguinho 1 Gol, Uilliam Barros 1 Gol.
@@ -79,14 +79,14 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
 
 2. STATUS RESMI HASIL LAGA, JADWAL & KLASEMEN PERSIB 2026/2027:
    - HASIL AKHIR PEKAN 10 SUPER LEAGUE: PERSIB Bandung 2 - 1 Bali United FC (FULL TIME SELESAI di Stadion GBLA).
-     * Pencetak Gol: Balša Sekulić (18') & Luka Menalo (67') | Bali United: Privat Mbarga (41').
-     * Assist PERSIB: Thom Haye memborong 2 assist matang.
-     * Dampak Hasil: Kemenangan ini resmi mengantar PERSIB Bandung melesat ke posisi 3 besar klasemen sementara dengan 19 poin, unggul head-to-head langsung atas Bali United!
+     * Jalannya Gol: Marko Dugandžić (Bali United 66'), Mariano Peralta (PERSIB 79'), Luka Menalo (PERSIB 81').
+     * Kartu Merah: Mariano Peralta (PERSIB 86' - kartu merah langsung), Maung Bandung bertahan heroik dengan 10 pemain hingga menit 90+6.
+     * Dampak Hasil: Kemenangan comeback dramatis 2 menit melesatkan PERSIB Bandung meraih 19 poin di peringkat 4 klasemen sementara, menempel ketat Bali United (peringkat 3, 19 poin), Dewa United (#2, 20 poin), dan Persija (#1, 22 poin).
    - KLASEMEN SUPER LEAGUE PEKAN 10 RESMI:
-     #1 Persija Jakarta (21 poin - 9 main)
+     #1 Persija Jakarta (22 poin - 10 main)
      #2 Dewa United (20 poin - 10 main)
-     #3 PERSIB Bandung (19 poin - 10 main: 6M 1S 3K, Gol 18-11 [+7], unggul H2H atas Bali United)
-     #4 Bali United (19 poin - 10 main: 6M 1S 3K, Gol 27-11 [+16])
+     #3 Bali United (19 poin - 10 main: 6M 1S 3K, Gol 27-11 [+16])
+     #4 PERSIB Bandung (19 poin - 10 main: 6M 1S 3K, Gol 18-11 [+7])
      #5 Madura United (19 poin - 10 main: 6M 1S 3K, Gol 16-11 [+5])
      #6 Persita Tangerang (18 poin - 9 main)
    - JADWAL TERDEKAT BERIKUTNYA (PEKAN 11 SUPER LEAGUE):

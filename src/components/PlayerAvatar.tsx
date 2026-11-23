@@ -24,6 +24,7 @@ export function PlayerAvatar({
 }: PlayerAvatarProps) {
   const [retryStage, setRetryStage] = useState<number>(0);
   const [hasFailed, setHasFailed] = useState<boolean>(false);
+  const [isLoaded, setIsLoaded] = useState<boolean>(false);
   const rawSrc = avatarUrl || getPlayerAvatar(name);
 
   // Fallback cascade: direct Transfermarkt/Custom -> UI Avatars high-res with official styling
@@ -68,12 +69,21 @@ export function PlayerAvatar({
     >
       {currentSrc && !hasFailed ? (
         <div className="relative w-full h-full flex items-center justify-center overflow-hidden">
+          {!isLoaded && (
+            <div className="absolute inset-0 flex items-center justify-center bg-slate-900 text-white/70 font-mono text-[9px] font-bold">
+              {number ? `#${number}` : name.substring(0, 2).toUpperCase()}
+            </div>
+          )}
           <img
             src={currentSrc}
             alt={name}
             referrerPolicy="no-referrer"
-            className="w-full h-full object-contain select-none transition-all duration-300 scale-[0.88] origin-bottom drop-shadow-sm"
+            className={`w-full h-full object-contain select-none transition-opacity duration-300 scale-[0.88] origin-bottom drop-shadow-sm ${
+              isLoaded ? 'opacity-100' : 'opacity-0'
+            }`}
+            onLoad={() => setIsLoaded(true)}
             onError={() => {
+              setIsLoaded(false);
               if (retryStage === 0) {
                 setRetryStage(1);
               } else {

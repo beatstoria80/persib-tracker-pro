@@ -3,6 +3,7 @@
 import React, { useState, useRef } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { OFFICIAL_SQUAD_2026_2027, getPlayerAvatar } from '@/data/persib-data';
+import { PlayerAvatar } from '@/components/PlayerAvatar';
 import {
   ArrowLeft,
   ShieldCheck,
@@ -16,39 +17,15 @@ function SquadThumbnailAvatar({
 }: {
   player: (typeof OFFICIAL_SQUAD_2026_2027)[0];
 }) {
-  const [hasError, setHasError] = useState(false);
-  const avatarUrl = player.avatarUrl || getPlayerAvatar(player.id) || getPlayerAvatar(player.name);
-
-  const getPosBadge = (pos: string) => {
-    if (pos.includes('GK')) return 'bg-amber-500/30 border-amber-400 text-amber-300';
-    if (pos.includes('DF')) return 'bg-emerald-500/30 border-emerald-400 text-emerald-300';
-    if (pos.includes('MF')) return 'bg-cyan-500/30 border-cyan-400 text-cyan-300';
-    return 'bg-rose-500/30 border-rose-400 text-rose-300';
-  };
-
-  if (hasError || !avatarUrl) {
-    return (
-      <div
-        className={`w-8 h-8 rounded-full border-2 shrink-0 flex items-center justify-center font-mono font-black text-[10px] shadow-sm select-none ${getPosBadge(
-          player.position
-        )}`}
-      >
-        #{player.number}
-      </div>
-    );
-  }
-
   return (
-    <div className="relative w-8 h-8 rounded-full overflow-hidden border-2 border-white/40 shrink-0 bg-slate-900 shadow-sm">
-      <img
-        src={avatarUrl}
-        alt={player.name}
-        referrerPolicy="no-referrer"
-        loading="lazy"
-        className="w-full h-full object-cover object-top select-none"
-        onError={() => setHasError(true)}
-      />
-    </div>
+    <PlayerAvatar
+      name={player.name}
+      number={player.number}
+      avatarUrl={player.avatarUrl}
+      position={player.position}
+      size="xs"
+      className="!w-8 !h-8 !rounded-full overflow-hidden shrink-0"
+    />
   );
 }
 

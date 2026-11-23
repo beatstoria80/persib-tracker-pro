@@ -232,7 +232,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
 
   // REFACTOR: Sinkronisasi data faktual Super League 2026/2027 (Pekan 10 tuntas: PERSIB 2 - 1 Bali United)
   const currentStageName = 'Pekan 10 Super League 2026/2027 Tuntas: PERSIB 2 - 1 Bali United';
-  const dynamicBulletin = `🏆 [SUPER LEAGUE PEKAN 10] PERSIB Bandung menang 2-1 atas Bali United di GBLA! Gol Balša Sekulić & sundulan Luka Menalo lesatkan Maung Bandung ke Peringkat 3 Klasemen (19 Poin). Fokus berikutnya: Pekan 11 tandang ke Indomilk Arena vs Persita Tangerang! (Sync: ${nowWib})`;
+  const dynamicBulletin = `🏆 [SUPER LEAGUE PEKAN 10] PERSIB Bandung menang comeback heroik 2-1 atas Bali United di GBLA! Gol Mariano Peralta (79') & Luka Menalo (81') balas gol Marko Dugandžić (66') meski Peralta diganjar kartu merah (86'). Maung Bandung raih 19 poin di Papan Atas Klasemen! (Sync: ${nowWib})`;
 
   const persibInStandings = calculatedStandings.find((c) => c.isPersib || c.team.toLowerCase().includes('persib'));
 
@@ -267,12 +267,14 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       aggregateScore: 'PERSIB Bandung 2 - 1 Bali United FC (FT)',
       venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
       statusText: 'SELESAI (FULL TIME) - PERSIB 2 - 1 BALI UNITED',
-      qualificationScenario: 'Kemenangan dramatis 2-1 atas Bali United di Stadion GBLA melesatkan PERSIB Bandung ke peringkat 3 besar Super League dengan 19 poin (unggul head-to-head atas Bali United).',
+      qualificationScenario: 'Kemenangan comeback dramatis 2-1 atas Bali United di Stadion GBLA membawa PERSIB Bandung mengoleksi 19 poin dari 10 laga, menempel ketat papan atas klasemen Super League 2026/2027.',
       keyEvents: [
-        { minute: "18'", type: 'goal', text: 'GOOOL! Balša Sekulić menyontek umpan silang akurat Thom Haye ke sudut gawang 1-0!' },
-        { minute: "41'", type: 'goal', text: 'Gol Bali United! Privat Mbarga menuntaskan serangan balik cepat 1-1.' },
-        { minute: "67'", type: 'goal', text: 'GOOOL KEPALA EMAS! Luka Menalo menyambar sepak pojok melengkung Thom Haye 2-1!' },
-        { minute: "90+4'", type: 'chance', text: 'Peluit panjang berbunyi! FULL TIME: PERSIB Bandung 2 - 1 Bali United. 3 poin krusial melesatkan Maung Bandung ke peringkat 3 klasemen!' },
+        { minute: "45+2'", type: 'chance', text: 'Turun minum (Half-time): PERSIB Bandung 0 - 0 Bali United, duel sengit di GBLA.' },
+        { minute: "66'", type: 'goal', text: 'Gol Bali United! Marko Dugandžić menyambar bola rebound sepakan bebas Teppei Yachida 0-1.' },
+        { minute: "79'", type: 'goal', text: 'GOOOL! Mariano Peralta menyamakan kedudukan 1-1 menerima umpan matang Luka Menalo!' },
+        { minute: "81'", type: 'goal', text: 'GOOOL COMEBACK 2 MENIT! Luka Menalo membalikkan skor menjadi 2-1 membakar GBLA!' },
+        { minute: "86'", type: 'card', text: 'Kartu Merah! Mariano Peralta diusir wasit, PERSIB bertahan heroik dengan 10 pemain!' },
+        { minute: "90+6'", type: 'chance', text: 'Peluit panjang! FULL TIME: PERSIB Bandung 2 - 1 Bali United. 3 poin krusial diamankan!' },
       ],
     },
     matchCenter: {
@@ -281,7 +283,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
         matchweek: latestFinished?.roundOrWeek || 'Pekan 10 Super League 2026/2027',
         opponent: 'Bali United',
         score: '2 - 1',
-        scorers: ["Balša Sekulić 18' (PERSIB)", "Privat Mbarga 41' (Bali United)", "Luka Menalo 67' (PERSIB)"],
+        scorers: ["Marko Dugandžić 66' (Bali United)", "Mariano Peralta 79' (PERSIB)", "Luka Menalo 81' (PERSIB) [KM: Peralta 86']"],
         venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
       },
       nextFixture: {
@@ -292,10 +294,9 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       },
     },
     leagueStandings: {
-      // REFACTOR: Sinkronisasi peringkat resmi faktual setelah Pekan 9 (Posisi #6 dengan 16 poin)
-      persibRank: persibInStandings?.rank ?? 6,
-      persibPoints: persibInStandings?.points ?? 16,
-      persibGD: persibInStandings?.gd ?? 6,
+      persibRank: persibInStandings?.rank ?? 4,
+      persibPoints: persibInStandings?.points ?? 19,
+      persibGD: persibInStandings?.gd ?? 7,
       topClubs: calculatedStandings.slice(0, 5),
       allClubs: calculatedStandings,
     },
@@ -310,7 +311,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
           fitness: {
             ...p.fitness,
             percentage: 100,
-            notes: 'Kondisi 100% fit & bugar! Winger andalan siap tampil starter di laga Super League 2026/2027.',
+            notes: 'Pencetak gol penyeimbang vs Bali United (menit 79). Menjalani suspensi kartu merah di Pekan 11 vs Persita.',
           },
         };
       }
@@ -342,13 +343,13 @@ ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
 1. LARANGAN KERAS: DILARANG MENGGUNAKAN ATAU MENYEBUT DATA ARTEFAK MUSIM 2024/2025 ATAUPUN 2025/2026! Seluruh analisis HANYA untuk musim aktif 2026/2027.
 2. STATUS RESMI HASIL PEKAN 10 & KLASEMEN TERKINI:
    - Super Big Match Super League Pekan 10 antara PERSIB Bandung vs Bali United FC di Stadion GBLA telah SELESAI (FULL TIME).
-   - Skor Akhir: PERSIB Bandung 2 - 1 Bali United FC (Balša Sekulić 18', Luka Menalo 67' | Privat Mbarga 41').
-   - Kemenangan ini melesatkan Maung Bandung ke peringkat 3 klasemen Super League 2026/2027!
+   - Skor Akhir: PERSIB Bandung 2 - 1 Bali United FC (Mariano Peralta 79', Luka Menalo 81' [Kartu Merah: Peralta 86'] | Marko Dugandžić 66').
+   - Kemenangan comeback dramatis 2 menit ini membawa Maung Bandung mengumpulkan 19 poin di posisi 4 klasemen Super League 2026/2027!
 3. KLASEMEN RESMI (10 PEKAN SELESAI):
-   - #1 Persija (21 poin)
-   - #2 Dewa United (20 poin)
-   - #3 PERSIB Bandung (19 poin - 10 main: 6 menang, 1 seri, 3 kalah, gol 18-11 [+7], unggul H2H atas Bali United)
-   - #4 Bali United (19 poin - 10 main: 6M 1S 3K, gol 27-11 [+16])
+   - #1 Persija (22 poin - 10 main)
+   - #2 Dewa United (20 poin - 10 main)
+   - #3 Bali United (19 poin - 10 main: 6M 1S 3K, gol 27-11 [+16])
+   - #4 PERSIB Bandung (19 poin - 10 main: 6 menang, 1 seri, 3 kalah, gol 18-11 [+7])
    - #5 Madura United (19 poin - 10 main: 6M 1S 3K, gol 16-11 [+5])
    - #6 Persita Tangerang (18 poin - 9 main)
 4. RIWAYAT 10 LAGA RESMI PERSIB SUPER LEAGUE 2026/2027:
