@@ -52,6 +52,7 @@ export default function PlayerVideoProfilePage() {
         (routeId.toLowerCase().includes('rhaka') && p.id.includes('rakha')) ||
         (routeId.toLowerCase().includes('syafaka') && p.id.includes('rakha')) ||
         (routeId.toLowerCase().includes('teja') && p.id.includes('teja')) ||
+        (routeId.toLowerCase().includes('beckam') && p.id.includes('beckham')) ||
         (routeId.toLowerCase().includes('fitrah') && p.id.includes('fitrah'))
     ) ||
     OFFICIAL_SQUAD_2026_2027.find((p) => p.id === 'peralta-10') ||
@@ -84,7 +85,11 @@ export default function PlayerVideoProfilePage() {
   // REFACTOR: Authentic player video resolution with cinematic stadium fallback
   const videoSource =
     activePlayer.videoUrl ||
-    (activePlayer.id.includes('teja')
+    (activePlayer.id.includes('beckham') || activePlayer.id.includes('beckam')
+      ? '/Beckam.mp4'
+      : activePlayer.id.includes('kakang')
+      ? '/Kakang.mp4'
+      : activePlayer.id.includes('teja')
       ? '/paku_alam.mp4'
       : activePlayer.id.includes('adam')
       ? '/Adam_Alis.mp4'

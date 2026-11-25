@@ -238,6 +238,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€350K (Rp 6.08 M)',
     contractUntil: '31 Mei 2028',
     verifiedData: true,
+    videoUrl: '/Kakang.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/817899-1789636503.png',
     fitness: {
       status: 'fit',
@@ -454,6 +455,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€375K (Rp 6.52 M)',
     contractUntil: '31 Mei 2028',
     verifiedData: true,
+    videoUrl: '/Beckam.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/662777-1737431497.png',
     fitness: {
       status: 'fit',
