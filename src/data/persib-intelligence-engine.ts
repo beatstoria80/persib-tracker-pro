@@ -10,6 +10,7 @@
  */
 
 import { VERIFIED_FIXTURES_2026_2027 } from './persib-data';
+import { isFixtureTodayWib } from '@/lib/groq';
 
 // REFACTOR: Global response sanitizer stripping raw AI formatting tokens (*, **, _, <br>)
 export function cleanAiResponseText(rawText: string): string {
@@ -138,28 +139,129 @@ export class PersibIntelligenceEngine {
     const timeStr = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) + ' WIB';
 
     // Dynamic fixtures feed from authentic schedule
-    const latestFinished =
-      VERIFIED_FIXTURES_2026_2027.filter((f) => f.status === 'FINISHED' && f.tournamentKey === 'liga1').slice(-1)[0] ||
-      VERIFIED_FIXTURES_2026_2027.find((f) => f.id === 'l1-p10');
-    const upcomingMatch =
-      VERIFIED_FIXTURES_2026_2027.find((f) => f.status === 'SCHEDULED' && f.tournamentKey === 'liga1') ||
-      VERIFIED_FIXTURES_2026_2027.find((f) => f.id === 'l1-p11');
+    const todayMatch = VERIFIED_FIXTURES_2026_2027.find((f) => isFixtureTodayWib(f.date) || f.status === 'LIVE');
     const activeLiveFixture = VERIFIED_FIXTURES_2026_2027.find((f) => f.status === 'LIVE');
+    const latestFinished =
+      VERIFIED_FIXTURES_2026_2027.filter((f) => f.status === 'FINISHED').slice(-1)[0] ||
+      VERIFIED_FIXTURES_2026_2027.find((f) => f.id === 'l1-p10');
+    const upcomingScheduled =
+      VERIFIED_FIXTURES_2026_2027.find((f) => f.status === 'SCHEDULED' && !isFixtureTodayWib(f.date)) ||
+      VERIFIED_FIXTURES_2026_2027.find((f) => f.id === 'l1-p11');
 
-    // Metrik Default Musim Aktif 2026/2027 (Pasca Pekan 10 Selesai)
+    // Metrik Default Musim Aktif 2026/2027 (Pasca Pekan 10 Selesai & Hari Ini Matchday 5 ACL Two)
     const defaultMetrics = {
       leagueRank: 4,
       points: 19,
       matchRecord: '10 Main: 6M 1S 3K (Gol 18-11 [+7])',
-      nextOpponent: upcomingMatch
-        ? (upcomingMatch.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : upcomingMatch.homeTeam)
-        : 'Persita Tangerang',
-      nextMatchDate: upcomingMatch
-        ? `${upcomingMatch.date} (${upcomingMatch.time})`
-        : 'Minggu, 29 November 2026 (19:00 WIB)',
+      nextOpponent: todayMatch
+        ? (todayMatch.homeTeam.includes('PERSIB') ? todayMatch.awayTeam : todayMatch.homeTeam)
+        : upcomingScheduled
+        ? (upcomingScheduled.homeTeam.includes('PERSIB') ? upcomingScheduled.awayTeam : upcomingScheduled.homeTeam)
+        : 'FC Seoul (KOR)',
+      nextMatchDate: todayMatch
+        ? `Hari Ini, ${todayMatch.date} (${todayMatch.time || '19:15 WIB'})`
+        : upcomingScheduled
+        ? `${upcomingScheduled.date} (${upcomingScheduled.time})`
+        : 'Hari Ini (19:15 WIB)',
       shopeeRank: 1,
-      aclStatus: 'Juara Grup E (Lolos 16 Besar Asia)',
+      aclStatus: 'Peringkat 1 Grup E (12 Poin Maksimal - Siap Matchday 5 Hari Ini)',
     };
+
+    // =========================================================================
+    // KATEGORI 0A: PERTANDINGAN HARI INI / KESIAPAN LAGA (ACL TWO VS FC SEOUL)
+    // =========================================================================
+    const isTodayMatchQuery =
+      q.includes('hari ini') ||
+      q.includes('kesiapan') ||
+      q.includes('seoul') ||
+      (q.includes('acl') && (q.includes('update') || q.includes('laga') || q.includes('jadwal') || q.includes('siap') || q.includes('main') || q.includes('tanding'))) ||
+      (q.includes('laga') && (q.includes('hari ini') || q.includes('malam ini') || q.includes('sekarang')));
+
+    if (isTodayMatchQuery && todayMatch) {
+      const isLiveNow = todayMatch.status === 'LIVE';
+      const text = `${isLiveNow ? '🚨 LAGA SEDANG BERLANGSUNG LIVE:' : 'Halo Bobotoh! Berikut informasi kesiapan dan update resmi laga PERSIB di ACL Two hari ini:'}
+
+Pertandingan Hari Ini:
+• Laga: ${todayMatch.homeTeam} vs ${todayMatch.awayTeam} (Matchday 5 Grup E ACL Two 2026/2027)
+• Waktu Kick-off: Hari ini, ${todayMatch.date} pukul ${todayMatch.time || '19:15 WIB'}
+• Stadion: ${todayMatch.venue}
+• Status: ${isLiveNow ? 'SEDANG BERLANGSUNG LIVE' : 'Siap Kick-off Pukul ' + (todayMatch.time || '19:15 WIB')}
+
+Kesiapan Tim & Mentalitas Skuad:
+1. Moral Juara Tertinggi: PERSIB berbekal rekor sempurna di Asia (4 laga, 4 menang, 12 poin) dan kemenangan bersejarah 0-1 di Seoul World Cup Stadium pada Matchday 2 berkat gol Balša Sekulić. Tren kemenangan comeback heroik 2-1 atas Bali United di liga domestik semakin mempertebal kepercayaan diri Maung Bandung.
+2. Status Pemain & Disiplin (Penting):
+- Mariano Peralta: 100% sah dan bugar bermain sejak menit awal sebagai starter di laga Asia malam ini. Sanksi kartu merah langsung Peralta hanya berlaku di kompetisi domestik (Super League Pekan 11 vs Persita), sehingga tidak memengaruhi keabsahannya di ajang resmi AFC.
+- Pilar Inti Siap Tempur: Thom Haye (jenderal lapangan tengah), Sandy Walsh (palang pintu tangguh), Balša Sekulić, Luka Menalo, Patricio Matricardi, dan kiper Teja Paku Alam dalam kondisi fisik 100% prima.
+3. Strategi & Skema Taktik Bojan Hodak:
+Pelatih Bojan Hodak menurunkan formasi 4-2-3-1 dengan penguasaan lini tengah agresif melalui duet Thom Haye dan Marc Klok, transisi kilat counter-attack, serta eksploitasi koridor sayap oleh Mariano Peralta dan Luka Menalo untuk memanjakan Balša Sekulić di kotak penalti lawan.
+
+Target Utama:
+PERSIB bertekad mengunci kemenangan ke-5 berturut-turut untuk menyapu bersih rekor 100% sempurna 15 poin di Grup E dan menegaskan status Juara Grup di hadapan gemuruh puluhan ribu Bobotoh di Stadion GBLA!`;
+
+      return {
+        id: 'msg-' + Date.now(),
+        sender: 'ai',
+        text: cleanAiResponseText(text),
+        timestamp: timeStr,
+        category: 'acl',
+        actionableTips: [
+          'Pertandingan kick-off resmi malam ini pukul 19:15 WIB di Stadion GBLA Bandung.',
+          'Mariano Peralta 100% sah bermain sebagai starter karena kartu merah hanya berlaku di liga domestik.',
+          'Pantau live score dan timeline peristiwa pertandingan real-time di tab Matches aplikasi ini.'
+        ],
+        metricsContext: {
+          ...defaultMetrics,
+          nextOpponent: todayMatch.awayTeam,
+          nextMatchDate: `Hari Ini (${todayMatch.time || '19:15 WIB'})`,
+          aclStatus: 'Juara Grup E (12 Poin - Matchday 5 Hari Ini)',
+        },
+      };
+    }
+
+    // =========================================================================
+    // KATEGORI 0B: STATUS DISIPLIN, SANKSI KARTU MERAH & DENDA PEMAIN
+    // =========================================================================
+    if (
+      (q.includes('peralta') && (q.includes('kartu') || q.includes('merah') || q.includes('sanksi') || q.includes('denda') || q.includes('bisa main') || q.includes('absen') || q.includes('skorsing'))) ||
+      (q.includes('kartu merah') && (q.includes('peralta') || q.includes('denda') || q.includes('persita') || q.includes('acl'))) ||
+      (q.includes('matricardi') && q.includes('kartu'))
+    ) {
+      const isMatricardi = q.includes('matricardi');
+      let text = '';
+      if (isMatricardi) {
+        text = `Berikut adalah status disiplin dan kartu Patricio Matricardi (#48 Bek Tengah):
+• Catatan Kartu: Mengantongi 3 kartu kuning di Super League 2026/2027.
+• Status Kesiapan: Berada dalam status PERINGATAN AKUMULASI (1 kartu kuning lagi menuju sanksi larangan bertanding 1 laga di Super League).
+• Ketersediaan Laga: Siap 100% tampil sebagai benteng pertahanan utama, baik di ajang Super League maupun ACL Two malam ini vs FC Seoul.`;
+      } else {
+        text = `Berikut rincian resmi status sanksi disiplin dan ketersediaan laga Mariano Peralta (#10 Sayap Kanan):
+
+1. Kronologi Kartu Merah:
+Mariano Peralta menerima kartu merah langsung pada menit ke-86 saat laga dramatis Pekan 10 Super League vs Bali United di Stadion GBLA usai mencetak gol penyama kedudukan di menit 79.
+
+2. Konsekuensi di Super League (Liga Domestik):
+• Status: Terkena sanksi larangan bertanding pada laga Super League Pekan 11 kontra Persita Tangerang (Minggu, 29 November 2026).
+• Opsi Klausul Denda: Berdasarkan regulasi Komite Disiplin PSSI, sanksi dapat diselesaikan melalui opsi denda disiplin sebesar Rp 10.000.000 jika diselesaikan oleh pihak klub.
+
+3. Konsekuensi di Ajang Asia (ACL Two & Shopee Cup):
+• Status: 100% SAH DAN BEBAS BERMAIN SEJAK MENIT AWAL!
+• Regulasi: Yurisdiksi sanksi kartu merah PSSI di liga domestik terpisah dari regulasi kompetisi AFC (Asian Football Confederation) dan AFF. Oleh karena itu, Peralta bebas tampil penuh membela PERSIB di laga Matchday 5 ACL Two vs FC Seoul malam ini serta Shopee Cup.`;
+      }
+
+      return {
+        id: 'msg-' + Date.now(),
+        sender: 'ai',
+        text: cleanAiResponseText(text),
+        timestamp: timeStr,
+        category: 'squad',
+        actionableTips: [
+          'Sanksi kartu merah Peralta hanya berlaku di kompetisi domestik PSSI (Pekan 11 vs Persita).',
+          'Untuk kompetisi internasional (ACL Two vs FC Seoul malam ini), Peralta 100% sah bermain.',
+          'Manajemen PERSIB sedang mengevaluasi opsi pembayaran denda Komdis PSSI Rp 10 Juta untuk Pekan 11.'
+        ],
+        metricsContext: defaultMetrics,
+      };
+    }
 
     // =========================================================================
     // KATEGORI 0: TOP SCORER & RAJA ASSIST RESMI PERSIB (SEMUA KOMPETISI 2026/2027)
@@ -269,20 +371,20 @@ ${highlightsText}
 
 🔥 Dampak Klasemen & Taktikal:
 Koleksi 19 poin menempatkan PERSIB di posisi 4 klasemen sementara Super League 2026/2027, menempel ketat papan atas!`;
-      } else if (upcomingMatch) {
-        const oppName = upcomingMatch.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : upcomingMatch.homeTeam;
-        text = `Berikut jadwal resmi pertandingan terdekat PERSIB Bandung di ${upcomingMatch.tournament}:
+      } else if (upcomingScheduled) {
+        const oppName = upcomingScheduled.homeTeam.includes('PERSIB') ? upcomingScheduled.awayTeam : upcomingScheduled.homeTeam;
+        text = `Berikut jadwal resmi pertandingan terdekat PERSIB Bandung di ${upcomingScheduled.tournament}:
 
-⚔️ Pertandingan Terdekat (${upcomingMatch.roundOrWeek}):
-• Laga: ${upcomingMatch.homeTeam} vs ${upcomingMatch.awayTeam} (${upcomingMatch.homeTeam.includes('PERSIB') ? 'Laga Kandang' : 'Laga Tandang'})
-• Hari/Tanggal: ${upcomingMatch.date}
-• Waktu Kick-off: ${upcomingMatch.time} WIB
-• Stadion: ${upcomingMatch.venue}
+⚔️ Pertandingan Terdekat (${upcomingScheduled.roundOrWeek}):
+• Laga: ${upcomingScheduled.homeTeam} vs ${upcomingScheduled.awayTeam} (${upcomingScheduled.homeTeam.includes('PERSIB') ? 'Laga Kandang' : 'Laga Tandang'})
+• Hari/Tanggal: ${upcomingScheduled.date}
+• Waktu Kick-off: ${upcomingScheduled.time} WIB
+• Stadion: ${upcomingScheduled.venue}
 • Status: SCHEDULED (Laga Mendatang)
 
 🎯 Misi Taktikal Bojan Hodak:
 1. Lanjutkan Tren Kemenangan: Mengamankan 3 poin tandang demi terus menekan Persija (22 poin), Dewa United (20 poin), dan Bali United (19 poin).
-2. Kesiapan Skuad: Balša Sekulić, Luka Menalo, Thom Haye, Sandy Walsh, dan Teja Paku Alam dalam kondisi bugar 100% (Peralta absen suspensi kartu merah).
+2. Kesiapan Skuad: Balša Sekulić, Luka Menalo, Thom Haye, Sandy Walsh, dan Teja Paku Alam dalam kondisi bugar 100% (Peralta absen suspensi kartu merah di liga domestik).
 3. Fokus Lanjutan: Usai Pekan 11, Maung Bandung akan melakoni Super Big Match Pekan 12 kontra Persebaya (6 Des 2026) dan lawatan Shopee Cup ke markas Lion City Sailors (10 Des 2026).`;
       }
 
@@ -410,21 +512,19 @@ Koleksi 19 poin menempatkan PERSIB di posisi 4 klasemen sementara Super League 2
       q.includes('seoul') ||
       q.includes('viettel')
     ) {
-      const text = `Status resmi spektakuler **PERSIB Bandung di AFC Champions League Two (ACL Two 2026/2027 - Grup E)**:
+      const text = `Status resmi spektakuler PERSIB Bandung di AFC Champions League Two (ACL Two 2026/2027 - Grup E):
 
 ⭐ Rekor Sempurna 100% di Panggung Asia:
-* **Posisi**: **JUARA GRUP E (Juara Grup Resmi)**
-* **Tiket Lolos**: **Lolos ke Babak 16 Besar Asia (Knockout Stage)**
-* **Rekor Tanding**: 4 Pertandingan, 4 Menang, 0 Seri, 0 Kalah | **12 Poin Maksimal**
-* **Produktivitas Gol**: 8 Gol dicetak, hanya 2 kebobolan (Selisih Gol +6)
+• Posisi: Peringkat 1 / JUARA GRUP E
+• Tiket Lolos: Lolos ke Babak 16 Besar Asia (Knockout Stage)
+• Rekor Tanding Saat Ini: 4 Pertandingan, 4 Menang, 0 Seri, 0 Kalah | 12 Poin Maksimal (Gol 8-2, Selisih Gol +6)
+• Laga Matchday 5: Hari Ini (Rabu, 25 November 2026 pukul 19:15 WIB) vs FC Seoul di Stadion GBLA Bandung!
 
----
-
-🏆 Klub-Klub yang Dikangkangi Maung Bandung:
-1. **PERSIB Bandung (IDN)**: 12 Poin (Lolos 16 Besar)
-2. **Melbourne Victory (AUS)**: 6 Poin
-3. **FC Seoul (KOR)**: 4 Poin
-4. **The Cong-Viettel (VIE)**: 1 Poin
+🏆 Klasemen Sementara Grup E:
+1. PERSIB Bandung (IDN): 12 Poin (Lolos 16 Besar Asia)
+2. Melbourne Victory (AUS): 6 Poin
+3. FC Seoul (KOR): 4 Poin
+4. The Cong-Viettel (VIE): 1 Poin
 
 Maung Bandung mencetak sejarah baru sebagai klub Indonesia dengan performa paling dominan di fase grup turnamen resmi AFC musim 2026/2027!`;
 

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PersibIntelligenceEngine, PersibAiChatMessage } from '@/data/persib-intelligence-engine';
 import { VERIFIED_FIXTURES_2026_2027 } from '@/data/persib-data';
+import { isFixtureTodayWib } from '@/lib/groq';
 
 export const dynamic = 'force-dynamic';
 export const revalidate = 0;
@@ -64,12 +65,30 @@ export async function POST(req: NextRequest) {
     const uniqueModels = Array.from(new Set(candidateModels));
 
     // Dynamic live fixtures & schedule feed from database
+    const todayMatch = VERIFIED_FIXTURES_2026_2027.find((f) => isFixtureTodayWib(f.date) || f.status === 'LIVE');
     const liveMatchNow = VERIFIED_FIXTURES_2026_2027.find((f) => f.status === 'LIVE');
     const recentFinished = VERIFIED_FIXTURES_2026_2027.filter((f) => f.status === 'FINISHED').slice(-3);
-    const nextUpcoming = VERIFIED_FIXTURES_2026_2027.filter((f) => f.status === 'SCHEDULED').slice(0, 5);
+    const nextUpcoming = VERIFIED_FIXTURES_2026_2027.filter((f) => f.status === 'SCHEDULED' && !isFixtureTodayWib(f.date)).slice(0, 5);
+
+    const todayMatchFeed = todayMatch
+      ? `🚨 HARI INI ADA PERTANDINGAN BESAR RESMI PERSIB (${todayMatch.date}):
+- Turnamen: ${todayMatch.tournament} (${todayMatch.roundOrWeek})
+- Laga: ${todayMatch.homeTeam} vs ${todayMatch.awayTeam} (${todayMatch.homeTeam.includes('PERSIB') ? 'Laga Kandang di Bandung' : 'Laga Tandang'})
+- Waktu Kick-off Resmi: Pukul ${todayMatch.time || '19:15 WIB'}
+- Stadion: ${todayMatch.venue}
+- Status: ${todayMatch.status === 'LIVE' ? 'SEDANG BERLANGSUNG LIVE SAAT INI!' : 'JADWAL HARI INI (SIAP KICK-OFF MALAM INI ' + (todayMatch.time || '19:15 WIB') + ')'}
+- Konteks Laga & Kesiapan:
+  * Ini adalah laga Matchday 5 Grup E ACL Two vs wakil kuat K-League Korea Selatan FC Seoul di Stadion GBLA.
+  * Rekor Pertemuan: Pada Matchday 2 di Korea, PERSIB mencetak sejarah menang 0-1 di Seoul World Cup Stadium lewat gol Balša Sekulić.
+  * Kesiapan Tim: Mentalitas tim sangat tinggi setelah menang dramatis 2-1 atas Bali United di liga domestik dan mengantongi rekor 100% menang di Grup E (12 poin dari 4 laga).
+  * Status Skuad & Disiplin (PENTING): Mariano Peralta 100% SAH dan bebas bermain sebagai starter di laga Asia malam ini (kartu merah Peralta hanya berlaku di kompetisi domestik Super League PSSI, tidak ada sanksi di kompetisi AFC). Pilar inti seperti Thom Haye, Sandy Walsh, Balša Sekulić, Luka Menalo, dan Patricio Matricardi siap tempur.
+  * Target: Mengamankan kemenangan ke-5 beruntun untuk menyapu bersih rekor 100% sempurna 15 poin di Grup E!`
+      : `Tidak ada pertandingan resmi yang dijadwalkan pada hari ini. Tim sedang beristirahat dan berlatih taktik mempersiapkan laga terdekat mendatang.`;
 
     const liveMatchFeed = liveMatchNow
       ? `SEDANG BERLANGSUNG LIVE: ${liveMatchNow.roundOrWeek} (${liveMatchNow.tournament}): ${liveMatchNow.homeTeam} ${liveMatchNow.homeScore} - ${liveMatchNow.awayScore} ${liveMatchNow.awayTeam} (Waktu: ${liveMatchNow.time || 'LIVE'}) di ${liveMatchNow.venue}. Pertandingan sedang berjalan saat ini!`
+      : todayMatch
+      ? `Laga resmi berikutnya adalah HARI INI (${todayMatch.date}): ${todayMatch.homeTeam} vs ${todayMatch.awayTeam} pukul ${todayMatch.time || '19:15 WIB'} di ${todayMatch.venue}.`
       : `Tidak ada laga yang sedang berjalan LIVE saat ini. Laga resmi terakhir telah rampung dan tim sedang mempersiapkan jadwal terdekat berikutnya.`;
 
     const recentResultsFeed = recentFinished
@@ -82,6 +101,29 @@ export async function POST(req: NextRequest) {
 
     // REFACTOR: Comprehensive Global Football & Persib Tactical Intelligence system prompt
     const systemPrompt = `Kamu adalah "PERSIB & GLOBAL FOOTBALL TACTICAL INTELLIGENCE", ensiklopedia sepak bola dunia dan asisten resmi paling cerdas, taktis, dan otoritatif untuk Bobotoh pendukung PERSIB Bandung serta seluruh penggemar sepak bola profesional internasional.
+
+ATURAN UTAMA MENJAWAB (PATUHI INTENSI PERTANYAAN SECARA KETAT & DILARANG SALAH KONTEKS):
+1. JIKA PENGGUNA BERTANYA: "apa update laga persib di ACL hari ini", "bagaimana kesiapan laga hari ini", "apakah hari ini ada pertandingan", atau pertanyaan serupa seputar laga hari ini / ACL Two:
+   - JAWAB LANGSUNG MENGENAI LAGA HARI INI: PERSIB Bandung vs FC Seoul (KOR) di Matchday 5 Grup E ACL Two, kick-off malam ini pukul 19:15 WIB di Stadion Gelora Bandung Lautan Api (GBLA)!
+   - Jelaskan kesiapan tim: moral juara tim pasca menang 0-1 di markas Seoul dan comeback heroik 2-1 atas Bali United.
+   - Jelaskan status pemain: Mariano Peralta 100% SAH dan bebas bermain di ACL Two malam ini (skorsing kartu merah Peralta hanya berlaku di kompetisi domestik PSSI Super League, BUKAN kompetisi Asia AFC). Thom Haye, Sandy Walsh, Balša Sekulić (pencetak gol di Seoul), Luka Menalo, dan Patricio Matricardi siap starter.
+   - DILARANG KERAS menjawab panjang lebar mendeskripsikan hasil laga lampau (seperti ulasan laga Matchday 4 vs Melbourne Victory atau laga-laga berbulan-bulan lalu) ketika pengguna menanyakan kesiapan hari ini! Fokus 100% pada laga hari ini dan persiapan tim!
+   - DILARANG KERAS mengatakan "saat ini tidak ada laga persib" atau "tim sedang istirahat menunggu 16 besar", karena hari ini ada laga Matchday 5 vs FC Seoul!
+
+2. PENANGANAN HIDDEN KONTEKS PADA SELURUH TEMA:
+   - Tema Jadwal & Laga Terdekat:
+     Jika pengguna menanyakan "laga selanjutnya", "jadwal terdekat", atau "kapan main lagi":
+     Prioritas pertama: Sebutkan laga hari ini jika ada (vs FC Seoul 19:15 WIB hari ini). Setelah itu baru sebutkan laga Super League berikutnya (Pekan 11 vs Persita, 29 Nov 19:00 WIB di Indomilk Arena).
+   - Tema Disiplin & Ketersediaan Pemain (Mariano Peralta & Patricio Matricardi):
+     Jika ditanya "apakah Peralta bisa main?" atau tentang kartu merah:
+     Peralta terkena kartu merah langsung vs Bali United (menit 86). Konsekuensi: Absen di Super League Pekan 11 vs Persita Tangerang kecuali denda disiplin Komdis PSSI Rp 10.000.000 diselesaikan klub. NAMUN di kompetisi internasional (ACL Two vs FC Seoul & Shopee Cup), Peralta 100% SAH dan bebas bermain karena yurisdiksi sanksi domestik PSSI tidak berlaku di AFC/ASEAN.
+     Patricio Matricardi mengantongi 3 kartu kuning (peringatan akumulasi di liga).
+   - Tema Klasemen:
+     Jika tidak menyebut ajang, berikan rangkuman ringkas ketiga kompetisi (Super League #4 19 poin; ACL Two #1 12 poin lolos 16 besar; Shopee Cup #1 6 poin).
+   - Tema Taktik & Formasi Bojan Hodak:
+     Jelaskan formasi 4-2-3-1, kedisiplinan compact defense, transisi balik kilat, poros Thom Haye-Marc Klok, penetrasi Menalo-Peralta, dan finishing Sekulic/Uilliam.
+   - Tema Skuad Asing & Pemain Lama:
+     Pemain lama (David da Silva, Ciro Alves, Alberto Rodriguez, Nick Kuipers, Mendoza, Tyronne del Pino) sudah tidak bermain di Persib 2026/2027. Skuad saat ini diperkuat 11 pemain asing resmi plus diaspora Thom Haye, Sandy Walsh, dan Ragnar Oratmangoen.
 
 KAPABILITAS & CAKUPAN PENGETAHUAN LENGKAP:
 Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepak bola, baik tingkat lokal, nasional (Timnas Indonesia), regional (ASEAN/AFC), maupun turnamen profesional FIFA/UEFA di seluruh dunia! DILARANG KERAS menolak pertanyaan dengan alasan "data tidak menyertakan" atau "hanya untuk Persib". Jawablah dengan analisis taktis mendalam, data akurat, dan gaya bahasa yang profesional serta ramah.
@@ -128,6 +170,8 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
      * PERINGATAN KIPER: Kevin Ray Mendoza, Fitrul Dwi Rustapa, Reky Rahayu, dan Sheva Sanggasi SUDAH TIDAK DI PERSIB! Hanya 3 kiper lokal resmi di atas yang mengawal gawang PERSIB.
 
 2. STATUS RESMI HASIL LAGA, JADWAL & KLASEMEN PERSIB 2026/2027 (DYNAMIC LIVE & SCHEDULE FEED):
+   - FEED LAGA HARI INI:
+     ${todayMatchFeed}
    - FEED LAGA LIVE SAAT INI:
      ${liveMatchFeed}
    - HASIL LAGA RESMI TERKINI YANG TELAH RAMPUNG:
@@ -155,7 +199,7 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
      * MD4: PERSIB vs Johor Darul Ta'zim (JDT) — 17 Des 2026, 19:00 WIB (GBLA)
      * MD5: PKR Svay Rieng vs PERSIB — 25 Feb 2027, 19:00 WIB (Kamboja)
      * MD6: PERSIB vs Cong An Ha Noi — 4 Mar 2027, 19:00 WIB (GBLA)
-   - ACL TWO GRUP E: Rekor 100% menang sempurna (4 main, 4 menang, 12 poin, gol 8-2) resmi lolos ke Babak 16 Besar Asia.
+   - ACL TWO GRUP E: Rekor 100% menang sempurna (4 main, 4 menang, 12 poin, gol 8-2). Malam ini Matchday 5 kandang vs FC Seoul (19:15 WIB di GBLA).
    - TOKOH KUNCI: Pelatih Bojan Hodak, Asisten Igor Tolic, Thom Haye (#33), Sandy Walsh (#6), Ragnar Oratmangoen (#77), Mariano Peralta (#10), Balša Sekulić (#99), Luka Menalo (#9), Marc Klok (#23), Teja Paku Alam (#14).
 
 3. PENGETAHUAN SEPAK BOLA DUNIA & FIFA:
@@ -169,7 +213,7 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
 FORMAT & GAYA JAWABAN:
 - Berbahasa Indonesia fasih, tajam, profesional, berbasis data nyata, dan antusias 🔵.
 - HINDARI SIMBOL MARKDOWN KAKU: DILARANG menggunakan tanda bintang ganda (**) untuk penekanan/bold, garis bawah (_) untuk cetak miring, atau tag html (<br>) di dalam teks respons. HILANGKAN SEMUA TANDA BACA ASTERISK GANDA (**) AGAR TEKS RAPIH. Tuliskan teks secara alami, bersih, rapi, dan mudah dibaca tanpa simbol ** tersebut.
-- Jika ditanya tentang Persib, hubungkan dengan performa musim 2026/2027. Jika ditanya tentang sepak bola internasional/FIFA, berikan fakta komprehensif tanpa ragu.`;
+- Jawab langsung inti pertanyaan di 1-2 paragraf awal. Jika ditanya kesiapan laga hari ini, jawab laga hari ini tanpa menceritakan ulasan panjang hasil laga lalu!`;
 
     if (apiKey) {
       const messagesToSend = [

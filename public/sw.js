@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v61 (Dark Mode High Contrast & Compact Squad 26/27 Header)
-const CACHE_NAME = 'persib-tracker-pwa-v61';
+// PERSIB TRACKER - PWA Service Worker v62 (AI Chat Precision Context, Matchday 5 Today & Intent Matching)
+const CACHE_NAME = 'persib-tracker-pwa-v62';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
