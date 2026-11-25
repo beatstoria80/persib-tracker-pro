@@ -69,7 +69,7 @@ export function SponsorshipFooter() {
   ];
 
   return (
-    <footer className="pt-2 pb-2 text-center select-none">
+    <footer className="pt-1 pb-0 text-center select-none">
       {/* =========================================================================
           // REFACTOR: SPONSORSHIP & OFFICIAL PARTNER CARD (MINIMALIS, COMPACT & TANPA DEAD SPACE)
           - Tightened padding & margin to eliminate wasteful negative space.

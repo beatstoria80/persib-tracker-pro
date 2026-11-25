@@ -235,20 +235,22 @@ export default function PlayerVideoProfilePage() {
             className="relative z-20 px-4 pb-6 pt-2 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto no-scrollbar animate-sheet-rise"
             style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)' }}
           >
-            {/* Main Player Identification Card (High-Contrast Frosted Glass - Zero Collisions) */}
-            <div className="relative p-5 rounded-[28px] bg-slate-950/80 backdrop-blur-xl border border-white/20 shadow-2xl space-y-4">
-              {/* Sleek Close/Minimize Chevron Button positioned close-up at the corner/ujung of the card */}
+            {/* Minimalist Close/Minimize Chevron Handle - Placed Outside in the Center */}
+            <div className="flex justify-center -mb-1 z-30">
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="absolute top-3.5 right-3.5 w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-white/80 hover:text-cyan-300 transition-all active:scale-90 z-10"
+                className="w-8 h-8 rounded-full bg-slate-950/80 hover:bg-slate-900 border border-white/20 backdrop-blur-md flex items-center justify-center text-white/90 hover:text-cyan-300 transition-all active:scale-90 shadow-lg cursor-pointer"
                 aria-label="Tutup sheet profil"
               >
-                <ChevronDown className="w-3.5 h-3.5 text-white/90" />
+                <ChevronDown className="w-4.5 h-4.5" />
               </button>
+            </div>
 
+            {/* Main Player Identification Card (High-Contrast Frosted Glass - Zero Collisions) */}
+            <div className="p-5 rounded-[28px] bg-slate-950/80 backdrop-blur-xl border border-white/20 shadow-2xl space-y-4">
               {/* Row 1: Player Number + Name + Verified Badge on left, Contract Pill on right */}
-              <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10 pr-8">
+              <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <span className="font-mono font-black text-2xl sm:text-3xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0">
                     #{activePlayer.number}
@@ -350,6 +352,31 @@ export default function PlayerVideoProfilePage() {
                   {activePlayer.fitness.notes || 'Pemain kunci dalam skema multi-kompetisi PERSIB Bandung 2026/2027.'}
                 </p>
               </div>
+
+              {/* Row 6: Disciplinary & Match Availability Systemic Status */}
+              {activePlayer.disciplinary && (
+                <div className={`p-3.5 rounded-2xl border backdrop-blur-md space-y-1.5 ${
+                  activePlayer.disciplinary.status === 'red_card_suspended'
+                    ? 'bg-red-950/40 border-red-500/40 text-red-200'
+                    : activePlayer.disciplinary.status === 'yellow_card_accumulation'
+                    ? 'bg-amber-950/40 border-amber-500/40 text-amber-200'
+                    : 'bg-emerald-950/40 border-emerald-500/40 text-emerald-200'
+                }`}>
+                  <div className="flex items-center justify-between text-xs font-mono font-bold">
+                    <span className="flex items-center gap-1.5">
+                      <span>{activePlayer.disciplinary.badgeText}</span>
+                    </span>
+                    {activePlayer.disciplinary.fineAmount && (
+                      <span className="text-[10px] px-2 py-0.5 rounded-full bg-red-600/30 border border-red-500/50 text-red-200">
+                        {activePlayer.disciplinary.fineAmount}
+                      </span>
+                    )}
+                  </div>
+                  <p className="text-[11px] leading-relaxed text-slate-200">
+                    {activePlayer.disciplinary.effectNotice}
+                  </p>
+                </div>
+              )}
             </div>
 
             {/* Horizontal Roster Carousel Selector */}

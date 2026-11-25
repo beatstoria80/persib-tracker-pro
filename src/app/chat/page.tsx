@@ -338,7 +338,8 @@ export default function ChatDedicatedPage() {
             4. MINIMALIST FLOATING INPUT BAR (Above Bottom Nav)
             ========================================================================= */}
         <div
-          className="px-3 pt-2 pb-24 bg-gradient-to-t from-[#050811] via-[#050811]/95 to-transparent shrink-0 z-20"
+          className="px-3 pt-2 bg-gradient-to-t from-[#050811] via-[#050811]/95 to-transparent shrink-0 z-20"
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 70px)' }}
         >
           <form
             onSubmit={(e) => {

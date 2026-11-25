@@ -435,7 +435,29 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
           fitness: {
             ...p.fitness,
             percentage: 100,
-            notes: 'Kondisi bugar 100%. Siap tampil di ajang Asia (ACL Two & Shopee Cup). Menjalani suspensi Liga 1 vs Persita.',
+            notes: 'Kondisi bugar 100%. Sah starter di ajang Asia (ACL Two vs FC Seoul & Shopee Cup). Skorsing kartu merah berlaku di Super League Pekan 11 vs Persita (opsi denda Komdis Rp 10 Jt).',
+          },
+          disciplinary: {
+            status: 'red_card_suspended' as const,
+            badgeText: '🟥 Sanksi Kartu Merah (Pekan 10)',
+            effectNotice: 'Sanksi kartu merah langsung menit 86 vs Bali United. Absen di Super League Pekan 11 vs Persita kecuali denda disiplin Komdis PSSI Rp 10.000.000 dibayarkan. Namun di kompetisi Asia (ACL Two & Shopee Cup), Peralta 100% sah bermain.',
+            suspensionNotice: 'Skorsing Super League Pekan 11 vs Persita',
+            fineAmount: 'Denda Disiplin Komdis PSSI: Rp 10.000.000 (Opsi Pemutihan)',
+            suspendedCompetitions: ['liga1'],
+            eligibleCompetitions: ['acl2', 'shopee_cup'],
+          },
+        };
+      }
+      if (p.id.includes('matricardi')) {
+        return {
+          ...p,
+          disciplinary: {
+            status: 'yellow_card_accumulation' as const,
+            badgeText: '🟨 Waspada Akumulasi (3 KK)',
+            effectNotice: 'Mengoleksi 3 kartu kuning di Super League 2026/2027. Satu kartu kuning lagi akan memicu skorsing 1 laga.',
+            suspensionNotice: 'Ambang Batas: 1 Kartu Kuning Lagi',
+            eligibleCompetitions: ['liga1', 'acl2', 'shopee_cup'],
+            suspendedCompetitions: [],
           },
         };
       }
@@ -476,8 +498,12 @@ POSISI PERSIB DI 3 KOMPETISI AKTIF 2026/2027:
 - AFC Champions League Two (Grup E): Peringkat 1 puncak klasemen (12 poin sempurna dari 4 laga, sapu bersih kemenangan). Hari ini 25 November 2026 Matchday 5 kandang vs FC Seoul (19:15 WIB di GBLA).
 - Shopee Cup (Grup B): Peringkat 1 puncak klasemen (6 poin dari 2 laga, selisih gol 9-1).
 
+REGULASI DISIPLIN & STATUS KARTU SISTEMIK:
+- Mariano Peralta: Terkena kartu merah langsung menit 86 vs Bali United. Konsekuensi sistemik: Absen di Super League Pekan 11 vs Persita Tangerang kecuali denda disiplin Komdis PSSI Rp 10.000.000 dibayarkan. Namun untuk laga Asia (ACL Two vs FC Seoul & Shopee Cup), Peralta 100% sah dan bugar bermain karena yurisdiksi sanksi domestik tidak menghalangi kompetisi AFC/ASEAN.
+- Patricio Matricardi: Mengantongi 3 kartu kuning di Super League (status waspada akumulasi 1 kartu lagi).
+
 TUGAS AI DATA FEEDER:
-Buat TEPAT 1 kalimat ringkasan intelijen taktis/analisis resmi berbahasa Indonesia mengenai laga hero tersebut (${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}) dan kesiapan/situasi Maung Bandung saat ini.
+Buat TEPAT 1 kalimat ringkasan intelijen taktis/analisis resmi berbahasa Indonesia mengenai laga hero tersebut (${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}), kesiapan skuad, serta status ketersediaan pemain (termasuk dampak kartu/disiplin).
 ATURAN MUTLAK:
 1. TEPAT 1 kalimat padat, jelas, akurat, dan profesional.
 2. DILARANG menggunakan tanda bintang markdown (**) sama sekali!

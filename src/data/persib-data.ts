@@ -395,6 +395,14 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
         { x: 32, y: 62, intensity: 0.85 },
       ],
     },
+    disciplinary: {
+      status: 'yellow_card_accumulation',
+      badgeText: '🟨 Waspada Akumulasi (3 KK)',
+      effectNotice: 'Mengoleksi 3 kartu kuning di Super League 2026/2027. Mendapat 1 kartu kuning tambahan akan memicu sanksi skorsing 1 pertandingan otomatis.',
+      suspensionNotice: 'Ambang Batas: 1 Kartu Kuning Lagi',
+      eligibleCompetitions: ['liga1', 'acl2', 'shopee_cup'],
+      suspendedCompetitions: [],
+    },
   },
   {
     id: 'kevin-pasha-66',
@@ -974,6 +982,15 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
         { x: 74, y: 82, intensity: 0.95 },
         { x: 84, y: 72, intensity: 0.9 },
       ],
+    },
+    disciplinary: {
+      status: 'red_card_suspended',
+      badgeText: '🟥 Sanksi Kartu Merah (Pekan 10)',
+      effectNotice: 'Sanksi kartu merah langsung di menit 86 vs Bali United. Absen di Super League Pekan 11 vs Persita Tangerang kecuali denda disiplin Komdis PSSI Rp 10.000.000 diselesaikan oleh klub. Namun di ajang AFC Champions League Two (vs FC Seoul) dan Shopee Cup, Peralta 100% sah dan siap starter.',
+      suspensionNotice: 'Skorsing 1 Laga Super League (Pekan 11 vs Persita)',
+      fineAmount: 'Denda Disiplin Komdis PSSI: Rp 10.000.000 (Opsi Pemutihan)',
+      suspendedCompetitions: ['liga1'],
+      eligibleCompetitions: ['acl2', 'shopee_cup'],
     },
   },
   {

@@ -1200,6 +1200,49 @@ export function MatchCenter() {
                           </span>
                         </div>
 
+                        {/* Radar Status Disiplin, Kartu & Ketersediaan Laga Sistemik */}
+                        <div className="p-3.5 rounded-2xl bg-gradient-to-r from-red-500/10 via-amber-500/10 to-transparent border border-red-500/25 space-y-2">
+                          <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-1.5 text-xs font-black text-red-600 dark:text-red-400">
+                              <span className="w-2 h-2 rounded-full bg-red-500 animate-ping" />
+                              <span>Status Disiplin, Kartu & Ketersediaan Laga</span>
+                            </div>
+                            <span className="text-[9px] font-mono font-extrabold uppercase px-2 py-0.5 rounded-full bg-red-600 text-white">
+                              Regulasi Sistemik
+                            </span>
+                          </div>
+
+                          <div className="space-y-1.5 text-[11px] text-slate-700 dark:text-slate-300">
+                            <div className="p-2.5 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-red-500/20 flex flex-col gap-1">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-red-600 dark:text-red-400 flex items-center gap-1">
+                                  <span>🟥 Mariano Peralta (#10)</span>
+                                </span>
+                                <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-red-100 dark:bg-red-950 text-red-600 dark:text-red-400">
+                                  Kartu Merah Menit 86'
+                                </span>
+                              </div>
+                              <p className="text-[10.5px] text-slate-600 dark:text-slate-400 leading-tight">
+                                Absen di Super League Pekan 11 vs Persita (kecuali klub menyelesaikan opsi denda Komdis PSSI Rp 10.000.000). Namun di ajang Asia (ACL Two vs FC Seoul & Shopee Cup), Peralta <strong className="text-emerald-500 font-bold">100% sah bermain</strong>.
+                              </p>
+                            </div>
+
+                            <div className="p-2.5 rounded-xl bg-white/70 dark:bg-slate-900/70 border border-amber-500/20 flex flex-col gap-1">
+                              <div className="flex items-center justify-between">
+                                <span className="font-bold text-amber-600 dark:text-amber-400">
+                                  🟨 Patricio Matricardi (#48)
+                                </span>
+                                <span className="text-[9.5px] font-mono font-bold px-1.5 py-0.5 rounded bg-amber-100 dark:bg-amber-950 text-amber-600 dark:text-amber-400">
+                                  3 Kartu Kuning
+                                </span>
+                              </div>
+                              <p className="text-[10.5px] text-slate-600 dark:text-slate-400 leading-tight">
+                                Status waspada akumulasi. 1 kartu kuning tambahan akan memicu skorsing 1 pertandingan.
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+
                         {/* Persib Starting XI */}
                         <div>
                           <div className="text-[10px] font-mono font-bold text-slate-500 dark:text-slate-400 uppercase mb-2 flex items-center justify-between">
@@ -1232,6 +1275,23 @@ export function MatchCenter() {
                                       <span>•</span>
                                       <span>{player.marketValue}</span>
                                     </div>
+                                    {player.disciplinary && player.disciplinary.status !== 'cleared' && (
+                                      <div className="mt-1">
+                                        <span className={`inline-block px-1.5 py-0.5 rounded text-[9px] font-bold font-mono tracking-tight ${
+                                          player.disciplinary.status === 'red_card_suspended'
+                                            ? activeTournament === 'liga1'
+                                              ? 'bg-red-500/15 text-red-600 dark:text-red-400 border border-red-500/30'
+                                              : 'bg-emerald-500/15 text-emerald-600 dark:text-emerald-400 border border-emerald-500/30'
+                                            : 'bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30'
+                                        }`}>
+                                          {player.disciplinary.status === 'red_card_suspended'
+                                            ? activeTournament === 'liga1'
+                                              ? '🟥 Sanksi KM (Absen P11 / Opsi Denda)'
+                                              : '✅ Sah Tampil Asia (ACL Two)'
+                                            : player.disciplinary.badgeText}
+                                        </span>
+                                      </div>
+                                    )}
                                   </div>
                                 </div>
                                 <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-100 dark:bg-blue-950 text-blue-900 dark:text-cyan-300 shrink-0">

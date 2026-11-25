@@ -6,6 +6,18 @@ export type Position = 'GK' | 'DF' | 'MF' | 'FW';
 
 export type FitnessStatus = 'fit' | 'latihan_terpisah' | 'cedera';
 
+export type DisciplinaryStatus = 'cleared' | 'red_card_suspended' | 'yellow_card_accumulation' | 'injured';
+
+export interface PlayerDisciplinary {
+  status: DisciplinaryStatus;
+  badgeText: string;
+  effectNotice: string;
+  suspensionNotice?: string;
+  fineAmount?: string;
+  suspendedCompetitions?: string[];
+  eligibleCompetitions?: string[];
+}
+
 export interface PlayerStats {
   minutesPlayed: number;
   appearances: number;
@@ -42,6 +54,7 @@ export interface Player {
   stats: PlayerStats;
   avatarUrl?: string;
   videoUrl?: string;
+  disciplinary?: PlayerDisciplinary;
 }
 
 export interface MatchShot {
@@ -121,6 +134,7 @@ export interface ClubPlayerProfile {
   tacticalRole?: string;
   pitchX?: number; // 0-100 vertical position on pitch
   pitchY?: number; // 0-100 horizontal position on pitch
+  disciplinary?: PlayerDisciplinary;
 }
 
 export interface TacticalDuelMatchup {

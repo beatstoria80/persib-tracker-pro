@@ -102,7 +102,10 @@ export default function HomePage() {
         </div>
 
         {/* Scrollable Main Mobile Hub Content - Flexible bottom alignment without wasteful dead space */}
-        <main className={`flex-1 flex flex-col justify-between px-4 sm:px-5 py-3 pb-20 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
+        <main
+          className={`flex-1 flex flex-col justify-between px-4 sm:px-5 py-3 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}
+          style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 70px)' }}
+        >
           <div className="flex-1">
             {(activeHub === 'match-center' || activeHub === 'ai-chat') && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}
@@ -110,7 +113,7 @@ export default function HomePage() {
           </div>
 
           {/* Official Sponsorship & Partner Footer Section pushed down cleanly above bottom nav */}
-          <div className="mt-auto pt-4 pb-1">
+          <div className="mt-auto pt-3 pb-0">
             <SponsorshipFooter />
           </div>
         </main>
