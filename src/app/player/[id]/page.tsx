@@ -59,6 +59,7 @@ export default function PlayerVideoProfilePage() {
 
   const [copiedToast, setCopiedToast] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleShare = async () => {
@@ -109,7 +110,7 @@ export default function PlayerVideoProfilePage() {
       ? '/Mutombo.mp4'
       : activePlayer.id.includes('notsuda') || activePlayer.id.includes('gatuko') || activePlayer.id.includes('gakuto')
       ? '/Gatuko.mp4'
-      : '/Stadium_scene_logo_animation_6f37cafb.mp4');
+      : '/Stadium_scene_logo_animation_6f37cafb.mp4') || '/Stadium_scene_logo_animation_6f37cafb.mp4';
 
   // Imperative Autoplay & Immediate Video Rendering Trigger (Zero Delay on Page Navigation)
   useEffect(() => {
@@ -126,36 +127,44 @@ export default function PlayerVideoProfilePage() {
     const tryPlay = () => {
       const playPromise = video.play();
       if (playPromise !== undefined) {
-        playPromise.catch(() => {
-          // Retry muted playback if browser queued or throttled background play
-          if (video) {
-            video.muted = true;
-            video.play().catch(() => {});
-          }
-        });
+        playPromise
+          .then(() => setIsVideoPlaying(true))
+          .catch(() => {
+            // Retry muted playback if browser queued or throttled background play
+            if (video) {
+              video.muted = true;
+              video.play().then(() => setIsVideoPlaying(true)).catch(() => {});
+            }
+          });
       }
     };
 
-    if (video.readyState >= 2) {
+    if (video.readyState >= 1) {
       tryPlay();
     } else {
+      video.addEventListener('loadedmetadata', tryPlay, { once: true });
       video.addEventListener('loadeddata', tryPlay, { once: true });
       video.addEventListener('canplay', tryPlay, { once: true });
     }
+
+    const onPlaying = () => setIsVideoPlaying(true);
+    video.addEventListener('playing', onPlaying, { once: true });
 
     // Passive touch fallback in case aggressive OS battery saving mode requires first touch
     const resumeOnInteraction = () => {
       if (video && video.paused) {
         video.muted = true;
-        video.play().catch(() => {});
+        video.play().then(() => setIsVideoPlaying(true)).catch(() => {});
       }
     };
     window.addEventListener('touchstart', resumeOnInteraction, { once: true, passive: true });
     window.addEventListener('click', resumeOnInteraction, { once: true, passive: true });
 
     return () => {
+      video.removeEventListener('loadedmetadata', tryPlay);
       video.removeEventListener('loadeddata', tryPlay);
       video.removeEventListener('canplay', tryPlay);
+      video.removeEventListener('playing', onPlaying);
       window.removeEventListener('touchstart', resumeOnInteraction);
       window.removeEventListener('click', resumeOnInteraction);
     };
@@ -163,36 +172,32 @@ export default function PlayerVideoProfilePage() {
 
   return (
     <div className="min-h-screen w-full bg-[#050811] text-white flex justify-center items-start overflow-hidden">
+      {/* Native React 19 Head Video Preloading for Zero-Delay Startup */}
+      <link rel="preload" as="video" type="video/mp4" href={videoSource} />
+
       {/* 430px Mobile-First App Canvas */}
-      <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-black">
-        {/* Background Looping Stream or Cinematic Portrait Backdrop (100% Crisp, Instant Autoplay) */}
-        <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950 flex items-center justify-center">
-          {videoSource ? (
-            <video
-              ref={videoRef}
-              key={videoSource}
-              src={videoSource}
-              autoPlay
-              loop
-              muted
-              playsInline
-              preload="auto"
-              poster={activePlayer.avatarUrl || getPlayerAvatar(activePlayer.name)}
-              className="w-full h-full object-cover object-center opacity-100"
-            />
-          ) : (
-            <div className="relative w-full h-full flex flex-col items-center justify-center bg-gradient-to-b from-[#0A101D] via-[#050811] to-black">
-              <div className="absolute w-72 h-72 rounded-full bg-blue-600/10 blur-3xl pointer-events-none" />
-              <img
-                src={activePlayer.avatarUrl || getPlayerAvatar(activePlayer.name)}
-                alt={activePlayer.name}
-                className="w-56 h-56 object-cover rounded-full border-4 border-blue-500/30 shadow-2xl drop-shadow-[0_0_35px_rgba(2,132,199,0.3)] filter brightness-95"
-              />
-              <span className="text-xs font-mono font-bold text-slate-500 uppercase tracking-widest mt-6">
-                Official Player Roster
-              </span>
-            </div>
-          )}
+      <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-[#060c18]">
+        {/* Background Looping Video Stream (Zero Static Photo, Zero Black Void) */}
+        <div className="absolute inset-0 z-0 overflow-hidden bg-gradient-to-b from-[#09162e] via-[#050e20] to-[#03060f] flex items-center justify-center">
+          {/* Ambient stadium lighting gradient so canvas is vibrant and never pitch black */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/25 via-slate-950/70 to-black pointer-events-none" />
+
+          <video
+            ref={videoRef}
+            key={videoSource}
+            src={videoSource}
+            autoPlay
+            loop
+            muted
+            playsInline
+            preload="auto"
+            disablePictureInPicture
+            disableRemotePlayback
+            className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
+              isVideoPlaying ? 'opacity-100' : 'opacity-95'
+            }`}
+          />
+
           {/* Subtle Top & Bottom Gradient (Unobtrusive, Keeps Video Crisp & Unblurred) */}
           <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
           <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-black/50 to-transparent pointer-events-none" />
@@ -450,6 +455,22 @@ export default function PlayerVideoProfilePage() {
                     <button
                       type="button"
                       key={player.id}
+                      onMouseEnter={() => {
+                        const targetSrc = player.videoUrl || '/Stadium_scene_logo_animation_6f37cafb.mp4';
+                        const link = document.createElement('link');
+                        link.rel = 'prefetch';
+                        link.as = 'video';
+                        link.href = targetSrc;
+                        document.head.appendChild(link);
+                      }}
+                      onTouchStart={() => {
+                        const targetSrc = player.videoUrl || '/Stadium_scene_logo_animation_6f37cafb.mp4';
+                        const link = document.createElement('link');
+                        link.rel = 'prefetch';
+                        link.as = 'video';
+                        link.href = targetSrc;
+                        document.head.appendChild(link);
+                      }}
                       onClick={() => {
                         setIsExpanded(false);
                         router.replace(`/player/${player.id}`);

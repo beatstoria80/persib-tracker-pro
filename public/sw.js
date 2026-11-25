@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v64 (Clean Feeds Without Timestamp & Bulletproof ACL Matchday AI Grounding)
-const CACHE_NAME = 'persib-tracker-pwa-v64';
+// PERSIB TRACKER - PWA Service Worker v65 (Instant Looping Player Video Without Static Photo or Black Screen)
+const CACHE_NAME = 'persib-tracker-pwa-v65';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

@@ -30,6 +30,47 @@ export function RosterDeepDive() {
     (p: Player) => p.category === activeCategory && p.fitness.status !== 'fit'
   ).length;
 
+  const prefetchPlayerVideo = (player: Player) => {
+    if (typeof document === 'undefined') return;
+    const vSrc =
+      player.videoUrl ||
+      (player.id.includes('uilliam')
+        ? '/uilliam.mp4'
+        : player.id.includes('menalo')
+        ? '/menalo.mp4'
+        : player.id.includes('reijnders')
+        ? '/Reijnders.mp4'
+        : player.id.includes('klok')
+        ? '/Klok.mp4'
+        : player.id.includes('haye')
+        ? '/haye.mp4'
+        : player.id.includes('ragnar')
+        ? '/Ragnar.mp4'
+        : player.id.includes('walsh')
+        ? '/Sandy_Walsh.mp4'
+        : player.id.includes('peralta')
+        ? '/peralta.mp4'
+        : player.id.includes('loncar')
+        ? '/Loncar.mp4'
+        : player.id.includes('cesar') || player.id.includes('caesar')
+        ? '/Cesar.mp4'
+        : player.id.includes('matricardi')
+        ? '/Matricardi.mp4'
+        : player.id.includes('mutombo')
+        ? '/Mutombo.mp4'
+        : player.id.includes('notsuda')
+        ? '/Gatuko.mp4'
+        : '/Stadium_scene_logo_animation_6f37cafb.mp4');
+
+    if (!document.querySelector(`link[href="${vSrc}"]`)) {
+      const link = document.createElement('link');
+      link.rel = 'prefetch';
+      link.as = 'video';
+      link.href = vSrc;
+      document.head.appendChild(link);
+    }
+  };
+
   return (
     <div className="space-y-4">
       {/* 1. Header Typography - Compact & High Contrast (Tanpa Menghabiskan Space) */}
@@ -151,7 +192,8 @@ export function RosterDeepDive() {
         {filteredPlayers.map((player: Player) => (
           <div
             key={player.id}
-            // // REFACTOR: Direct navigation to player profile page without popup card modal
+            onMouseEnter={() => prefetchPlayerVideo(player)}
+            onTouchStart={() => prefetchPlayerVideo(player)}
             onClick={() => router.push(`/player/${player.id}`)}
             className={`rounded-[28px] border p-4 cursor-pointer active:scale-[0.98] transition-all shadow-md ${
               isPro
