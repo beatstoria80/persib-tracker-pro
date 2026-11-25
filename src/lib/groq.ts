@@ -601,20 +601,21 @@ TOP SCORER & TOP ASSIST RESMI SUPER LEAGUE / BRI LIGA 1 2026/2027 (SETELAH PEKAN
 
 KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E - LIVE SEDANG BERLANGSUNG):
 - Situasi Pertandingan LIVE Saat Ini (Matchday 5 di Stadion GBLA):
-  PERSIB Bandung 1 - 1 FC Seoul (Sedang Berlangsung). Gol PERSIB dicetak Mariano Peralta menit ke-6 (assist Sandy Walsh), dibalas Lucas Ruiz menit ke-39!
+  PERSIB Bandung 2 - 1 FC Seoul (Sedang Berlangsung). Gol PERSIB dicetak Mariano Peralta menit ke-6 (assist Sandy Walsh) dan Luka Menalo menit ke-41, dibalas Leonardo Ruiz menit ke-37!
 - Klasemen Live Virtual Grup E:
-  1. PERSIB Bandung (IDN): 5 Main, 4 Menang, 1 Seri, 0 Kalah, Gol 6-2, 13 Poin (Lolos 16 Besar)
-  2. FC Seoul (KOR): 5 Main, 2 Menang, 1 Seri, 2 Kalah, Gol 8-4, 7 Poin
+  1. PERSIB Bandung (IDN): 5 Main, 5 Menang, 0 Seri, 0 Kalah, Gol 7-2, 15 Poin (Juara Grup E & Lolos 16 Besar)
+  2. FC Seoul (KOR): 5 Main, 2 Menang, 0 Seri, 3 Kalah, Gol 8-5, 6 Poin
   3. Melbourne Victory (AUS): 5 Main, 1 Menang, 2 Seri, 2 Kalah, Gol 3-6, 5 Poin (Hasil 0-0 vs The Cong-Viettel hari ini)
   4. The Cong-Viettel FC (VIE): 5 Main, 0 Menang, 2 Seri, 3 Kalah, Gol 1-6, 2 Poin (Hasil 0-0 vs Melbourne Victory hari ini, tersingkir)
 - Top Scorer Resmi Grup E ACL Two 2026/2027:
   1. Balša Sekulić (Persib Bandung) - 3 Gol, 0 Assist (Peringkat 1)
-  2. Mariano Peralta (Persib Bandung) - 2 Gol, 1 Assist (baru saja mencetak gol ke-2 di menit ke-6 vs FC Seoul assist Sandy Walsh!)
-  3. Moon Seon-min (FC Seoul) - 2 Gol, 1 Assist
-  4. Anderson Oliveira (FC Seoul) - 2 Gol, 1 Assist
-  5. Clarismario Santos (Melbourne Victory) - 2 Gol, 0 Assist
-  6. Luka Menalo (Persib Bandung) - 1 Gol, 0 Assist
-- Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 3, Mariano Peralta 2, Luka Menalo 1). Sandy Walsh 1 Assist di laga ini.
+  2. Mariano Peralta (Persib Bandung) - 2 Gol, 1 Assist (mencetak gol di menit ke-6 vs FC Seoul assist Sandy Walsh)
+  3. Luka Menalo (Persib Bandung) - 2 Gol, 0 Assist (mencetak gol rebound di menit ke-41 vs FC Seoul)
+  4. Leonardo Ruiz (FC Seoul) - 2 Gol, 0 Assist (mencetak gol balasan menit ke-37)
+  5. Moon Seon-min (FC Seoul) - 2 Gol, 1 Assist
+  6. Anderson Oliveira (FC Seoul) - 2 Gol, 1 Assist
+  7. Clarismario Santos (Melbourne Victory) - 2 Gol, 0 Assist
+- Total Gol PERSIB di ACL Two: 7 Gol (Balša Sekulić 3, Mariano Peralta 2, Luka Menalo 2). Sandy Walsh 1 Assist di laga ini.
 ${liveGoogleHeadlines.length > 0 ? `\nHEADLINE GOOGLE SEARCH LIVE TERKINI (ACL TWO):\n${liveGoogleHeadlines.map((h) => `- ${h}`).join('\n')}` : ''}
 
 REGULASI DISIPLIN & STATUS KARTU SISTEMIK:
