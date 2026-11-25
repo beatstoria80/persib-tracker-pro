@@ -29,6 +29,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€200K (Rp 3.48 M)',
     contractUntil: '31 Mei 2027',
     verifiedData: true,
+    videoUrl: '/paku_alam.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/474524-1737430429.png',
     fitness: {
       status: 'fit',
@@ -620,6 +621,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€250K (Rp 4.35 M)',
     contractUntil: '31 Mei 2027',
     verifiedData: true,
+    videoUrl: '/Adam_Alis.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/505890-1737431465.png',
     fitness: {
       status: 'fit',

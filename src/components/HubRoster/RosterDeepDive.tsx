@@ -34,7 +34,11 @@ export function RosterDeepDive() {
     if (typeof document === 'undefined') return;
     const vSrc =
       player.videoUrl ||
-      (player.id.includes('uilliam')
+      (player.id.includes('teja')
+        ? '/paku_alam.mp4'
+        : player.id.includes('adam')
+        ? '/Adam_Alis.mp4'
+        : player.id.includes('uilliam')
         ? '/uilliam.mp4'
         : player.id.includes('menalo')
         ? '/menalo.mp4'

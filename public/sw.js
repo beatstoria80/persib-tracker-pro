@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v67 (Context Synced & Production Verified)
-const CACHE_NAME = 'persib-tracker-pwa-v67';
+// PERSIB TRACKER - PWA Service Worker v68 (Teja Paku Alam & Adam Alis Player Profile Video)
+const CACHE_NAME = 'persib-tracker-pwa-v68';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

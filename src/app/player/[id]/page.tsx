@@ -84,7 +84,11 @@ export default function PlayerVideoProfilePage() {
   // REFACTOR: Authentic player video resolution with cinematic stadium fallback
   const videoSource =
     activePlayer.videoUrl ||
-    (activePlayer.id.includes('uilliam')
+    (activePlayer.id.includes('teja')
+      ? '/paku_alam.mp4'
+      : activePlayer.id.includes('adam')
+      ? '/Adam_Alis.mp4'
+      : activePlayer.id.includes('uilliam')
       ? '/uilliam.mp4'
       : activePlayer.id.includes('menalo')
       ? '/menalo.mp4'
