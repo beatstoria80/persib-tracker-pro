@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import {
   MapPin,
@@ -45,6 +45,16 @@ import {
 import { PlayerAvatar } from '@/components/PlayerAvatar';
 import { ClubIntelligenceView } from './ClubIntelligenceView';
 import { isFixtureTodayWib } from '@/lib/groq';
+
+function playerMatchesScorer(playerName: string, scorers: Set<string>): boolean {
+  if (!playerName || scorers.size === 0) return false;
+  const clean = playerName.toLowerCase().trim();
+  if (scorers.has(clean)) return true;
+  for (const s of scorers) {
+    if (clean.includes(s) || s.includes(clean)) return true;
+  }
+  return false;
+}
 
 // Helper to parse round and extra tag (e.g. "Pekan 10 (Laga Kandang - Super Big Match)" -> main: "Pekan 10 (Laga Kandang)", subBadge: "Super Big Match")
 function parseRoundAndExtra(raw: string): { mainText: string; subBadge: string | null } {
@@ -1663,9 +1673,7 @@ export function MatchCenter() {
                           // Calculate position on upper half (bottom: 54% to 92%)
                           const posX = opp.pitchX !== undefined ? opp.pitchX : 75;
                           const posY = opp.pitchY !== undefined ? opp.pitchY : 50;
-                          const oppHasScored =
-                            matchScorers.has(opp.name.toLowerCase().trim()) ||
-                            Array.from(matchScorers).some((s) => opp.name.toLowerCase().includes(s) || s.includes(opp.name.toLowerCase()));
+                          const oppHasScored = playerMatchesScorer(opp.name, matchScorers);
 
                           return (
                             <div
@@ -1725,9 +1733,7 @@ export function MatchCenter() {
                           const fullPlayer = players.find(
                             (p) => p.number === pos.number || p.name.toLowerCase().includes(pos.name.toLowerCase())
                           );
-                          const hasScored =
-                            matchScorers.has(pos.name.toLowerCase().trim()) ||
-                            Array.from(matchScorers).some((s) => pos.name.toLowerCase().includes(s) || s.includes(pos.name.toLowerCase()));
+                          const hasScored = playerMatchesScorer(pos.name, matchScorers);
 
                           return (
                             <TacticalPlayerNode
@@ -3242,9 +3248,7 @@ export function MatchCenter() {
                   const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
                   const posX = opp.pitchX !== undefined ? opp.pitchX : 75;
                   const posY = opp.pitchY !== undefined ? opp.pitchY : 50;
-                  const oppHasScored =
-                    matchScorers.has(opp.name.toLowerCase().trim()) ||
-                    Array.from(matchScorers).some((s) => opp.name.toLowerCase().includes(s) || s.includes(opp.name.toLowerCase()));
+                  const oppHasScored = playerMatchesScorer(opp.name, matchScorers);
 
                   return (
                     <div
@@ -3304,9 +3308,7 @@ export function MatchCenter() {
                   const fullPlayer = players.find(
                     (p) => p.number === pos.number || p.name.toLowerCase().includes(pos.name.toLowerCase())
                   );
-                  const hasScored =
-                    matchScorers.has(pos.name.toLowerCase().trim()) ||
-                    Array.from(matchScorers).some((s) => pos.name.toLowerCase().includes(s) || s.includes(pos.name.toLowerCase()));
+                  const hasScored = playerMatchesScorer(pos.name, matchScorers);
 
                   return (
                     <TacticalPlayerNode
