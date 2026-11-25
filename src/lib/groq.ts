@@ -498,6 +498,23 @@ POSISI PERSIB DI 3 KOMPETISI AKTIF 2026/2027:
 - AFC Champions League Two (Grup E): Peringkat 1 puncak klasemen (12 poin sempurna dari 4 laga, sapu bersih kemenangan). Hari ini 25 November 2026 Matchday 5 kandang vs FC Seoul (19:15 WIB di GBLA).
 - Shopee Cup (Grup B): Peringkat 1 puncak klasemen (6 poin dari 2 laga, selisih gol 9-1).
 
+TOP SCORER & TOP ASSIST RESMI SUPER LEAGUE / BRI LIGA 1 2026/2027 (SETELAH PEKAN 10):
+- Puncak Top Scorer Liga 1 (Seluruh Klub):
+  1. Alexander Jeremejeff (Persija) - 7 Gol
+  2. Alex Martins Ferreira (Persebaya) - 7 Gol
+  3. Lulinha (Madura United) - 6 Gol
+  4. Teppei Yachida (Bali United) - 6 Gol
+  5. Mariano Peralta (PERSIB Bandung) - 5 Gol (Pencetak Gol Terbanyak PERSIB di Super League)
+  6. Marko Dugandzic (Bali United) - 5 Gol
+  7. Balsa Sekulic (PERSIB Bandung) - 4 Gol
+  8. Luka Menalo (PERSIB Bandung) - 4 Gol
+  9. Alexandre Ramalingom (Persita) - 4 Gol
+  10. Ragnar Oratmangoen (PERSIB Bandung) - 3 Gol
+  11. Taisei Marukawa (Dewa United) - 3 Gol
+- Raja Assist Terbanyak Liga 1: Thom Haye (PERSIB Bandung) - 7 Assist!
+- Top Scorer Internal PERSIB di Super League (Total 18 Gol): Mariano Peralta 5 Gol, Balsa Sekulic 4 Gol, Luka Menalo 4 Gol, Ragnar Oratmangoen 3 Gol, Thom Haye 1 Gol (plus 7 assist), Marc Klok 1 Gol (plus 2 assist).
+- PERINGATAN KERAS DATABASE LAMA: DILARANG KERAS menyebut David da Silva, Ciro Alves di Persib, Alberto Rodriguez, Stefano Beltrame, Mateo Kocijan, Nick Kuipers, atau Tyronne del Pino sebagai pencetak gol atau pemain Persib musim 2026/2027! Mereka adalah mantan pemain masa lalu.
+
 KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E):
 - Klasemen Resmi Grup E (setelah Matchday 4):
   1. PERSIB Bandung (IDN): 4 Main, 4 Menang, 0 Seri, 0 Kalah, Gol 7-1, 12 Poin (Juara Grup & Lolos 16 Besar)

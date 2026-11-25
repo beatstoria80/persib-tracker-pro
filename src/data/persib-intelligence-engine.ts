@@ -278,29 +278,50 @@ Mariano Peralta menerima kartu merah langsung pada menit ke-86 saat laga dramati
       q.includes('golden boot') ||
       q.includes('raja gol')
     ) {
-      const text = `Berikut adalah Daftar Resmi Top Scorer & Top Assist PERSIB Bandung Musim 2026/2027 terpisah untuk masing-masing ajang kompetisi:
+      const text = `Berikut adalah Daftar Resmi Top Scorer & Top Assist BRI Super League dan PERSIB Bandung Musim 2026/2027:
 
-1. BRI LIGA 1 / SUPER LEAGUE (Total 18 Gol dari 10 Laga):
-- Mariano Peralta: 5 Gol (Top Scorer Persib di Super League)
+1. PUNCAK TOP SCORER SUPER LEAGUE / BRI LIGA 1 (Seluruh Klub - Pekan 10):
+- Alexander Jeremejeff (Persija): 7 Gol
+- Alex Martins Ferreira (Persebaya): 7 Gol
+- Lulinha (Madura United): 6 Gol
+- Teppei Yachida (Bali United): 6 Gol
+- Mariano Peralta (PERSIB Bandung): 5 Gol (Pencetak Gol Terbanyak PERSIB di Super League)
+- Marko Dugandžić (Bali United): 5 Gol
+- Balša Sekulić (PERSIB Bandung): 4 Gol
+- Luka Menalo (PERSIB Bandung): 4 Gol
+- Alexandre Ramalingom (Persita): 4 Gol
+- Ragnar Oratmangoen (PERSIB Bandung): 3 Gol
+- Taisei Marukawa (Dewa United): 3 Gol
+
+2. RAJA ASSIST SUPER LEAGUE 2026/2027:
+- Thom Haye (PERSIB Bandung): 7 Assist (Pemimpin Assist Terbanyak Liga 1)
+- Taisei Marukawa (Dewa United): 5 Assist
+- Ragnar Oratmangoen (PERSIB Bandung): 4 Assist
+- Teppei Yachida (Bali United): 4 Assist
+
+3. TOP SCORER INTERNAL PERSIB DI SUPER LEAGUE (Total 18 Gol):
+- Mariano Peralta: 5 Gol
 - Balša Sekulić: 4 Gol
 - Luka Menalo: 4 Gol
 - Ragnar Oratmangoen: 3 Gol
-- Thom Haye: 1 Gol, 7 Assist (Raja Assist Tak Tertandingi Liga 1)
+- Thom Haye: 1 Gol, 7 Assist
 - Marc Klok: 1 Gol, 2 Assist
 
-2. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Total 7 Gol PERSIB - Rekor 100% Menang Grup E):
-- Balša Sekulić: 5 Gol (Top Scorer Puncak Grup E ACL Two)
+4. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Total 7 Gol PERSIB - Rekor 100% Menang Grup E):
+- Balša Sekulić: 5 Gol (Top Scorer Puncak Grup E ACL Two Asia)
 - Luka Menalo: 1 Gol, 1 Assist
 - Marc Klok: 1 Gol (Penalti)
 - Thom Haye: 3 Assist (Playmaker Kreator Gol Asia)
 - Mariano Peralta: 2 Assist (Sayap Penyuplai Bola)
 
-3. SHOPEE CUP ASEAN (Total 9 Gol):
+5. SHOPEE CUP ASEAN (Total 9 Gol):
 - Balša Sekulić: 3 Gol (Hat-trick sensasional vs Shan United)
 - Luka Menalo: 2 Gol
 - Mariano Peralta: 2 Gol
 - Berguinho: 1 Gol
-- Uilliam Barros: 1 Gol`;
+- Uilliam Barros: 1 Gol
+
+Catatan Verifikasi: Pemain musim lalu seperti David da Silva atau Ciro Alves di Persib sudah tidak bermain di skuad Persib 2026/2027. Seluruh perolehan gol di atas adalah 100% terverifikasi musim aktif 2026/2027.`;
 
       return {
         id: 'msg-' + Date.now(),
@@ -310,8 +331,8 @@ Mariano Peralta menerima kartu merah langsung pada menit ke-86 saat laga dramati
         category: 'squad',
         actionableTips: [
           'Buka tab "Top Skor" di Match Center untuk melihat visual podium sepatu emas interaktif.',
-          'Balša Sekulić memimpin daftar pencetak gol PERSIB di Super League dengan 5 gol.',
-          'Thom Haye mencatatkan total 10 assist di seluruh kompetisi resmi musim 2026/2027.'
+          'Mariano Peralta memimpin daftar pencetak gol PERSIB di Super League dengan 5 gol.',
+          'Thom Haye mencatatkan total 10 assist di seluruh kompetisi resmi musim 2026/2027 (7 di Liga 1, 3 di ACL Two).'
         ],
         metricsContext: defaultMetrics,
       };

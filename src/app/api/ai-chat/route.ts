@@ -224,14 +224,48 @@ FORMAT & GAYA JAWABAN:
         (lower.includes('acl') && (lower.includes('update') || lower.includes('laga') || lower.includes('jadwal') || lower.includes('siap') || lower.includes('main') || lower.includes('tanding'))) ||
         (lower.includes('laga') && (lower.includes('hari ini') || lower.includes('malam ini') || lower.includes('sekarang')));
 
+      const isTopScoreQuery =
+        lower.includes('top score') ||
+        lower.includes('top skor') ||
+        lower.includes('top scorer') ||
+        lower.includes('pencetak gol') ||
+        lower.includes('gol terbanyak') ||
+        lower.includes('raja assist') ||
+        lower.includes('sepatu emas') ||
+        lower.includes('terbanyak gol');
+
       const contextReminder = isTodayMatchQuery && todayMatch
         ? `[INSTRUKSI MUTLAK: Pertanyaan pengguna menyangkut laga hari ini / ACL Two / kesiapan tim. HARI INI (${todayMatch.date}) ADA PERTANDINGAN RESMI: ${todayMatch.homeTeam} vs ${todayMatch.awayTeam} (Matchday 5 Grup E ACL Two 2026/2027) pukul ${todayMatch.time || '19:15 WIB'} di ${todayMatch.venue}! Jawab secara tegas dan informatif mengenai persiapan laga malam ini, moral tim, dan status pemain (Mariano Peralta 100% sah bermain di Asia, Thom Haye, Sandy Walsh, Sekulic, Menalo siap tempur). DILARANG KERAS mengatakan tidak ada laga hari ini, tim sedang istirahat, atau membahas panjang lebar hasil laga lampau Melbourne Victory!]`
+        : null;
+
+      const topScoreReminder = isTopScoreQuery
+        ? `[INSTRUKSI MUTLAK TOP SCORER MUSIM 2026/2027 (SETELAH PEKAN 10):
+Patuhi data resmi musim 2026/2027 dan DILARANG KERAS mencampur dengan data musim lama (2023/2024 atau 2024/2025)!
+DILARANG KERAS menyebut David da Silva, Ciro Alves di Persib, Flavio Silva, Stefano Lilipaly, dll. sebagai pencetak gol Persib musim 2026/2027!
+DAFTAR RESMI TOP SCORER SUPER LEAGUE / BRI LIGA 1 2026/2027:
+1. Puncak Klasemen Top Scorer Liga (Seluruh Klub):
+   - Alexander Jeremejeff (Persija): 7 Gol
+   - Alex Martins Ferreira (Persebaya): 7 Gol
+   - Lulinha (Madura United): 6 Gol
+   - Teppei Yachida (Bali United): 6 Gol
+   - Mariano Peralta (PERSIB Bandung): 5 Gol (Pencetak Gol Terbanyak PERSIB di Super League)
+   - Marko Dugandžić (Bali United): 5 Gol
+   - Balša Sekulić (PERSIB Bandung): 4 Gol
+   - Luka Menalo (PERSIB Bandung): 4 Gol
+   - Alexandre Ramalingom (Persita): 4 Gol
+   - Ragnar Oratmangoen (PERSIB Bandung): 3 Gol
+   - Taisei Marukawa (Dewa United): 3 Gol
+2. Raja Assist Liga 1: Thom Haye (PERSIB) dengan 7 Assist!
+3. Top Scorer Internal PERSIB di Super League (Total 18 Gol): Mariano Peralta 5 Gol, Balša Sekulić 4 Gol, Luka Menalo 4 Gol, Ragnar Oratmangoen 3 Gol, Thom Haye 1 Gol, Marc Klok 1 Gol.
+4. Top Scorer ACL Two Grup E: Balša Sekulić (PERSIB) 5 Gol (Pemuncak Top Scorer Grup E Asia)!
+5. Top Scorer Shopee Cup Grup B: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United)!]`
         : null;
 
       const messagesToSend = [
         { role: 'system', content: systemPrompt },
         ...conversationHistory.slice(-4),
         ...(contextReminder ? [{ role: 'system' as const, content: contextReminder }] : []),
+        ...(topScoreReminder ? [{ role: 'system' as const, content: topScoreReminder }] : []),
         { role: 'user', content: userMessage },
       ];
 

@@ -7,7 +7,7 @@ interface VideoLoadingSplashProps {
   onFinish?: () => void;
 }
 
-const SPLASH_SESSION_KEY = 'persib_opening_splash_seen_v1';
+export const SPLASH_SESSION_KEY = 'persib_opening_splash_v4';
 
 export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   // REFACTOR: Check sessionStorage so mobile refresh never loops or traps user in opening video
@@ -38,7 +38,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     }
     if (isFading) return;
     setIsFading(true);
-    // REFACTOR: Trigger onFinish synchronously with fade-out so underlying elements rise up in cross-fade sync
+    // Trigger onFinish synchronously with fade-out
     if (onFinish) onFinish();
     setTimeout(() => {
       setIsVisible(false);
@@ -57,12 +57,11 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     const v = videoRef.current;
     if (!v) return;
 
-    // REFACTOR: Explicitly configure DOM properties to bypass mobile browser autoplay restrictions
+    // Explicitly configure DOM properties to bypass mobile browser autoplay restrictions
     v.muted = true;
     v.defaultMuted = true;
     v.playsInline = true;
     v.playbackRate = 1.0;
-    v.defaultPlaybackRate = 1.0;
     v.setAttribute('muted', '');
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', '');
@@ -71,10 +70,8 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     if (playPromise !== undefined) {
       playPromise
         .then(() => {
+          setIsPlaying(true);
           setAutoplayBlocked(false);
-          try {
-            sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
-          } catch {}
         })
         .catch(() => {
           // Autoplay restricted by mobile OS battery saver / user gesture requirement
@@ -87,20 +84,25 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     if (alreadyShown) return;
     attemptPlay();
 
-    // REFACTOR: Rapid safety fallback: If video stalls or is blocked after 3.2s, dismiss automatically so mobile users are never trapped
-    const fallbackTimer = setTimeout(() => {
-      handleDismiss();
-    }, 3200);
+    // Safety fallback: only if video is neither playing nor user is prompted
+    let fallbackTimer: NodeJS.Timeout | null = null;
+    if (!isPlaying && !autoplayBlocked) {
+      fallbackTimer = setTimeout(() => {
+        handleDismiss();
+      }, 7000);
+    }
 
-    return () => clearTimeout(fallbackTimer);
-  }, [alreadyShown, attemptPlay, handleDismiss]);
+    return () => {
+      if (fallbackTimer) clearTimeout(fallbackTimer);
+    };
+  }, [alreadyShown, attemptPlay, handleDismiss, isPlaying, autoplayBlocked]);
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
     if (!v || !v.duration || isNaN(v.duration)) return;
 
-    // Dismiss when video is within 0.15s of completion
-    if (v.duration > 0.5 && v.currentTime >= v.duration - 0.15) {
+    // Dismiss when video is within 0.2s of completion
+    if (v.duration > 0.5 && v.currentTime >= v.duration - 0.2) {
       handleDismiss();
     }
   };
@@ -108,9 +110,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const handleVideoPlaying = () => {
     setIsPlaying(true);
     setAutoplayBlocked(false);
-    try {
-      sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
-    } catch {}
   };
 
   const handleManualPlayTap = (e: React.MouseEvent) => {
@@ -142,10 +141,11 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         isFading ? 'opacity-0 scale-105 filter blur-xs pointer-events-none' : 'opacity-100 scale-100 filter blur-0'
       }`}
     >
-      {/* REFACTOR: Video animasi sinematik baru 'Stadium Scene Logo Animation' layar penuh */}
+      {/* Video animasi sinematik opening layar penuh */}
       <div className="absolute inset-0 w-full h-full overflow-hidden bg-black pointer-events-none">
         <video
           ref={videoRef}
+          src="/Stadium_scene_logo_animation_6f37cafb.mp4"
           autoPlay
           muted
           playsInline

@@ -8,7 +8,7 @@ import { InstallPwaPrompt } from '@/components/InstallPwaPrompt';
 import { MatchCenter } from '@/components/HubMatchCenter/MatchCenter';
 import { RosterDeepDive } from '@/components/HubRoster/RosterDeepDive';
 import { CorporateTransparency } from '@/components/HubCorporate/CorporateTransparency';
-import { VideoLoadingSplash } from '@/components/VideoLoadingSplash';
+import { VideoLoadingSplash, SPLASH_SESSION_KEY } from '@/components/VideoLoadingSplash';
 import { PwaInstallModal } from '@/components/PwaInstallModal';
 import { LiveTelemetryWidget } from '@/components/LiveTelemetryWidget';
 import { SponsorshipFooter } from '@/components/SponsorshipFooter';
@@ -24,7 +24,7 @@ export default function HomePage() {
   const [hasEnteredApp, setHasEnteredApp] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       try {
-        return sessionStorage.getItem('persib_opening_splash_seen_v1') === 'true';
+        return sessionStorage.getItem(SPLASH_SESSION_KEY) === 'true';
       } catch {
         return false;
       }
