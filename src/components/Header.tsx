@@ -10,10 +10,10 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full transition-colors duration-200 border-b ${
+      className={`w-full transition-colors duration-200 border-b ${
         isPro
-          ? 'bg-[#0E1118]/95 border-slate-800/80 text-white backdrop-blur-md shadow-xs'
-          : 'bg-white/95 border-slate-200/80 text-slate-950 backdrop-blur-md shadow-xs'
+          ? 'bg-[#0E1118]/98 border-slate-800/80 text-white backdrop-blur-xl shadow-xs'
+          : 'bg-white/98 border-slate-200/90 text-slate-950 backdrop-blur-xl shadow-xs'
       }`}
       style={{ paddingTop: 'env(safe-area-inset-top, 0px)' }}
     >

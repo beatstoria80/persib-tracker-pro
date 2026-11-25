@@ -61,7 +61,7 @@ body {
   }
   100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: none;
     filter: blur(0px);
   }
 }
@@ -99,7 +99,6 @@ body {
 /* Staggered Element Classes for Smooth Cinematic Entrance */
 .animate-ui-header-drop {
   animation: uiHeaderDrop 650ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  will-change: transform, opacity;
 }
 
 .animate-ui-rise-1 {

@@ -78,8 +78,8 @@ export default function HomePage() {
             : 'bg-[#F8FAFC] text-slate-950 sm:border-slate-200 shadow-xl'
         }`}
       >
-        {/* Sleek Mobile Header with Drop-Down Entrance */}
-        <div className={hasEnteredApp ? 'animate-ui-header-drop' : 'opacity-0 -translate-y-4'}>
+        {/* Stationary Sticky Mobile Top Header - Permanently stays at top on scroll */}
+        <div className={`sticky top-0 z-50 w-full ${hasEnteredApp ? 'animate-ui-header-drop' : 'opacity-0 -translate-y-4'}`}>
           <Header />
         </div>
 

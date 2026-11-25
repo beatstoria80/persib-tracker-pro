@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v57 (Fixed Bottom Layout Alignment & Zero Dead Space)
-const CACHE_NAME = 'persib-tracker-pwa-v57';
+// PERSIB TRACKER - PWA Service Worker v58 (Stationary Sticky Top Header & Zero Scroll-Away)
+const CACHE_NAME = 'persib-tracker-pwa-v58';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
