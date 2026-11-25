@@ -25,19 +25,21 @@ export function CorporateTransparency() {
     <div className="space-y-5">
       {/* 1. Header Typography */}
       <div className="pt-1">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-[11px] font-mono tracking-widest text-slate-400 font-bold uppercase">
-            Corporate Transparency
-          </span>
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider bg-blue-500/10 text-blue-600 dark:text-cyan-400 border border-blue-500/20">
-            <CheckCircle2 className="w-3 h-3" />
-            PT PBB Verified
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h1 className={`text-base sm:text-lg font-black tracking-tight uppercase ${isPro ? 'text-white' : 'text-slate-950'}`}>
+              Governance
+            </h1>
+            <span className={`text-[9.5px] font-mono font-bold tracking-wider px-2 py-0.5 rounded-md uppercase ${
+              isPro ? 'bg-blue-600/25 border border-blue-400/40 text-cyan-300' : 'bg-blue-50 border border-blue-200 text-blue-700'
+            }`}>
+              PT PBB Verified
+            </span>
+          </div>
+          <span className={`text-[10px] font-mono font-bold uppercase tracking-wider ${isPro ? 'text-slate-300' : 'text-slate-500'}`}>
+            FFP & Finansial
           </span>
         </div>
-
-        <h1 className="text-3xl font-black uppercase tracking-tight text-slate-950 dark:text-white">
-          GOVERNANCE
-        </h1>
       </div>
 
       {/* 2. Horizontal Section Switcher Pills */}
@@ -81,10 +83,10 @@ export function CorporateTransparency() {
             >
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="text-sm font-black tracking-tight text-slate-950 dark:text-white">
+                  <h3 className={`text-sm font-black tracking-tight ${isPro ? 'text-white' : 'text-slate-950'}`}>
                     {infra.name}
                   </h3>
-                  <div className="text-[11px] text-slate-400 mt-0.5 font-medium">{infra.location}</div>
+                  <div className={`text-[11px] mt-0.5 font-medium ${isPro ? 'text-slate-300' : 'text-slate-500'}`}>{infra.location}</div>
                 </div>
                 <span className="text-[9px] uppercase font-mono font-bold px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-500 border border-emerald-500/20">
                   {infra.status}
@@ -160,8 +162,8 @@ export function CorporateTransparency() {
                   </span>
                 )}
               </div>
-              <h4 className="text-sm font-black text-slate-950 dark:text-white">{person.name}</h4>
-              <p className="text-xs font-bold text-blue-600 dark:text-cyan-400 mt-0.5">{person.role}</p>
+              <h4 className={`text-sm font-black ${isPro ? 'text-white' : 'text-slate-950'}`}>{person.name}</h4>
+              <p className={`text-xs font-bold mt-0.5 ${isPro ? 'text-cyan-400' : 'text-blue-600'}`}>{person.role}</p>
               <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800/80 text-[11px] text-slate-400 space-y-0.5">
                 <div>Kewarganegaraan: <strong className="text-slate-700 dark:text-slate-200">{person.nationality}</strong></div>
                 {person.license && <div>Lisensi: <strong className="text-amber-500">{person.license}</strong></div>}

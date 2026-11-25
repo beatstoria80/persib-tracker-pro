@@ -140,7 +140,7 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
                   className="w-5 h-5 object-contain shrink-0 drop-shadow-xs"
                 />
               )}
-              <span className="font-extrabold text-xs truncate">{homeName}</span>
+              <span className={`font-extrabold text-xs truncate ${isPro ? 'text-white' : 'text-slate-900'}`}>{homeName}</span>
             </div>
 
             {/* Skor Tengah / Jam Laga */}
@@ -156,7 +156,7 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
 
             {/* Tim Tamu */}
             <div className="flex items-center justify-end gap-2 min-w-0 flex-1 text-right">
-              <span className="font-extrabold text-xs truncate">{awayName}</span>
+              <span className={`font-extrabold text-xs truncate ${isPro ? 'text-white' : 'text-slate-900'}`}>{awayName}</span>
               {currentFixture?.awayLogo && (
                 <img
                   src={currentFixture.awayLogo}
@@ -169,9 +169,9 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
 
           {/* Subtitle Lokasi & Putaran */}
           {currentFixture && (
-            <p className="text-[10px] text-slate-500 dark:text-slate-400 mt-1.5 px-0.5 truncate flex items-center justify-between">
+            <p className={`text-[10px] mt-1.5 px-0.5 truncate flex items-center justify-between ${isPro ? 'text-slate-300' : 'text-slate-500'}`}>
               <span>{currentFixture.roundOrWeek}</span>
-              <span className="opacity-75">{currentFixture.venue.replace('Stadion ', '')}</span>
+              <span className="opacity-90">{currentFixture.venue.replace('Stadion ', '')}</span>
             </p>
           )}
         </div>
@@ -183,14 +183,14 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
           <div
             className={`border-t px-3.5 sm:px-4 py-2 transition-colors ${
               isPro
-                ? 'bg-blue-950/30 border-slate-800/80'
-                : 'bg-blue-50/50 border-blue-100'
+                ? 'bg-blue-950/40 border-slate-800 text-slate-200'
+                : 'bg-blue-50/50 border-blue-100 text-slate-700'
             }`}
           >
             <div className="flex items-center justify-between gap-2">
               <div className="flex items-center gap-1.5">
                 {/* REFACTOR: Minimalist feeds copy text replacing previous live intel badge */}
-                <span className="text-xs font-black uppercase tracking-wider text-blue-700 dark:text-cyan-400">
+                <span className={`text-xs font-black uppercase tracking-wider ${isPro ? 'text-cyan-300' : 'text-blue-700'}`}>
                   feeds
                 </span>
               </div>
@@ -201,7 +201,7 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
                 onClick={() => setIsIntelExpanded((prev) => !prev)}
                 className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-lg transition-all active:scale-95 ${
                   isPro
-                    ? 'text-cyan-400 hover:bg-slate-800/60'
+                    ? 'text-cyan-300 hover:bg-slate-800/60'
                     : 'text-blue-700 hover:bg-blue-100/60'
                 }`}
                 aria-expanded={isIntelExpanded}
@@ -220,8 +220,8 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
               <p
                 className={`text-[11px] leading-relaxed transition-all duration-300 ${
                   isIntelExpanded
-                    ? 'text-slate-800 dark:text-slate-200'
-                    : 'line-clamp-2 text-slate-600 dark:text-slate-300'
+                    ? (isPro ? 'text-slate-100' : 'text-slate-800')
+                    : (isPro ? 'line-clamp-2 text-slate-200' : 'line-clamp-2 text-slate-600')
                 }`}
               >
                 {groqBulletin}
@@ -229,13 +229,13 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
 
               {/* Tag Ringkasan Cepat saat Di-expand */}
               {isIntelExpanded && (
-                <div className="grid grid-cols-2 gap-1.5 mt-2.5 pt-2 border-t border-slate-200 dark:border-slate-800/80 text-[10px]">
-                  <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
-                    <Trophy className="w-3 h-3 text-amber-500 shrink-0" />
+                <div className={`grid grid-cols-2 gap-1.5 mt-2.5 pt-2 border-t text-[10px] ${isPro ? 'border-slate-800' : 'border-slate-200'}`}>
+                  <div className={`flex items-center gap-1 ${isPro ? 'text-slate-300' : 'text-slate-600'}`}>
+                    <Trophy className="w-3 h-3 text-amber-400 shrink-0" />
                     <span>Shopee Cup: #1 (6 Pts, SG +8)</span>
                   </div>
-                  <div className="flex items-center gap-1 text-slate-500 dark:text-slate-400">
-                    <ShieldCheck className="w-3 h-3 text-emerald-500 shrink-0" />
+                  <div className={`flex items-center gap-1 ${isPro ? 'text-slate-300' : 'text-slate-600'}`}>
+                    <ShieldCheck className="w-3 h-3 text-emerald-400 shrink-0" />
                     <span>Super League: #6 (16 Pts)</span>
                   </div>
                 </div>

@@ -31,29 +31,33 @@ export function RosterDeepDive() {
   ).length;
 
   return (
-    <div className="space-y-5">
-      {/* 1. Header Typography */}
-      <div className="pt-1">
-        <div className="flex items-center justify-between mb-1">
-          <span className="text-[11px] font-mono tracking-widest text-slate-400 font-bold uppercase">
-            Official Roster & Medical
+    <div className="space-y-4">
+      {/* 1. Header Typography - Compact & High Contrast (Tanpa Menghabiskan Space) */}
+      <div className="flex items-center justify-between pt-1">
+        <div className="flex items-center gap-2">
+          <h1 className={`text-base sm:text-lg font-black tracking-tight uppercase ${isPro ? 'text-white' : 'text-slate-950'}`}>
+            Squad 26/27
+          </h1>
+          <span className={`text-[9.5px] font-mono font-bold tracking-wider px-2 py-0.5 rounded-md uppercase ${
+            isPro ? 'bg-blue-600/25 border border-blue-400/40 text-cyan-300' : 'bg-blue-50 border border-blue-200 text-blue-700'
+          }`}>
+            Roster Resmi
           </span>
-          <button
-            onClick={() => setFitnessFilter((prev) => (prev === 'ALL' ? 'CEDERA_ONLY' : 'ALL'))}
-            className={`cursor-pointer inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-wider transition-all ${
-              fitnessFilter === 'CEDERA_ONLY'
-                ? 'bg-rose-600 text-white shadow-sm'
-                : 'bg-rose-500/10 text-rose-500 border border-rose-500/20'
-            }`}
-          >
-            <Activity className="w-3 h-3" />
-            <span>{injuredCount} Medis</span>
-          </button>
         </div>
 
-        <h1 className="text-3xl font-black uppercase tracking-tight text-slate-950 dark:text-white">
-          SQUAD 26/27
-        </h1>
+        <button
+          onClick={() => setFitnessFilter((prev) => (prev === 'ALL' ? 'CEDERA_ONLY' : 'ALL'))}
+          className={`cursor-pointer inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-[10px] font-mono font-black uppercase tracking-wider transition-all active:scale-95 ${
+            fitnessFilter === 'CEDERA_ONLY'
+              ? 'bg-rose-600 text-white shadow-sm'
+              : isPro
+              ? 'bg-rose-500/15 text-rose-300 border border-rose-500/30'
+              : 'bg-rose-50 text-rose-600 border border-rose-200'
+          }`}
+        >
+          <Activity className="w-3 h-3" />
+          <span>{injuredCount} Medis</span>
+        </button>
       </div>
 
       {/* 2. Category Pills Selector (Minimalist Horizontal Bar) */}
@@ -77,7 +81,7 @@ export function RosterDeepDive() {
                   ? 'bg-blue-600 text-white shadow-lg shadow-blue-600/30'
                   : 'bg-blue-700 text-white shadow-md shadow-blue-700/25'
                 : isPro
-                ? 'bg-[#121620] text-slate-400 hover:text-slate-200 border border-slate-800'
+                ? 'bg-[#121620] text-slate-200 hover:text-white border border-slate-700/80'
                 : 'bg-white text-slate-600 hover:text-slate-900 border border-slate-200 shadow-xs'
             }`}
           >
@@ -91,7 +95,7 @@ export function RosterDeepDive() {
         <div
           className={`p-1.5 rounded-2xl border flex items-center justify-between text-xs font-bold ${
             isPro
-              ? 'bg-[#121620] border-slate-800 text-slate-400'
+              ? 'bg-[#121620] border-slate-700/80 text-slate-300'
               : 'bg-white border-slate-200 text-slate-600 shadow-xs'
           }`}
         >
@@ -108,9 +112,11 @@ export function RosterDeepDive() {
               className={`flex-1 py-2 rounded-xl text-[11px] font-extrabold transition-all text-center ${
                 roleFilter === role.id
                   ? isPro
-                    ? 'bg-slate-800 text-cyan-300 shadow-sm'
+                    ? 'bg-blue-600 text-white shadow-sm'
                     : 'bg-blue-50 text-blue-900 shadow-xs'
-                  : 'hover:text-slate-900 dark:hover:text-white'
+                  : isPro
+                  ? 'text-slate-200 hover:text-white'
+                  : 'text-slate-600 hover:text-slate-900'
               }`}
             >
               {role.label}
@@ -127,9 +133,11 @@ export function RosterDeepDive() {
             onClick={() => setSelectedPosition(pos)}
             className={`px-3 py-1 rounded-full text-[10px] font-mono font-bold transition-all shrink-0 border ${
               selectedPosition === pos
-                ? 'bg-slate-950 text-white dark:bg-white dark:text-slate-950 border-transparent shadow-xs'
+                ? isPro
+                  ? 'bg-cyan-400 text-slate-950 font-black border-transparent shadow-xs'
+                  : 'bg-slate-950 text-white border-transparent shadow-xs'
                 : isPro
-                ? 'bg-[#121620] border-slate-800 text-slate-400'
+                ? 'bg-[#121620] border-slate-700/80 text-slate-200 hover:text-white'
                 : 'bg-white border-slate-200 text-slate-600'
             }`}
           >
@@ -163,7 +171,7 @@ export function RosterDeepDive() {
                 />
                 <div>
                   <div className="flex items-center gap-2">
-                    <h4 className="font-black text-sm tracking-tight text-slate-950 dark:text-white">
+                    <h4 className={`font-black text-sm tracking-tight ${isPro ? 'text-white' : 'text-slate-950'}`}>
                       {player.name}
                     </h4>
                     {player.squadRole === 'starting' && (
@@ -172,8 +180,8 @@ export function RosterDeepDive() {
                       </span>
                     )}
                   </div>
-                  <div className="text-[11px] text-slate-400 font-medium mt-0.5">
-                    {player.nationality} • <strong className="text-blue-600 dark:text-cyan-400">{player.position}</strong> ({player.age} thn)
+                  <div className={`text-[11px] font-medium mt-0.5 ${isPro ? 'text-slate-300' : 'text-slate-500'}`}>
+                    {player.nationality} • <strong className={isPro ? 'text-cyan-400' : 'text-blue-600'}>{player.position}</strong> ({player.age} thn)
                   </div>
                 </div>
               </div>
@@ -183,7 +191,7 @@ export function RosterDeepDive() {
               )}
             </div>
 
-            <div className="mt-3.5 pt-3 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between text-xs">
+            <div className={`mt-3.5 pt-3 border-t flex items-center justify-between text-xs ${isPro ? 'border-slate-800' : 'border-slate-100'}`}>
               <FitnessTrackerBadge
                 status={player.fitness.status}
                 percentage={player.fitness.percentage}
@@ -192,8 +200,10 @@ export function RosterDeepDive() {
               />
 
               <div className="flex items-center gap-3 font-mono">
-                <span className="text-slate-400 text-[10.5px]">G: {player.stats.goals} | A: {player.stats.assists}</span>
-                <span className="text-blue-600 dark:text-cyan-400 font-black flex items-center text-xs">
+                <span className={`text-[10.5px] ${isPro ? 'text-slate-300' : 'text-slate-500'}`}>
+                  G: {player.stats.goals} | A: {player.stats.assists}
+                </span>
+                <span className={`font-black flex items-center text-xs ${isPro ? 'text-cyan-400' : 'text-blue-600'}`}>
                   Detail <ChevronRight className="w-3.5 h-3.5" />
                 </span>
               </div>

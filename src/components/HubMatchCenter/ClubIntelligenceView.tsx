@@ -87,7 +87,7 @@ export function ClubIntelligenceView({
                   Est. {profile.foundedYear}
                 </span>
               </div>
-              <h2 className="text-xl font-black tracking-tight mt-1 truncate text-slate-950 dark:text-white">
+              <h2 className={`text-xl font-black tracking-tight mt-1 truncate ${isPro ? 'text-white' : 'text-slate-950'}`}>
                 {profile.name}
               </h2>
               <p className="text-xs text-slate-500 dark:text-slate-400 italic">

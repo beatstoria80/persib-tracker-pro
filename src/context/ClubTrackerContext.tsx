@@ -263,8 +263,25 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const toggleMode = () => {
-    setMode((prev: AppThemeState) => (prev === 'minimal' ? 'pro' : 'minimal'));
+    setMode((prev: AppThemeState) => {
+      const next = prev === 'minimal' ? 'pro' : 'minimal';
+      try {
+        localStorage.setItem('persib_theme_mode', next);
+      } catch {}
+      return next;
+    });
   };
+
+  // Synchronize 'dark' class on documentElement for complete CSS contrast in dark mode
+  useEffect(() => {
+    if (typeof document !== 'undefined') {
+      if (mode === 'pro') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    }
+  }, [mode]);
 
   useEffect(() => {
     // Register PWA Service Worker for standalone installability on any mobile phone

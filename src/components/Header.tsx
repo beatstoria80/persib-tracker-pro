@@ -39,7 +39,7 @@ export function Header() {
 
           {/* PERSIB (Font Besar) + TRACKER (Font Kecil di Bawah) */}
           <div className="flex flex-col justify-center">
-            <h1 className="font-black text-base sm:text-lg tracking-tight uppercase leading-none text-slate-950 dark:text-white">
+            <h1 className={`font-black text-base sm:text-lg tracking-tight uppercase leading-none ${isPro ? 'text-white' : 'text-slate-950'}`}>
               PERSIB
             </h1>
             <span

@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v60 (Zero Bottom Negative Space, Disciplinary System, Centered Chevron)
-const CACHE_NAME = 'persib-tracker-pwa-v60';
+// PERSIB TRACKER - PWA Service Worker v61 (Dark Mode High Contrast & Compact Squad 26/27 Header)
+const CACHE_NAME = 'persib-tracker-pwa-v61';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

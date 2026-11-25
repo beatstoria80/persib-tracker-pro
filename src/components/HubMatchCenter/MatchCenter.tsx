@@ -426,7 +426,7 @@ export function MatchCenter() {
       <div className="pt-0.5">
         <div className="flex items-center justify-between mb-2">
           <div className="flex items-center gap-2">
-            <h2 className="text-base sm:text-lg font-black tracking-tight text-slate-950 dark:text-white uppercase">
+            <h2 className={`text-base sm:text-lg font-black tracking-tight uppercase ${isPro ? 'text-white' : 'text-slate-950'}`}>
               {activeTournament === 'shopee_cup'
                 ? 'Shopee Cup'
                 : activeTournament === 'acl2'
@@ -2625,7 +2625,7 @@ export function MatchCenter() {
               </div>
               <div className="flex items-end justify-between mt-1">
                 <div>
-                  <h4 className="text-xl font-black tracking-tight text-slate-950 dark:text-white">
+                  <h4 className={`text-xl font-black tracking-tight ${isPro ? 'text-white' : 'text-slate-950'}`}>
                     PERSIB Bandung
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
@@ -2672,7 +2672,7 @@ export function MatchCenter() {
               </div>
               <div className="flex items-end justify-between mt-1">
                 <div>
-                  <h4 className="text-xl font-black tracking-tight text-slate-950 dark:text-white">
+                  <h4 className={`text-xl font-black tracking-tight ${isPro ? 'text-white' : 'text-slate-950'}`}>
                     PERSIB Bandung
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
@@ -2719,7 +2719,7 @@ export function MatchCenter() {
               </div>
               <div className="flex items-end justify-between mt-1">
                 <div>
-                  <h4 className="text-xl font-black tracking-tight text-slate-950 dark:text-white">
+                  <h4 className={`text-xl font-black tracking-tight ${isPro ? 'text-white' : 'text-slate-950'}`}>
                     PERSIB Bandung
                   </h4>
                   <p className="text-xs text-slate-500 dark:text-slate-300 mt-0.5">
@@ -3000,7 +3000,7 @@ export function MatchCenter() {
             <div className="flex items-center justify-between gap-2 pb-3 border-b border-slate-200 dark:border-slate-800 mb-3">
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5 flex-wrap">
-                  <h3 className="text-xs sm:text-sm font-black tracking-tight text-slate-950 dark:text-white whitespace-nowrap">
+                  <h3 className={`text-xs sm:text-sm font-black tracking-tight whitespace-nowrap ${isPro ? 'text-white' : 'text-slate-950'}`}>
                     {taktikClashMode === 'dual'
                       ? `Bentrok Taktikal: Persib (4-2-3-1) vs ${opponentTeamName} (${opponentProfile.preferredFormation})`
                       : taktikClashMode === 'opponent'
