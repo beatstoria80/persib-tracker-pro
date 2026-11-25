@@ -263,7 +263,8 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         const now = new Date();
         return prev.map((f) => {
           if (f.status !== 'LIVE') return f;
-          const kickoff = parseIndonesianFixtureDate(f.date, '19:15 WIB');
+          const origTime = VERIFIED_FIXTURES_2026_2027.find((orig) => orig.id === f.id)?.time || '19:15 WIB';
+          const kickoff = parseIndonesianFixtureDate(f.date, origTime);
           if (!kickoff) return f;
           const diffMin = Math.floor((now.getTime() - kickoff.getTime()) / 60000);
           if (diffMin < 0 || diffMin > 125) return f;
