@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v69 (Beckham Putra Profile Video & Roster Sync)
-const CACHE_NAME = 'persib-tracker-pwa-v69';
+// PERSIB TRACKER - PWA Service Worker v70 (Adam Alis Suyatna adam_alis.mp4 video)
+const CACHE_NAME = 'persib-tracker-pwa-v70';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

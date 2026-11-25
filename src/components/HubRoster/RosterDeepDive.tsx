@@ -41,7 +41,7 @@ export function RosterDeepDive() {
         : player.id.includes('teja')
         ? '/paku_alam.mp4'
         : player.id.includes('adam')
-        ? '/Adam_Alis.mp4'
+        ? '/adam_alis.mp4'
         : player.id.includes('uilliam')
         ? '/uilliam.mp4'
         : player.id.includes('menalo')

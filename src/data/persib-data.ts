@@ -613,7 +613,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
   {
     id: 'adam-18',
     name: 'Adam Alis',
-    fullName: 'Adam Alis Setyano',
+    fullName: 'Adam Alis Setyano (Suyatna)',
     number: 18,
     position: 'MF',
     category: 'senior',
@@ -623,7 +623,7 @@ export const OFFICIAL_SQUAD_2026_2027: Player[] = [
     marketValue: '€250K (Rp 4.35 M)',
     contractUntil: '31 Mei 2027',
     verifiedData: true,
-    videoUrl: '/Adam_Alis.mp4',
+    videoUrl: '/adam_alis.mp4',
     avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/505890-1737431465.png',
     fitness: {
       status: 'fit',
