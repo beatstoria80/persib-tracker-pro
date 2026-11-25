@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v58 (Stationary Sticky Top Header & Zero Scroll-Away)
-const CACHE_NAME = 'persib-tracker-pwa-v58';
+// PERSIB TRACKER - PWA Service Worker v59 (Official Kick-off 19:15 WIB, Nationality Badge & Compact Chevron)
+const CACHE_NAME = 'persib-tracker-pwa-v59';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

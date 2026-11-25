@@ -473,7 +473,7 @@ ${currentHeroMatch.highlights ? `- Catatan: ${currentHeroMatch.highlights.join('
 
 POSISI PERSIB DI 3 KOMPETISI AKTIF 2026/2027:
 - Super League: Posisi 4 (19 poin, 10 laga, selisih gol +7). Menang 2-1 vs Bali United di GBLA. Laga berikutnya tandang vs Persita Tangerang (29 Nov 2026).
-- AFC Champions League Two (Grup E): Peringkat 1 puncak klasemen (12 poin sempurna dari 4 laga, sapu bersih kemenangan). Hari ini 25 November 2026 Matchday 5 kandang vs FC Seoul (19:00 WIB di GBLA).
+- AFC Champions League Two (Grup E): Peringkat 1 puncak klasemen (12 poin sempurna dari 4 laga, sapu bersih kemenangan). Hari ini 25 November 2026 Matchday 5 kandang vs FC Seoul (19:15 WIB di GBLA).
 - Shopee Cup (Grup B): Peringkat 1 puncak klasemen (6 poin dari 2 laga, selisih gol 9-1).
 
 TUGAS AI DATA FEEDER:

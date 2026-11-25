@@ -2855,7 +2855,7 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
     homeScore: 0,
     awayScore: 0,
     date: '25 November 2026',
-    time: '19:00 WIB',
+    time: '19:15 WIB',
     venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
     status: 'SCHEDULED',
     aggregateScore: 'PERSIB Bandung vs FC Seoul (Matchday 5 ACL Two 2026/2027)',
@@ -2866,12 +2866,12 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
       'FC Seoul mengusung misi balas dendam setelah kalah 0-1 di Seoul World Cup Stadium pada Matchday 2',
     ],
     events: [
-      { minute: "19:00", type: 'chance', text: 'Kick-off Babak Pertama PERSIB Bandung vs FC Seoul di Stadion GBLA' },
+      { minute: "19:15", type: 'chance', text: 'Kick-off Babak Pertama PERSIB Bandung vs FC Seoul di Stadion GBLA' },
       { minute: "Pra-Laga", type: 'chance', text: 'Konferensi Pers Resmi: Bojan Hodak tekankan disiplin transisi dan pressing ketat' },
       { minute: "Taktik", type: 'chance', text: 'Thom Haye dan Marc Klok memimpin lini tengah meredam kreativitas Jesse Lingard' },
     ],
     detailedEvents: [
-      { minute: "19:00", type: 'sub', team: 'home', player: 'Kick-off Resmi', detail: 'Stadion GBLA Penuh Gemuruh Bobotoh' },
+      { minute: "19:15", type: 'sub', team: 'home', player: 'Kick-off Resmi', detail: 'Stadion GBLA Penuh Gemuruh Bobotoh' },
     ],
     statsSummary: {
       possession: [50, 50],

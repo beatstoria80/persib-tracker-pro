@@ -205,15 +205,19 @@ export default function PlayerVideoProfilePage() {
                       <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 inline shrink-0" />
                     )}
                   </div>
-                  <div className="text-[11px] text-slate-200 font-medium truncate mt-0.5">
+                  <div className="text-[11px] text-slate-200 font-medium truncate mt-0.5 flex items-center gap-1.5">
+                    <span className="px-1.5 py-0.5 rounded bg-emerald-500/20 text-emerald-300 text-[10px] font-bold border border-emerald-400/30 shrink-0">
+                      {activePlayer.nationality}
+                    </span>
+                    <span className="text-white/40">•</span>
                     {activePlayer.position === 'GK' ? (
-                      <>
+                      <span className="truncate">
                         <span className="text-amber-300 font-black">{activePlayer.position}</span> • {activePlayer.stats.appearances} Laga • {activePlayer.stats.interceptions} Penyelamatan • Rating <strong className="text-amber-400 font-black">{activePlayer.stats.rating}</strong>
-                      </>
+                      </span>
                     ) : (
-                      <>
+                      <span className="truncate">
                         <span className="text-cyan-300 font-black">{activePlayer.position}</span> • {activePlayer.stats.goals} Gol • {activePlayer.stats.assists} Ast • Rating <strong className="text-amber-400 font-black">{activePlayer.stats.rating}</strong>
-                      </>
+                      </span>
                     )}
                   </div>
                 </div>
@@ -231,22 +235,20 @@ export default function PlayerVideoProfilePage() {
             className="relative z-20 px-4 pb-6 pt-2 flex flex-col gap-3.5 max-h-[85vh] overflow-y-auto no-scrollbar animate-sheet-rise"
             style={{ paddingBottom: 'calc(env(safe-area-inset-bottom, 0px) + 24px)' }}
           >
-            {/* Minimalist Collapse Handle without capsule or copy text */}
-            <div className="flex justify-center pb-1">
+            {/* Main Player Identification Card (High-Contrast Frosted Glass - Zero Collisions) */}
+            <div className="relative p-5 rounded-[28px] bg-slate-950/80 backdrop-blur-xl border border-white/20 shadow-2xl space-y-4">
+              {/* Sleek Close/Minimize Chevron Button positioned close-up at the corner/ujung of the card */}
               <button
                 type="button"
                 onClick={() => setIsExpanded(false)}
-                className="p-2 text-white/80 hover:text-cyan-300 transition-colors active:scale-90"
+                className="absolute top-3.5 right-3.5 w-6 h-6 rounded-full bg-white/10 hover:bg-white/20 border border-white/15 flex items-center justify-center text-white/80 hover:text-cyan-300 transition-all active:scale-90 z-10"
                 aria-label="Tutup sheet profil"
               >
-                <ChevronDown className="w-7 h-7 text-white/90 drop-shadow" />
+                <ChevronDown className="w-3.5 h-3.5 text-white/90" />
               </button>
-            </div>
 
-            {/* Main Player Identification Card (High-Contrast Frosted Glass - Zero Collisions) */}
-            <div className="p-5 rounded-[28px] bg-slate-950/80 backdrop-blur-xl border border-white/20 shadow-2xl space-y-4">
               {/* Row 1: Player Number + Name + Verified Badge on left, Contract Pill on right */}
-              <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10">
+              <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10 pr-8">
                 <div className="flex items-center gap-2.5 min-w-0">
                   <span className="font-mono font-black text-2xl sm:text-3xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0">
                     #{activePlayer.number}
@@ -269,12 +271,17 @@ export default function PlayerVideoProfilePage() {
                 </div>
               </div>
 
-              {/* Row 2: Full Name, Position Pill, and Age */}
+              {/* Row 2: Full Name, Position Pill, Asal Negara (Nationality), and Age */}
               <div className="flex items-center gap-2 flex-wrap text-xs text-slate-100 font-semibold">
                 <span className="text-slate-200 font-bold">{activePlayer.fullName}</span>
                 <span className="text-white/40">•</span>
                 <span className="px-2.5 py-0.5 rounded-md text-[10.5px] font-black uppercase tracking-wider bg-blue-600 text-white font-mono shadow-xs">
                   {activePlayer.position}
+                </span>
+                <span className="text-white/40">•</span>
+                <span className="px-2 py-0.5 rounded-md text-[10.5px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1">
+                  <span>Asal:</span>
+                  <span className="text-white font-black">{activePlayer.nationality}</span>
                 </span>
                 <span className="text-white/40">•</span>
                 <span className="text-slate-200 font-medium">Usia {activePlayer.age} Tahun</span>
@@ -283,9 +290,10 @@ export default function PlayerVideoProfilePage() {
               {/* Row 3: Nationality & Market Value */}
               <div className="flex items-center justify-between gap-2 text-xs text-slate-200 flex-wrap pt-1 border-t border-white/10">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-slate-300 font-medium">{activePlayer.nationality}</span>
+                  <span className="text-slate-400">Kewarganegaraan:</span>
+                  <span className="text-emerald-300 font-extrabold">{activePlayer.nationality}</span>
                   <span className="text-white/30">•</span>
-                  <span className="text-slate-300">Nilai Pasar:</span>
+                  <span className="text-slate-400">Nilai Pasar:</span>
                   <strong className="text-emerald-300 font-extrabold text-sm">{activePlayer.marketValue}</strong>
                 </div>
               </div>
