@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v70 (Adam Alis Suyatna adam_alis.mp4 video)
-const CACHE_NAME = 'persib-tracker-pwa-v70';
+// PERSIB TRACKER - PWA Service Worker v71 (High-Performance 60fps GPU Compositing & Media Stream Bypass)
+const CACHE_NAME = 'persib-tracker-pwa-v71';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
@@ -41,13 +41,13 @@ self.addEventListener('message', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  // Let browser native media player handle byte-range requests directly
-  if (event.request.headers.get('range')) {
+  // REFACTOR: Completely bypass Service Worker for video streams & byte-range requests
+  // Prevents heavy memory buffer allocation and UI stutter on mobile devices
+  if (event.request.url.includes('.mp4') || event.request.headers.get('range')) {
     return;
   }
 
-  // REFACTOR: Network-First Strategy for HTML document navigation
-  // Ensures smartphone users always receive live Vercel updates immediately upon opening the app
+  // Network-First Strategy for HTML document navigation
   if (event.request.mode === 'navigate' || event.request.destination === 'document') {
     event.respondWith(
       fetch(event.request)
@@ -63,11 +63,12 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Stale-While-Revalidate for lightweight static images & assets
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
       return fetch(event.request).then((response) => {
-        if (response.status === 200 && (event.request.url.includes('.mp4') || event.request.url.includes('.png') || event.request.url.includes('.json'))) {
+        if (response.status === 200 && (event.request.url.includes('.png') || event.request.url.includes('.jpg') || event.request.url.includes('.svg') || event.request.url.includes('.json'))) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }

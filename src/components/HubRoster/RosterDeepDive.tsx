@@ -201,7 +201,6 @@ export function RosterDeepDive() {
           <div
             key={player.id}
             onMouseEnter={() => prefetchPlayerVideo(player)}
-            onTouchStart={() => prefetchPlayerVideo(player)}
             onClick={() => router.push(`/player/${player.id}`)}
             className={`rounded-[28px] border p-4 cursor-pointer active:scale-[0.98] transition-all shadow-md ${
               isPro
