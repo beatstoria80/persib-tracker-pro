@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { OFFICIAL_SQUAD_2026_2027, getPlayerAvatar } from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
@@ -80,7 +80,7 @@ export default function PlayerVideoProfilePage() {
     }
   };
 
-  // REFACTOR: Authentic player video resolution without forced default fallback
+  // REFACTOR: Authentic player video resolution with cinematic stadium fallback
   const videoSource =
     activePlayer.videoUrl ||
     (activePlayer.id.includes('uilliam')
@@ -109,22 +109,75 @@ export default function PlayerVideoProfilePage() {
       ? '/Mutombo.mp4'
       : activePlayer.id.includes('notsuda') || activePlayer.id.includes('gatuko') || activePlayer.id.includes('gakuto')
       ? '/Gatuko.mp4'
-      : undefined);
+      : '/Stadium_scene_logo_animation_6f37cafb.mp4');
+
+  // Imperative Autoplay & Immediate Video Rendering Trigger (Zero Delay on Page Navigation)
+  useEffect(() => {
+    const video = videoRef.current;
+    if (!video) return;
+
+    // Enforce hardware-accelerated muted inline autoplay for mobile WebView / Safari / Chrome
+    video.defaultMuted = true;
+    video.muted = true;
+    video.playsInline = true;
+    video.setAttribute('playsinline', '');
+    video.setAttribute('webkit-playsinline', '');
+
+    const tryPlay = () => {
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Retry muted playback if browser queued or throttled background play
+          if (video) {
+            video.muted = true;
+            video.play().catch(() => {});
+          }
+        });
+      }
+    };
+
+    if (video.readyState >= 2) {
+      tryPlay();
+    } else {
+      video.addEventListener('loadeddata', tryPlay, { once: true });
+      video.addEventListener('canplay', tryPlay, { once: true });
+    }
+
+    // Passive touch fallback in case aggressive OS battery saving mode requires first touch
+    const resumeOnInteraction = () => {
+      if (video && video.paused) {
+        video.muted = true;
+        video.play().catch(() => {});
+      }
+    };
+    window.addEventListener('touchstart', resumeOnInteraction, { once: true, passive: true });
+    window.addEventListener('click', resumeOnInteraction, { once: true, passive: true });
+
+    return () => {
+      video.removeEventListener('loadeddata', tryPlay);
+      video.removeEventListener('canplay', tryPlay);
+      window.removeEventListener('touchstart', resumeOnInteraction);
+      window.removeEventListener('click', resumeOnInteraction);
+    };
+  }, [videoSource]);
 
   return (
     <div className="min-h-screen w-full bg-[#050811] text-white flex justify-center items-start overflow-hidden">
       {/* 430px Mobile-First App Canvas */}
       <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-black">
-        {/* Background Looping Stream or Cinematic Portrait Backdrop (100% Crisp, No Blur, Full Opacity) */}
+        {/* Background Looping Stream or Cinematic Portrait Backdrop (100% Crisp, Instant Autoplay) */}
         <div className="absolute inset-0 z-0 overflow-hidden bg-slate-950 flex items-center justify-center">
           {videoSource ? (
             <video
               ref={videoRef}
+              key={videoSource}
               src={videoSource}
               autoPlay
               loop
               muted
               playsInline
+              preload="auto"
+              poster={activePlayer.avatarUrl || getPlayerAvatar(activePlayer.name)}
               className="w-full h-full object-cover object-center opacity-100"
             />
           ) : (
