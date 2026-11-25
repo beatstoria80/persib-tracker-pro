@@ -19,7 +19,7 @@ import {
   IGOR_TOLIC_TACTICAL_PLAYBOOK,
   FINANCIAL_OVERVIEW_2026_2027,
 } from '@/data/persib-data';
-import { isFixtureTodayWib } from '@/lib/groq';
+import { isFixtureTodayWib, parseIndonesianFixtureDate } from '@/lib/groq';
 
 export type AppThemeState = 'minimal' | 'pro';
 export type ActiveHub = 'match-center' | 'roster' | 'transparency' | 'ai-chat';
@@ -110,7 +110,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [isGroqSyncing, setIsGroqSyncing] = useState<boolean>(false);
   const [lastSyncedAt, setLastSyncedAt] = useState<string>('Live Synced');
   const [groqBulletin, setGroqBulletin] = useState<string>(
-    '🔴 [LIVE ACL TWO] PERSIB Bandung 1 - 0 FC Seoul di GBLA! Gol cepat Mariano Peralta menit ke-6 (assist Sandy Walsh).'
+    '🔴 [LIVE ACL TWO] PERSIB Bandung 1 - 1 FC Seoul di GBLA! Gol cepat Mariano Peralta (6\') dibalas Lucas Ruiz (39\').'
   );
 
   const lastVerifiedDate = 'AFC Live Center & Google Sports (Real-Time)';
@@ -248,17 +248,44 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    // Trigger initial background fetch asynchronously & poll every 5s for real-time live match updates
+    // Trigger initial background fetch asynchronously & poll every 5s for live match updates (backed by 8s server cache)
     const timeout = setTimeout(() => {
       syncBackground();
     }, 100);
 
     const interval = setInterval(syncBackground, 5000);
 
+    // 1-second real-time live match minute ticker in UI
+    const liveClockInterval = setInterval(() => {
+      setFixtures((prev) => {
+        const hasLive = prev.some((f) => f.status === 'LIVE');
+        if (!hasLive) return prev;
+        const now = new Date();
+        return prev.map((f) => {
+          if (f.status !== 'LIVE') return f;
+          const kickoff = parseIndonesianFixtureDate(f.date, '19:15 WIB');
+          if (!kickoff) return f;
+          const diffMin = Math.floor((now.getTime() - kickoff.getTime()) / 60000);
+          if (diffMin < 0 || diffMin > 125) return f;
+          let liveMinute = `${diffMin + 1}'`;
+          if (diffMin >= 45 && diffMin < 60) {
+            liveMinute = 'HT (Jeda)';
+          } else if (diffMin >= 60 && diffMin <= 105) {
+            liveMinute = `${diffMin - 15}'`;
+          } else if (diffMin > 105) {
+            liveMinute = `90+${diffMin - 105}'`;
+          }
+          if (f.time === liveMinute) return f;
+          return { ...f, time: liveMinute };
+        });
+      });
+    }, 1000);
+
     return () => {
       isSubscribed = false;
       clearTimeout(timeout);
       clearInterval(interval);
+      clearInterval(liveClockInterval);
     };
   }, []);
 

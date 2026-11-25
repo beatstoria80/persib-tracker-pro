@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v76 (Real-time Google Search Grounded Live ACL Two Sync)
-const CACHE_NAME = 'persib-tracker-pwa-v76';
+// PERSIB TRACKER - PWA Service Worker v77 (Dynamic Google Search Live Sync & 1s UI Match Clock)
+const CACHE_NAME = 'persib-tracker-pwa-v77';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

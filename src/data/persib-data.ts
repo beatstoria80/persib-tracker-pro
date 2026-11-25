@@ -2906,35 +2906,37 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
     homeLogo: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
     awayLogo: 'https://img.a.transfermarkt.technology/wappen/head/6500.png',
     homeScore: 1,
-    awayScore: 0,
+    awayScore: 1,
     date: '25 November 2026',
     time: '19:15 WIB',
     venue: 'Stadion Gelora Bandung Lautan Api (GBLA)',
     status: 'LIVE',
-    aggregateScore: 'PERSIB Bandung 1 - 0 FC Seoul (LIVE - Gol Mariano Peralta 6\')',
+    aggregateScore: 'PERSIB Bandung 1 - 1 FC Seoul (LIVE - Peralta 6\', Lucas Ruiz 39\')',
     highlights: [
       'Menit 6\': GOOOLL PERSIB Bandung! Mariano Peralta mencetak gol cepat pembuka memanfaatkan umpan matang Sandy Walsh 1-0!',
-      'Stadion GBLA bergemuruh, Maung Bandung unggul cepat atas wakil Korea Selatan FC Seoul',
-      'Laga Matchday 5 Grup E ACL Two 2026/2027 — PERSIB telah memastikan tiket lolos ke Babak 16 Besar',
+      'Menit 39\': Gol balasan FC Seoul dicetak Lucas Ruiz menyamakan kedudukan menjadi 1-1 jelang turun minum',
+      'Laga Matchday 5 Grup E ACL Two 2026/2027 di Stadion GBLA — PERSIB telah memastikan tiket lolos ke Babak 16 Besar',
     ],
     events: [
+      { minute: "39'", type: 'goal', text: 'Gol FC Seoul! Lucas Ruiz menyamakan kedudukan menjadi 1-1 menjelang akhir babak pertama.' },
       { minute: "6'", type: 'goal', text: 'GOOOL PERSIB Bandung! Gol cepat Mariano Peralta memanfaatkan umpan matang Sandy Walsh membobol gawang FC Seoul! 1-0!' },
       { minute: "1'", type: 'chance', text: 'Kick-off Babak Pertama dimulai di Stadion Gelora Bandung Lautan Api (GBLA) pukul 19:15 WIB' },
     ],
     detailedEvents: [
+      { minute: "39'", type: 'goal', team: 'away', player: 'Lucas Ruiz', detail: 'Gol Penyeimbang FC Seoul Menjelang Turun Minum' },
       { minute: "6'", type: 'goal', team: 'home', player: 'Mariano Peralta', detail: 'Gol Cepat Pembuka (Assist Sandy Walsh)' },
       { minute: "1'", type: 'sub', team: 'home', player: 'Kick-off Babak Pertama', detail: 'Wasit Memulai Pertandingan Resmi Matchday 5 ACL Two' },
     ],
     statsSummary: {
-      possession: [54, 46],
-      totalShots: [4, 2],
-      shotsOnTarget: [2, 1],
-      passAccuracy: [86, 82],
-      corners: [2, 1],
-      fouls: [3, 4],
-      yellowCards: [0, 0],
+      possession: [51, 49],
+      totalShots: [6, 5],
+      shotsOnTarget: [3, 2],
+      passAccuracy: [85, 84],
+      corners: [3, 2],
+      fouls: [5, 5],
+      yellowCards: [0, 1],
       redCards: [0, 0],
-      saves: [1, 1],
+      saves: [1, 2],
     },
     tacticalDuels: [
       {
@@ -3238,7 +3240,7 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
 ];
 
 // =========================================================================
-// ACL TWO 2026/2027 GROUP STANDINGS (GRUP E - LIVE MATCHDAY 5 PERSIB UNGGUL 1-0)
+// ACL TWO 2026/2027 GROUP STANDINGS (GRUP E - LIVE MATCHDAY 5 SKOR SEMENTARA 1-1)
 // Catatan: Melbourne Victory vs The Cong-Viettel MD5 berakhir imbang 0-0 (25 Nov 2026)
 // =========================================================================
 export const ACL_GROUP_STANDINGS_2026_2027: GroupTeam[] = [
@@ -3246,12 +3248,12 @@ export const ACL_GROUP_STANDINGS_2026_2027: GroupTeam[] = [
     name: 'PERSIB Bandung (IDN)',
     logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/14105.png',
     played: 5,
-    won: 5,
-    drawn: 0,
+    won: 4,
+    drawn: 1,
     lost: 0,
     gf: 6,
-    ga: 1,
-    points: 15,
+    ga: 2,
+    points: 13,
     isPersib: true,
   },
   {
@@ -3259,11 +3261,11 @@ export const ACL_GROUP_STANDINGS_2026_2027: GroupTeam[] = [
     logoUrl: 'https://img.a.transfermarkt.technology/wappen/head/6500.png',
     played: 5,
     won: 2,
-    drawn: 0,
-    lost: 3,
-    gf: 7,
+    drawn: 1,
+    lost: 2,
+    gf: 8,
     ga: 4,
-    points: 6,
+    points: 7,
   },
   {
     name: 'Melbourne Victory (AUS)',

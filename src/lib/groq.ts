@@ -273,16 +273,39 @@ export function isFixtureTodayWib(fixtureDateStr: string, nowUtc: Date = new Dat
   );
 }
 
+// Server-side rate-limit cache for Google Search + Groq LPU inference (8-second TTL)
+let cachedLiveInference: {
+  matchId: string;
+  timestamp: number;
+  homeScore: number | null;
+  awayScore: number | null;
+  bulletin: string | null;
+  headlines: string[];
+} | null = null;
+
+const LIVE_CACHE_TTL_MS = 8000;
+
 /**
- * Real-time Google Search / Google News RSS fetcher for keyword "ACL TWO" & "Persib"
- * Grounds Groq LPU inference on live search headlines to eliminate stale hallucinations.
+ * Real-time Google Search / Google News RSS fetcher dynamic for ANY active match
+ * Automatically adapts search keywords to ACL TWO, BRI Super League, or Shopee Cup.
  */
-async function fetchGoogleSearchAclTwo(): Promise<string[]> {
+async function fetchGoogleSearchLiveMatch(heroMatch: MatchFixture): Promise<string[]> {
   try {
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 3000);
-    const rssUrl =
-      'https://news.google.com/rss/search?q=ACL+TWO+Persib+FC+Seoul&hl=id&gl=ID&ceid=ID:id';
+
+    const compKeyword =
+      heroMatch.tournamentKey === 'acl2'
+        ? 'ACL TWO'
+        : heroMatch.tournamentKey === 'shopee_cup'
+        ? 'Shopee Cup'
+        : 'BRI Super League';
+
+    const cleanHome = heroMatch.homeTeam.replace(/\s*\([^)]*\)/g, '').trim();
+    const cleanAway = heroMatch.awayTeam.replace(/\s*\([^)]*\)/g, '').trim();
+    const query = encodeURIComponent(`${compKeyword} ${cleanHome} ${cleanAway} live score`);
+    const rssUrl = `https://news.google.com/rss/search?q=${query}&hl=id&gl=ID&ceid=ID:id`;
+
     const res = await fetch(rssUrl, {
       cache: 'no-store',
       signal: controller.signal,
@@ -323,7 +346,6 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const apiKey = process.env.GROQ_API_KEY;
   const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
   const startTime = Date.now();
-  const liveGoogleHeadlines = await fetchGoogleSearchAclTwo();
 
   const now = new Date();
   const nowWibDate = new Date(now.getTime() + 7 * 3600 * 1000);
@@ -387,6 +409,16 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const currentHeroMatch = activeLiveFixture || todayMatch || latestFinished || upcomingMatch || dynamicFixtures[0];
   const isCurrentlyLive = Boolean(activeLiveFixture);
   const isHeroToday = Boolean(todayMatch && currentHeroMatch.id === todayMatch.id);
+
+  // Use 8-second server cache for Google Search + Groq inference so 1s-5s UI polling never hits rate limits
+  const isCacheValid =
+    cachedLiveInference &&
+    cachedLiveInference.matchId === currentHeroMatch.id &&
+    Date.now() - cachedLiveInference.timestamp < LIVE_CACHE_TTL_MS;
+
+  const liveGoogleHeadlines = isCacheValid
+    ? cachedLiveInference!.headlines
+    : await fetchGoogleSearchLiveMatch(currentHeroMatch);
 
   // Dynamic stage name and bulletin synthesis
   let currentStageName = '';
@@ -521,10 +553,23 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     },
   };
 
-  // If valid Groq API key is configured, enhance bulletin with dynamic Groq LPU inference
-  if (apiKey && apiKey.length > 20 && !apiKey.includes('placeholder')) {
+  // If valid Groq API key is configured, enhance bulletin & extract any live score from Google Search
+  if (isCacheValid && cachedLiveInference?.bulletin) {
+    liveData.summaryBulletin = cachedLiveInference.bulletin;
+    if (
+      isCurrentlyLive &&
+      activeLiveFixture &&
+      typeof cachedLiveInference.homeScore === 'number' &&
+      typeof cachedLiveInference.awayScore === 'number'
+    ) {
+      activeLiveFixture.homeScore = cachedLiveInference.homeScore;
+      activeLiveFixture.awayScore = cachedLiveInference.awayScore;
+      liveData.liveMatch.homeScore = cachedLiveInference.homeScore;
+      liveData.liveMatch.awayScore = cachedLiveInference.awayScore;
+    }
+  } else if (apiKey && apiKey.length > 20 && !apiKey.includes('placeholder')) {
     try {
-      const systemPrompt = `Kamu adalah AI Autonomous Sports Data Feeder resmi PERSIB Bandung musim 2026/2027 (sumber valid: the-afc.com, ileague.id, persib.co.id).
+      const systemPrompt = `Kamu adalah AI Autonomous Sports Data Feeder resmi PERSIB Bandung musim 2026/2027 (sumber valid: Google News Live, the-afc.com, ileague.id, persib.co.id).
 WAKTU SINKRONISASI REAL-TIME: ${nowWibDateStr}, ${nowWib}.
 
 SITUASI LAGA HERO SAAT INI:
@@ -556,10 +601,10 @@ TOP SCORER & TOP ASSIST RESMI SUPER LEAGUE / BRI LIGA 1 2026/2027 (SETELAH PEKAN
 
 KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E - LIVE SEDANG BERLANGSUNG):
 - Situasi Pertandingan LIVE Saat Ini (Matchday 5 di Stadion GBLA):
-  PERSIB Bandung 1 - 0 FC Seoul (Sedang Berlangsung Babak Pertama). Gol cepat dicetak oleh Mariano Peralta pada menit ke-6 memanfaatkan umpan matang Sandy Walsh!
+  PERSIB Bandung 1 - 1 FC Seoul (Sedang Berlangsung). Gol PERSIB dicetak Mariano Peralta menit ke-6 (assist Sandy Walsh), dibalas Lucas Ruiz menit ke-39!
 - Klasemen Live Virtual Grup E:
-  1. PERSIB Bandung (IDN): 5 Main, 5 Menang, 0 Seri, 0 Kalah, Gol 6-1, 15 Poin (Memimpin Unggul 1-0 LIVE; sebelum laga 4 main 12 poin)
-  2. FC Seoul (KOR): 5 Main, 2 Menang, 0 Seri, 3 Kalah, Gol 7-4, 6 Poin (sebelum laga 4 main 6 poin)
+  1. PERSIB Bandung (IDN): 5 Main, 4 Menang, 1 Seri, 0 Kalah, Gol 6-2, 13 Poin (Lolos 16 Besar)
+  2. FC Seoul (KOR): 5 Main, 2 Menang, 1 Seri, 2 Kalah, Gol 8-4, 7 Poin
   3. Melbourne Victory (AUS): 5 Main, 1 Menang, 2 Seri, 2 Kalah, Gol 3-6, 5 Poin (Hasil 0-0 vs The Cong-Viettel hari ini)
   4. The Cong-Viettel FC (VIE): 5 Main, 0 Menang, 2 Seri, 3 Kalah, Gol 1-6, 2 Poin (Hasil 0-0 vs Melbourne Victory hari ini, tersingkir)
 - Top Scorer Resmi Grup E ACL Two 2026/2027:
@@ -577,11 +622,12 @@ REGULASI DISIPLIN & STATUS KARTU SISTEMIK:
 - Patricio Matricardi: Mengantongi 3 kartu kuning di Super League (status waspada akumulasi 1 kartu lagi).
 
 TUGAS AI DATA FEEDER:
-Buat TEPAT 1 kalimat ringkasan intelijen taktis/analisis resmi berbahasa Indonesia mengenai laga hero tersebut (${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}), kesiapan skuad, serta status ketersediaan pemain (termasuk dampak kartu/disiplin).
-ATURAN MUTLAK:
-1. TEPAT 1 kalimat padat, jelas, akurat, dan profesional.
-2. DILARANG menggunakan tanda bintang markdown (**) sama sekali!
-3. DILARANG menyebut tahun di luar musim 2026/2027.`;
+Kembalikan JSON valid SAJA tanpa markdown dengan format:
+{"homeScore": number|null, "awayScore": number|null, "bulletin": "1 kalimat ringkasan intelijen terkini"}
+Aturan:
+1. Jika di HEADLINE GOOGLE SEARCH LIVE TERKINI terdapat skor pertandingan yang jelas dan pasti untuk ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}, isi homeScore dan awayScore dengan angka bulatnya; jika tidak ada skor eksplisit di headline, isi null.
+2. "bulletin" harus TEPAT 1 kalimat padat berbahasa Indonesia mengenai laga (${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}), kesiapan skuad, serta status ketersediaan pemain.
+3. DILARANG menggunakan tanda bintang markdown (**) atau menyebut tahun di luar musim 2026/2027.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
@@ -595,21 +641,65 @@ ATURAN MUTLAK:
             { role: 'system', content: systemPrompt },
             {
               role: 'user',
-              content: `Keluarkan 1 kalimat intelijen resmi terkini untuk update real-time: ${currentStageName}. Status: ${currentHeroMatch.status}, Waktu: ${currentHeroMatch.time}.`,
+              content: `Keluarkan JSON update real-time untuk: ${currentStageName}. Status: ${currentHeroMatch.status}, Waktu: ${currentHeroMatch.time}.`,
             },
           ],
           temperature: 0.1,
-          max_tokens: 150,
+          max_tokens: 200,
         }),
       });
 
       if (res.ok) {
         const json = await res.json();
-        const groqText = json.choices?.[0]?.message?.content?.trim();
-        if (groqText) {
-          const cleanText = groqText.replace(/\*\*/g, '').replace(/^"+|"+$/g, '').trim();
-          liveData.summaryBulletin = cleanText;
+        const rawContent = json.choices?.[0]?.message?.content?.trim();
+        let parsedHomeScore: number | null = null;
+        let parsedAwayScore: number | null = null;
+        let parsedBulletin: string | null = null;
+
+        if (rawContent) {
+          try {
+            const jsonMatch = rawContent.match(/\{[\s\S]*\}/);
+            if (jsonMatch) {
+              const parsed = JSON.parse(jsonMatch[0]) as {
+                homeScore?: number | null;
+                awayScore?: number | null;
+                bulletin?: string;
+              };
+              if (typeof parsed.homeScore === 'number' && parsed.homeScore >= 0) {
+                parsedHomeScore = parsed.homeScore;
+              }
+              if (typeof parsed.awayScore === 'number' && parsed.awayScore >= 0) {
+                parsedAwayScore = parsed.awayScore;
+              }
+              if (typeof parsed.bulletin === 'string' && parsed.bulletin.trim()) {
+                parsedBulletin = parsed.bulletin.replace(/\*\*/g, '').replace(/^"+|"+$/g, '').trim();
+              }
+            } else {
+              parsedBulletin = rawContent.replace(/\*\*/g, '').replace(/^"+|"+$/g, '').trim();
+            }
+          } catch {
+            parsedBulletin = rawContent.replace(/\*\*/g, '').replace(/^"+|"+$/g, '').trim();
+          }
         }
+
+        if (parsedBulletin) {
+          liveData.summaryBulletin = parsedBulletin;
+        }
+        if (isCurrentlyLive && activeLiveFixture && parsedHomeScore !== null && parsedAwayScore !== null) {
+          activeLiveFixture.homeScore = parsedHomeScore;
+          activeLiveFixture.awayScore = parsedAwayScore;
+          liveData.liveMatch.homeScore = parsedHomeScore;
+          liveData.liveMatch.awayScore = parsedAwayScore;
+        }
+
+        cachedLiveInference = {
+          matchId: currentHeroMatch.id,
+          timestamp: Date.now(),
+          homeScore: parsedHomeScore,
+          awayScore: parsedAwayScore,
+          bulletin: parsedBulletin,
+          headlines: liveGoogleHeadlines,
+        };
       }
     } catch (err) {
       console.warn('Groq live inference fallback handled gracefully:', err);
