@@ -300,32 +300,29 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     const parsedDate = parseIndonesianFixtureDate(f.date, f.time);
     if (!parsedDate) return { ...f };
 
-    const isToday = isFixtureTodayWib(f.date, now);
-    if (isToday) {
-      const diffMs = now.getTime() - parsedDate.getTime();
-      const diffMinutes = Math.floor(diffMs / 60000);
+    const diffMs = now.getTime() - parsedDate.getTime();
+    const diffMinutes = Math.floor(diffMs / 60000);
 
-      // Match window: kick-off until +115 minutes
-      if (diffMinutes >= 0 && diffMinutes <= 115) {
-        let liveMinute = `${diffMinutes + 1}'`;
-        if (diffMinutes >= 45 && diffMinutes < 60) {
-          liveMinute = 'HT (Jeda)';
-        } else if (diffMinutes >= 60 && diffMinutes <= 105) {
-          liveMinute = `${diffMinutes - 15}'`;
-        } else if (diffMinutes > 105) {
-          liveMinute = `90+${diffMinutes - 105}'`;
-        }
-        return {
-          ...f,
-          status: 'LIVE' as const,
-          time: liveMinute,
-        };
-      } else if (diffMinutes > 115) {
-        return {
-          ...f,
-          status: 'FINISHED' as const,
-        };
+    // Match window: kick-off until +115 minutes (berlaku untuk SEMUA pertandingan mendatang)
+    if (diffMinutes >= 0 && diffMinutes <= 115) {
+      let liveMinute = `${diffMinutes + 1}'`;
+      if (diffMinutes >= 45 && diffMinutes < 60) {
+        liveMinute = 'HT (Jeda)';
+      } else if (diffMinutes >= 60 && diffMinutes <= 105) {
+        liveMinute = `${diffMinutes - 15}'`;
+      } else if (diffMinutes > 105) {
+        liveMinute = `90+${diffMinutes - 105}'`;
       }
+      return {
+        ...f,
+        status: 'LIVE' as const,
+        time: liveMinute,
+      };
+    } else if (diffMinutes > 115 && f.status === 'SCHEDULED') {
+      return {
+        ...f,
+        status: 'FINISHED' as const,
+      };
     }
     return { ...f };
   });

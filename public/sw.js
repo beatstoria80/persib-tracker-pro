@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v55 (Dynamic Real-Time Matchday Trigger & Time-Aware Groq Feeder)
-const CACHE_NAME = 'persib-tracker-pwa-v55';
+// PERSIB TRACKER - PWA Service Worker v56 (Universal Automated Match Lifecycle Engine)
+const CACHE_NAME = 'persib-tracker-pwa-v56';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
