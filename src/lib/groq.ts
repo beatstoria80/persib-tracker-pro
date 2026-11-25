@@ -500,36 +500,38 @@ POSISI PERSIB DI 3 KOMPETISI AKTIF 2026/2027:
 
 TOP SCORER & TOP ASSIST RESMI SUPER LEAGUE / BRI LIGA 1 2026/2027 (SETELAH PEKAN 10):
 - Puncak Top Scorer Liga 1 (Seluruh Klub):
-  1. Alexander Jeremejeff (Persija) - 7 Gol
-  2. Alex Martins Ferreira (Persebaya) - 7 Gol
-  3. Lulinha (Madura United) - 6 Gol
-  4. Teppei Yachida (Bali United) - 6 Gol
-  5. Mariano Peralta (PERSIB Bandung) - 5 Gol (Pencetak Gol Terbanyak PERSIB di Super League)
-  6. Marko Dugandzic (Bali United) - 5 Gol
-  7. Balsa Sekulic (PERSIB Bandung) - 4 Gol
-  8. Luka Menalo (PERSIB Bandung) - 4 Gol
-  9. Alexandre Ramalingom (Persita) - 4 Gol
-  10. Ragnar Oratmangoen (PERSIB Bandung) - 3 Gol
-  11. Taisei Marukawa (Dewa United) - 3 Gol
+  1. Alexander Jeremejeff (Persija Jakarta) - 7 Gol
+  2. Dimitar Mitkov (Madura United) - 6 Gol
+  3. Teppei Yachida (Bali United) - 6 Gol
+  4. Denilson Junior (Dewa United) - 6 Gol
+  5. Careca (Arema FC) - 6 Gol
+  6. Irfan Jaya (Bali United) - 5 Gol
+  7. Jayro Jean (Semen Padang) - 5 Gol
+  8. Mariano Peralta (PERSIB Bandung) - 5 Gol (Pencetak Gol Terbanyak PERSIB di Super League)
 - Raja Assist Terbanyak Liga 1: Thom Haye (PERSIB Bandung) - 7 Assist!
-- Top Scorer Internal PERSIB di Super League (Total 18 Gol): Mariano Peralta 5 Gol, Balsa Sekulic 4 Gol, Luka Menalo 4 Gol, Ragnar Oratmangoen 3 Gol, Thom Haye 1 Gol (plus 7 assist), Marc Klok 1 Gol (plus 2 assist).
+- Top Scorer Internal PERSIB di Super League (Total 18 Gol): Mariano Peralta 5 Gol, Balša Sekulić 4 Gol, Luka Menalo 4 Gol, Ragnar Oratmangoen 3 Gol, Thom Haye 1 Gol (plus 7 assist), Marc Klok 1 Gol (plus 2 assist).
 - PERINGATAN KERAS DATABASE LAMA: DILARANG KERAS menyebut David da Silva, Ciro Alves di Persib, Alberto Rodriguez, Stefano Beltrame, Mateo Kocijan, Nick Kuipers, atau Tyronne del Pino sebagai pencetak gol atau pemain Persib musim 2026/2027! Mereka adalah mantan pemain masa lalu.
 
-KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E):
-- Klasemen Resmi Grup E (setelah Matchday 4):
-  1. PERSIB Bandung (IDN): 4 Main, 4 Menang, 0 Seri, 0 Kalah, Gol 7-1, 12 Poin (Juara Grup & Lolos 16 Besar)
-  2. FC Seoul (KOR): 4 Main, 2 Menang, 1 Seri, 1 Kalah, Gol 5-3, 7 Poin
-  3. Melbourne Victory (AUS): 4 Main, 1 Menang, 0 Seri, 3 Kalah, Gol 3-6, 3 Poin
-  4. The Cong-Viettel FC (VIE): 4 Main, 0 Menang, 1 Seri, 3 Kalah, Gol 1-6, 1 Poin
-- Top Scorer Puncak Grup E ACL Two 2026/2027:
-  1. Balša Sekulić (PERSIB) - 5 Gol (Top Scorer Utama Grup E)
-  2. Stanislav Iljutcenko (FC Seoul) - 2 Gol
-  3. Bruno Fornaroli (Melbourne Victory) - 2 Gol
-  4. Luka Menalo (PERSIB) - 1 Gol
-  5. Jesse Lingard (FC Seoul) - 1 Gol
-  6. Daniel Arzani (Melbourne Victory) - 1 Gol
-  7. Marc Klok (PERSIB) - 1 Gol
-- Top Assist: Thom Haye (PERSIB) 3 Assist, Mariano Peralta (PERSIB) 2 Assist.
+KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E - PER 25 NOV 2026 17:17 WIB):
+- Klasemen Resmi Grup E:
+  1. PERSIB Bandung (IDN): 4 Main, 4 Menang, 0 Seri, 0 Kalah, Gol 5-1, 12 Poin (Juara Grup E & Lolos 16 Besar)
+  2. FC Seoul (KOR): 4 Main, 2 Menang, 1 Seri, 1 Kalah, Gol 7-3, 7 Poin
+  3. Melbourne Victory (AUS): 5 Main, 1 Menang, 1 Seri, 3 Kalah, Gol 3-6, 4 Poin (Baru saja imbang 0-0 vs The Cong-Viettel sore tadi)
+  4. The Cong-Viettel FC (VIE): 5 Main, 0 Menang, 2 Seri, 3 Kalah, Gol 1-6, 2 Poin (Baru saja imbang 0-0 vs Melbourne Victory sore tadi)
+- Top Scorer Resmi Grup E ACL Two 2026/2027 (Sumber Resmi ESPN & AFC):
+  1. Balša Sekulić (Persib Bandung) - 3 Gol, 0 Assist (Peringkat 1 Teratas)
+  2. Moon Seon-min (FC Seoul) - 2 Gol, 1 Assist
+  3. Anderson Oliveira (FC Seoul) - 2 Gol, 1 Assist
+  4. Clarismario Santos (Melbourne Victory) - 2 Gol, 0 Assist
+  5. Mariano Peralta (Persib Bandung) - 1 Gol, 1 Assist
+  6. Luka Menalo (Persib Bandung) - 1 Gol, 0 Assist
+  7. Leonardo Ruiz (FC Seoul) - 1 Gol, 0 Assist
+  8. Cho Young-wook (FC Seoul) - 1 Gol, 0 Assist
+  9. Hwang Do-yun (FC Seoul) - 1 Gol, 0 Assist
+  10. Guillermo May (Melbourne Victory) - 1 Gol, 0 Assist
+  11. Jordi Valadon (Melbourne Victory) - 1 Gol, 0 Assist
+- Total Gol PERSIB di ACL Two: 5 Gol (Balša Sekulić 3, Mariano Peralta 1, Luka Menalo 1). Mariano Peralta 1 Assist.
+- Laga Hari Ini: Matchday 5 PERSIB Bandung vs FC Seoul (Rabu, 25 Nov 2026, 19:15 WIB di Stadion GBLA). Hasil Melbourne Victory vs The Cong-Viettel sore tadi berakhir imbang 0-0 sehingga daftar pencetak gol belum berubah.
 
 REGULASI DISIPLIN & STATUS KARTU SISTEMIK:
 - Mariano Peralta: Terkena kartu merah langsung menit 86 vs Bali United. Konsekuensi sistemik: Absen di Super League Pekan 11 vs Persita Tangerang kecuali denda disiplin Komdis PSSI Rp 10.000.000 dibayarkan. Namun untuk laga Asia (ACL Two vs FC Seoul & Shopee Cup), Peralta 100% sah dan bugar bermain karena yurisdiksi sanksi domestik tidak menghalangi kompetisi AFC/ASEAN.

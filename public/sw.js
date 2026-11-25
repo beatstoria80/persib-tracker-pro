@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v73 (Opening Animation Splash & Super League Top Scorers Alignment)
-const CACHE_NAME = 'persib-tracker-pwa-v73';
+// PERSIB TRACKER - PWA Service Worker v74 (Verified Lapangbola & ESPN Top Scorers Reconciliation)
+const CACHE_NAME = 'persib-tracker-pwa-v74';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
