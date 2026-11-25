@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v54 (Official Authentic Super League 2026/2027 Roster & Tactical Duels Responsive Fix)
-const CACHE_NAME = 'persib-tracker-pwa-v54';
+// PERSIB TRACKER - PWA Service Worker v55 (Dynamic Real-Time Matchday Trigger & Time-Aware Groq Feeder)
+const CACHE_NAME = 'persib-tracker-pwa-v55';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

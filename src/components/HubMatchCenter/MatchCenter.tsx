@@ -43,6 +43,7 @@ import {
 } from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
 import { ClubIntelligenceView } from './ClubIntelligenceView';
+import { isFixtureTodayWib } from '@/lib/groq';
 
 // Helper to parse round and extra tag (e.g. "Pekan 10 (Laga Kandang - Super Big Match)" -> main: "Pekan 10 (Laga Kandang)", subBadge: "Super Big Match")
 function parseRoundAndExtra(raw: string): { mainText: string; subBadge: string | null } {
@@ -316,16 +317,18 @@ export function MatchCenter() {
     };
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
-  // REFACTOR: Dynamically prioritize explicit selection -> LIVE match -> tournament-aware matchday -> latest finished/scheduled
+  const globalTodayMatch = fixtures.find((f) => isFixtureTodayWib(f.date) || f.status === 'LIVE');
+  const todayFixtureInTournament = tournamentFixtures.find((f) => isFixtureTodayWib(f.date) || f.status === 'LIVE');
+  const latestFinishedInTournament = [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED');
+  const nextScheduledInTournament = tournamentFixtures.find((f) => f.status === 'SCHEDULED' && !isFixtureTodayWib(f.date));
+
+  // Dynamic tournament-aware resolution: selected -> LIVE -> today's match -> latest finished -> next scheduled
   const currentFixture: MatchFixture =
     (selectedFixtureId ? tournamentFixtures.find((f: MatchFixture) => f.id === selectedFixtureId) : null) ||
     tournamentFixtures.find((f) => f.status === 'LIVE') ||
-    (activeTournament === 'shopee_cup'
-      ? tournamentFixtures.find((f) => f.id === 'shopee-26-md2-ft') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')
-      : activeTournament === 'acl2'
-      ? tournamentFixtures.find((f) => f.id === 'acl2-26-md4-live') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')
-      : tournamentFixtures.find((f) => f.id === 'l1-p10') || tournamentFixtures.find((f) => f.id === 'l1-p9') || [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED')) ||
-    [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED' || f.status === 'SCHEDULED') ||
+    todayFixtureInTournament ||
+    latestFinishedInTournament ||
+    nextScheduledInTournament ||
     tournamentFixtures[0] ||
     fixtures[0];
 
@@ -500,6 +503,31 @@ export function MatchCenter() {
             <span className="w-1.5 h-1.5 rounded-full bg-amber-400 shrink-0" />
           </button>
         </div>
+
+        {/* Real-time Matchday Quick-Jump Alert when a match is active/today in another tournament */}
+        {globalTodayMatch && globalTodayMatch.tournamentKey !== activeTournament && (
+          <button
+            type="button"
+            onClick={() => {
+              setActiveTournament(globalTodayMatch.tournamentKey);
+              setSelectedFixtureId(globalTodayMatch.id);
+            }}
+            className="w-full mt-2 p-2 rounded-xl bg-blue-600/10 hover:bg-blue-600/20 border border-blue-500/30 flex items-center justify-between text-left transition-all active:scale-98"
+          >
+            <div className="flex items-center gap-1.5 min-w-0">
+              <span className="relative flex h-2 w-2 shrink-0">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-red-500"></span>
+              </span>
+              <span className="text-[10px] font-bold text-slate-800 dark:text-slate-200 truncate">
+                Laga Hari Ini ({globalTodayMatch.tournamentKey.toUpperCase()}): {globalTodayMatch.homeTeam} vs {globalTodayMatch.awayTeam} ({globalTodayMatch.time})
+              </span>
+            </div>
+            <span className="text-[10px] font-bold text-blue-600 dark:text-cyan-400 shrink-0 flex items-center">
+              Lihat <ChevronRight className="w-3 h-3" />
+            </span>
+          </button>
+        )}
       </div>
 
       {/* 2. Structured Sub-Page Navigation Tabs (5-Column Responsive Grid - Zero Truncation Mobile) */}

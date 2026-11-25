@@ -213,55 +213,172 @@ function computeSortedGroupStandings(
 }
 
 /**
+ * Indonesian Month Name Mapping for Date Parsing
+ */
+const MONTHS_ID_MAP: Record<string, number> = {
+  januari: 0, jan: 0,
+  februari: 1, feb: 1,
+  maret: 2, mar: 2,
+  april: 3, apr: 3,
+  mei: 4,
+  juni: 5, jun: 5,
+  juli: 6, jul: 6,
+  agustus: 7, ags: 7, agt: 7,
+  september: 8, sep: 8,
+  oktober: 9, okt: 9,
+  november: 10, nov: 10,
+  desember: 11, des: 11,
+};
+
+/**
+ * Parses Indonesian match date string (e.g. '25 November 2026', 'Minggu, 22 November 2026')
+ * and time string into a valid UTC Date corresponding to WIB (UTC+7).
+ */
+export function parseIndonesianFixtureDate(dateStr: string, timeStr?: string): Date | null {
+  if (!dateStr) return null;
+  const cleaned = dateStr.replace(/^[A-Za-z]+,\s*/, '').trim();
+  const parts = cleaned.split(/\s+/);
+  if (parts.length < 3) return null;
+  const day = parseInt(parts[0], 10);
+  const monthName = parts[1].toLowerCase();
+  const year = parseInt(parts[2], 10);
+  const month = MONTHS_ID_MAP[monthName];
+  if (isNaN(day) || month === undefined || isNaN(year)) return null;
+
+  let hour = 19;
+  let minute = 0;
+  if (timeStr) {
+    const timeMatch = timeStr.match(/(\d{1,2})[:.](\d{2})/);
+    if (timeMatch) {
+      hour = parseInt(timeMatch[1], 10);
+      minute = parseInt(timeMatch[2], 10);
+    }
+  }
+  // Construct UTC date for WIB (WIB = UTC+7)
+  return new Date(Date.UTC(year, month, day, hour - 7, minute));
+}
+
+/**
+ * Checks if a fixture date string matches today's date in Western Indonesia Time (WIB).
+ */
+export function isFixtureTodayWib(fixtureDateStr: string, nowUtc: Date = new Date()): boolean {
+  const fDate = parseIndonesianFixtureDate(fixtureDateStr);
+  if (!fDate) return false;
+  const nowWib = new Date(nowUtc.getTime() + 7 * 3600 * 1000);
+  const fixWib = new Date(fDate.getTime() + 7 * 3600 * 1000);
+  return (
+    nowWib.getUTCDate() === fixWib.getUTCDate() &&
+    nowWib.getUTCMonth() === fixWib.getUTCMonth() &&
+    nowWib.getUTCFullYear() === fixWib.getUTCFullYear()
+  );
+}
+
+/**
  * Backend Autonomous Data Supplier Function
  * Real-time event progression across all 18 clubs in Super League 2026/2027, ACL Two 2026/2027, & Shopee Cup.
+ * Fully dynamic: detects active matchday, live kick-offs, and synthesizes time-aware Groq intelligence.
  */
 export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const apiKey = process.env.GROQ_API_KEY;
   const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
   const startTime = Date.now();
 
+  const now = new Date();
+  const nowWibDate = new Date(now.getTime() + 7 * 3600 * 1000);
   const nowWib =
-    new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+    nowWibDate.toLocaleTimeString('id-ID', { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' WIB';
+  const nowWibDateStr =
+    nowWibDate.toLocaleDateString('id-ID', { timeZone: 'UTC', day: 'numeric', month: 'long', year: 'numeric' });
 
-  // REFACTOR: Dynamically calculate real competition state for active 2026/2027 season without outdated years or fake match scores
+  // Dynamically calculate real competition state for active 2026/2027 season
   const calculatedStandings: LeagueStandingRow[] = computeSortedStandings(BRI_LIGA_1_STANDINGS_2026_2027, []);
   const calculatedAcl: GroupTeam[] = computeSortedGroupStandings(ACL_GROUP_STANDINGS_2026_2027, []);
   const calculatedShopeeCup: GroupTeam[] = computeSortedGroupStandings(SHOPEE_CUP_STANDINGS_2026_2027, []);
-  const dynamicFixtures: MatchFixture[] = [...VERIFIED_FIXTURES_2026_2027];
 
-  // REFACTOR: Sinkronisasi data faktual Super League 2026/2027 (Pekan 10 tuntas: PERSIB 2 - 1 Bali United)
-  const currentStageName = 'Pekan 10 Super League 2026/2027 Tuntas: PERSIB 2 - 1 Bali United';
-  const dynamicBulletin = `🏆 [SUPER LEAGUE PEKAN 10] PERSIB Bandung menang comeback heroik 2-1 atas Bali United di GBLA! Gol Mariano Peralta (79') & Luka Menalo (81') balas gol Marko Dugandžić (66') meski Peralta diganjar kartu merah (86'). Maung Bandung raih 19 poin di Papan Atas Klasemen! (Sync: ${nowWib})`;
+  // Dynamically evaluate all fixtures against current real-time clock (WIB)
+  const dynamicFixtures: MatchFixture[] = VERIFIED_FIXTURES_2026_2027.map((f) => {
+    const parsedDate = parseIndonesianFixtureDate(f.date, f.time);
+    if (!parsedDate) return { ...f };
+
+    const isToday = isFixtureTodayWib(f.date, now);
+    if (isToday) {
+      const diffMs = now.getTime() - parsedDate.getTime();
+      const diffMinutes = Math.floor(diffMs / 60000);
+
+      // Match window: kick-off until +115 minutes
+      if (diffMinutes >= 0 && diffMinutes <= 115) {
+        let liveMinute = `${diffMinutes + 1}'`;
+        if (diffMinutes >= 45 && diffMinutes < 60) {
+          liveMinute = 'HT (Jeda)';
+        } else if (diffMinutes >= 60 && diffMinutes <= 105) {
+          liveMinute = `${diffMinutes - 15}'`;
+        } else if (diffMinutes > 105) {
+          liveMinute = `90+${diffMinutes - 105}'`;
+        }
+        return {
+          ...f,
+          status: 'LIVE' as const,
+          time: liveMinute,
+        };
+      } else if (diffMinutes > 115) {
+        return {
+          ...f,
+          status: 'FINISHED' as const,
+        };
+      }
+    }
+    return { ...f };
+  });
 
   const persibInStandings = calculatedStandings.find((c) => c.isPersib || c.team.toLowerCase().includes('persib'));
 
-  // REFACTOR: Decoupled dynamic match extraction based on authentic 2026/2027 schedule
-  const latestFinished =
-    dynamicFixtures.filter((f) => f.status === 'FINISHED' && f.tournamentKey === 'liga1').slice(-1)[0] ||
-    dynamicFixtures.find((f) => f.id === 'l1-p10');
-  const upcomingMatch =
-    dynamicFixtures.find((f) => f.status === 'SCHEDULED' && f.tournamentKey === 'liga1') ||
-    dynamicFixtures.find((f) => f.id === 'l1-p11');
-
+  // Autonomous dynamic match detection across ALL tournaments
   const activeLiveFixture = dynamicFixtures.find((f) => f.status === 'LIVE');
+  const todayMatch = dynamicFixtures.find((f) => isFixtureTodayWib(f.date, now) && f.status !== 'FINISHED');
+  const allFinished = dynamicFixtures.filter((f) => f.status === 'FINISHED');
+  const latestFinished = allFinished.length > 0 ? allFinished[allFinished.length - 1] : dynamicFixtures[0];
+  const allUpcoming = dynamicFixtures.filter((f) => f.status === 'SCHEDULED' && !isFixtureTodayWib(f.date, now));
+  const upcomingMatch = allUpcoming[0] || dynamicFixtures[dynamicFixtures.length - 1];
+
+  // Dynamic hero match hierarchy:
+  // 1. Match currently LIVE
+  // 2. Match scheduled TODAY (e.g. 25 November 2026 vs FC Seoul in ACL Two)
+  // 3. Latest finished match across all competitions
+  // 4. Next upcoming match
+  const currentHeroMatch = activeLiveFixture || todayMatch || latestFinished || upcomingMatch || dynamicFixtures[0];
   const isCurrentlyLive = Boolean(activeLiveFixture);
-  const currentHeroMatch = activeLiveFixture || latestFinished || dynamicFixtures[0];
+  const isHeroToday = Boolean(todayMatch && currentHeroMatch.id === todayMatch.id);
+
+  // Dynamic stage name and bulletin synthesis
+  let currentStageName = '';
+  let dynamicBulletin = '';
+
+  if (isCurrentlyLive) {
+    currentStageName = `🔴 SEDANG BERLANGSUNG: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} (${currentHeroMatch.roundOrWeek})`;
+    dynamicBulletin = `🔴 [LIVE ${currentHeroMatch.tournament.toUpperCase()}] Sedang Berlangsung! ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} di ${currentHeroMatch.venue} memasuki menit ${currentHeroMatch.time}. (Sync: ${nowWib})`;
+  } else if (isHeroToday) {
+    currentStageName = `🔥 MATCHDAY HARI INI: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} (${currentHeroMatch.roundOrWeek})`;
+    dynamicBulletin = `🔥 [MATCHDAY HARI INI - ${currentHeroMatch.tournament.toUpperCase()}] Big Match! ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} kick-off pukul ${currentHeroMatch.time} di ${currentHeroMatch.venue}! (Sync: ${nowWib})`;
+  } else if (latestFinished) {
+    currentStageName = `${latestFinished.roundOrWeek} Tuntas: ${latestFinished.homeTeam} ${latestFinished.homeScore ?? 0} - ${latestFinished.awayScore ?? 0} ${latestFinished.awayTeam}`;
+    dynamicBulletin = `🏆 [${latestFinished.tournament.toUpperCase()}] Hasil Akhir: ${latestFinished.homeTeam} ${latestFinished.homeScore ?? 0} - ${latestFinished.awayScore ?? 0} ${latestFinished.awayTeam} di ${latestFinished.venue}. (Sync: ${nowWib})`;
+  } else {
+    currentStageName = `${currentHeroMatch.tournament}: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}`;
+    dynamicBulletin = `📅 [JADWAL RESMI] ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} pada ${currentHeroMatch.date} (${currentHeroMatch.time}). (Sync: ${nowWib})`;
+  }
 
   const heroEvents = (currentHeroMatch?.events && currentHeroMatch.events.length > 0)
     ? currentHeroMatch.events.map((ev) => ({ minute: ev.minute, type: ev.type, text: ev.text }))
+    : (currentHeroMatch.highlights && currentHeroMatch.highlights.length > 0)
+    ? currentHeroMatch.highlights.map((h, idx) => ({ minute: idx === 0 ? "Pra-Laga" : "Info", type: 'chance' as const, text: h }))
     : [
-        { minute: "45+2'", type: 'chance' as const, text: 'Turun minum (Half-time): PERSIB Bandung 0 - 0 Bali United, duel sengit di GBLA.' },
-        { minute: "66'", type: 'goal' as const, text: 'Gol Bali United! Marko Dugandžić menyambar bola rebound sepakan bebas Teppei Yachida 0-1.' },
-        { minute: "79'", type: 'goal' as const, text: 'GOOOL! Mariano Peralta menyamakan kedudukan 1-1 menerima umpan matang Luka Menalo!' },
-        { minute: "81'", type: 'goal' as const, text: 'GOOOL COMEBACK 2 MENIT! Luka Menalo membalikkan skor menjadi 2-1 membakar GBLA!' },
-        { minute: "86'", type: 'card' as const, text: 'Kartu Merah! Mariano Peralta diusir wasit, PERSIB bertahan heroik dengan 10 pemain!' },
-        { minute: "90+6'", type: 'chance' as const, text: 'Peluit panjang! FULL TIME: PERSIB Bandung 2 - 1 Bali United. 3 poin krusial diamankan!' },
+        { minute: "Pra-Laga", type: 'chance' as const, text: `Persiapan pertandingan resmi ${currentHeroMatch.roundOrWeek} di ${currentHeroMatch.venue}.` },
+        { minute: "Kick-off", type: 'chance' as const, text: `Jadwal kick-off pertandingan: ${currentHeroMatch.time}.` },
       ];
 
   const liveData: GroqSuppliedData = {
     lastUpdated: nowWib,
-    source: 'Super League Indonesia 2026/2027 (PT LIB / ileague.id & persib.co.id)',
+    source: `${currentHeroMatch.tournament} (the-afc.com & persib.co.id)`,
     engine: 'Groq LPU Autonomous Multi-Event Data Engine',
     inferenceTimeMs: Date.now() - startTime,
     dataPipelineStatus: 'operational',
@@ -270,36 +387,38 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     liveMatch: {
       isLive: isCurrentlyLive,
       tournament: currentHeroMatch.tournament || 'Super League 2026/2027',
-      matchweek: currentHeroMatch.roundOrWeek || 'Pekan 10 (Laga Kandang - Selesai)',
+      matchweek: currentHeroMatch.roundOrWeek || 'Jadwal Resmi Pertandingan',
       homeTeam: currentHeroMatch.homeTeam,
       awayTeam: currentHeroMatch.awayTeam,
-      homeScore: currentHeroMatch.homeScore,
-      awayScore: currentHeroMatch.awayScore,
-      liveMinute: isCurrentlyLive ? (currentHeroMatch.time || 'LIVE') : 'FT',
-      aggregateScore: `${currentHeroMatch.homeTeam} ${currentHeroMatch.homeScore} - ${currentHeroMatch.awayScore} ${currentHeroMatch.awayTeam} (${isCurrentlyLive ? 'LIVE' : 'FT'})`,
+      homeScore: currentHeroMatch.homeScore ?? 0,
+      awayScore: currentHeroMatch.awayScore ?? 0,
+      liveMinute: isCurrentlyLive ? (currentHeroMatch.time || 'LIVE') : isHeroToday ? 'HARI INI' : 'FT',
+      aggregateScore: currentHeroMatch.aggregateScore || `${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} (${currentHeroMatch.roundOrWeek})`,
       venue: currentHeroMatch.venue,
       statusText: isCurrentlyLive
         ? `SEDANG BERLANGSUNG (LIVE) - ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}`
-        : `SELESAI (FULL TIME) - ${currentHeroMatch.homeTeam} ${currentHeroMatch.homeScore} - ${currentHeroMatch.awayScore} ${currentHeroMatch.awayTeam}`,
+        : isHeroToday
+        ? `MATCHDAY HARI INI - Kick-off ${currentHeroMatch.time} (${currentHeroMatch.venue})`
+        : `SELESAI (FULL TIME) - ${currentHeroMatch.homeTeam} ${currentHeroMatch.homeScore ?? 0} - ${currentHeroMatch.awayScore ?? 0} ${currentHeroMatch.awayTeam}`,
       qualificationScenario: currentHeroMatch.aggregateScore || `Hasil laga resmi ${currentHeroMatch.roundOrWeek} mengamankan perolehan poin penting di klasemen kompetisi 2026/2027.`,
       keyEvents: heroEvents,
     },
     matchCenter: {
-      tournament: 'Super League 2026/2027 & Asia',
+      tournament: currentHeroMatch.tournament || 'Super League 2026/2027 & Asia',
       latestResult: {
-        matchweek: latestFinished?.roundOrWeek || 'Pekan 10 Super League 2026/2027',
-        opponent: latestFinished ? (latestFinished.homeTeam.includes('PERSIB') ? latestFinished.awayTeam : latestFinished.homeTeam) : 'Bali United',
-        score: latestFinished ? `${latestFinished.homeScore} - ${latestFinished.awayScore}` : '2 - 1',
+        matchweek: latestFinished?.roundOrWeek || 'Laga Terakhir Selesai',
+        opponent: latestFinished ? (latestFinished.homeTeam.includes('PERSIB') ? latestFinished.awayTeam : latestFinished.homeTeam) : 'Lawan',
+        score: latestFinished ? `${latestFinished.homeScore ?? 0} - ${latestFinished.awayScore ?? 0}` : '0 - 0',
         scorers: (latestFinished?.highlights && latestFinished.highlights.length > 0)
           ? latestFinished.highlights
-          : ["Marko Dugandžić 66' (Bali United)", "Mariano Peralta 79' (PERSIB)", "Luka Menalo 81' (PERSIB) [KM: Peralta 86']"],
-        venue: latestFinished?.venue || 'Stadion Gelora Bandung Lautan Api (GBLA)',
+          : ['Hasil resmi terverifikasi kompetisi 2026/2027'],
+        venue: latestFinished?.venue || 'Stadion Resmi',
       },
       nextFixture: {
-        matchweek: upcomingMatch?.roundOrWeek || 'Pekan 11 (Laga Tandang)',
-        opponent: upcomingMatch ? (upcomingMatch.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : upcomingMatch.homeTeam) : 'Persita Tangerang',
-        date: upcomingMatch ? `${upcomingMatch.date} • ${upcomingMatch.time}` : '29 November 2026 • 19:00 WIB',
-        venue: upcomingMatch?.venue || 'Stadion Indomilk Arena, Tangerang',
+        matchweek: upcomingMatch?.roundOrWeek || 'Jadwal Pertandingan Berikutnya',
+        opponent: upcomingMatch ? (upcomingMatch.homeTeam.includes('PERSIB') ? upcomingMatch.awayTeam : upcomingMatch.homeTeam) : 'Lawan Berikutnya',
+        date: upcomingMatch ? `${upcomingMatch.date} • ${upcomingMatch.time}` : 'Segera Diumumkan',
+        venue: upcomingMatch?.venue || 'Stadion Laga',
       },
     },
     leagueStandings: {
@@ -313,14 +432,13 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     aclStandings: calculatedAcl,
     shopeeCupStandings: calculatedShopeeCup,
     players: OFFICIAL_SQUAD_2026_2027.map((p) => {
-      // REFACTOR: Verified Persib squad attacker Mariano Peralta
       if (p.id.includes('peralta')) {
         return {
           ...p,
           fitness: {
             ...p.fitness,
             percentage: 100,
-            notes: 'Pencetak gol penyeimbang vs Bali United (menit 79). Menjalani suspensi kartu merah di Pekan 11 vs Persita.',
+            notes: 'Kondisi bugar 100%. Siap tampil di ajang Asia (ACL Two & Shopee Cup). Menjalani suspensi Liga 1 vs Persita.',
           },
         };
       }
@@ -342,54 +460,31 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
     },
   };
 
-  // If valid Groq API key is configured, enhance bulletin with Groq LPU inference
+  // If valid Groq API key is configured, enhance bulletin with dynamic Groq LPU inference
   if (apiKey && apiKey.length > 20 && !apiKey.includes('placeholder')) {
     try {
-      // REFACTOR: Pedoman data valid resmi sebagai acuan inferensi Groq AI (PT LIB, ileague.id, persib.co.id, AFC ACL Two, Shopee Cup)
-      // REFACTOR: Pedoman data valid mutlak resmi 2026/2027 (PT LIB / ileague.id, AFC, ASEAN Club Championship)
-      const systemPrompt = `Kamu adalah AI Data Feeder Backend Super League, ACL Two, dan Shopee Cup resmi untuk MUSIM AKTIF 2026/2027 (sumber valid: ileague.id, the-afc.com, persib.co.id).
-ATURAN MUTLAK DATA VALID MUSIM 2026/2027:
-1. LARANGAN KERAS: DILARANG MENGGUNAKAN ATAU MENYEBUT DATA ARTEFAK MUSIM 2024/2025 ATAUPUN 2025/2026! Seluruh analisis HANYA untuk musim aktif 2026/2027.
-2. STATUS RESMI HASIL PEKAN 10 & KLASEMEN TERKINI:
-   - Super Big Match Super League Pekan 10 antara PERSIB Bandung vs Bali United FC di Stadion GBLA telah SELESAI (FULL TIME).
-   - Skor Akhir: PERSIB Bandung 2 - 1 Bali United FC (Mariano Peralta 79', Luka Menalo 81' [Kartu Merah: Peralta 86'] | Marko Dugandžić 66').
-   - Kemenangan comeback dramatis 2 menit ini membawa Maung Bandung mengumpulkan 19 poin di posisi 4 klasemen Super League 2026/2027!
-3. KLASEMEN RESMI (10 PEKAN SELESAI):
-   - #1 Persija (22 poin - 10 main)
-   - #2 Dewa United (20 poin - 10 main)
-   - #3 Bali United (19 poin - 10 main: 6M 1S 3K, gol 27-11 [+16])
-   - #4 PERSIB Bandung (19 poin - 10 main: 6 menang, 1 seri, 3 kalah, gol 18-11 [+7])
-   - #5 Madura United (19 poin - 10 main: 6M 1S 3K, gol 16-11 [+5])
-   - #6 Persita Tangerang (18 poin - 9 main)
-4. TOP SCORER & BINTANG RESMI LIGA 1 2026/2027:
-   - Alexander Jeremejeff (Persija - 7 Gol)
-   - Alex Martins Ferreira (Persebaya - 7 Gol)
-   - Lulinha (Madura United - 6 Gol)
-   - Teppei Yachida (Bali United - 6 Gol)
-   - Mariano Peralta (PERSIB - 5 Gol)
-   - Marko Dugandžić (Bali United - 5 Gol)
-   - Balša Sekulić (PERSIB - 4 Gol)
-   - Luka Menalo (PERSIB - 4 Gol)
-   - Alexandre Ramalingom (Persita - 4 Gol)
-   - Taisei Marukawa (Dewa United - 3 Gol + 5 Assist)
-   - Thom Haye (PERSIB - 1 Gol + 7 Assist)
-5. RIWAYAT 10 LAGA RESMI PERSIB SUPER LEAGUE 2026/2027:
-   - P1: PERSIB 3-1 Persijap Jepara (M)
-   - P2: Madura United 2-1 PERSIB (K)
-   - P3: PERSIB 2-0 Bhayangkara FC (M)
-   - P4: PSM Makassar 2-1 PERSIB (K)
-   - P5: PERSIB 1-1 Persebaya (S)
-   - P6: Persik 1-2 PERSIB (M)
-   - P7: Garudayaksa 1-2 PERSIB (M)
-   - P8: PERSIB 4-0 Isenmulang Kalteng (M)
-   - P9: Java United 2-1 PERSIB (K)
-   - P10: PERSIB 2-1 Bali United (M)
-6. JADWAL TERDEKAT BERIKUTNYA:
-   - Super League Pekan 11: Persita Tangerang vs PERSIB Bandung di Stadion Indomilk Arena, Minggu 29 November 2026 pukul 19:00 WIB.
-7. ASIA 2026/2027:
-   - ACL Two Grup E: PERSIB Juara Grup E rekor 100% (4 main, 4 menang, 12 poin, lolos 16 Besar Asia).
-   - Shopee Cup Grup B: PERSIB pemuncak klasemen Grup B (2 main, 2 menang, 6 poin, gol 9-1). Laga terdekat Shopee Cup: MD3 tandang vs Lion City Sailors (10 Des 2026, 19:30 WIB), disusul Super Big Match MD4 vs Johor Darul Ta'zim (17 Des 2026, 19:00 WIB).
-Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengenai kemenangan 2-1 Pekan 10 atas Bali United, penguncian 19 poin di peringkat 4 klasemen, dan persiapan Pekan 11 vs Persita tanpa basa-basi atau simbol markdown.`;
+      const systemPrompt = `Kamu adalah AI Autonomous Sports Data Feeder resmi PERSIB Bandung musim 2026/2027 (sumber valid: the-afc.com, ileague.id, persib.co.id).
+WAKTU SINKRONISASI REAL-TIME: ${nowWibDateStr}, ${nowWib}.
+
+SITUASI LAGA HERO SAAT INI:
+- Pertandingan: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}
+- Kompetisi: ${currentHeroMatch.tournament} (${currentHeroMatch.roundOrWeek})
+- Status Laga: ${currentHeroMatch.status === 'LIVE' ? `SEDANG BERLANGSUNG (LIVE - Menit ${currentHeroMatch.time})` : isHeroToday ? `KICK-OFF HARI INI (Pukul ${currentHeroMatch.time})` : `STATUS: ${currentHeroMatch.status}`}
+- Venue: ${currentHeroMatch.venue}
+${currentHeroMatch.status === 'FINISHED' ? `- Skor Akhir: ${currentHeroMatch.homeTeam} ${currentHeroMatch.homeScore ?? 0} - ${currentHeroMatch.awayScore ?? 0} ${currentHeroMatch.awayTeam}` : ''}
+${currentHeroMatch.highlights ? `- Catatan: ${currentHeroMatch.highlights.join('; ')}` : ''}
+
+POSISI PERSIB DI 3 KOMPETISI AKTIF 2026/2027:
+- Super League: Posisi 4 (19 poin, 10 laga, selisih gol +7). Menang 2-1 vs Bali United di GBLA. Laga berikutnya tandang vs Persita Tangerang (29 Nov 2026).
+- AFC Champions League Two (Grup E): Peringkat 1 puncak klasemen (12 poin sempurna dari 4 laga, sapu bersih kemenangan). Hari ini 25 November 2026 Matchday 5 kandang vs FC Seoul (19:00 WIB di GBLA).
+- Shopee Cup (Grup B): Peringkat 1 puncak klasemen (6 poin dari 2 laga, selisih gol 9-1).
+
+TUGAS AI DATA FEEDER:
+Buat TEPAT 1 kalimat ringkasan intelijen taktis/analisis resmi berbahasa Indonesia mengenai laga hero tersebut (${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}) dan kesiapan/situasi Maung Bandung saat ini.
+ATURAN MUTLAK:
+1. TEPAT 1 kalimat padat, jelas, akurat, dan profesional.
+2. DILARANG menggunakan tanda bintang markdown (**) sama sekali!
+3. DILARANG menyebut tahun di luar musim 2026/2027.`;
 
       const res = await fetch('https://api.groq.com/openai/v1/chat/completions', {
         method: 'POST',
@@ -403,7 +498,7 @@ Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengen
             { role: 'system', content: systemPrompt },
             {
               role: 'user',
-              content: `Buat ringkasan intelijen pergerakan klasemen Super League 2026/2027 untuk update real-time sekarang: ${currentStageName}.`,
+              content: `Keluarkan 1 kalimat intelijen resmi terkini untuk update real-time: ${currentStageName}. Status: ${currentHeroMatch.status}, Waktu: ${currentHeroMatch.time}.`,
             },
           ],
           temperature: 0.1,
@@ -415,7 +510,8 @@ Keluarkan TEPAT 1 kalimat ringkasan intelijen faktual berbahasa Indonesia mengen
         const json = await res.json();
         const groqText = json.choices?.[0]?.message?.content?.trim();
         if (groqText) {
-          liveData.summaryBulletin = `${groqText} (Live Groq LPU: ${nowWib})`;
+          const cleanText = groqText.replace(/\*\*/g, '').replace(/^"+|"+$/g, '').trim();
+          liveData.summaryBulletin = `${cleanText} (Live Groq LPU: ${nowWib})`;
         }
       }
     } catch (err) {

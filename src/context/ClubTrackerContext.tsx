@@ -19,6 +19,7 @@ import {
   IGOR_TOLIC_TACTICAL_PLAYBOOK,
   FINANCIAL_OVERVIEW_2026_2027,
 } from '@/data/persib-data';
+import { isFixtureTodayWib } from '@/lib/groq';
 
 export type AppThemeState = 'minimal' | 'pro';
 export type ActiveHub = 'match-center' | 'roster' | 'transparency' | 'ai-chat';
@@ -78,7 +79,10 @@ const ClubTrackerContext = createContext<ClubTrackerContextType | undefined>(und
 export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [mode, setMode] = useState<AppThemeState>('minimal');
   const [activeHub, setActiveHub] = useState<ActiveHub>('match-center');
-  const [activeTournament, setActiveTournament] = useState<TournamentKey>('liga1');
+  const [activeTournament, setActiveTournament] = useState<TournamentKey>(() => {
+    const matchToday = VERIFIED_FIXTURES_2026_2027.find((f) => isFixtureTodayWib(f.date) || f.status === 'LIVE');
+    return matchToday?.tournamentKey || 'liga1';
+  });
   const [matchDisplayMode, setMatchDisplayMode] = useState<MatchDisplayMode>('official_result');
   const [players, setPlayers] = useState<Player[]>(OFFICIAL_SQUAD_2026_2027);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
@@ -133,6 +137,10 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
           // 2. Sinkronisasi Jadwal & Hasil Pertandingan
           if (payload.fixtures && Array.isArray(payload.fixtures)) {
             setFixtures([...payload.fixtures]);
+            const matchToday = payload.fixtures.find((f: MatchFixture) => isFixtureTodayWib(f.date) || f.status === 'LIVE');
+            if (matchToday?.tournamentKey) {
+              setActiveTournament(matchToday.tournamentKey);
+            }
           }
 
           // 3. Sinkronisasi Skuad Pemain & Medis (Fitness Live Updates)
@@ -211,6 +219,10 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
             }
             if (payload.fixtures && Array.isArray(payload.fixtures)) {
               setFixtures([...payload.fixtures]);
+              const matchToday = payload.fixtures.find((f: MatchFixture) => isFixtureTodayWib(f.date) || f.status === 'LIVE');
+              if (matchToday?.tournamentKey) {
+                setActiveTournament(matchToday.tournamentKey);
+              }
             }
             if (payload.players && Array.isArray(payload.players)) {
               setPlayers([...payload.players]);

@@ -13,6 +13,7 @@ import { PwaInstallModal } from '@/components/PwaInstallModal';
 import { LiveTelemetryWidget } from '@/components/LiveTelemetryWidget';
 import { SponsorshipFooter } from '@/components/SponsorshipFooter';
 import { Smartphone, CheckCircle2 } from 'lucide-react';
+import { isFixtureTodayWib } from '@/lib/groq';
 
 export default function HomePage() {
   const { mode, activeHub, activeTournament, syncFeedback, fixtures } = useClubTracker();
@@ -32,16 +33,12 @@ export default function HomePage() {
   });
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
-  // REFACTOR: Tournament-aware resolution: LIVE -> tournament key match -> scheduled / latest finished
+  // Dynamic tournament fixture selection: LIVE -> scheduled TODAY -> latest finished -> next scheduled
   const currentTournFixture =
     tournamentFixtures.find((f) => f.status === 'LIVE') ||
-    (activeTournament === 'shopee_cup'
-      ? tournamentFixtures.find((f) => f.id === 'shopee-26-md2-ft')
-      : activeTournament === 'acl2'
-      ? tournamentFixtures.find((f) => f.id === 'acl2-26-md4-live')
-      : tournamentFixtures.find((f) => f.id === 'l1-p10') || tournamentFixtures.find((f) => f.id === 'l1-p9')) ||
-    tournamentFixtures.find((f) => f.status === 'SCHEDULED') ||
+    tournamentFixtures.find((f) => isFixtureTodayWib(f.date)) ||
     [...tournamentFixtures].reverse().find((f) => f.status === 'FINISHED') ||
+    tournamentFixtures.find((f) => f.status === 'SCHEDULED') ||
     tournamentFixtures[0] ||
     fixtures[0];
 
