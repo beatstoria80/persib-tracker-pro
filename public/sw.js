@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v66 (Contextual Discipline Radar, Group E Official Squads & Top Scorers Sync)
-const CACHE_NAME = 'persib-tracker-pwa-v66';
+// PERSIB TRACKER - PWA Service Worker v67 (Context Synced & Production Verified)
+const CACHE_NAME = 'persib-tracker-pwa-v67';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

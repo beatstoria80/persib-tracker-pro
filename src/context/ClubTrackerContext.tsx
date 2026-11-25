@@ -155,7 +155,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
                     fitness: {
                       ...p.fitness,
                       percentage: 100,
-                      notes: 'Masa pemulihan tuntas! Siap starter di laga Super League Pekan 10.',
+                      notes: 'Kondisi 100% prima dan siap tempur. Sah dan bebas bermain di ajang Asia (ACL Two vs FC Seoul & Shopee Cup).',
                     },
                   };
                 }
