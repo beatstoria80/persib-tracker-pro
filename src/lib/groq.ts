@@ -498,6 +498,22 @@ POSISI PERSIB DI 3 KOMPETISI AKTIF 2026/2027:
 - AFC Champions League Two (Grup E): Peringkat 1 puncak klasemen (12 poin sempurna dari 4 laga, sapu bersih kemenangan). Hari ini 25 November 2026 Matchday 5 kandang vs FC Seoul (19:15 WIB di GBLA).
 - Shopee Cup (Grup B): Peringkat 1 puncak klasemen (6 poin dari 2 laga, selisih gol 9-1).
 
+KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E):
+- Klasemen Resmi Grup E (setelah Matchday 4):
+  1. PERSIB Bandung (IDN): 4 Main, 4 Menang, 0 Seri, 0 Kalah, Gol 7-1, 12 Poin (Juara Grup & Lolos 16 Besar)
+  2. FC Seoul (KOR): 4 Main, 2 Menang, 1 Seri, 1 Kalah, Gol 5-3, 7 Poin
+  3. Melbourne Victory (AUS): 4 Main, 1 Menang, 0 Seri, 3 Kalah, Gol 3-6, 3 Poin
+  4. The Cong-Viettel FC (VIE): 4 Main, 0 Menang, 1 Seri, 3 Kalah, Gol 1-6, 1 Poin
+- Top Scorer Puncak Grup E ACL Two 2026/2027:
+  1. Balša Sekulić (PERSIB) - 5 Gol (Top Scorer Utama Grup E)
+  2. Stanislav Iljutcenko (FC Seoul) - 2 Gol
+  3. Bruno Fornaroli (Melbourne Victory) - 2 Gol
+  4. Luka Menalo (PERSIB) - 1 Gol
+  5. Jesse Lingard (FC Seoul) - 1 Gol
+  6. Daniel Arzani (Melbourne Victory) - 1 Gol
+  7. Marc Klok (PERSIB) - 1 Gol
+- Top Assist: Thom Haye (PERSIB) 3 Assist, Mariano Peralta (PERSIB) 2 Assist.
+
 REGULASI DISIPLIN & STATUS KARTU SISTEMIK:
 - Mariano Peralta: Terkena kartu merah langsung menit 86 vs Bali United. Konsekuensi sistemik: Absen di Super League Pekan 11 vs Persita Tangerang kecuali denda disiplin Komdis PSSI Rp 10.000.000 dibayarkan. Namun untuk laga Asia (ACL Two vs FC Seoul & Shopee Cup), Peralta 100% sah dan bugar bermain karena yurisdiksi sanksi domestik tidak menghalangi kompetisi AFC/ASEAN.
 - Patricio Matricardi: Mengantongi 3 kartu kuning di Super League (status waspada akumulasi 1 kartu lagi).

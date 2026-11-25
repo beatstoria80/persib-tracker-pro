@@ -288,11 +288,12 @@ Mariano Peralta menerima kartu merah langsung pada menit ke-86 saat laga dramati
 - Thom Haye: 1 Gol, 7 Assist (Raja Assist Tak Tertandingi Liga 1)
 - Marc Klok: 1 Gol, 2 Assist
 
-2. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Total 8 Gol):
-- Luka Menalo: 3 Gol (Top Scorer Persib di Asia)
-- Balša Sekulić: 2 Gol
-- Mariano Peralta: 2 Gol
-- Thom Haye: 1 Gol, 3 Assist (Playmaker No. 1)
+2. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Total 7 Gol PERSIB - Rekor 100% Menang Grup E):
+- Balša Sekulić: 5 Gol (Top Scorer Puncak Grup E ACL Two)
+- Luka Menalo: 1 Gol, 1 Assist
+- Marc Klok: 1 Gol (Penalti)
+- Thom Haye: 3 Assist (Playmaker Kreator Gol Asia)
+- Mariano Peralta: 2 Assist (Sayap Penyuplai Bola)
 
 3. SHOPEE CUP ASEAN (Total 9 Gol):
 - Balša Sekulić: 3 Gol (Hat-trick sensasional vs Shan United)
@@ -799,8 +800,8 @@ Tanyakan apa saja seputar taktik Bojan Hodak, kondisi pemain, atau jadwal beriku
    - **PERSIB Bandung 2 - 1 Bali United FC** (Kemenangan comeback dramatis 2 menit di GBLA berkat gol Mariano Peralta 79' dan Luka Menalo 81' membalas gol Marko Dugandžić 66').
 2. **Shopee Cup (MD2 - 19 Nov 2026)**:
    - **PERSIB Bandung 6 - 0 Shan United** (Pesta gol di hadapan Bobotoh, mengokohkan posisi #1 Grup B).
-3. **ACL Two (MD4 - 6 Nov 2026)**:
-   - **PERSIB Bandung 2 - 1 Melbourne Victory** (Rekor sempurna 100% menang 4 kali, memastikan tiket Babak 16 Besar Asia!).
+3. **ACL Two (MD4 Leg 2 - 6 Nov 2026)**:
+   - **Melbourne Victory 1 - 2 PERSIB Bandung** (Kemenangan comeback dramatis Leg 2 di AAMI Park Melbourne, rekor 100% menang 4 kali, memastikan tiket Babak 16 Besar Asia!).
 
 Semua fokus tim saat ini tercurah pada laga tandang krusial kontra Persita Tangerang (Pekan 11, 29 Nov 2026) di Indomilk Arena!`;
 

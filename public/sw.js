@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v71 (High-Performance 60fps GPU Compositing & Media Stream Bypass)
-const CACHE_NAME = 'persib-tracker-pwa-v71';
+// PERSIB TRACKER - PWA Service Worker v72 (ACL Two Top Scorers & Standings Ground Truth Sync)
+const CACHE_NAME = 'persib-tracker-pwa-v72';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
