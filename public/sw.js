@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v65 (Instant Looping Player Video Without Static Photo or Black Screen)
-const CACHE_NAME = 'persib-tracker-pwa-v65';
+// PERSIB TRACKER - PWA Service Worker v66 (Contextual Discipline Radar, Group E Official Squads & Top Scorers Sync)
+const CACHE_NAME = 'persib-tracker-pwa-v66';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

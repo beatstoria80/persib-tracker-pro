@@ -147,10 +147,10 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
    - SHOPEE CUP ASEAN 2026/2027 (GRUP B - TOTAL 9 GOL DARI 2 LAGA):
      * Top Scorer Kompetisi: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United), Arif Aiman (JDT) 3 Gol, Bergson da Silva (JDT) 3 Gol, Luka Menalo (PERSIB) 2 Gol, Mariano Peralta (PERSIB) 2 Gol, Bounphachan Bounkong (Svay Rieng) 2 Gol, Léo Artur (Cong An Ha Noi) 2 Gol, Alan Grafite (Cong An Ha Noi) 2 Gol.
      * Gol PERSIB di Shopee Cup: Balša Sekulić 3 Gol, Luka Menalo 2 Gol, Mariano Peralta 2 Gol, Berguinho 1 Gol, Uilliam Barros 1 Gol.
-   - AFC CHAMPIONS LEAGUE TWO (ACL TWO 2026/2027 - GRUP E - TOTAL 8 GOL DARI 4 LAGA):
-     * Top Scorer Kompetisi: Luka Menalo (PERSIB) 3 Gol, Balša Sekulić (PERSIB) 2 Gol, Mariano Peralta (PERSIB) 2 Gol, Zico Bailey (Melbourne Victory) 2 Gol, Jason Geria (Melbourne Victory) 2 Gol, Peeradol (Port FC) 2 Gol, Felipe Amorim (Port FC) 2 Gol, Jean Evrard Kouassi (Zhejiang FC) 2 Gol, Thom Haye (PERSIB) 1 Gol.
-     * Gol PERSIB di ACL Two: Luka Menalo 3 Gol, Balša Sekulić 2 Gol, Mariano Peralta 2 Gol, Thom Haye 1 Gol (plus 3 Assist).
-   - SKUAD RESMI 11 PEMAIN ASING PERSIB 2026/2027 (OFFICIAL - SELAIN INI BUKAN PEMAIN PERSIB):
+   - AFC CHAMPIONS LEAGUE TWO (ACL TWO 2026/2027 - GRUP E - TOTAL 7 GOL PERSIB DARI 4 LAGA):
+      * Top Scorer Grup E: Balša Sekulić (PERSIB) 5 Gol, Stanislav Iljutcenko (FC Seoul) 2 Gol, Bruno Fornaroli (Melbourne Victory) 2 Gol, Luka Menalo (PERSIB) 1 Gol, Jesse Lingard (FC Seoul) 1 Gol, Daniel Arzani (Melbourne Victory) 1 Gol, Cho Young-wook (FC Seoul) 1 Gol, Pedro Henrique (The Cong-Viettel) 1 Gol, Lucas Silva (FC Seoul) 1 Gol, Marc Klok (PERSIB) 1 Gol. Thom Haye 3 Assist, Mariano Peralta 2 Assist.
+      * Gol PERSIB di ACL Two: Balša Sekulić 5 Gol, Luka Menalo 1 Gol, Marc Klok 1 Gol (Total 7 Gol). Thom Haye 3 Assist, Mariano Peralta 2 Assist.
+    - SKUAD RESMI 11 PEMAIN ASING PERSIB 2026/2027 (OFFICIAL - SELAIN INI BUKAN PEMAIN PERSIB):
      1. #3 Gabriel Mutombo (Prancis, Bek Tengah)
      2. #4 Júlio César (Brasil, Bek Tengah)
      3. #22 Danijel Lončar (Kroasia, Bek Tengah)
@@ -199,7 +199,7 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
      * MD4: PERSIB vs Johor Darul Ta'zim (JDT) — 17 Des 2026, 19:00 WIB (GBLA)
      * MD5: PKR Svay Rieng vs PERSIB — 25 Feb 2027, 19:00 WIB (Kamboja)
      * MD6: PERSIB vs Cong An Ha Noi — 4 Mar 2027, 19:00 WIB (GBLA)
-   - ACL TWO GRUP E: Rekor 100% menang sempurna (4 main, 4 menang, 12 poin, gol 8-2). Malam ini Matchday 5 kandang vs FC Seoul (19:15 WIB di GBLA).
+   - ACL TWO GRUP E: Rekor 100% menang sempurna (4 main, 4 menang, 12 poin, gol 7-1 [+6]). Klasemen: 1. PERSIB (12 Poin), 2. FC Seoul (7 Poin), 3. Melbourne Victory (3 Poin), 4. The Cong-Viettel (1 Poin). Malam ini Matchday 5 kandang vs FC Seoul (19:15 WIB di GBLA).
    - TOKOH KUNCI: Pelatih Bojan Hodak, Asisten Igor Tolic, Thom Haye (#33), Sandy Walsh (#6), Ragnar Oratmangoen (#77), Mariano Peralta (#10), Balša Sekulić (#99), Luka Menalo (#9), Marc Klok (#23), Teja Paku Alam (#14).
 
 3. PENGETAHUAN SEPAK BOLA DUNIA & FIFA:

@@ -517,14 +517,14 @@ Koleksi 19 poin menempatkan PERSIB di posisi 4 klasemen sementara Super League 2
 ⭐ Rekor Sempurna 100% di Panggung Asia:
 • Posisi: Peringkat 1 / JUARA GRUP E
 • Tiket Lolos: Lolos ke Babak 16 Besar Asia (Knockout Stage)
-• Rekor Tanding Saat Ini: 4 Pertandingan, 4 Menang, 0 Seri, 0 Kalah | 12 Poin Maksimal (Gol 8-2, Selisih Gol +6)
+• Rekor Tanding Saat Ini: 4 Pertandingan, 4 Menang, 0 Seri, 0 Kalah | 12 Poin Maksimal (Gol 7-1, Selisih Gol +6)
 • Laga Matchday 5: Hari Ini (Rabu, 25 November 2026 pukul 19:15 WIB) vs FC Seoul di Stadion GBLA Bandung!
 
 🏆 Klasemen Sementara Grup E:
-1. PERSIB Bandung (IDN): 12 Poin (Lolos 16 Besar Asia)
-2. Melbourne Victory (AUS): 6 Poin
-3. FC Seoul (KOR): 4 Poin
-4. The Cong-Viettel (VIE): 1 Poin
+1. PERSIB Bandung (IDN): 12 Poin (Gol 7-1, +6) - Lolos 16 Besar Asia
+2. FC Seoul (KOR): 7 Poin (Gol 5-3, +2)
+3. Melbourne Victory (AUS): 3 Poin (Gol 3-6, -3)
+4. The Cong-Viettel (VIE): 1 Poin (Gol 1-6, -5)
 
 Maung Bandung mencetak sejarah baru sebagai klub Indonesia dengan performa paling dominan di fase grup turnamen resmi AFC musim 2026/2027!`;
 
