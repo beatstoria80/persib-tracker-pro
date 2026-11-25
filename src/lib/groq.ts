@@ -274,6 +274,47 @@ export function isFixtureTodayWib(fixtureDateStr: string, nowUtc: Date = new Dat
 }
 
 /**
+ * Real-time Google Search / Google News RSS fetcher for keyword "ACL TWO" & "Persib"
+ * Grounds Groq LPU inference on live search headlines to eliminate stale hallucinations.
+ */
+async function fetchGoogleSearchAclTwo(): Promise<string[]> {
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 3000);
+    const rssUrl =
+      'https://news.google.com/rss/search?q=ACL+TWO+Persib+FC+Seoul&hl=id&gl=ID&ceid=ID:id';
+    const res = await fetch(rssUrl, {
+      cache: 'no-store',
+      signal: controller.signal,
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (compatible; PersibTrackerBot/1.0)',
+      },
+    });
+    clearTimeout(timeout);
+    if (!res.ok) return [];
+    const xml = await res.text();
+    const items: string[] = [];
+    const itemRegex = /<item>[\s\S]*?<title>([\s\S]*?)<\/title>[\s\S]*?<pubDate>([\s\S]*?)<\/pubDate>[\s\S]*?<\/item>/g;
+    let match: RegExpExecArray | null;
+    while ((match = itemRegex.exec(xml)) !== null && items.length < 5) {
+      const title = match[1]
+        .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+        .replace(/&amp;/g, '&')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .trim();
+      const pubDate = match[2].trim();
+      if (title) {
+        items.push(`${title} (${pubDate})`);
+      }
+    }
+    return items;
+  } catch {
+    return [];
+  }
+}
+
+/**
  * Backend Autonomous Data Supplier Function
  * Real-time event progression across all 18 clubs in Super League 2026/2027, ACL Two 2026/2027, & Shopee Cup.
  * Fully dynamic: detects active matchday, live kick-offs, and synthesizes time-aware Groq intelligence.
@@ -282,6 +323,7 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const apiKey = process.env.GROQ_API_KEY;
   const model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b';
   const startTime = Date.now();
+  const liveGoogleHeadlines = await fetchGoogleSearchAclTwo();
 
   const now = new Date();
   const nowWibDate = new Date(now.getTime() + 7 * 3600 * 1000);
@@ -514,25 +556,21 @@ TOP SCORER & TOP ASSIST RESMI SUPER LEAGUE / BRI LIGA 1 2026/2027 (SETELAH PEKAN
 
 KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E - LIVE SEDANG BERLANGSUNG):
 - Situasi Pertandingan LIVE Saat Ini (Matchday 5 di Stadion GBLA):
-  PERSIB Bandung 1 - 0 FC Seoul (Sedang Berlangsung Babak Pertama). Gol dicetak oleh Balša Sekulić pada menit ke-11 memanfaatkan umpan matang Thom Haye!
+  PERSIB Bandung 1 - 0 FC Seoul (Sedang Berlangsung Babak Pertama). Gol cepat dicetak oleh Mariano Peralta pada menit ke-6 memanfaatkan umpan matang Sandy Walsh!
 - Klasemen Live Virtual Grup E:
-  1. PERSIB Bandung (IDN): 5 Main, 5 Menang, 0 Seri, 0 Kalah, Gol 6-1, 15 Poin (Memimpin Unggul 1-0 LIVE)
-  2. FC Seoul (KOR): 5 Main, 2 Menang, 1 Seri, 2 Kalah, Gol 7-4, 7 Poin
-  3. Melbourne Victory (AUS): 5 Main, 1 Menang, 1 Seri, 3 Kalah, Gol 3-6, 4 Poin (Hasil 0-0 vs The Cong-Viettel sore tadi)
-  4. The Cong-Viettel FC (VIE): 5 Main, 0 Menang, 2 Seri, 3 Kalah, Gol 1-6, 2 Poin (Hasil 0-0 vs Melbourne Victory sore tadi)
+  1. PERSIB Bandung (IDN): 5 Main, 5 Menang, 0 Seri, 0 Kalah, Gol 6-1, 15 Poin (Memimpin Unggul 1-0 LIVE; sebelum laga 4 main 12 poin)
+  2. FC Seoul (KOR): 5 Main, 2 Menang, 0 Seri, 3 Kalah, Gol 7-4, 6 Poin (sebelum laga 4 main 6 poin)
+  3. Melbourne Victory (AUS): 5 Main, 1 Menang, 2 Seri, 2 Kalah, Gol 3-6, 5 Poin (Hasil 0-0 vs The Cong-Viettel hari ini)
+  4. The Cong-Viettel FC (VIE): 5 Main, 0 Menang, 2 Seri, 3 Kalah, Gol 1-6, 2 Poin (Hasil 0-0 vs Melbourne Victory hari ini, tersingkir)
 - Top Scorer Resmi Grup E ACL Two 2026/2027:
-  1. Balša Sekulić (Persib Bandung) - 4 Gol, 0 Assist (Peringkat 1 Kokoh di Puncak Asia - baru saja mencetak gol ke-4 vs FC Seoul!)
-  2. Moon Seon-min (FC Seoul) - 2 Gol, 1 Assist
-  3. Anderson Oliveira (FC Seoul) - 2 Gol, 1 Assist
-  4. Clarismario Santos (Melbourne Victory) - 2 Gol, 0 Assist
-  5. Mariano Peralta (Persib Bandung) - 1 Gol, 1 Assist
+  1. Balša Sekulić (Persib Bandung) - 3 Gol, 0 Assist (Peringkat 1)
+  2. Mariano Peralta (Persib Bandung) - 2 Gol, 1 Assist (baru saja mencetak gol ke-2 di menit ke-6 vs FC Seoul assist Sandy Walsh!)
+  3. Moon Seon-min (FC Seoul) - 2 Gol, 1 Assist
+  4. Anderson Oliveira (FC Seoul) - 2 Gol, 1 Assist
+  5. Clarismario Santos (Melbourne Victory) - 2 Gol, 0 Assist
   6. Luka Menalo (Persib Bandung) - 1 Gol, 0 Assist
-  7. Leonardo Ruiz (FC Seoul) - 1 Gol, 0 Assist
-  8. Cho Young-wook (FC Seoul) - 1 Gol, 0 Assist
-  9. Hwang Do-yun (FC Seoul) - 1 Gol, 0 Assist
-  10. Guillermo May (Melbourne Victory) - 1 Gol, 0 Assist
-  11. Jordi Valadon (Melbourne Victory) - 1 Gol, 0 Assist
-- Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 4, Mariano Peralta 1, Luka Menalo 1). Thom Haye 1 Assist di laga ini (total assist Asia 4).
+- Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 3, Mariano Peralta 2, Luka Menalo 1). Sandy Walsh 1 Assist di laga ini.
+${liveGoogleHeadlines.length > 0 ? `\nHEADLINE GOOGLE SEARCH LIVE TERKINI (ACL TWO):\n${liveGoogleHeadlines.map((h) => `- ${h}`).join('\n')}` : ''}
 
 REGULASI DISIPLIN & STATUS KARTU SISTEMIK:
 - Mariano Peralta: Terkena kartu merah langsung menit 86 vs Bali United. Konsekuensi sistemik: Absen di Super League Pekan 11 vs Persita Tangerang kecuali denda disiplin Komdis PSSI Rp 10.000.000 dibayarkan. Namun untuk laga Asia (ACL Two vs FC Seoul & Shopee Cup), Peralta 100% sah dan bugar bermain karena yurisdiksi sanksi domestik tidak menghalangi kompetisi AFC/ASEAN.

@@ -110,7 +110,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [isGroqSyncing, setIsGroqSyncing] = useState<boolean>(false);
   const [lastSyncedAt, setLastSyncedAt] = useState<string>('Live Synced');
   const [groqBulletin, setGroqBulletin] = useState<string>(
-    '🏆 [ACL TWO 16 BESAR] PERSIB Bandung raih 12 poin sempurna sapu bersih Grup E dan resmi lolos fase gugur Asia!'
+    '🔴 [LIVE ACL TWO] PERSIB Bandung 1 - 0 FC Seoul di GBLA! Gol cepat Mariano Peralta menit ke-6 (assist Sandy Walsh).'
   );
 
   const lastVerifiedDate = 'AFC Live Center & Google Sports (Real-Time)';
@@ -248,12 +248,12 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
       }
     };
 
-    // Trigger initial background fetch asynchronously
+    // Trigger initial background fetch asynchronously & poll every 5s for real-time live match updates
     const timeout = setTimeout(() => {
       syncBackground();
     }, 100);
 
-    const interval = setInterval(syncBackground, 25000);
+    const interval = setInterval(syncBackground, 5000);
 
     return () => {
       isSubscribed = false;

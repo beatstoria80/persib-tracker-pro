@@ -148,9 +148,9 @@ Kamu memiliki otoritas penuh untuk menjawab APAPUN pertanyaan seputar dunia sepa
      * Top Scorer Kompetisi: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United), Arif Aiman (JDT) 3 Gol, Bergson da Silva (JDT) 3 Gol, Luka Menalo (PERSIB) 2 Gol, Mariano Peralta (PERSIB) 2 Gol, Bounphachan Bounkong (Svay Rieng) 2 Gol, Léo Artur (Cong An Ha Noi) 2 Gol, Alan Grafite (Cong An Ha Noi) 2 Gol.
      * Gol PERSIB di Shopee Cup: Balša Sekulić 3 Gol, Luka Menalo 2 Gol, Mariano Peralta 2 Gol, Berguinho 1 Gol, Uilliam Barros 1 Gol.
    - AFC CHAMPIONS LEAGUE TWO (ACL TWO 2026/2027 - GRUP E - LIVE SEDANG BERLANGSUNG):
-      * Laga LIVE Saat Ini (Matchday 5 di Stadion GBLA): PERSIB Bandung 1 - 0 FC Seoul! Gol dicetak Balša Sekulić pada menit ke-11 memanfaatkan umpan matang Thom Haye!
-      * Top Scorer Grup E Resmi: Balša Sekulić (PERSIB Bandung) 4 Gol (Puncak Top Scorer Asia), Moon Seon-min (FC Seoul) 2 Gol, Anderson Oliveira (FC Seoul) 2 Gol, Clarismario Santos (Melbourne Victory) 2 Gol, Mariano Peralta (PERSIB Bandung) 1 Gol, Luka Menalo (PERSIB Bandung) 1 Gol.
-      * Gol PERSIB di ACL Two: Balša Sekulić 4 Gol, Mariano Peralta 1 Gol, Luka Menalo 1 Gol (Total 6 Gol). Thom Haye 1 Assist di laga ini (total 4 assist di Asia).
+      * Laga LIVE Saat Ini (Matchday 5 di Stadion GBLA): PERSIB Bandung 1 - 0 FC Seoul! Gol cepat dicetak Mariano Peralta pada menit ke-6 memanfaatkan umpan matang Sandy Walsh!
+      * Top Scorer Grup E Resmi: Balša Sekulić (PERSIB Bandung) 3 Gol, Mariano Peralta (PERSIB Bandung) 2 Gol (1 Ast), Moon Seon-min (FC Seoul) 2 Gol, Anderson Oliveira (FC Seoul) 2 Gol, Clarismario Santos (Melbourne Victory) 2 Gol, Luka Menalo (PERSIB Bandung) 1 Gol.
+      * Gol PERSIB di ACL Two: Balša Sekulić 3 Gol, Mariano Peralta 2 Gol, Luka Menalo 1 Gol (Total 6 Gol). Sandy Walsh 1 Assist di laga ini.
       * Hasil MD5 Sore Tadi: Melbourne Victory vs The Cong-Viettel berakhir imbang 0-0!
     - SKUAD RESMI 11 PEMAIN ASING PERSIB 2026/2027 (OFFICIAL - SELAIN INI BUKAN PEMAIN PERSIB):
      1. #3 Gabriel Mutombo (Prancis, Bek Tengah)
@@ -256,18 +256,18 @@ DAFTAR RESMI TOP SCORER SUPER LEAGUE / BRI LIGA 1 2026/2027 (PEKAN 10):
 2. Raja Assist Liga 1: Thom Haye (PERSIB) dengan 7 Assist!
 3. Top Scorer Internal PERSIB di Super League (Total 18 Gol): Mariano Peralta 5 Gol, Balša Sekulić 4 Gol, Luka Menalo 4 Gol, Ragnar Oratmangoen 3 Gol, Thom Haye 1 Gol, Marc Klok 1 Gol.
 4. Top Scorer ACL Two Grup E (LIVE MD5 - PERSIB Bandung 1 - 0 FC Seoul):
-   - Balša Sekulić (Persib Bandung): 4 Gol, 0 Assist (Peringkat 1 - baru saja cetak gol menit 11' vs FC Seoul!)
+   - Balša Sekulić (Persib Bandung): 3 Gol, 0 Assist (Peringkat 1)
+   - Mariano Peralta (Persib Bandung): 2 Gol, 1 Assist (Peringkat 2 - baru saja cetak gol cepat menit ke-6 vs FC Seoul assist Sandy Walsh!)
    - Moon Seon-min (FC Seoul): 2 Gol, 1 Assist
    - Anderson Oliveira (FC Seoul): 2 Gol, 1 Assist
    - Clarismario Santos (Melbourne Victory): 2 Gol, 0 Assist
-   - Mariano Peralta (Persib Bandung): 1 Gol, 1 Assist
    - Luka Menalo (Persib Bandung): 1 Gol, 0 Assist
    - Leonardo Ruiz (FC Seoul): 1 Gol, 0 Assist
    - Cho Young-wook (FC Seoul): 1 Gol, 0 Assist
    - Hwang Do-yun (FC Seoul): 1 Gol, 0 Assist
    - Guillermo May (Melbourne Victory): 1 Gol, 0 Assist
    - Jordi Valadon (Melbourne Victory): 1 Gol, 0 Assist
-   Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 4, Mariano Peralta 1, Luka Menalo 1).
+   Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 3, Mariano Peralta 2, Luka Menalo 1).
    Catatan: Laga MD5 sore tadi Melbourne Victory vs The Cong-Viettel imbang 0-0! Saat ini PERSIB vs FC Seoul sedang LIVE 1-0!
 5. Top Scorer Shopee Cup Grup B: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United)!]`
         : null;

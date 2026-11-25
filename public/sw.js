@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v75 (ACL Two MD5 Live 1-0 Update vs FC Seoul)
-const CACHE_NAME = 'persib-tracker-pwa-v75';
+// PERSIB TRACKER - PWA Service Worker v76 (Real-time Google Search Grounded Live ACL Two Sync)
+const CACHE_NAME = 'persib-tracker-pwa-v76';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

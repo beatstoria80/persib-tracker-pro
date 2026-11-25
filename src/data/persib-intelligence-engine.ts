@@ -309,19 +309,19 @@ Mariano Peralta menerima kartu merah langsung pada menit ke-86 saat laga dramati
 - Marc Klok: 1 Gol, 2 Assist
 
 4. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Grup E - LIVE MATCHDAY 5 PERSIB UNGGUL 1-0):
-- Balša Sekulić (Persib Bandung): 4 Gol, 0 Assist (Peringkat 1 Puncak Top Scorer Grup E Asia - baru saja cetak gol menit 11' vs FC Seoul!)
+- Balša Sekulić (Persib Bandung): 3 Gol, 0 Assist (Peringkat 1 Puncak Top Scorer Grup E Asia)
+- Mariano Peralta (Persib Bandung): 2 Gol, 1 Assist (Peringkat 2 - baru saja cetak gol cepat menit ke-6 vs FC Seoul assist Sandy Walsh!)
 - Moon Seon-min (FC Seoul): 2 Gol, 1 Assist (Peringkat 2)
 - Anderson Oliveira (FC Seoul): 2 Gol, 1 Assist (Peringkat 2)
 - Clarismario Santos (Melbourne Victory): 2 Gol, 0 Assist (Peringkat 2)
-- Mariano Peralta (Persib Bandung): 1 Gol, 1 Assist (Peringkat 5)
-- Luka Menalo (Persib Bandung): 1 Gol, 0 Assist (Peringkat 5)
-- Leonardo Ruiz (FC Seoul): 1 Gol, 0 Assist (Peringkat 5)
-- Cho Young-wook (FC Seoul): 1 Gol, 0 Assist (Peringkat 5)
-- Hwang Do-yun (FC Seoul): 1 Gol, 0 Assist (Peringkat 5)
-- Guillermo May (Melbourne Victory): 1 Gol, 0 Assist (Peringkat 5)
-- Jordi Valadon (Melbourne Victory): 1 Gol, 0 Assist (Peringkat 5)
-Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 4, Mariano Peralta 1, Luka Menalo 1).
-Status Laga Terkini LIVE: PERSIB Bandung 1 - 0 FC Seoul (Stadion GBLA, Babak Pertama Sedang Berlangsung - Gol Balša Sekulić 11' assist Thom Haye!). Hasil sore tadi: Melbourne Victory 0 - 0 The Cong-Viettel.
+- Luka Menalo (Persib Bandung): 1 Gol, 0 Assist (Peringkat 6)
+- Leonardo Ruiz (FC Seoul): 1 Gol, 0 Assist (Peringkat 6)
+- Cho Young-wook (FC Seoul): 1 Gol, 0 Assist (Peringkat 6)
+- Hwang Do-yun (FC Seoul): 1 Gol, 0 Assist (Peringkat 6)
+- Guillermo May (Melbourne Victory): 1 Gol, 0 Assist (Peringkat 6)
+- Jordi Valadon (Melbourne Victory): 1 Gol, 0 Assist (Peringkat 6)
+Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 3, Mariano Peralta 2, Luka Menalo 1).
+Status Laga Terkini LIVE: PERSIB Bandung 1 - 0 FC Seoul (Stadion GBLA - Gol Mariano Peralta menit ke-6 memanfaatkan umpan Sandy Walsh). Hasil sore tadi: Melbourne Victory 0 - 0 The Cong-Viettel.
 
 5. SHOPEE CUP ASEAN (Total 9 Gol):
 - Balša Sekulić: 3 Gol (Hat-trick sensasional vs Shan United)
@@ -827,7 +827,7 @@ Tanyakan apa saja seputar taktik Bojan Hodak, kondisi pemain, atau jadwal beriku
 
 🏆 Hasil & Situasi Laga Terkini:
 1. **ACL Two (MD5 - 25 Nov 2026 SEDANG BERLANGSUNG LIVE)**:
-   - **PERSIB Bandung 1 - 0 FC Seoul** (Gol cepat Balša Sekulić 11' memanfaatkan umpan matang Thom Haye, Maung Bandung memimpin di GBLA!).
+   - **PERSIB Bandung 1 - 0 FC Seoul** (Gol cepat Mariano Peralta pada menit ke-6 memanfaatkan umpan matang Sandy Walsh di Stadion GBLA!).
 2. **Super League (Pekan 10 - 22 Nov 2026)**:
    - **PERSIB Bandung 2 - 1 Bali United FC** (Kemenangan comeback dramatis 2 menit di GBLA berkat gol Mariano Peralta 79' dan Luka Menalo 81' membalas gol Marko Dugandžić 66').
 3. **Shopee Cup (MD2 - 19 Nov 2026)**:
