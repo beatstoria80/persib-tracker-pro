@@ -308,8 +308,8 @@ Mariano Peralta menerima kartu merah langsung pada menit ke-86 saat laga dramati
 - Thom Haye: 1 Gol, 7 Assist
 - Marc Klok: 1 Gol, 2 Assist
 
-4. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Grup E - Per 25 Nov 2026 17:17 WIB):
-- Balša Sekulić (Persib Bandung): 3 Gol, 0 Assist (Peringkat 1 Puncak Top Scorer Grup E Asia)
+4. AFC CHAMPIONS LEAGUE TWO / ACL TWO (Grup E - LIVE MATCHDAY 5 PERSIB UNGGUL 1-0):
+- Balša Sekulić (Persib Bandung): 4 Gol, 0 Assist (Peringkat 1 Puncak Top Scorer Grup E Asia - baru saja cetak gol menit 11' vs FC Seoul!)
 - Moon Seon-min (FC Seoul): 2 Gol, 1 Assist (Peringkat 2)
 - Anderson Oliveira (FC Seoul): 2 Gol, 1 Assist (Peringkat 2)
 - Clarismario Santos (Melbourne Victory): 2 Gol, 0 Assist (Peringkat 2)
@@ -320,8 +320,8 @@ Mariano Peralta menerima kartu merah langsung pada menit ke-86 saat laga dramati
 - Hwang Do-yun (FC Seoul): 1 Gol, 0 Assist (Peringkat 5)
 - Guillermo May (Melbourne Victory): 1 Gol, 0 Assist (Peringkat 5)
 - Jordi Valadon (Melbourne Victory): 1 Gol, 0 Assist (Peringkat 5)
-Total Gol PERSIB di ACL Two: 5 Gol (Balša Sekulić 3, Mariano Peralta 1, Luka Menalo 1).
-Catatan Terkini Matchday 5: Melbourne Victory vs The Cong-Viettel sore tadi (25 Nov 2026) berakhir imbang 0-0! Laga PERSIB Bandung vs FC Seoul dimainkan malam ini 19:15 WIB di GBLA.
+Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 4, Mariano Peralta 1, Luka Menalo 1).
+Status Laga Terkini LIVE: PERSIB Bandung 1 - 0 FC Seoul (Stadion GBLA, Babak Pertama Sedang Berlangsung - Gol Balša Sekulić 11' assist Thom Haye!). Hasil sore tadi: Melbourne Victory 0 - 0 The Cong-Viettel.
 
 5. SHOPEE CUP ASEAN (Total 9 Gol):
 - Balša Sekulić: 3 Gol (Hat-trick sensasional vs Shan United)
@@ -825,13 +825,15 @@ Tanyakan apa saja seputar taktik Bojan Hodak, kondisi pemain, atau jadwal beriku
     ) {
       const text = `Berikut rekap hasil pertandingan resmi **PERSIB Bandung Musim 2026/2027**:
 
-🏆 Hasil Laga Terkini:
-1. **Super League (Pekan 10 - 22 Nov 2026)**:
+🏆 Hasil & Situasi Laga Terkini:
+1. **ACL Two (MD5 - 25 Nov 2026 SEDANG BERLANGSUNG LIVE)**:
+   - **PERSIB Bandung 1 - 0 FC Seoul** (Gol cepat Balša Sekulić 11' memanfaatkan umpan matang Thom Haye, Maung Bandung memimpin di GBLA!).
+2. **Super League (Pekan 10 - 22 Nov 2026)**:
    - **PERSIB Bandung 2 - 1 Bali United FC** (Kemenangan comeback dramatis 2 menit di GBLA berkat gol Mariano Peralta 79' dan Luka Menalo 81' membalas gol Marko Dugandžić 66').
-2. **Shopee Cup (MD2 - 19 Nov 2026)**:
+3. **Shopee Cup (MD2 - 19 Nov 2026)**:
    - **PERSIB Bandung 6 - 0 Shan United** (Pesta gol di hadapan Bobotoh, mengokohkan posisi #1 Grup B).
-3. **ACL Two (MD4 Leg 2 - 6 Nov 2026)**:
-   - **Melbourne Victory 1 - 2 PERSIB Bandung** (Kemenangan comeback dramatis Leg 2 di AAMI Park Melbourne, rekor 100% menang 4 kali, memastikan tiket Babak 16 Besar Asia!).
+4. **ACL Two (MD4 Leg 2 - 6 Nov 2026)**:
+   - **Melbourne Victory 1 - 2 PERSIB Bandung** (Kemenangan dramatis Leg 2 di AAMI Park Melbourne).
 
 Semua fokus tim saat ini tercurah pada laga tandang krusial kontra Persita Tangerang (Pekan 11, 29 Nov 2026) di Indomilk Arena!`;
 

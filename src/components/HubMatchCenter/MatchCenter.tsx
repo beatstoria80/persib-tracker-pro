@@ -2601,11 +2601,11 @@ export function MatchCenter() {
                 </div>
                 <div>
                   <span className="block text-slate-400 font-medium">Gol (GF:GA)</span>
-                  <span className="font-mono font-bold text-xs">{persibAclTeam?.gf ?? 5} : {persibAclTeam?.ga ?? 1}</span>
+                  <span className="font-mono font-bold text-xs">{persibAclTeam?.gf ?? 6} : {persibAclTeam?.ga ?? 1}</span>
                 </div>
                 <div>
                   <span className="block text-slate-400 font-medium">Selisih Gol</span>
-                  <span className="font-mono font-bold text-emerald-500 text-xs">+{((persibAclTeam?.gf ?? 5) - (persibAclTeam?.ga ?? 1))}</span>
+                  <span className="font-mono font-bold text-emerald-500 text-xs">+{((persibAclTeam?.gf ?? 6) - (persibAclTeam?.ga ?? 1))}</span>
                 </div>
               </div>
             </div>
@@ -3508,7 +3508,7 @@ export function MatchCenter() {
                       {scorerTournamentFilter === 'liga1'
                         ? '18 Gol'
                         : scorerTournamentFilter === 'acl2'
-                        ? '5 Gol'
+                        ? '6 Gol'
                         : '9 Gol'}
                     </div>
                     <span className="text-[9px] text-slate-400 font-medium">

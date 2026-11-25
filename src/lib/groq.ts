@@ -367,8 +367,8 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   const heroEvents = (currentHeroMatch?.events && currentHeroMatch.events.length > 0)
     ? currentHeroMatch.events.map((ev) => ({ minute: ev.minute, type: ev.type, text: ev.text }))
     : (currentHeroMatch.highlights && currentHeroMatch.highlights.length > 0)
-    ? currentHeroMatch.highlights.map((h, idx) => ({ minute: idx === 0 ? "Pra-Laga" : "Info", type: 'chance' as const, text: h }))
-    : [
+      ? currentHeroMatch.highlights.map((h, idx) => ({ minute: idx === 0 ? "Pra-Laga" : "Info", type: 'chance' as const, text: h }))
+      : [
         { minute: "Pra-Laga", type: 'chance' as const, text: `Persiapan pertandingan resmi ${currentHeroMatch.roundOrWeek} di ${currentHeroMatch.venue}.` },
         { minute: "Kick-off", type: 'chance' as const, text: `Jadwal kick-off pertandingan: ${currentHeroMatch.time}.` },
       ];
@@ -395,8 +395,8 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
       statusText: isCurrentlyLive
         ? `SEDANG BERLANGSUNG (LIVE) - ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}`
         : isHeroToday
-        ? `MATCHDAY HARI INI - Kick-off ${currentHeroMatch.time} (${currentHeroMatch.venue})`
-        : `SELESAI (FULL TIME) - ${currentHeroMatch.homeTeam} ${currentHeroMatch.homeScore ?? 0} - ${currentHeroMatch.awayScore ?? 0} ${currentHeroMatch.awayTeam}`,
+          ? `MATCHDAY HARI INI - Kick-off ${currentHeroMatch.time} (${currentHeroMatch.venue})`
+          : `SELESAI (FULL TIME) - ${currentHeroMatch.homeTeam} ${currentHeroMatch.homeScore ?? 0} - ${currentHeroMatch.awayScore ?? 0} ${currentHeroMatch.awayTeam}`,
       qualificationScenario: currentHeroMatch.aggregateScore || `Hasil laga resmi ${currentHeroMatch.roundOrWeek} mengamankan perolehan poin penting di klasemen kompetisi 2026/2027.`,
       keyEvents: heroEvents,
     },
@@ -512,14 +512,16 @@ TOP SCORER & TOP ASSIST RESMI SUPER LEAGUE / BRI LIGA 1 2026/2027 (SETELAH PEKAN
 - Top Scorer Internal PERSIB di Super League (Total 18 Gol): Mariano Peralta 5 Gol, Balša Sekulić 4 Gol, Luka Menalo 4 Gol, Ragnar Oratmangoen 3 Gol, Thom Haye 1 Gol (plus 7 assist), Marc Klok 1 Gol (plus 2 assist).
 - PERINGATAN KERAS DATABASE LAMA: DILARANG KERAS menyebut David da Silva, Ciro Alves di Persib, Alberto Rodriguez, Stefano Beltrame, Mateo Kocijan, Nick Kuipers, atau Tyronne del Pino sebagai pencetak gol atau pemain Persib musim 2026/2027! Mereka adalah mantan pemain masa lalu.
 
-KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E - PER 25 NOV 2026 17:17 WIB):
-- Klasemen Resmi Grup E:
-  1. PERSIB Bandung (IDN): 4 Main, 4 Menang, 0 Seri, 0 Kalah, Gol 5-1, 12 Poin (Juara Grup E & Lolos 16 Besar)
-  2. FC Seoul (KOR): 4 Main, 2 Menang, 1 Seri, 1 Kalah, Gol 7-3, 7 Poin
-  3. Melbourne Victory (AUS): 5 Main, 1 Menang, 1 Seri, 3 Kalah, Gol 3-6, 4 Poin (Baru saja imbang 0-0 vs The Cong-Viettel sore tadi)
-  4. The Cong-Viettel FC (VIE): 5 Main, 0 Menang, 2 Seri, 3 Kalah, Gol 1-6, 2 Poin (Baru saja imbang 0-0 vs Melbourne Victory sore tadi)
-- Top Scorer Resmi Grup E ACL Two 2026/2027 (Sumber Resmi ESPN & AFC):
-  1. Balša Sekulić (Persib Bandung) - 3 Gol, 0 Assist (Peringkat 1 Teratas)
+KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E - LIVE SEDANG BERLANGSUNG):
+- Situasi Pertandingan LIVE Saat Ini (Matchday 5 di Stadion GBLA):
+  PERSIB Bandung 1 - 0 FC Seoul (Sedang Berlangsung Babak Pertama). Gol dicetak oleh Balša Sekulić pada menit ke-11 memanfaatkan umpan matang Thom Haye!
+- Klasemen Live Virtual Grup E:
+  1. PERSIB Bandung (IDN): 5 Main, 5 Menang, 0 Seri, 0 Kalah, Gol 6-1, 15 Poin (Memimpin Unggul 1-0 LIVE)
+  2. FC Seoul (KOR): 5 Main, 2 Menang, 1 Seri, 2 Kalah, Gol 7-4, 7 Poin
+  3. Melbourne Victory (AUS): 5 Main, 1 Menang, 1 Seri, 3 Kalah, Gol 3-6, 4 Poin (Hasil 0-0 vs The Cong-Viettel sore tadi)
+  4. The Cong-Viettel FC (VIE): 5 Main, 0 Menang, 2 Seri, 3 Kalah, Gol 1-6, 2 Poin (Hasil 0-0 vs Melbourne Victory sore tadi)
+- Top Scorer Resmi Grup E ACL Two 2026/2027:
+  1. Balša Sekulić (Persib Bandung) - 4 Gol, 0 Assist (Peringkat 1 Kokoh di Puncak Asia - baru saja mencetak gol ke-4 vs FC Seoul!)
   2. Moon Seon-min (FC Seoul) - 2 Gol, 1 Assist
   3. Anderson Oliveira (FC Seoul) - 2 Gol, 1 Assist
   4. Clarismario Santos (Melbourne Victory) - 2 Gol, 0 Assist
@@ -530,8 +532,7 @@ KLASEMEN & TOP SKOR RESMI AFC CHAMPIONS LEAGUE TWO (GRUP E - PER 25 NOV 2026 17:
   9. Hwang Do-yun (FC Seoul) - 1 Gol, 0 Assist
   10. Guillermo May (Melbourne Victory) - 1 Gol, 0 Assist
   11. Jordi Valadon (Melbourne Victory) - 1 Gol, 0 Assist
-- Total Gol PERSIB di ACL Two: 5 Gol (Balša Sekulić 3, Mariano Peralta 1, Luka Menalo 1). Mariano Peralta 1 Assist.
-- Laga Hari Ini: Matchday 5 PERSIB Bandung vs FC Seoul (Rabu, 25 Nov 2026, 19:15 WIB di Stadion GBLA). Hasil Melbourne Victory vs The Cong-Viettel sore tadi berakhir imbang 0-0 sehingga daftar pencetak gol belum berubah.
+- Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 4, Mariano Peralta 1, Luka Menalo 1). Thom Haye 1 Assist di laga ini (total assist Asia 4).
 
 REGULASI DISIPLIN & STATUS KARTU SISTEMIK:
 - Mariano Peralta: Terkena kartu merah langsung menit 86 vs Bali United. Konsekuensi sistemik: Absen di Super League Pekan 11 vs Persita Tangerang kecuali denda disiplin Komdis PSSI Rp 10.000.000 dibayarkan. Namun untuk laga Asia (ACL Two vs FC Seoul & Shopee Cup), Peralta 100% sah dan bugar bermain karena yurisdiksi sanksi domestik tidak menghalangi kompetisi AFC/ASEAN.

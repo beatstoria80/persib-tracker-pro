@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v74 (Verified Lapangbola & ESPN Top Scorers Reconciliation)
-const CACHE_NAME = 'persib-tracker-pwa-v74';
+// PERSIB TRACKER - PWA Service Worker v75 (ACL Two MD5 Live 1-0 Update vs FC Seoul)
+const CACHE_NAME = 'persib-tracker-pwa-v75';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
