@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v78 (Live Hero Fixture Card Score, Scorers & Status UI)
-const CACHE_NAME = 'persib-tracker-pwa-v78';
+// PERSIB TRACKER - PWA Service Worker v79 (Live Match Score 2-1 Menalo & Peralta vs FC Seoul, Dynamic Top Scorers)
+const CACHE_NAME = 'persib-tracker-pwa-v79';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

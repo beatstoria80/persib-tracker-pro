@@ -40,6 +40,7 @@ import {
   getOpponentSquad,
   convertOpponentPlayerToPlayer,
   TOP_SCORERS_2026_2027,
+  OFFICIAL_SQUAD_2026_2027,
 } from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
 import { ClubIntelligenceView } from './ClubIntelligenceView';
@@ -2196,25 +2197,20 @@ export function MatchCenter() {
                             ⚽ Top Skor (Semua Ajang)
                           </span>
                           <div className="space-y-1 pt-0.5">
-                            {[
-                              { name: 'Balša Sekulić', count: 8, num: 99 },
-                              { name: 'Mariano Peralta', count: 5, num: 10 },
-                              { name: 'Luka Menalo', count: 4, num: 9 },
-                              { name: 'Marc Klok', count: 1, num: 23 },
-                              { name: 'Beckham Putra', count: 1, num: 7 },
-                              { name: 'Adam Alis', count: 1, num: 18 },
-                              { name: 'Uilliam Barros', count: 1, num: 94 },
-                              { name: 'Berguinho', count: 1, num: 97 },
-                            ].slice(0, 4).map((p, pI) => (
-                              <div key={pI} className="flex items-center justify-between text-[11px]">
-                                <span className="font-extrabold truncate text-slate-800 dark:text-slate-200">
-                                  {pI + 1}. {p.name}
-                                </span>
-                                <span className="font-mono font-black text-blue-600 dark:text-cyan-400 shrink-0">
-                                  {p.count} Gol
-                                </span>
-                              </div>
-                            ))}
+                            {OFFICIAL_SQUAD_2026_2027
+                              .filter((p) => (p.stats?.goals ?? 0) > 0)
+                              .sort((a, b) => (b.stats?.goals ?? 0) - (a.stats?.goals ?? 0))
+                              .slice(0, 4)
+                              .map((p, pI) => (
+                                <div key={p.id || p.name} className="flex items-center justify-between text-[11px]">
+                                  <span className="font-extrabold truncate text-slate-800 dark:text-slate-200">
+                                    {pI + 1}. {p.name}
+                                  </span>
+                                  <span className="font-mono font-black text-blue-600 dark:text-cyan-400 shrink-0">
+                                    {p.stats?.goals ?? 0} Gol
+                                  </span>
+                                </div>
+                              ))}
                           </div>
                         </div>
 
@@ -2228,22 +2224,20 @@ export function MatchCenter() {
                             👟 Top Assist (Semua Ajang)
                           </span>
                           <div className="space-y-1 pt-0.5">
-                            {[
-                              { name: 'Thom Haye', count: 6, num: 33 },
-                              { name: 'Marc Klok', count: 4, num: 23 },
-                              { name: 'Eliano Reijnders', count: 3, num: 2 },
-                              { name: 'Beckham Putra', count: 3, num: 7 },
-                              { name: 'Mariano Peralta', count: 2, num: 10 },
-                            ].slice(0, 4).map((p, pI) => (
-                              <div key={pI} className="flex items-center justify-between text-[11px]">
-                                <span className="font-extrabold truncate text-slate-800 dark:text-slate-200">
-                                  {pI + 1}. {p.name}
-                                </span>
-                                <span className="font-mono font-black text-emerald-600 dark:text-emerald-400 shrink-0">
-                                  {p.count} Ast
-                                </span>
-                              </div>
-                            ))}
+                            {OFFICIAL_SQUAD_2026_2027
+                              .filter((p) => (p.stats?.assists ?? 0) > 0)
+                              .sort((a, b) => (b.stats?.assists ?? 0) - (a.stats?.assists ?? 0))
+                              .slice(0, 4)
+                              .map((p, pI) => (
+                                <div key={p.id || p.name} className="flex items-center justify-between text-[11px]">
+                                  <span className="font-extrabold truncate text-slate-800 dark:text-slate-200">
+                                    {pI + 1}. {p.name}
+                                  </span>
+                                  <span className="font-mono font-black text-emerald-600 dark:text-emerald-400 shrink-0">
+                                    {p.stats?.assists ?? 0} Ast
+                                  </span>
+                                </div>
+                              ))}
                           </div>
                         </div>
                       </div>
@@ -3929,28 +3923,29 @@ export function MatchCenter() {
             </div>
 
             <div className="grid grid-cols-2 gap-2">
-              {[
-                { name: 'Thom Haye', num: 33, role: 'Playmaker Maestro', assists: 9, matches: 15, key: 'Umpan Kunci No. 1' },
-                { name: 'Ragnar Oratmangoen', num: 77, role: 'Winger Kilat', assists: 5, matches: 13, key: 'Dribel & Cutback' },
-                { name: 'Mariano Peralta', num: 10, role: 'Sayap Kanan', assists: 4, matches: 14, key: 'Crossing & Cut-inside' },
-                { name: 'Marc Klok', num: 23, role: 'Kapten Tim', assists: 4, matches: 14, key: 'Set Piece & Crossing' },
-              ].map((pm) => (
-                <div
-                  key={pm.name}
-                  className={`p-3 rounded-2xl border transition-all ${
-                    isPro ? 'bg-[#161B28] border-slate-800' : 'bg-slate-50 border-slate-200'
-                  }`}
-                >
-                  <div className="flex items-center justify-between">
-                    <span className="text-[10px] font-mono font-bold text-slate-400">#{pm.num}</span>
-                    <span className="text-xs font-mono font-black text-emerald-500">{pm.assists} Assist</span>
+              {OFFICIAL_SQUAD_2026_2027
+                .filter((p) => (p.stats?.assists ?? 0) > 0)
+                .sort((a, b) => (b.stats?.assists ?? 0) - (a.stats?.assists ?? 0))
+                .slice(0, 4)
+                .map((pm) => (
+                  <div
+                    key={pm.id || pm.name}
+                    className={`p-3 rounded-2xl border transition-all ${
+                      isPro ? 'bg-[#161B28] border-slate-800' : 'bg-slate-50 border-slate-200'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-[10px] font-mono font-bold text-slate-400">#{pm.number}</span>
+                      <span className="text-xs font-mono font-black text-emerald-500">{pm.stats?.assists ?? 0} Assist</span>
+                    </div>
+                    <div className="font-black text-xs text-slate-900 dark:text-white mt-1 truncate">
+                      {pm.name}
+                    </div>
+                    <div className="text-[9.5px] text-slate-400 mt-0.5 truncate">
+                      {pm.position === 'MF' ? 'Playmaker Maestro' : 'Penyerang Sayap'}
+                    </div>
                   </div>
-                  <div className="font-black text-xs text-slate-900 dark:text-white mt-1 truncate">
-                    {pm.name}
-                  </div>
-                  <div className="text-[9.5px] text-slate-400 mt-0.5 truncate">{pm.key}</div>
-                </div>
-              ))}
+                ))}
             </div>
           </div>
         </div>
