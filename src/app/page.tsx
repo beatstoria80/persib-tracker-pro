@@ -101,16 +101,16 @@ export default function HomePage() {
           <LiveTelemetryWidget currentFixture={currentTournFixture} />
         </div>
 
-        {/* Scrollable Main Mobile Hub Content - Stage 3 High Impact Rise with Sheen */}
-        <main className={`flex-1 px-4 sm:px-5 py-3 pb-48 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
-          <div>
+        {/* Scrollable Main Mobile Hub Content - Flexible bottom alignment without wasteful dead space */}
+        <main className={`flex-1 flex flex-col justify-between px-4 sm:px-5 py-3 pb-20 ${hasEnteredApp ? 'animate-ui-rise-3' : 'opacity-0 translate-y-8'}`}>
+          <div className="flex-1">
             {(activeHub === 'match-center' || activeHub === 'ai-chat') && <MatchCenter />}
             {activeHub === 'roster' && <RosterDeepDive />}
             {activeHub === 'transparency' && <CorporateTransparency />}
           </div>
 
-          {/* REFACTOR: Official Sponsorship & Partner Footer Section with full bottom clearance */}
-          <div className="mt-6 mb-4">
+          {/* Official Sponsorship & Partner Footer Section pushed down cleanly above bottom nav */}
+          <div className="mt-auto pt-4 pb-1">
             <SponsorshipFooter />
           </div>
         </main>

@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v56 (Universal Automated Match Lifecycle Engine)
-const CACHE_NAME = 'persib-tracker-pwa-v56';
+// PERSIB TRACKER - PWA Service Worker v57 (Fixed Bottom Layout Alignment & Zero Dead Space)
+const CACHE_NAME = 'persib-tracker-pwa-v57';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
