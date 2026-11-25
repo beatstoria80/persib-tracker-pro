@@ -1999,12 +1999,15 @@ export const OPPONENT_SQUADS_REGISTRY: Record<string, { startingXI: ClubPlayerPr
       { id: 'fcs-6', name: 'Ki Sung-yueng', number: 6, position: 'MF (CM)', nationality: 'Korea Selatan', marketValue: 'Rp 7.0 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/9832-1598424269.jpg', isStarting: true, fitnessPercentage: 96, rating: 9.1, keyStat: 'Kapten Legenda Swansea & Celtic & 92% Umpan', tacticalRole: 'Deep-Lying Maestro Pengatur Laga', pitchX: 56, pitchY: 66 },
       { id: 'fcs-10', name: 'Jesse Lingard', number: 10, position: 'MF (AM)', nationality: 'Inggris', marketValue: 'Rp 18.0 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/50164-1678278278.jpg', isStarting: true, fitnessPercentage: 100, rating: 9.4, keyStat: '1 Gol & 2 Assist di ACL Two (Bintang Eks-MU)', tacticalRole: 'Playmaker Bebas Penusuk Box', pitchX: 54, pitchY: 34 },
       { id: 'fcs-11', name: 'Cho Young-wook', number: 11, position: 'FW (RW)', nationality: 'Korea Selatan', marketValue: 'Rp 7.5 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/542475-1710928300.jpg', isStarting: true, fitnessPercentage: 100, rating: 8.9, keyStat: '1 Gol & 1 Assist di ACL Two', tacticalRole: 'Inside Forward Penusuk Flank', pitchX: 38, pitchY: 82 },
-      { id: 'fcs-90', name: 'Stanislav Iljutcenko', number: 90, position: 'FW (CF)', nationality: 'Jerman / Rusia', marketValue: 'Rp 9.0 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/93539-1688629555.jpg', isStarting: true, fitnessPercentage: 100, rating: 9.3, keyStat: '2 Gol di ACL Two Grup E (Top Skorer Seoul)', tacticalRole: 'Target Man Predator Kotak Penalti', pitchX: 35, pitchY: 50 },
+      { id: 'fcs-9', name: 'Leonardo Ruiz', number: 9, position: 'FW (CF)', nationality: 'Brasil', marketValue: 'Rp 8.5 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/358848-1688629550.jpg', isStarting: true, fitnessPercentage: 100, rating: 9.2, keyStat: 'Pencetak Gol vs PERSIB (37\') & 2 Gol ACL Two', tacticalRole: 'Target Man Penuntas Peluang', pitchX: 35, pitchY: 50 },
       { id: 'fcs-7', name: 'Lucas Silva', number: 7, position: 'FW (LW)', nationality: 'Brasil', marketValue: 'Rp 8.5 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/543971-1688629590.jpg', isStarting: true, fitnessPercentage: 98, rating: 8.9, keyStat: '1 Gol & 1 Assist di ACL Two (Winger Brasil)', tacticalRole: 'Winger Vertikal Penyuplai Crossing', pitchX: 38, pitchY: 18 },
     ],
     substitutes: [
+      { id: 'fcs-sub-27', name: 'Moon Seon-min', number: 27, position: 'FW (LW)', nationality: 'Korea Selatan', marketValue: 'Rp 6.5 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/221978-1710928200.jpg', isStarting: false, fitnessPercentage: 100, rating: 9.0, keyStat: '2 Gol & 1 Assist di ACL Two Grup E', tacticalRole: 'Super Sub Sayap Eksplosif' },
+      { id: 'fcs-sub-70', name: 'Anderson Oliveira', number: 70, position: 'FW (RW)', nationality: 'Brasil', marketValue: 'Rp 7.0 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/560946-1688629500.jpg', isStarting: false, fitnessPercentage: 100, rating: 8.9, keyStat: '2 Gol & 1 Assist di ACL Two Grup E', tacticalRole: 'Penyerang Sayap Brasil' },
+      { id: 'fcs-sub-90', name: 'Stanislav Iljutcenko', number: 90, position: 'FW (CF)', nationality: 'Jerman / Rusia', marketValue: 'Rp 9.0 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/93539-1688629555.jpg', isStarting: false, fitnessPercentage: 100, rating: 8.8, keyStat: 'Target Man Berpostur 1.89m', tacticalRole: 'Predator Udara Rotasi' },
+      { id: 'fcs-sub-25', name: 'Hwang Do-yun', number: 25, position: 'MF (CM)', nationality: 'Korea Selatan', marketValue: 'Rp 4.5 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/975306-1710928320.jpg', isStarting: false, fitnessPercentage: 100, rating: 8.2, keyStat: '1 Gol di ACL Two', tacticalRole: 'Gelandang Enerjik' },
       { id: 'fcs-sub-21', name: 'Baek Jong-bum', number: 21, position: 'GK', nationality: 'Korea Selatan', marketValue: 'Rp 3.5 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/597816-1710928240.jpg', isStarting: false, fitnessPercentage: 100, rating: 7.8, keyStat: 'Kiper Pelapis', tacticalRole: 'Cadangan GK' },
-      { id: 'fcs-sub-27', name: 'Kang Seong-jin', number: 27, position: 'FW (RW)', nationality: 'Korea Selatan', marketValue: 'Rp 4.5 M', avatarUrl: 'https://img.a.transfermarkt.technology/portrait/header/867768-1710928320.jpg', isStarting: false, fitnessPercentage: 100, rating: 8.1, keyStat: 'Winger Muda Eksplosif', tacticalRole: 'Super Sub Penambah Daya Dobrak' },
     ],
   },
   // REFACTOR: Skuad autentik The Cong-Viettel FC (Lawan Matchday 1 & 6 ACL Two 2026/2027)
@@ -2919,12 +2922,14 @@ export const VERIFIED_FIXTURES_2026_2027: MatchFixture[] = [
       'Babak Kedua Sedang Berlangsung di Stadion GBLA — PERSIB mengokohkan rekor 100% menang menuju Babak 16 Besar!',
     ],
     events: [
+      { minute: "60'", type: 'sub', text: 'Pergantian Pemain FC Seoul: Moon Seon-min masuk menggantikan Cho Young-wook menambah daya gedor sayap.' },
       { minute: "41'", type: 'goal', text: 'GOOOL PERSIB Bandung! Luka Menalo menyambar bola rebound kemelut di kotak penalti menembus gawang FC Seoul! 2-1!' },
       { minute: "37'", type: 'goal', text: 'Gol FC Seoul! Leonardo Ruiz menyamakan kedudukan 1-1 melalui sontekan jarak dekat.' },
       { minute: "6'", type: 'goal', text: 'GOOOL PERSIB Bandung! Gol cepat Mariano Peralta memanfaatkan umpan silang matang Sandy Walsh membobol gawang FC Seoul! 1-0!' },
       { minute: "1'", type: 'chance', text: 'Kick-off Babak Pertama dimulai di Stadion Gelora Bandung Lautan Api (GBLA) pukul 19:15 WIB' },
     ],
     detailedEvents: [
+      { minute: "60'", type: 'sub', team: 'away', player: 'Moon Seon-min (Masuk)', detail: 'Menggantikan Cho Young-wook (Sub Taktis FC Seoul)' },
       { minute: "41'", type: 'goal', team: 'home', player: 'Luka Menalo', detail: 'Gol Rebound Kemelut di Depan Gawang Lawan' },
       { minute: "37'", type: 'goal', team: 'away', player: 'Leonardo Ruiz', detail: 'Gol Penyeimbang Sontekan Jarak Dekat' },
       { minute: "6'", type: 'goal', team: 'home', player: 'Mariano Peralta', detail: 'Gol Cepat Pembuka (Assist Sandy Walsh)' },

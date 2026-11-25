@@ -211,10 +211,12 @@ function TacticalPlayerNode({
   pos,
   fullPlayer,
   onSelectPlayer,
+  hasScored,
 }: {
   pos: TacticalPlayerPos;
   fullPlayer?: Player;
   onSelectPlayer: (player: Player) => void;
+  hasScored?: boolean;
 }) {
   const [hasError, setHasError] = useState(false);
 
@@ -230,6 +232,13 @@ function TacticalPlayerNode({
       }}
     >
       <div className="relative">
+        {/* Goal Indicator Pill if Scored in Live Match */}
+        {hasScored && (
+          <span className="absolute -top-2 -left-1 text-[11px] filter drop-shadow-md z-20 animate-bounce">
+            ⚽
+          </span>
+        )}
+
         {/* Round Player Avatar Node - Clean Photo WITHOUT any text covering the face */}
         <div className="w-10 h-10 rounded-full ring-2 ring-white/95 dark:ring-slate-700 shadow-xl overflow-hidden bg-slate-900 group-hover:scale-110 group-hover:ring-cyan-300 transition-all flex items-center justify-center p-0.5">
           {!hasError ? (
@@ -373,6 +382,20 @@ export function MatchCenter() {
   const opponentLogo = isPersibHome ? currentFixture.awayLogo : currentFixture.homeLogo;
   const opponentSquadData = currentFixture.opponentSquad || getOpponentSquad(opponentTeamName);
   const opponentProfile = getClubProfile(opponentTeamName);
+
+  // Dynamic set of goal scorers in active match for 2D tactical pitch highlight
+  const matchScorers = useMemo(() => {
+    const list = new Set<string>();
+    if (currentFixture.detailedEvents) {
+      for (const ev of currentFixture.detailedEvents) {
+        if (ev.type === 'goal' && ev.player) {
+          list.add(ev.player.toLowerCase().trim());
+        }
+      }
+    }
+    return list;
+  }, [currentFixture.detailedEvents]);
+
   const activeTacticalDuels: TacticalDuelMatchup[] =
     currentFixture.tacticalDuels && currentFixture.tacticalDuels.length > 0
       ? currentFixture.tacticalDuels
@@ -1640,6 +1663,9 @@ export function MatchCenter() {
                           // Calculate position on upper half (bottom: 54% to 92%)
                           const posX = opp.pitchX !== undefined ? opp.pitchX : 75;
                           const posY = opp.pitchY !== undefined ? opp.pitchY : 50;
+                          const oppHasScored =
+                            matchScorers.has(opp.name.toLowerCase().trim()) ||
+                            Array.from(matchScorers).some((s) => opp.name.toLowerCase().includes(s) || s.includes(opp.name.toLowerCase()));
 
                           return (
                             <div
@@ -1649,6 +1675,11 @@ export function MatchCenter() {
                               className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-10 transition-transform active:scale-90"
                             >
                               <div className="relative">
+                                {oppHasScored && (
+                                  <span className="absolute -top-2 -left-1 text-[11px] filter drop-shadow-md z-20 animate-bounce">
+                                    ⚽
+                                  </span>
+                                )}
                                 <div className="w-8 h-8 rounded-full border-2 border-red-500 overflow-hidden shadow-lg bg-slate-900 group-hover:scale-110 transition-transform">
                                   <img
                                     src={opp.avatarUrl}
@@ -1687,13 +1718,16 @@ export function MatchCenter() {
                               { id: 'p-dm2', name: 'Marc Klok', number: 23, role: 'DM', x: 30, y: 40 },
                               { id: 'p-rw', name: 'Mariano Peralta', number: 10, role: 'RW', x: 42, y: 82 },
                               { id: 'p-am', name: 'Luciano Guaycochea', number: 8, role: 'AM', x: 40, y: 50 },
-                              { id: 'p-lw', name: 'Ragnar Oratmangoen', number: 77, role: 'LW', x: 42, y: 18 },
+                              { id: 'p-lw', name: 'Luka Menalo', number: 9, role: 'LW', x: 42, y: 18 },
                               { id: 'p-cf', name: 'Balša Sekulić', number: 99, role: 'CF', x: 47, y: 50 },
                             ]
                         ).map((pos) => {
                           const fullPlayer = players.find(
                             (p) => p.number === pos.number || p.name.toLowerCase().includes(pos.name.toLowerCase())
                           );
+                          const hasScored =
+                            matchScorers.has(pos.name.toLowerCase().trim()) ||
+                            Array.from(matchScorers).some((s) => pos.name.toLowerCase().includes(s) || s.includes(pos.name.toLowerCase()));
 
                           return (
                             <TacticalPlayerNode
@@ -1701,6 +1735,7 @@ export function MatchCenter() {
                               pos={pos}
                               fullPlayer={fullPlayer}
                               onSelectPlayer={setSelectedPlayer}
+                              hasScored={hasScored}
                             />
                           );
                         })}
@@ -3207,6 +3242,9 @@ export function MatchCenter() {
                   const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
                   const posX = opp.pitchX !== undefined ? opp.pitchX : 75;
                   const posY = opp.pitchY !== undefined ? opp.pitchY : 50;
+                  const oppHasScored =
+                    matchScorers.has(opp.name.toLowerCase().trim()) ||
+                    Array.from(matchScorers).some((s) => opp.name.toLowerCase().includes(s) || s.includes(opp.name.toLowerCase()));
 
                   return (
                     <div
@@ -3216,6 +3254,11 @@ export function MatchCenter() {
                       className="absolute -translate-x-1/2 -translate-y-1/2 flex flex-col items-center cursor-pointer group z-10 transition-transform active:scale-90"
                     >
                       <div className="relative">
+                        {oppHasScored && (
+                          <span className="absolute -top-2 -left-1 text-[11px] filter drop-shadow-md z-20 animate-bounce">
+                            ⚽
+                          </span>
+                        )}
                         <div className="w-8 h-8 rounded-full border-2 border-red-500 overflow-hidden shadow-lg bg-slate-900 group-hover:scale-110 transition-transform">
                           <img
                             src={opp.avatarUrl}
@@ -3254,13 +3297,16 @@ export function MatchCenter() {
                       { id: 'p-dm2', name: 'Marc Klok', number: 23, role: 'DM', x: 30, y: 40 },
                       { id: 'p-rw', name: 'Mariano Peralta', number: 10, role: 'RW', x: 42, y: 82 },
                       { id: 'p-am', name: 'Luciano Guaycochea', number: 8, role: 'AM', x: 40, y: 50 },
-                      { id: 'p-lw', name: 'Ragnar Oratmangoen', number: 77, role: 'LW', x: 42, y: 18 },
+                      { id: 'p-lw', name: 'Luka Menalo', number: 9, role: 'LW', x: 42, y: 18 },
                       { id: 'p-cf', name: 'Balša Sekulić', number: 99, role: 'CF', x: 47, y: 50 },
                     ]
                 ).map((pos) => {
                   const fullPlayer = players.find(
                     (p) => p.number === pos.number || p.name.toLowerCase().includes(pos.name.toLowerCase())
                   );
+                  const hasScored =
+                    matchScorers.has(pos.name.toLowerCase().trim()) ||
+                    Array.from(matchScorers).some((s) => pos.name.toLowerCase().includes(s) || s.includes(pos.name.toLowerCase()));
 
                   return (
                     <TacticalPlayerNode
@@ -3268,6 +3314,7 @@ export function MatchCenter() {
                       pos={pos}
                       fullPlayer={fullPlayer}
                       onSelectPlayer={setSelectedPlayer}
+                      hasScored={hasScored}
                     />
                   );
                 })}
