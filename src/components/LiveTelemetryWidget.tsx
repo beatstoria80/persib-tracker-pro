@@ -29,6 +29,13 @@ function formatMobileClubName(rawName: string): string {
   return rawName.replace(/\s*\([A-Z]+\)\s*/g, '').trim();
 }
 
+function cleanBulletinDisplay(rawBulletin: string): string {
+  if (!rawBulletin) return '';
+  return rawBulletin
+    .replace(/\s*\((?:Sync|Live Groq LPU):[^)]+\)/gi, '')
+    .trim();
+}
+
 export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps) {
   const {
     mode,
@@ -224,7 +231,7 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
                     : (isPro ? 'line-clamp-2 text-slate-200' : 'line-clamp-2 text-slate-600')
                 }`}
               >
-                {groqBulletin}
+                {cleanBulletinDisplay(groqBulletin)}
               </p>
 
               {/* Tag Ringkasan Cepat saat Di-expand */}

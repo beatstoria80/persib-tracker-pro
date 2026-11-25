@@ -216,9 +216,22 @@ FORMAT & GAYA JAWABAN:
 - Jawab langsung inti pertanyaan di 1-2 paragraf awal. Jika ditanya kesiapan laga hari ini, jawab laga hari ini tanpa menceritakan ulasan panjang hasil laga lalu!`;
 
     if (apiKey) {
+      const lower = userMessage.toLowerCase();
+      const isTodayMatchQuery =
+        lower.includes('hari ini') ||
+        lower.includes('kesiapan') ||
+        lower.includes('seoul') ||
+        (lower.includes('acl') && (lower.includes('update') || lower.includes('laga') || lower.includes('jadwal') || lower.includes('siap') || lower.includes('main') || lower.includes('tanding'))) ||
+        (lower.includes('laga') && (lower.includes('hari ini') || lower.includes('malam ini') || lower.includes('sekarang')));
+
+      const contextReminder = isTodayMatchQuery && todayMatch
+        ? `[INSTRUKSI MUTLAK: Pertanyaan pengguna menyangkut laga hari ini / ACL Two / kesiapan tim. HARI INI (${todayMatch.date}) ADA PERTANDINGAN RESMI: ${todayMatch.homeTeam} vs ${todayMatch.awayTeam} (Matchday 5 Grup E ACL Two 2026/2027) pukul ${todayMatch.time || '19:15 WIB'} di ${todayMatch.venue}! Jawab secara tegas dan informatif mengenai persiapan laga malam ini, moral tim, dan status pemain (Mariano Peralta 100% sah bermain di Asia, Thom Haye, Sandy Walsh, Sekulic, Menalo siap tempur). DILARANG KERAS mengatakan tidak ada laga hari ini, tim sedang istirahat, atau membahas panjang lebar hasil laga lampau Melbourne Victory!]`
+        : null;
+
       const messagesToSend = [
         { role: 'system', content: systemPrompt },
-        ...conversationHistory.slice(-6),
+        ...conversationHistory.slice(-4),
+        ...(contextReminder ? [{ role: 'system' as const, content: contextReminder }] : []),
         { role: 'user', content: userMessage },
       ];
 

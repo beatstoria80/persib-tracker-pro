@@ -352,16 +352,16 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
 
   if (isCurrentlyLive) {
     currentStageName = `🔴 SEDANG BERLANGSUNG: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} (${currentHeroMatch.roundOrWeek})`;
-    dynamicBulletin = `🔴 [LIVE ${currentHeroMatch.tournament.toUpperCase()}] Sedang Berlangsung! ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} di ${currentHeroMatch.venue} memasuki menit ${currentHeroMatch.time}. (Sync: ${nowWib})`;
+    dynamicBulletin = `🔴 [LIVE ${currentHeroMatch.tournament.toUpperCase()}] Sedang Berlangsung! ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} di ${currentHeroMatch.venue} memasuki menit ${currentHeroMatch.time}.`;
   } else if (isHeroToday) {
     currentStageName = `🔥 MATCHDAY HARI INI: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} (${currentHeroMatch.roundOrWeek})`;
-    dynamicBulletin = `🔥 [MATCHDAY HARI INI - ${currentHeroMatch.tournament.toUpperCase()}] Big Match! ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} kick-off pukul ${currentHeroMatch.time} di ${currentHeroMatch.venue}! (Sync: ${nowWib})`;
+    dynamicBulletin = `🔥 [MATCHDAY HARI INI - ${currentHeroMatch.tournament.toUpperCase()}] Big Match! ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} kick-off pukul ${currentHeroMatch.time} di ${currentHeroMatch.venue}!`;
   } else if (latestFinished) {
     currentStageName = `${latestFinished.roundOrWeek} Tuntas: ${latestFinished.homeTeam} ${latestFinished.homeScore ?? 0} - ${latestFinished.awayScore ?? 0} ${latestFinished.awayTeam}`;
-    dynamicBulletin = `🏆 [${latestFinished.tournament.toUpperCase()}] Hasil Akhir: ${latestFinished.homeTeam} ${latestFinished.homeScore ?? 0} - ${latestFinished.awayScore ?? 0} ${latestFinished.awayTeam} di ${latestFinished.venue}. (Sync: ${nowWib})`;
+    dynamicBulletin = `🏆 [${latestFinished.tournament.toUpperCase()}] Hasil Akhir: ${latestFinished.homeTeam} ${latestFinished.homeScore ?? 0} - ${latestFinished.awayScore ?? 0} ${latestFinished.awayTeam} di ${latestFinished.venue}.`;
   } else {
     currentStageName = `${currentHeroMatch.tournament}: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam}`;
-    dynamicBulletin = `📅 [JADWAL RESMI] ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} pada ${currentHeroMatch.date} (${currentHeroMatch.time}). (Sync: ${nowWib})`;
+    dynamicBulletin = `📅 [JADWAL RESMI] ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} pada ${currentHeroMatch.date} (${currentHeroMatch.time}).`;
   }
 
   const heroEvents = (currentHeroMatch?.events && currentHeroMatch.events.length > 0)
@@ -534,7 +534,7 @@ ATURAN MUTLAK:
         const groqText = json.choices?.[0]?.message?.content?.trim();
         if (groqText) {
           const cleanText = groqText.replace(/\*\*/g, '').replace(/^"+|"+$/g, '').trim();
-          liveData.summaryBulletin = `${cleanText} (Live Groq LPU: ${nowWib})`;
+          liveData.summaryBulletin = cleanText;
         }
       }
     } catch (err) {

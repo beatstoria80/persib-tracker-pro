@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v63 (Instant Player Profile Video Autoplay & Fallback Loop)
-const CACHE_NAME = 'persib-tracker-pwa-v63';
+// PERSIB TRACKER - PWA Service Worker v64 (Clean Feeds Without Timestamp & Bulletproof ACL Matchday AI Grounding)
+const CACHE_NAME = 'persib-tracker-pwa-v64';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
