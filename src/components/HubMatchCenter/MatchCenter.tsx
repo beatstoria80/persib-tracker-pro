@@ -691,20 +691,62 @@ export function MatchCenter() {
                   <span className="text-[10px] text-slate-400 font-semibold mt-0.5">Tuan Rumah</span>
                 </div>
 
-                {/* Center: Circular VS Pill */}
+                {/* Center: Live/Final Score or Circular VS Pill */}
                 <div className="flex flex-col items-center px-2 shrink-0">
-                  <div
-                    className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-xs shadow-md border ${
-                      isPro
-                        ? 'bg-[#0E1118] border-slate-700 text-cyan-300'
-                        : 'bg-white border-slate-200 text-slate-800'
-                    }`}
-                  >
-                    VS
-                  </div>
-                  <span className="text-[9px] font-mono font-bold text-slate-400 mt-1 uppercase whitespace-nowrap">
-                    {currentFixture.status === 'FINISHED' ? 'Full Time' : currentFixture.time}
-                  </span>
+                  {currentFixture.status === 'LIVE' ? (
+                    <>
+                      <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-600 text-white text-[8.5px] font-black uppercase tracking-wider mb-1.5 shadow-sm">
+                        <span className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
+                        <span>LIVE</span>
+                      </div>
+                      <div
+                        className={`px-3.5 py-1.5 rounded-2xl flex items-center justify-center font-black text-xl sm:text-2xl font-mono tabular-nums shadow-md border ${
+                          isPro
+                            ? 'bg-[#0E1118] border-red-500/40 text-white'
+                            : 'bg-white border-red-200 text-slate-950'
+                        }`}
+                      >
+                        {currentFixture.homeScore ?? 0}
+                        <span className="mx-1.5 text-red-500 text-base">:</span>
+                        {currentFixture.awayScore ?? 0}
+                      </div>
+                      <span className="text-[10px] font-mono font-extrabold text-red-500 mt-1.5 uppercase whitespace-nowrap">
+                        {currentFixture.time}
+                      </span>
+                    </>
+                  ) : currentFixture.status === 'FINISHED' ? (
+                    <>
+                      <div
+                        className={`px-3.5 py-1.5 rounded-2xl flex items-center justify-center font-black text-xl sm:text-2xl font-mono tabular-nums shadow-md border ${
+                          isPro
+                            ? 'bg-[#0E1118] border-slate-700 text-cyan-300'
+                            : 'bg-white border-slate-200 text-slate-950'
+                        }`}
+                      >
+                        {currentFixture.homeScore ?? 0}
+                        <span className="mx-1.5 text-blue-500 text-base">:</span>
+                        {currentFixture.awayScore ?? 0}
+                      </div>
+                      <span className="text-[9px] font-mono font-bold text-slate-400 mt-1 uppercase whitespace-nowrap">
+                        Full Time
+                      </span>
+                    </>
+                  ) : (
+                    <>
+                      <div
+                        className={`w-10 h-10 rounded-full flex items-center justify-center font-black text-xs shadow-md border ${
+                          isPro
+                            ? 'bg-[#0E1118] border-slate-700 text-cyan-300'
+                            : 'bg-white border-slate-200 text-slate-800'
+                        }`}
+                      >
+                        VS
+                      </div>
+                      <span className="text-[9px] font-mono font-bold text-slate-400 mt-1 uppercase whitespace-nowrap">
+                        {currentFixture.time}
+                      </span>
+                    </>
+                  )}
                 </div>
 
                 {/* Away Team */}
@@ -721,6 +763,44 @@ export function MatchCenter() {
                   <span className="text-[10px] text-slate-400 font-semibold mt-0.5">Tim Tamu</span>
                 </div>
               </div>
+
+              {/* Goal Scorers & Cards Strip (when LIVE or FINISHED with events) */}
+              {(currentFixture.status === 'LIVE' || currentFixture.status === 'FINISHED') &&
+                currentFixture.detailedEvents &&
+                currentFixture.detailedEvents.some((ev) => ev.type === 'goal' || ev.type === 'red_card') && (
+                  <div
+                    className={`mt-4 pt-3 border-t grid grid-cols-2 gap-3 text-[10.5px] ${
+                      isPro ? 'border-slate-800/80 text-slate-300' : 'border-slate-200/80 text-slate-700'
+                    }`}
+                  >
+                    <div className="space-y-1 text-left">
+                      {currentFixture.detailedEvents
+                        .filter((ev) => ev.team === 'home' && (ev.type === 'goal' || ev.type === 'red_card'))
+                        .map((ev, idx) => (
+                          <div key={idx} className="flex items-center gap-1 font-semibold leading-tight">
+                            <span>{ev.type === 'goal' ? '⚽' : '🟥'}</span>
+                            <span className="truncate">{ev.player}</span>
+                            <span className="font-mono text-[9.5px] text-blue-600 dark:text-cyan-400 font-bold shrink-0">
+                              {ev.minute}
+                            </span>
+                          </div>
+                        ))}
+                    </div>
+                    <div className="space-y-1 text-right">
+                      {currentFixture.detailedEvents
+                        .filter((ev) => ev.team === 'away' && (ev.type === 'goal' || ev.type === 'red_card'))
+                        .map((ev, idx) => (
+                          <div key={idx} className="flex items-center justify-end gap-1 font-semibold leading-tight">
+                            <span className="font-mono text-[9.5px] text-rose-500 font-bold shrink-0">
+                              {ev.minute}
+                            </span>
+                            <span className="truncate">{ev.player}</span>
+                            <span>{ev.type === 'goal' ? '⚽' : '🟥'}</span>
+                          </div>
+                        ))}
+                    </div>
+                  </div>
+                )}
             </div>
 
             {/* Bottom Half: Score / Time Display Dual-Tone Canvas */}
@@ -734,10 +814,23 @@ export function MatchCenter() {
               <div className="flex items-center justify-between gap-2 pb-3.5 border-b border-slate-200 dark:border-slate-800/80">
                 <div className="shrink-0">
                   <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider whitespace-nowrap">
-                    {currentFixture.status === 'FINISHED' ? 'Skor Akhir' : 'Jadwal Kick-off'}
+                    {currentFixture.status === 'LIVE'
+                      ? 'Skor Live'
+                      : currentFixture.status === 'FINISHED'
+                      ? 'Skor Akhir'
+                      : 'Jadwal Kick-off'}
                   </span>
                   <div className="mt-0.5 whitespace-nowrap">
-                    {currentFixture.status === 'FINISHED' ? (
+                    {currentFixture.status === 'LIVE' ? (
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-xl sm:text-2xl font-black font-mono text-red-500 dark:text-red-400 tabular-nums">
+                          {currentFixture.homeScore ?? 0} : {currentFixture.awayScore ?? 0}
+                        </span>
+                        <span className="text-[10px] font-mono text-slate-400 font-semibold">
+                          • {currentFixture.time}
+                        </span>
+                      </div>
+                    ) : currentFixture.status === 'FINISHED' ? (
                       <span className="text-xl sm:text-2xl font-black font-mono text-blue-600 dark:text-cyan-400">
                         {currentFixture.homeScore} : {currentFixture.awayScore}
                       </span>
@@ -756,10 +849,20 @@ export function MatchCenter() {
 
                 <div className="text-right min-w-0">
                   <span className="text-[10px] uppercase font-bold text-slate-400 block tracking-wider whitespace-nowrap">
-                    {currentFixture.status === 'FINISHED' ? 'Status Laga' : 'Tanggal Pertandingan'}
+                    {currentFixture.status === 'LIVE' || currentFixture.status === 'FINISHED'
+                      ? 'Status Laga'
+                      : 'Tanggal Pertandingan'}
                   </span>
                   <div className="text-[11px] sm:text-xs font-bold mt-1 whitespace-nowrap">
-                    {currentFixture.status === 'FINISHED' ? (
+                    {currentFixture.status === 'LIVE' ? (
+                      <div className="flex flex-col items-end gap-0.5">
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-red-100 text-red-700 dark:bg-red-950/80 dark:text-red-300 font-extrabold text-[10px] whitespace-nowrap">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-500 animate-ping" />
+                          LIVE ({currentFixture.time})
+                        </span>
+                        <span className="text-[9.5px] font-mono text-slate-400">{currentFixture.date}</span>
+                      </div>
+                    ) : currentFixture.status === 'FINISHED' ? (
                       <span className="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 dark:bg-emerald-950 dark:text-emerald-300 font-extrabold text-[10px] whitespace-nowrap">
                         FT (Selesai)
                       </span>
@@ -771,6 +874,30 @@ export function MatchCenter() {
                   </div>
                 </div>
               </div>
+
+              {/* Compact Live Stats Strip when LIVE */}
+              {currentFixture.status === 'LIVE' && currentFixture.statsSummary && (
+                <div className="grid grid-cols-3 gap-2 py-2.5 border-b border-slate-200 dark:border-slate-800/80 text-center text-[10px]">
+                  <div>
+                    <span className="block text-slate-400 text-[9px] uppercase font-bold">Penguasaan</span>
+                    <span className="font-mono font-extrabold text-slate-800 dark:text-slate-200">
+                      {currentFixture.statsSummary.possession[0]}% - {currentFixture.statsSummary.possession[1]}%
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block text-slate-400 text-[9px] uppercase font-bold">On Target</span>
+                    <span className="font-mono font-extrabold text-slate-800 dark:text-slate-200">
+                      {currentFixture.statsSummary.shotsOnTarget[0]} - {currentFixture.statsSummary.shotsOnTarget[1]}
+                    </span>
+                  </div>
+                  <div>
+                    <span className="block text-slate-400 text-[9px] uppercase font-bold">Kartu Kuning</span>
+                    <span className="font-mono font-extrabold text-amber-500">
+                      🟨 {currentFixture.statsSummary.yellowCards[0]} - {currentFixture.statsSummary.yellowCards[1]}
+                    </span>
+                  </div>
+                </div>
+              )}
 
               {/* Venue Row */}
               <div className="flex items-center gap-2 pt-3 text-xs text-slate-400">

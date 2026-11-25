@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v77 (Dynamic Google Search Live Sync & 1s UI Match Clock)
-const CACHE_NAME = 'persib-tracker-pwa-v77';
+// PERSIB TRACKER - PWA Service Worker v78 (Live Hero Fixture Card Score, Scorers & Status UI)
+const CACHE_NAME = 'persib-tracker-pwa-v78';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
