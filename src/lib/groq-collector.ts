@@ -226,6 +226,13 @@ export function isFixtureTodayWib(fixtureDateStr: string, nowUtc: Date = new Dat
   );
 }
 
+export function isFixtureInFuture(fixtureDateStr: string, timeStr?: string, nowUtc: Date = new Date()): boolean {
+  const fDate = parseIndonesianFixtureDate(fixtureDateStr, timeStr);
+  if (!fDate) return false;
+  const diffMinutes = Math.floor((nowUtc.getTime() - fDate.getTime()) / 60000);
+  return diffMinutes < -15;
+}
+
 // Rate-limited cache for live inference (8-second TTL)
 interface LiveInferenceCache {
   matchId: string;
@@ -1079,7 +1086,8 @@ ATURAN KRUSIAL KICK-OFF & MENIT LAGA (WAJIB DIPATUHI SECARA KETAT):
 2. Jika kick-off diundur/tertunda atau peluit babak pertama belum ditiup di lapangan, status WAJIB "SCHEDULED", dan liveMinute adalah "Menunggu Kick-off" atau "Kick-off Segera".
 3. Status HANYA boleh "LIVE" jika berita/feed resmi mengonfirmasi peluit kick-off telah ditiup resmi di lapangan (misal: 'sedang berlangsung', 'babak pertama dimulai', 'live score', 'menit ke-X').
 4. Nilai liveMinute HARUS persis mengikuti menit resmi yang dilaporkan siaran/feed berita (contoh: "1'", "14'", "HT", "45+2'", "78'", "90+4'"), BUKAN perhitungan matematika jam komputer.
-5. Status HANYA boleh "FINISHED" jika ada laporan peluit panjang akhir laga (FT / Selesai / Usai).
+5. Status HANYA boleh "FINISHED" jika ada laporan peluit panjang akhir laga (FT / Selesai / Usai) yang benar-benar bertanding hari ini atau di masa lalu.
+6. PERATURAN MUTLAK JADWAL MASA DEPAN: Untuk pertandingan yang tanggal/jam resminya belum tiba di masa depan (contoh: Pekan 11 vs Persita 29 November 2026), status WAJIB tetap "SCHEDULED", skor DILARANG KERAS diisi angka (biarkan null), dan DILARANG KERAS diubah menjadi FINISHED atau LIVE!
 
 Laga Sasaran: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} (${currentHeroMatch.tournament} - ${currentHeroMatch.roundOrWeek})
 Waktu Lokal WIB Saat Ini: ${nowWibDateStr}, ${nowWib}
@@ -1178,11 +1186,18 @@ Keluarkan HANYA JSON murni tanpa markdown dengan format:
 
             const targetFix = dynamicFixtures.find((f) => f.id === currentHeroMatch.id);
             if (targetFix) {
-              targetFix.homeScore = parsedHome;
-              targetFix.awayScore = parsedAway;
-              targetFix.status = parsedStatus;
-              if (parsed.liveMinute) {
-                targetFix.time = parsed.liveMinute;
+              const isHeroStrictFuture = isFixtureInFuture(targetFix.date, targetFix.time, now);
+              if (isHeroStrictFuture) {
+                targetFix.status = 'SCHEDULED';
+                targetFix.homeScore = undefined;
+                targetFix.awayScore = undefined;
+              } else {
+                targetFix.homeScore = parsedHome;
+                targetFix.awayScore = parsedAway;
+                targetFix.status = parsedStatus;
+                if (parsed.liveMinute) {
+                  targetFix.time = parsed.liveMinute;
+                }
               }
             }
 
@@ -1197,6 +1212,15 @@ Keluarkan HANYA JSON murni tanpa markdown dengan format:
                     f.awayTeam.toLowerCase().includes(oppClean)
                 );
                 if (target) {
+                  // GUARD KETAT: Laga masa depan TIDAK BOLEH ditandai FINISHED atau LIVE oleh AI Groq!
+                  const isTargetStrictFuture = isFixtureInFuture(target.date, target.time, now);
+                  if (isTargetStrictFuture) {
+                    target.status = 'SCHEDULED';
+                    target.homeScore = undefined;
+                    target.awayScore = undefined;
+                    continue;
+                  }
+
                   if (update.status) target.status = update.status;
                   if (typeof update.homeScore === 'number') target.homeScore = update.homeScore;
                   if (typeof update.awayScore === 'number') target.awayScore = update.awayScore;

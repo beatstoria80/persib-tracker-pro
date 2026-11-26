@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { Header } from '@/components/Header';
 import { MobileBottomNav } from '@/components/MobileBottomNav';
@@ -21,6 +21,9 @@ export default function HomePage() {
 
   // State pemicu transisi rise element UI/UX bertingkat (staggered cascade) setelah video splash selesai
   const [hasEnteredApp, setHasEnteredApp] = useState<boolean>(false);
+  const handleSplashFinish = useCallback(() => {
+    setHasEnteredApp(true);
+  }, []);
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
   // Dynamic tournament fixture selection: LIVE -> scheduled TODAY -> latest finished -> next scheduled
@@ -35,7 +38,7 @@ export default function HomePage() {
   return (
     <>
       {/* PWA Video Splash & Loading Screen on Smartphone Launch */}
-      <VideoLoadingSplash onFinish={() => setHasEnteredApp(true)} />
+      <VideoLoadingSplash onFinish={handleSplashFinish} />
 
       {/* REFACTOR: App container rendered directly without display:none to guarantee instant responsiveness on mobile refresh */}
       <div

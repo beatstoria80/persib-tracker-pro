@@ -15,16 +15,26 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
+  const onFinishRef = useRef(onFinish);
+  useEffect(() => {
+    onFinishRef.current = onFinish;
+  }, [onFinish]);
+
   const handleDismiss = useCallback(() => {
     if (isFading) return;
     setIsFading(true);
-    if (onFinish) onFinish();
+    if (onFinishRef.current) onFinishRef.current();
     setTimeout(() => {
       setIsVisible(false);
-    }, 450);
-  }, [isFading, onFinish]);
+    }, 500);
+  }, [isFading]);
 
-  // REFACTOR: Putar langsung video Stadium_scene_logo_animation_6f37cafb.mp4 tanpa blokir sessionStorage
+  const handleDismissRef = useRef(handleDismiss);
+  useEffect(() => {
+    handleDismissRef.current = handleDismiss;
+  }, [handleDismiss]);
+
+  // REFACTOR: Putar video Stadium_scene_logo_animation_6f37cafb.mp4 tepat satu kali saat mount (tanpa re-trigger loop)
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -38,48 +48,37 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     video.setAttribute('webkit-playsinline', 'true');
     video.setAttribute('x5-playsinline', 'true');
 
-    const playVideo = () => {
+    const startPlayback = () => {
       if (!video) return;
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Jika browser menuntut interaksi sentuhan pengguna
-          const onFirstTouch = () => {
+          // Fallback sentuhan jika browser menerapkan restriksi autoplay ketat
+          const onTouch = () => {
             if (video) {
               video.muted = true;
               video.play().catch(() => {});
             }
-            window.removeEventListener('touchstart', onFirstTouch);
-            window.removeEventListener('click', onFirstTouch);
+            window.removeEventListener('touchstart', onTouch);
+            window.removeEventListener('click', onTouch);
           };
-          window.addEventListener('touchstart', onFirstTouch, { once: true, passive: true });
-          window.addEventListener('click', onFirstTouch, { once: true, passive: true });
+          window.addEventListener('touchstart', onTouch, { once: true, passive: true });
+          window.addEventListener('click', onTouch, { once: true, passive: true });
         });
       }
     };
 
-    // Jalankan segera
-    try {
-      video.load();
-    } catch {}
-    playVideo();
+    startPlayback();
 
-    video.addEventListener('canplay', playVideo);
-    video.addEventListener('loadeddata', playVideo);
-
-    // Batas waktu pengaman maksimal durasi video (~6 detik)
+    // Batas waktu pengaman jika durasi video tuntas (durasi 5.04s + jeda transisi)
     const safetyTimer = setTimeout(() => {
-      handleDismiss();
+      handleDismissRef.current();
     }, 6500);
 
     return () => {
       clearTimeout(safetyTimer);
-      if (video) {
-        video.removeEventListener('canplay', playVideo);
-        video.removeEventListener('loadeddata', playVideo);
-      }
     };
-  }, [handleDismiss]);
+  }, []); // Dependensi kosong: berjalan tepat SATU KALI saat komponen pertama kali di-mount
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
@@ -89,7 +88,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     const dur = v.duration;
     setProgressPercent(Math.min(100, Math.round((current / dur) * 100)));
 
-    // Selesai otomatis saat video mencapai ujung akhir (0.15 detik sebelum tuntas)
+    // Selesaikan splash tepat saat video mendekati akhir (0.15s sebelum usai)
     if (dur > 0.5 && current >= dur - 0.15) {
       handleDismiss();
     }
@@ -100,8 +99,8 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     if (v && v.paused) {
       v.muted = true;
       v.play().catch(() => handleDismiss());
-    } else if (v && v.currentTime > 0.8) {
-      // Izinkan lewati melalui ketukan layar jika video sudah berjalan minimal 0.8 detik
+    } else if (v && v.currentTime > 1.0) {
+      // Lewati dengan sentuhan layar jika video sudah berputar minimal 1 detik
       handleDismiss();
     }
   };
@@ -114,7 +113,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       aria-label="Layar Pembuka Sinematik PERSIB"
       onClick={handleScreenTouch}
       style={{ backgroundColor: '#000000' }}
-      className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer transition-all duration-450 ease-out ${
+      className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer transition-all duration-500 ease-out ${
         isFading
           ? 'opacity-0 scale-105 filter blur-sm pointer-events-none'
           : 'opacity-100 scale-100 filter blur-0'

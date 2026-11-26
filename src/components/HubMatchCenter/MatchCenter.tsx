@@ -44,7 +44,7 @@ import {
 } from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
 import { ClubIntelligenceView } from './ClubIntelligenceView';
-import { isFixtureTodayWib } from '@/lib/groq';
+import { isFixtureTodayWib, isFixtureInFuture } from '@/lib/groq';
 
 function playerMatchesScorer(playerName: string, scorers: Set<string>): boolean {
   if (!playerName || scorers.size === 0) return false;
@@ -713,23 +713,28 @@ export function MatchCenter() {
               </div>
 
               {(() => {
+                const isStrictlyFuture = isFixtureInFuture(currentFixture.date, currentFixture.time);
+
                 const isHeroLive =
-                  currentFixture.status === 'LIVE' ||
-                  (!['FINISHED'].includes(currentFixture.status) &&
-                    (currentFixture.roundOrWeek.toLowerCase().includes('live') ||
-                      currentFixture.time?.includes("'") ||
-                      currentFixture.time?.toLowerCase().includes('ht') ||
-                      currentFixture.time?.toLowerCase().includes('jeda') ||
-                      currentFixture.time?.toLowerCase().includes('babak')));
+                  !isStrictlyFuture &&
+                  (currentFixture.status === 'LIVE' ||
+                    (!['FINISHED', 'SCHEDULED'].includes(currentFixture.status) &&
+                      (currentFixture.roundOrWeek.toLowerCase().includes('live') ||
+                        currentFixture.time?.includes("'") ||
+                        currentFixture.time?.toLowerCase().includes('ht') ||
+                        currentFixture.time?.toLowerCase().includes('jeda') ||
+                        currentFixture.time?.toLowerCase().includes('babak'))));
 
                 const isHeroFinished =
-                  currentFixture.status === 'FINISHED' ||
-                  (currentFixture.status !== 'SCHEDULED' &&
-                    (currentFixture.time?.toLowerCase().includes('ft') ||
-                      currentFixture.time?.toLowerCase().includes('full time') ||
-                      currentFixture.time?.toLowerCase().includes('selesai')));
+                  !isStrictlyFuture &&
+                  (currentFixture.status === 'FINISHED' ||
+                    (currentFixture.status !== 'SCHEDULED' &&
+                      (currentFixture.time?.toLowerCase().includes('ft') ||
+                        currentFixture.time?.toLowerCase().includes('full time') ||
+                        currentFixture.time?.toLowerCase().includes('selesai'))));
 
                 const hasHeroScore =
+                  !isStrictlyFuture &&
                   currentFixture.status !== 'SCHEDULED' &&
                   typeof currentFixture.homeScore === 'number' &&
                   typeof currentFixture.awayScore === 'number';
@@ -920,23 +925,28 @@ export function MatchCenter() {
             >
               <div className="flex items-center justify-between gap-2 pb-3.5 border-b border-slate-200 dark:border-slate-800/80">
                 {(() => {
+                  const isStrictlyFuture = isFixtureInFuture(currentFixture.date, currentFixture.time);
+
                   const isHeroLive =
-                    currentFixture.status === 'LIVE' ||
-                    (!['FINISHED'].includes(currentFixture.status) &&
-                      (currentFixture.roundOrWeek.toLowerCase().includes('live') ||
-                        currentFixture.time?.includes("'") ||
-                        currentFixture.time?.toLowerCase().includes('ht') ||
-                        currentFixture.time?.toLowerCase().includes('jeda') ||
-                        currentFixture.time?.toLowerCase().includes('babak')));
+                    !isStrictlyFuture &&
+                    (currentFixture.status === 'LIVE' ||
+                      (!['FINISHED', 'SCHEDULED'].includes(currentFixture.status) &&
+                        (currentFixture.roundOrWeek.toLowerCase().includes('live') ||
+                          currentFixture.time?.includes("'") ||
+                          currentFixture.time?.toLowerCase().includes('ht') ||
+                          currentFixture.time?.toLowerCase().includes('jeda') ||
+                          currentFixture.time?.toLowerCase().includes('babak'))));
 
                   const isHeroFinished =
-                    currentFixture.status === 'FINISHED' ||
-                    (currentFixture.status !== 'SCHEDULED' &&
-                      (currentFixture.time?.toLowerCase().includes('ft') ||
-                        currentFixture.time?.toLowerCase().includes('full time') ||
-                        currentFixture.time?.toLowerCase().includes('selesai')));
+                    !isStrictlyFuture &&
+                    (currentFixture.status === 'FINISHED' ||
+                      (currentFixture.status !== 'SCHEDULED' &&
+                        (currentFixture.time?.toLowerCase().includes('ft') ||
+                          currentFixture.time?.toLowerCase().includes('full time') ||
+                          currentFixture.time?.toLowerCase().includes('selesai'))));
 
                   const hasHeroScore =
+                    !isStrictlyFuture &&
                     currentFixture.status !== 'SCHEDULED' &&
                     typeof currentFixture.homeScore === 'number' &&
                     typeof currentFixture.awayScore === 'number';
@@ -2529,7 +2539,7 @@ export function MatchCenter() {
           {scheduleViewDensity === 'compact' ? (
             <div className="space-y-1.5">
               {displayedSchedule.map((fix: MatchFixture) => {
-                const isFinished = fix.status === 'FINISHED';
+                const isFinished = !isFixtureInFuture(fix.date, fix.time) && fix.status === 'FINISHED';
                 const isCurrent = (selectedFixtureId ? selectedFixtureId === fix.id : currentFixture.id === fix.id);
                 const parsedRound = parseRoundAndExtra(fix.roundOrWeek);
 
@@ -2614,7 +2624,7 @@ export function MatchCenter() {
           ) : (
             <div className="space-y-3">
               {displayedSchedule.map((fix: MatchFixture) => {
-                const isFinished = fix.status === 'FINISHED';
+                const isFinished = !isFixtureInFuture(fix.date, fix.time) && fix.status === 'FINISHED';
                 const parsedRound = parseRoundAndExtra(fix.roundOrWeek);
 
                 return (

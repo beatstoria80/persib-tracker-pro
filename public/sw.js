@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v96 (Fix Roster Player Profile Link Navigation)
-const CACHE_NAME = 'persib-tracker-pwa-v96';
+// PERSIB TRACKER - PWA Service Worker v97 (Strict Future Match Guard & Instant Opening Video)
+const CACHE_NAME = 'persib-tracker-pwa-v97';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
