@@ -10,6 +10,7 @@ import {
   TacticalStep,
   FinancialSummary,
   FeedNewsItem,
+  TopScorerEntry,
 } from '@/types/club';
 import {
   OFFICIAL_SQUAD_2026_2027,
@@ -19,6 +20,7 @@ import {
   VERIFIED_FIXTURES_2026_2027,
   IGOR_TOLIC_TACTICAL_PLAYBOOK,
   FINANCIAL_OVERVIEW_2026_2027,
+  TOP_SCORERS_2026_2027,
 } from '@/data/persib-data';
 import { isFixtureTodayWib, parseIndonesianFixtureDate } from '@/lib/groq';
 
@@ -53,6 +55,8 @@ interface ClubTrackerContextType {
   setAclStandings: React.Dispatch<React.SetStateAction<GroupTeam[]>>;
   shopeeCupStandings: GroupTeam[];
   setShopeeCupStandings: React.Dispatch<React.SetStateAction<GroupTeam[]>>;
+  topScorers: Record<'liga1' | 'acl2' | 'shopee', TopScorerEntry[]>;
+  setTopScorers: React.Dispatch<React.SetStateAction<Record<'liga1' | 'acl2' | 'shopee', TopScorerEntry[]>>>;
   financialOverview: FinancialSummary;
   setFinancialOverview: React.Dispatch<React.SetStateAction<FinancialSummary>>;
   updateMatchSimulator: (simulatedPersibWon: boolean, simulatedGoalDiff: number) => void;
@@ -92,6 +96,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [liga1Standings, setLiga1Standings] = useState<LeagueStandingRow[]>(BRI_LIGA_1_STANDINGS_2026_2027);
   const [aclStandings, setAclStandings] = useState<GroupTeam[]>(ACL_GROUP_STANDINGS_2026_2027);
   const [shopeeCupStandings, setShopeeCupStandings] = useState<GroupTeam[]>(SHOPEE_CUP_STANDINGS_2026_2027);
+  const [topScorers, setTopScorers] = useState<Record<'liga1' | 'acl2' | 'shopee', TopScorerEntry[]>>(TOP_SCORERS_2026_2027);
   const [financialOverview, setFinancialOverview] = useState<FinancialSummary>(FINANCIAL_OVERVIEW_2026_2027);
   const [activeTacticalStep, setActiveTacticalStep] = useState<number>(1);
   const [isTacticsPlaying, setIsTacticsPlaying] = useState<boolean>(false);
@@ -169,6 +174,9 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
           }
           if (payload.shopeeCupStandings && Array.isArray(payload.shopeeCupStandings)) {
             setShopeeCupStandings([...payload.shopeeCupStandings]);
+          }
+          if (payload.topScorers) {
+            setTopScorers(payload.topScorers);
           }
 
           // 2. Sinkronisasi Jadwal & Hasil Pertandingan
@@ -256,6 +264,9 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
             }
             if (payload.shopeeCupStandings && Array.isArray(payload.shopeeCupStandings)) {
               setShopeeCupStandings([...payload.shopeeCupStandings]);
+            }
+            if (payload.topScorers) {
+              setTopScorers(payload.topScorers);
             }
             if (payload.fixtures && Array.isArray(payload.fixtures)) {
               setFixtures([...payload.fixtures]);
@@ -466,6 +477,8 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         setAclStandings,
         shopeeCupStandings,
         setShopeeCupStandings,
+        topScorers,
+        setTopScorers,
         financialOverview,
         setFinancialOverview,
         updateMatchSimulator,

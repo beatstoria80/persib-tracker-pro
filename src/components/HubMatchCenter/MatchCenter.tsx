@@ -296,8 +296,10 @@ export function MatchCenter() {
     setActiveTacticalStep,
     isTacticsPlaying,
     setIsTacticsPlaying,
+    topScorers,
   } = useClubTracker();
   const isPro = mode === 'pro';
+  const activeTopScorers = topScorers || TOP_SCORERS_2026_2027;
 
   // Sub-Page Navigation Tabs: Laga (featured), Jadwal (schedule), Klasemen (standings), Taktik (lineup), Top Skor (scorers)
   const [matchViewTab, setMatchViewTab] = useState<'featured' | 'schedule' | 'standings' | 'lineup' | 'scorers'>('featured');
@@ -2766,7 +2768,7 @@ export function MatchCenter() {
             {/* Quick Top Scorer Callout Shortcut for Active Tournament */}
             {(() => {
               const currentKey = activeTournament === 'liga1' ? 'liga1' : activeTournament === 'shopee_cup' ? 'shopee' : 'acl2';
-              const topList = TOP_SCORERS_2026_2027[currentKey] || [];
+              const topList = activeTopScorers[currentKey] || [];
               const leader = topList[0];
               if (!leader) return null;
 
@@ -3755,7 +3757,7 @@ export function MatchCenter() {
 
           {/* Quick Metrics Banner (3 Cards) */}
           {(() => {
-            const rawList = TOP_SCORERS_2026_2027[scorerTournamentFilter] || [];
+            const rawList = activeTopScorers[scorerTournamentFilter] || [];
             const list = scorerScopeFilter === 'persib' ? rawList.filter((sc) => sc.isPersib) : rawList;
             const topScorer = list[0];
 

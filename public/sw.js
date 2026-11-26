@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v87 (Dynamic Scale Feeds Card Maximize/Minimize Multi-Competition Live Feeds)
-const CACHE_NAME = 'persib-tracker-pwa-v87';
+// PERSIB TRACKER - PWA Service Worker v88 (Automated Google Search News RSS Scraper for All Fixtures & Dynamic Top Scorers)
+const CACHE_NAME = 'persib-tracker-pwa-v88';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
