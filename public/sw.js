@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v89 (Live Official Kick-off & Match Minute Grounding)
-const CACHE_NAME = 'persib-tracker-pwa-v89';
+// PERSIB TRACKER - PWA Service Worker v90 (Generic Autonomous Fixture Engine & Fully Dynamic RSS Feeds)
+const CACHE_NAME = 'persib-tracker-pwa-v90';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
