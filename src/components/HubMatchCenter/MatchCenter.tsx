@@ -724,12 +724,15 @@ export function MatchCenter() {
 
                 const isHeroFinished =
                   currentFixture.status === 'FINISHED' ||
-                  currentFixture.time?.toLowerCase().includes('ft') ||
-                  currentFixture.time?.toLowerCase().includes('full time') ||
-                  currentFixture.time?.toLowerCase().includes('selesai');
+                  (currentFixture.status !== 'SCHEDULED' &&
+                    (currentFixture.time?.toLowerCase().includes('ft') ||
+                      currentFixture.time?.toLowerCase().includes('full time') ||
+                      currentFixture.time?.toLowerCase().includes('selesai')));
 
                 const hasHeroScore =
-                  typeof currentFixture.homeScore === 'number' && typeof currentFixture.awayScore === 'number';
+                  currentFixture.status !== 'SCHEDULED' &&
+                  typeof currentFixture.homeScore === 'number' &&
+                  typeof currentFixture.awayScore === 'number';
 
                 const homeEvents =
                   currentFixture.detailedEvents?.filter(
@@ -928,12 +931,15 @@ export function MatchCenter() {
 
                   const isHeroFinished =
                     currentFixture.status === 'FINISHED' ||
-                    currentFixture.time?.toLowerCase().includes('ft') ||
-                    currentFixture.time?.toLowerCase().includes('full time') ||
-                    currentFixture.time?.toLowerCase().includes('selesai');
+                    (currentFixture.status !== 'SCHEDULED' &&
+                      (currentFixture.time?.toLowerCase().includes('ft') ||
+                        currentFixture.time?.toLowerCase().includes('full time') ||
+                        currentFixture.time?.toLowerCase().includes('selesai')));
 
                   const hasHeroScore =
-                    typeof currentFixture.homeScore === 'number' && typeof currentFixture.awayScore === 'number';
+                    currentFixture.status !== 'SCHEDULED' &&
+                    typeof currentFixture.homeScore === 'number' &&
+                    typeof currentFixture.awayScore === 'number';
 
                   return (
                     <>

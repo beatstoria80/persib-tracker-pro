@@ -462,8 +462,6 @@ export function verifyAndHealAllFixtures(
   rssHeadlines: string[],
   nowDate: Date
 ): MatchFixture[] {
-  const headlinesCombined = rssHeadlines.join(' ').toLowerCase();
-
   return baseFixtures.map((f) => {
     const fixture = { ...f };
 
@@ -477,59 +475,101 @@ export function verifyAndHealAllFixtures(
       .split(/\s+/)
       .filter((w) => w.length > 2 && w !== 'fc' && w !== 'united' && w !== 'city');
 
-    // Cek apakah lawan disebut dalam headline RSS berita terkini bersama PERSIB
-    const isMatchMentionedInRss =
-      headlinesCombined.includes('persib') &&
-      opponentKeywords.some((keyword) => headlinesCombined.includes(keyword));
+    // 2. Evaluasi Tanggal/Jam Resmi Terjadwal
+    const parsedDate = parseIndonesianFixtureDate(fixture.date, f.time);
+    const diffMs = parsedDate ? nowDate.getTime() - parsedDate.getTime() : 0;
+    const diffMinutes = Math.floor(diffMs / 60000);
 
-    // Jika laga sudah berstatus FINISHED dari database, biarkan kecuali ada update skor yang lebih terverifikasi
+    // Filter RSS Headline yang relevan HANYA untuk pertandingan spesifik ini
+    // Memastikan kata kunci PERSIB dan LAWAN muncul bersama dalam SATU headline (mencegah kontaminasi silang antar artikel)
+    const relevantHeadlines = rssHeadlines.filter((hl) => {
+      const lower = hl.toLowerCase();
+      return lower.includes('persib') && opponentKeywords.some((keyword) => lower.includes(keyword));
+    });
+
+    // 3. Jika laga sudah berstatus FINISHED dari database asli, pertahankan
     if (fixture.status === 'FINISHED') {
       return fixture;
     }
 
-    // 2. Deteksi Penundaan Kick-Off Lapangan Secara Generik
-    const hasDelayKeywords =
-      headlinesCombined.includes('ditunda') ||
-      headlinesCombined.includes('tertunda') ||
-      headlinesCombined.includes('diundur') ||
-      headlinesCombined.includes('delay') ||
-      headlinesCombined.includes('menunggu kick-off') ||
-      headlinesCombined.includes('pemanasan') ||
-      headlinesCombined.includes('hujan deras');
+    // 4. GUARD KETAT LAGA MASA DEPAN (Future Matches):
+    // Jika jadwal resmi pertandingan belum tiba (lebih dari 15 menit sebelum kick-off atau tanggal di masa depan),
+    // status WAJIB tetap SCHEDULED, skor TIDAK BOLEH di-default ke 0:0, dan dilarang berubah menjadi FINISHED atau LIVE!
+    if (parsedDate && diffMinutes < -15) {
+      fixture.status = 'SCHEDULED';
+      fixture.homeScore = undefined;
+      fixture.awayScore = undefined;
 
-    if (isMatchMentionedInRss && hasDelayKeywords) {
+      // Cek apakah ada berita resmi terkait penundaan jadwal masa depan
+      const isPostponed = relevantHeadlines.some((hl) => {
+        const lower = hl.toLowerCase();
+        return (
+          lower.includes('ditunda') ||
+          lower.includes('tertunda') ||
+          lower.includes('diundur') ||
+          lower.includes('delay')
+        );
+      });
+
+      if (isPostponed) {
+        fixture.time = 'Ditunda';
+      }
+      return fixture;
+    }
+
+    // 5. Deteksi Penundaan Kick-Off Lapangan Secara Generik (Untuk Laga Hari Ini)
+    const hasDelayKeywords = relevantHeadlines.some((hl) => {
+      const lower = hl.toLowerCase();
+      return (
+        lower.includes('ditunda') ||
+        lower.includes('tertunda') ||
+        lower.includes('diundur') ||
+        lower.includes('delay') ||
+        lower.includes('menunggu kick-off') ||
+        lower.includes('pemanasan') ||
+        lower.includes('hujan deras')
+      );
+    });
+
+    if (hasDelayKeywords) {
       fixture.status = 'SCHEDULED';
       fixture.time = 'Kick-off Diundur / Menunggu Lapangan';
       return fixture;
     }
 
-    // 3. Deteksi Konfirmasi Peluit Akhir (Full Time / Selesai) Secara Generik
-    const hasFinishedKeywords =
-      headlinesCombined.includes('full time') ||
-      headlinesCombined.includes('ft') ||
-      headlinesCombined.includes('selesai') ||
-      headlinesCombined.includes('skor akhir') ||
-      headlinesCombined.includes('usai') ||
-      headlinesCombined.includes('peluit panjang') ||
-      headlinesCombined.includes('tumbangkan') ||
-      headlinesCombined.includes('tekuk') ||
-      headlinesCombined.includes('kalahkan') ||
-      headlinesCombined.includes('bungkam') ||
-      headlinesCombined.includes('kalah dari') ||
-      headlinesCombined.includes('imbang lawan') ||
-      headlinesCombined.includes('taklukkan');
+    // 6. Deteksi Konfirmasi Peluit Akhir (Full Time / Selesai) Secara Generik
+    // HANYA berlaku jika laga sedang/sudah lewat window kick-off (diffMinutes >= 90) ATAU headline spesifik laga ini memuat pola skor terverifikasi
+    const finishedHeadline = relevantHeadlines.find((hl) => {
+      const lower = hl.toLowerCase();
+      return (
+        lower.includes('full time') ||
+        lower.includes('ft') ||
+        lower.includes('selesai') ||
+        lower.includes('skor akhir') ||
+        lower.includes('usai') ||
+        lower.includes('peluit panjang') ||
+        lower.includes('tumbangkan') ||
+        lower.includes('tekuk') ||
+        lower.includes('kalahkan') ||
+        lower.includes('bungkam') ||
+        lower.includes('kalah dari') ||
+        lower.includes('imbang lawan') ||
+        lower.includes('taklukkan')
+      );
+    });
 
-    if (isMatchMentionedInRss && hasFinishedKeywords) {
+    if (finishedHeadline && (diffMinutes >= 90 || isFixtureTodayWib(fixture.date, nowDate))) {
       fixture.status = 'FINISHED';
       fixture.time = 'Full Time (FT)';
 
-      // Deteksi pola skor generik: "Persib X - Y Lawan" atau "Lawan X - Y Persib"
+      // Deteksi pola skor generik: "Persib X - Y Lawan" atau "Lawan X - Y Persib" dari headline relevan tersebut
+      const lowerHl = finishedHeadline.toLowerCase();
       for (const keyword of opponentKeywords) {
         const scorePattern1 = new RegExp(`persib\\s+(\\d+)\\s*[-–:]\\s*(\\d+)\\s+${keyword}`);
         const scorePattern2 = new RegExp(`${keyword}\\s+(\\d+)\\s*[-–:]\\s*(\\d+)\\s+persib`);
 
-        const match1 = headlinesCombined.match(scorePattern1);
-        const match2 = headlinesCombined.match(scorePattern2);
+        const match1 = lowerHl.match(scorePattern1);
+        const match2 = lowerHl.match(scorePattern2);
 
         if (match1) {
           const persibScore = parseInt(match1[1], 10);
@@ -549,25 +589,30 @@ export function verifyAndHealAllFixtures(
       return fixture;
     }
 
-    // 4. Deteksi Konfirmasi Kick-Off Aktif di Lapangan Secara Generik
-    const hasLiveKeywords =
-      headlinesCombined.includes('sedang berlangsung') ||
-      headlinesCombined.includes('babak pertama') ||
-      headlinesCombined.includes('babak kedua') ||
-      headlinesCombined.includes('live score') ||
-      headlinesCombined.includes('kick-off') ||
-      headlinesCombined.includes('menit ke-') ||
-      headlinesCombined.includes('ht') ||
-      headlinesCombined.includes('jeda');
+    // 7. Deteksi Konfirmasi Kick-Off Aktif di Lapangan Secara Generik
+    const liveHeadline = relevantHeadlines.find((hl) => {
+      const lower = hl.toLowerCase();
+      return (
+        lower.includes('sedang berlangsung') ||
+        lower.includes('babak pertama') ||
+        lower.includes('babak kedua') ||
+        lower.includes('live score') ||
+        lower.includes('kick-off') ||
+        lower.includes('menit ke-') ||
+        lower.includes('ht') ||
+        lower.includes('jeda')
+      );
+    });
 
-    if (isMatchMentionedInRss && hasLiveKeywords) {
+    if (liveHeadline && diffMinutes >= 0 && diffMinutes <= 135) {
       fixture.status = 'LIVE';
+      const lowerHl = liveHeadline.toLowerCase();
 
       // Ekstraksi menit resmi generik
-      const minuteMatch = headlinesCombined.match(/menit\s*(?:ke-)?\s*(\d{1,2})/);
-      const aposMinuteMatch = headlinesCombined.match(/\b(\d{1,2})'/);
-      const isHt = headlinesCombined.includes('ht') || headlinesCombined.includes('jeda babak');
-      const isSecondHalf = headlinesCombined.includes('babak kedua');
+      const minuteMatch = lowerHl.match(/menit\s*(?:ke-)?\s*(\d{1,2})/);
+      const aposMinuteMatch = lowerHl.match(/\b(\d{1,2})'/);
+      const isHt = lowerHl.includes('ht') || lowerHl.includes('jeda babak');
+      const isSecondHalf = lowerHl.includes('babak kedua');
 
       if (minuteMatch) {
         fixture.time = `${minuteMatch[1]}'`;
@@ -586,8 +631,8 @@ export function verifyAndHealAllFixtures(
         const scorePattern1 = new RegExp(`persib\\s+(\\d+)\\s*[-–:]\\s*(\\d+)\\s+${keyword}`);
         const scorePattern2 = new RegExp(`${keyword}\\s+(\\d+)\\s*[-–:]\\s*(\\d+)\\s+persib`);
 
-        const match1 = headlinesCombined.match(scorePattern1);
-        const match2 = headlinesCombined.match(scorePattern2);
+        const match1 = lowerHl.match(scorePattern1);
+        const match2 = lowerHl.match(scorePattern2);
 
         if (match1) {
           const persibScore = parseInt(match1[1], 10);
@@ -607,18 +652,15 @@ export function verifyAndHealAllFixtures(
       return fixture;
     }
 
-    // 5. Evaluasi Tanggal/Jam Resmi Jika Belum Dimulai
-    const parsedDate = parseIndonesianFixtureDate(fixture.date, fixture.time);
+    // 8. Evaluasi Tanggal/Jam Resmi Jika Belum Dimulai
     if (parsedDate) {
-      const diffMs = nowDate.getTime() - parsedDate.getTime();
-      const diffMinutes = Math.floor(diffMs / 60000);
-
-      // Jika jam dinding telah lewat namun peluit belum terkonfirmasi, tetap SCHEDULED (siaga)
       if (diffMinutes >= 0 && diffMinutes < 30) {
         fixture.status = 'SCHEDULED';
         fixture.time = 'Kick-off Segera / Menunggu Peluit';
       } else if (diffMinutes < 0) {
         fixture.status = 'SCHEDULED';
+        fixture.homeScore = undefined;
+        fixture.awayScore = undefined;
       }
     }
 
