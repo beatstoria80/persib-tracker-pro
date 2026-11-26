@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v90 (Generic Autonomous Fixture Engine & Fully Dynamic RSS Feeds)
-const CACHE_NAME = 'persib-tracker-pwa-v90';
+// PERSIB TRACKER - PWA Service Worker v91 (Fix Video Opening Splash Animation Autoplay & Robust Playback)
+const CACHE_NAME = 'persib-tracker-pwa-v91';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
