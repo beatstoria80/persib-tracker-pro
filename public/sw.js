@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v98 (Player Profile Video Looping & Splash Session Fix)
-const CACHE_NAME = 'persib-tracker-pwa-v98';
+// PERSIB TRACKER - PWA Service Worker v99 (Fixed Default Screen Formation for Opening Video)
+const CACHE_NAME = 'persib-tracker-pwa-v99';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

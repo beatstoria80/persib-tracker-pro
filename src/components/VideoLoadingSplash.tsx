@@ -53,6 +53,22 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     } catch {}
   }, []);
 
+  // Lock body scroll and prevent touch bounce / drag while opening splash is active
+  useEffect(() => {
+    if (!isVisible) return;
+    const prevOverflow = document.body.style.overflow;
+    const prevTouchAction = document.body.style.touchAction;
+    const prevUserSelect = document.body.style.userSelect;
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+    document.body.style.userSelect = 'none';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.style.touchAction = prevTouchAction;
+      document.body.style.userSelect = prevUserSelect;
+    };
+  }, [isVisible]);
+
   // REFACTOR: Putar video Stadium_scene_logo_animation_6f37cafb.mp4 tepat satu kali saat splash aktif
   useEffect(() => {
     if (!isVisible) return;
@@ -73,7 +89,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Fallback sentuhan jika browser menerapkan restriksi autoplay ketat
+          // Fallback interaksi jika browser menerapkan restriksi autoplay
           const onTouch = () => {
             if (video) {
               video.muted = true;
@@ -114,31 +130,27 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     }
   };
 
-  const handleScreenTouch = () => {
-    const v = videoRef.current;
-    if (!v) return;
-    if (v.paused) {
-      v.muted = true;
-      v.play().catch(() => {});
-    }
-  };
-
   if (!isVisible) return null;
 
   return (
     <div
       role="dialog"
       aria-label="Layar Pembuka Sinematik PERSIB"
-      onClick={handleScreenTouch}
-      style={{ backgroundColor: '#000000' }}
-      className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer transition-all duration-500 ease-out ${
+      style={{
+        backgroundColor: '#000000',
+        touchAction: 'none',
+        userSelect: 'none',
+        overscrollBehavior: 'none',
+        WebkitUserSelect: 'none',
+      }}
+      className={`fixed inset-0 w-screen h-screen z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-default touch-none overscroll-none transition-all duration-500 ease-out ${
         isFading
-          ? 'opacity-0 scale-105 filter blur-sm pointer-events-none'
+          ? 'opacity-0 scale-100 filter blur-sm pointer-events-none'
           : 'opacity-100 scale-100 filter blur-0'
       }`}
     >
-      {/* Video Sinematik Layar Penuh Stadium_scene_logo_animation_6f37cafb.mp4 */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none bg-black">
+      {/* Video Sinematik Layar Penuh Default Formasi Layar (Fixed Fullscreen, Non-Draggable, Non-Scrollable) */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none bg-black select-none touch-none overscroll-none">
         <video
           ref={videoRef}
           src="/Stadium_scene_logo_animation_6f37cafb.mp4"
@@ -146,16 +158,18 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           muted
           playsInline
           preload="auto"
+          disablePictureInPicture
+          disableRemotePlayback
+          controls={false}
+          draggable={false}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
-          className="w-full h-full object-cover object-center"
-        >
-          <source src="/Stadium_scene_logo_animation_6f37cafb.mp4" type="video/mp4" />
-        </video>
+          className="w-full h-full object-cover object-center select-none pointer-events-none"
+        />
       </div>
 
       {/* Header Atas: Badge Pembuka Resmi & Tombol Lewati */}
-      <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 pt-6 flex items-center justify-between">
+      <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 pt-6 flex items-center justify-between pointer-events-auto">
         <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-950/70 backdrop-blur-md border border-blue-800/50 text-[10px] font-mono font-bold text-cyan-300 shadow-sm">
           <Shield className="w-3 h-3 text-amber-400" />
           <span>PERSIB OFFICIAL</span>
@@ -167,15 +181,15 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
             e.stopPropagation();
             handleDismiss();
           }}
-          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-950/80 hover:bg-blue-900 active:scale-95 backdrop-blur-md border border-cyan-400/50 text-white text-[11px] font-extrabold shadow-lg transition-all"
+          className="flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-blue-950/80 hover:bg-blue-900 active:scale-95 backdrop-blur-md border border-cyan-400/50 text-white text-[11px] font-extrabold shadow-lg transition-all cursor-pointer"
         >
           <span>Lewati</span>
           <ArrowRight className="w-3.5 h-3.5 text-cyan-400" />
         </button>
       </div>
 
-      {/* Bagian Bawah: Progress Bar Halus & Petunjuk Sentuh */}
-      <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 pb-6 space-y-2">
+      {/* Bagian Bawah: Progress Bar Halus & Identitas Resmi (Default Formasi Layar) */}
+      <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 pb-6 space-y-2 pointer-events-none">
         {/* Progress Bar Video */}
         <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden backdrop-blur-xs">
           <div
@@ -186,7 +200,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
 
         <div className="flex items-center justify-between text-[9px] font-mono text-white/80 px-0.5 drop-shadow-sm">
           <span>Stadion GBLA Sinematik</span>
-          <span>Ketuk di mana saja untuk lewati</span>
+          <span>PERSIB Bandung 2026/2027</span>
         </div>
       </div>
     </div>
