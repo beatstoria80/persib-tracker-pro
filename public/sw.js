@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v94 (Direct Splash Video Opening & Responsive Roster Navigation)
-const CACHE_NAME = 'persib-tracker-pwa-v94';
+// PERSIB TRACKER - PWA Service Worker v95 (Always Play Opening Video & Remove Session Blocker)
+const CACHE_NAME = 'persib-tracker-pwa-v95';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

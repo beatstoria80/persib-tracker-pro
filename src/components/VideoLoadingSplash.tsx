@@ -7,34 +7,15 @@ interface VideoLoadingSplashProps {
   onFinish?: () => void;
 }
 
-// REFACTOR: Bump session key to v7 to ensure immediate video opening across fresh reloads
-export const SPLASH_SESSION_KEY = 'persib_opening_splash_v7';
+export const SPLASH_SESSION_KEY = 'persib_opening_splash_v8';
 
 export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
-  const [alreadyShown] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        return sessionStorage.getItem(SPLASH_SESSION_KEY) === 'true';
-      } catch {
-        return false;
-      }
-    }
-    return false;
-  });
-
-  const [isVisible, setIsVisible] = useState<boolean>(!alreadyShown);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
   const [isFading, setIsFading] = useState<boolean>(false);
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
   const handleDismiss = useCallback(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
-      }
-    } catch {
-      // Mode private fallback
-    }
     if (isFading) return;
     setIsFading(true);
     if (onFinish) onFinish();
@@ -43,16 +24,8 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     }, 450);
   }, [isFading, onFinish]);
 
-  // Selesaikan splash jika sudah dilihat sebelumnya
+  // REFACTOR: Putar langsung video Stadium_scene_logo_animation_6f37cafb.mp4 tanpa blokir sessionStorage
   useEffect(() => {
-    if (alreadyShown && onFinish) {
-      onFinish();
-    }
-  }, [alreadyShown, onFinish]);
-
-  // REFACTOR: Langsung putar video Stadium_scene_logo_animation_6f37cafb.mp4 seketika
-  useEffect(() => {
-    if (alreadyShown) return;
     const video = videoRef.current;
     if (!video) return;
 
@@ -65,39 +38,39 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     video.setAttribute('webkit-playsinline', 'true');
     video.setAttribute('x5-playsinline', 'true');
 
-    // Trigger video load & play langsung tanpa menunggu metadata
-    try {
-      video.load();
-    } catch {}
-
     const playVideo = () => {
       if (!video) return;
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise.catch(() => {
-          // Jika browser membatasi autoplay, dengarkan sentuhan pertama pengguna di layar
-          const onFirstInteraction = () => {
+          // Jika browser menuntut interaksi sentuhan pengguna
+          const onFirstTouch = () => {
             if (video) {
               video.muted = true;
               video.play().catch(() => {});
             }
-            window.removeEventListener('touchstart', onFirstInteraction);
-            window.removeEventListener('click', onFirstInteraction);
+            window.removeEventListener('touchstart', onFirstTouch);
+            window.removeEventListener('click', onFirstTouch);
           };
-          window.addEventListener('touchstart', onFirstInteraction, { once: true, passive: true });
-          window.addEventListener('click', onFirstInteraction, { once: true, passive: true });
+          window.addEventListener('touchstart', onFirstTouch, { once: true, passive: true });
+          window.addEventListener('click', onFirstTouch, { once: true, passive: true });
         });
       }
     };
 
+    // Jalankan segera
+    try {
+      video.load();
+    } catch {}
     playVideo();
-    video.addEventListener('canplay', playVideo, { once: true });
-    video.addEventListener('loadeddata', playVideo, { once: true });
 
-    // Fallback otomatis jika video macet atau selesai (maksimal durasi video ~6 detik)
+    video.addEventListener('canplay', playVideo);
+    video.addEventListener('loadeddata', playVideo);
+
+    // Batas waktu pengaman maksimal durasi video (~6 detik)
     const safetyTimer = setTimeout(() => {
       handleDismiss();
-    }, 6000);
+    }, 6500);
 
     return () => {
       clearTimeout(safetyTimer);
@@ -106,7 +79,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         video.removeEventListener('loadeddata', playVideo);
       }
     };
-  }, [alreadyShown, handleDismiss]);
+  }, [handleDismiss]);
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
@@ -127,26 +100,28 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     if (v && v.paused) {
       v.muted = true;
       v.play().catch(() => handleDismiss());
-    } else {
+    } else if (v && v.currentTime > 0.8) {
+      // Izinkan lewati melalui ketukan layar jika video sudah berjalan minimal 0.8 detik
       handleDismiss();
     }
   };
 
-  if (alreadyShown || !isVisible) return null;
+  if (!isVisible) return null;
 
   return (
     <div
       role="dialog"
       aria-label="Layar Pembuka Sinematik PERSIB"
       onClick={handleScreenTouch}
+      style={{ backgroundColor: '#000000' }}
       className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer transition-all duration-450 ease-out ${
         isFading
           ? 'opacity-0 scale-105 filter blur-sm pointer-events-none'
           : 'opacity-100 scale-100 filter blur-0'
       }`}
     >
-      {/* Container Video Sinematik Layar Penuh Langsung Tanpa Latar Hitam / Copy Teks Tambahan */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
+      {/* Video Sinematik Layar Penuh Stadium_scene_logo_animation_6f37cafb.mp4 */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none bg-black">
         <video
           ref={videoRef}
           src="/Stadium_scene_logo_animation_6f37cafb.mp4"
@@ -156,9 +131,10 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           preload="auto"
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
-          onError={handleDismiss}
           className="w-full h-full object-cover object-center"
-        />
+        >
+          <source src="/Stadium_scene_logo_animation_6f37cafb.mp4" type="video/mp4" />
+        </video>
       </div>
 
       {/* Header Atas: Badge Pembuka Resmi & Tombol Lewati */}

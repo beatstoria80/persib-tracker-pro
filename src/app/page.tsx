@@ -19,18 +19,8 @@ export default function HomePage() {
   const { mode, activeHub, activeTournament, syncFeedback, fixtures } = useClubTracker();
   const isPro = mode === 'pro';
 
-  // REFACTOR: State pemicu transisi rise element UI/UX bertingkat (staggered cascade) setelah video splash selesai
-  // Inisialisasi dari sessionStorage agar refresh di mobile tidak mengulang loop video
-  const [hasEnteredApp, setHasEnteredApp] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        return sessionStorage.getItem(SPLASH_SESSION_KEY) === 'true';
-      } catch {
-        return false;
-      }
-    }
-    return false;
-  });
+  // State pemicu transisi rise element UI/UX bertingkat (staggered cascade) setelah video splash selesai
+  const [hasEnteredApp, setHasEnteredApp] = useState<boolean>(false);
 
   const tournamentFixtures = fixtures.filter((f) => f.tournamentKey === activeTournament);
   // Dynamic tournament fixture selection: LIVE -> scheduled TODAY -> latest finished -> next scheduled
