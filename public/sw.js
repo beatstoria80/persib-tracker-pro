@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v83 (Synced AI Chat Context & Live Match Telemetry)
-const CACHE_NAME = 'persib-tracker-pwa-v83';
+// PERSIB TRACKER - PWA Service Worker v84 (Dynamic Real-Time Google News RSS Grounding for Chat AI)
+const CACHE_NAME = 'persib-tracker-pwa-v84';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

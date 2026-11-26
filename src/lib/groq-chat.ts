@@ -1,7 +1,8 @@
 /**
- * GROQ CHAT AI ENGINE (Interactive Conversational Agent)
+ * GROQ CHAT AI ENGINE (Interactive Conversational Agent with Dynamic Grounding)
  * Role: Handles Bobotoh conversational Q&A, tactical discussions, historical club facts, and squad status.
- * Separated cleanly from the background Autonomous Data Collector Agent.
+ * Data Collection: Dynamically fetches real-time Google News RSS search headlines to eliminate
+ *                  stale hardcoded .ts database dependencies and stop hallucinations.
  */
 
 export function cleanAiResponseText(rawText: string): string {
@@ -30,6 +31,92 @@ export interface ChatCompletionOptions {
   maxTokens?: number;
 }
 
+/**
+ * Dynamic Live Grounding Collector for AI Groq Chat
+ * Queries Google News RSS in real-time based on the user's inquiry.
+ * Eliminates reliance on static, outdated .ts files.
+ */
+export async function collectLiveGroundingForChat(userMessage: string): Promise<string[]> {
+  const cleanInput = userMessage
+    .toLowerCase()
+    .replace(/[^\w\s]/gi, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+
+  // Extract core keywords from user inquiry
+  const stopWords = new Set([
+    'apa', 'siapa', 'bagaimana', 'kapan', 'di', 'ke', 'dari', 'yang', 'ini', 'itu',
+    'apakah', 'berapa', 'tolong', 'jelaskan', 'dong', 'min', 'bot', 'tentang', 'soal',
+    'ada', 'pada', 'untuk', 'dengan', 'dan', 'atau', 'laga', 'info', 'update'
+  ]);
+  const meaningfulWords = cleanInput
+    .split(' ')
+    .filter((w) => w.length > 2 && !stopWords.has(w))
+    .slice(0, 5)
+    .join(' ');
+
+  // Formulate dynamic search variants
+  const queriesToRun: string[] = [];
+  if (meaningfulWords) {
+    queriesToRun.push(`PERSIB Bandung ${meaningfulWords}`);
+  }
+
+  if (cleanInput.includes('acl') || cleanInput.includes('seoul') || cleanInput.includes('asia') || cleanInput.includes('grup')) {
+    queriesToRun.push('PERSIB Bandung ACL Two skor hasil klasemen');
+  } else if (cleanInput.includes('jadwal') || cleanInput.includes('kapan') || cleanInput.includes('lawan') || cleanInput.includes('berikutnya')) {
+    queriesToRun.push('PERSIB Bandung jadwal pertandingan berikutnya');
+  } else if (cleanInput.includes('pemain') || cleanInput.includes('skuad') || cleanInput.includes('transfer') || cleanInput.includes('cedera')) {
+    queriesToRun.push('PERSIB Bandung berita pemain skuad cedera transfer');
+  } else {
+    queriesToRun.push('PERSIB Bandung berita skor hasil terkini');
+  }
+
+  const collectedHeadlines: string[] = [];
+  const seenHeadlines = new Set<string>();
+
+  await Promise.all(
+    queriesToRun.slice(0, 2).map(async (query) => {
+      try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 3500);
+        const rssUrl = `https://news.google.com/rss/search?q=${encodeURIComponent(query)}&hl=id&gl=ID&ceid=ID:id`;
+
+        const res = await fetch(rssUrl, {
+          cache: 'no-store',
+          signal: controller.signal,
+          headers: {
+            'User-Agent': 'Mozilla/5.0 (compatible; PersibTrackerChatGrounding/2.0)',
+          },
+        });
+        clearTimeout(timeout);
+
+        if (res.ok) {
+          const xml = await res.text();
+          const itemRegex = /<item>[\s\S]*?<title>([\s\S]*?)<\/title>[\s\S]*?<pubDate>([\s\S]*?)<\/pubDate>[\s\S]*?<\/item>/g;
+          let match: RegExpExecArray | null;
+          while ((match = itemRegex.exec(xml)) !== null && collectedHeadlines.length < 8) {
+            const rawTitle = match[1]
+              .replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+              .replace(/&amp;/g, '&')
+              .replace(/&quot;/g, '"')
+              .replace(/&#39;/g, "'")
+              .trim();
+            const pubDate = match[2].trim();
+            if (rawTitle && !seenHeadlines.has(rawTitle.toLowerCase())) {
+              seenHeadlines.add(rawTitle.toLowerCase());
+              collectedHeadlines.push(`${rawTitle} (${pubDate})`);
+            }
+          }
+        }
+      } catch {
+        // Silently skip on network timeout
+      }
+    })
+  );
+
+  return collectedHeadlines;
+}
+
 export async function requestGroqChatCompletion(
   messages: ChatMessage[],
   options: ChatCompletionOptions = {}
@@ -55,7 +142,7 @@ export async function requestGroqChatCompletion(
         body: JSON.stringify({
           model,
           messages,
-          temperature: options.temperature ?? 0.3,
+          temperature: options.temperature ?? 0.25,
           max_tokens: options.maxTokens ?? 1024,
         }),
       });
