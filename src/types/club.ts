@@ -182,6 +182,7 @@ export interface MatchFixture {
   venue: string;
   status: 'LIVE' | 'FINISHED' | 'SCHEDULED' | 'SIMULATION';
   liveMinute?: string;
+  scorers?: string[];
   aggregateScore?: string;
   highlights?: string[];
   events?: Array<{ minute: string; type: 'goal' | 'card' | 'sub' | 'chance'; text: string }>;

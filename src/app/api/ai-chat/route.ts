@@ -255,20 +255,22 @@ DAFTAR RESMI TOP SCORER SUPER LEAGUE / BRI LIGA 1 2026/2027 (PEKAN 10):
    - Mariano Peralta (PERSIB Bandung): 5 Gol (Pencetak Gol Terbanyak PERSIB di Super League)
 2. Raja Assist Liga 1: Thom Haye (PERSIB) dengan 7 Assist!
 3. Top Scorer Internal PERSIB di Super League (Total 18 Gol): Mariano Peralta 5 Gol, Balša Sekulić 4 Gol, Luka Menalo 4 Gol, Ragnar Oratmangoen 3 Gol, Thom Haye 1 Gol, Marc Klok 1 Gol.
-4. Top Scorer ACL Two Grup E (LIVE MD5 - PERSIB Bandung 1 - 1 FC Seoul):
+4. Top Scorer ACL Two Grup E (HASIL AKHIR MATCHDAY 5 - PERSIB Bandung 3 - 1 FC Seoul):
    - Balša Sekulić (Persib Bandung): 3 Gol, 0 Assist (Peringkat 1)
-   - Mariano Peralta (Persib Bandung): 2 Gol, 1 Assist (Peringkat 2 - baru saja cetak gol cepat menit ke-6 vs FC Seoul assist Sandy Walsh!)
-   - Moon Seon-min (FC Seoul): 2 Gol, 1 Assist
+   - Mariano Peralta (Persib Bandung): 2 Gol, 1 Assist (Peringkat 2 - mencetak gol menit ke-6 vs FC Seoul assist Sandy Walsh!)
+   - Luka Menalo (Persib Bandung): 2 Gol, 0 Assist (Peringkat 2 - mencetak gol menit ke-41 vs FC Seoul!)
+   - Leonardo Ruiz (FC Seoul): 2 Gol, 0 Assist (mencetak gol balasan menit ke-37)
+   - Moon Seon-min (FC Seoul): 2 Gol, 1 Assist (dikartu merah menit ke-70)
    - Anderson Oliveira (FC Seoul): 2 Gol, 1 Assist
    - Clarismario Santos (Melbourne Victory): 2 Gol, 0 Assist
-   - Luka Menalo (Persib Bandung): 1 Gol, 0 Assist
-   - Leonardo Ruiz (FC Seoul): 1 Gol, 0 Assist
+   - Beckham Putra (Persib Bandung): 1 Gol, 1 Assist (mencetak gol penutup 3-1 menit ke-78!)
    - Cho Young-wook (FC Seoul): 1 Gol, 0 Assist
    - Hwang Do-yun (FC Seoul): 1 Gol, 0 Assist
    - Guillermo May (Melbourne Victory): 1 Gol, 0 Assist
    - Jordi Valadon (Melbourne Victory): 1 Gol, 0 Assist
-   Total Gol PERSIB di ACL Two: 6 Gol (Balša Sekulić 3, Mariano Peralta 2, Luka Menalo 1).
-   Catatan: Laga MD5 sore tadi Melbourne Victory vs The Cong-Viettel imbang 0-0! Saat ini PERSIB vs FC Seoul sedang LIVE 1-1!
+   Total Gol PERSIB di ACL Two: 8 Gol (Balša Sekulić 3, Mariano Peralta 2, Luka Menalo 2, Beckham Putra 1).
+   Catatan: PERSIB Bandung resmi sapu bersih 5 laga dengan 15 poin sempurna, mengunci Juara Grup E dan tiket 16 Besar Asia!
+   Laga berikutnya: Pekan 11 Super League vs Persita Tangerang (Minggu, 29 Nov 2026, 19:00 WIB di Indomilk Arena).
 5. Top Scorer Shopee Cup Grup B: Balša Sekulić (PERSIB) 3 Gol (Hat-trick vs Shan United)!]`
         : null;
 

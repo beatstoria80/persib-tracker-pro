@@ -267,7 +267,15 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
           const kickoff = parseIndonesianFixtureDate(f.date, origTime);
           if (!kickoff) return f;
           const diffMin = Math.floor((now.getTime() - kickoff.getTime()) / 60000);
-          if (diffMin < 0 || diffMin > 125) return f;
+          if (diffMin < 0) return f;
+          if (diffMin > 125) {
+            // Autonomous transition: after match window, finalize status to FINISHED
+            return {
+              ...f,
+              status: 'FINISHED' as const,
+              time: 'Full Time (FT)',
+            };
+          }
           let liveMinute = `${diffMin + 1}'`;
           if (diffMin >= 45 && diffMin < 60) {
             liveMinute = 'HT (Jeda)';
