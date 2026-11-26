@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v82 (Decoupled Groq Chat vs Live Collector Agent, Real-Time Fixture & Scorer Card Feeder)
-const CACHE_NAME = 'persib-tracker-pwa-v82';
+// PERSIB TRACKER - PWA Service Worker v83 (Synced AI Chat Context & Live Match Telemetry)
+const CACHE_NAME = 'persib-tracker-pwa-v83';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
