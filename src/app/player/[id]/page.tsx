@@ -211,10 +211,45 @@ export default function PlayerVideoProfilePage() {
 
       {/* 430px Mobile-First App Canvas */}
       <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-[#060c18]">
-        {/* Background Looping Video Stream (Zero Static Photo, Zero Black Void) */}
+        {/* Background Looping Video Stream & Instant Hero Portrait (Zero Black Void) */}
         <div className="absolute inset-0 z-0 overflow-hidden bg-gradient-to-b from-[#09162e] via-[#050e20] to-[#03060f] flex items-center justify-center">
-          {/* Ambient stadium lighting gradient so canvas is vibrant and never pitch black */}
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/25 via-slate-950/70 to-black pointer-events-none" />
+          {/* Ambient stadium lighting gradient */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/35 via-slate-950/80 to-black pointer-events-none" />
+
+          {/* Instant Player Portrait & Atmospheric Glow (Appears in 0.00ms while video streams) */}
+          <div className={`absolute inset-0 flex flex-col items-center justify-center pointer-events-none transition-all duration-700 ${
+            isVideoPlaying ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'
+          }`}>
+            {/* Ambient Blurred Aura from player avatar */}
+            {activePlayer.avatarUrl && (
+              <img
+                src={activePlayer.avatarUrl}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-30 scale-125 select-none"
+              />
+            )}
+
+            {/* Centered Hero Identification Badge while video buffers */}
+            <div className="relative flex flex-col items-center justify-center text-center px-4 -mt-16">
+              <div className="relative w-40 h-40 rounded-full ring-4 ring-cyan-400/50 shadow-[0_0_60px_rgba(34,211,238,0.4)] overflow-hidden bg-slate-900/90 mb-4 p-1">
+                <img
+                  src={activePlayer.avatarUrl || getPlayerAvatar(activePlayer.name)}
+                  alt={activePlayer.name}
+                  className="w-full h-full object-contain origin-bottom scale-95"
+                />
+              </div>
+              <span className="font-mono font-black text-2xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.6)]">
+                #{activePlayer.number}
+              </span>
+              <h2 className="text-xl font-black text-white tracking-tight mt-1 drop-shadow-md">
+                {activePlayer.name}
+              </h2>
+              <div className="flex items-center gap-1.5 mt-3 px-3 py-1 rounded-full bg-blue-950/90 border border-cyan-400/40 text-[10px] font-mono text-cyan-200 shadow-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
+                <span>Menyiapkan Siaran Looping...</span>
+              </div>
+            </div>
+          </div>
 
           <video
             ref={videoRef}
@@ -228,7 +263,15 @@ export default function PlayerVideoProfilePage() {
             disablePictureInPicture
             disableRemotePlayback
             onPlaying={() => setIsVideoPlaying(true)}
-            className="w-full h-full object-cover object-center opacity-100"
+            onLoadedData={() => {
+              if (videoRef.current && videoRef.current.paused) {
+                videoRef.current.muted = true;
+                videoRef.current.play().catch(() => {});
+              }
+            }}
+            className={`w-full h-full object-cover object-center transition-opacity duration-700 ${
+              isVideoPlaying ? 'opacity-100' : 'opacity-0'
+            }`}
           />
 
           {/* Subtle Top & Bottom Gradient (Unobtrusive, Keeps Video Crisp & Unblurred) */}

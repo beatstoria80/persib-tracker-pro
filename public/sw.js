@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v99 (Fixed Default Screen Formation for Opening Video)
-const CACHE_NAME = 'persib-tracker-pwa-v99';
+// PERSIB TRACKER - PWA Service Worker v100 (Instant Zero-Delay Player Video & Opening Aura)
+const CACHE_NAME = 'persib-tracker-pwa-v100';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
