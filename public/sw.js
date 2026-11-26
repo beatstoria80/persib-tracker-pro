@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v86 (Fix Squad Card Detail Navigation Trigger to Player Profile)
-const CACHE_NAME = 'persib-tracker-pwa-v86';
+// PERSIB TRACKER - PWA Service Worker v87 (Dynamic Scale Feeds Card Maximize/Minimize Multi-Competition Live Feeds)
+const CACHE_NAME = 'persib-tracker-pwa-v87';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

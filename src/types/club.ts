@@ -328,3 +328,14 @@ export interface TopScorerEntry {
   penalties?: number;
   tournament: 'all' | 'liga1' | 'acl2' | 'shopee';
 }
+
+export interface FeedNewsItem {
+  id: string;
+  competition: 'ACL Two' | 'Super League' | 'Shopee Cup';
+  badge: string;
+  title: string;
+  detail: string;
+  stats?: string;
+  timestamp: string;
+  tag: string;
+}

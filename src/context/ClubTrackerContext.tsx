@@ -9,6 +9,7 @@ import {
   LeagueStandingRow,
   TacticalStep,
   FinancialSummary,
+  FeedNewsItem,
 } from '@/types/club';
 import {
   OFFICIAL_SQUAD_2026_2027,
@@ -64,6 +65,7 @@ interface ClubTrackerContextType {
   isGroqSyncing: boolean;
   lastSyncedAt: string;
   groqBulletin: string;
+  multiCompetitionFeeds: FeedNewsItem[];
   triggerGroqDataSync: () => Promise<void>;
   syncFeedback: string | null;
   // REFACTOR: Global PWA installation states & trigger handler
@@ -110,8 +112,43 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [isGroqSyncing, setIsGroqSyncing] = useState<boolean>(false);
   const [lastSyncedAt, setLastSyncedAt] = useState<string>('Live Synced');
   const [groqBulletin, setGroqBulletin] = useState<string>(
-    '🔴 [LIVE ACL TWO] PERSIB Bandung 1 - 1 FC Seoul di GBLA! Gol cepat Mariano Peralta (6\') dibalas Lucas Ruiz (39\').'
+    '⭐ [ACL TWO GRUP E] Kemenangan Bersejarah! PERSIB Bandung 3 - 1 FC Seoul (Full Time di GBLA). Gol Mariano Peralta (6\'), Luka Menalo (41\'), dan Beckham Putra (78\') membawa Maung Bandung sapu bersih 5 laga dengan 15 poin sempurna resmi mengunci status Juara Grup E & tiket 16 Besar Asia! 🇮🇩 [BRI SUPER LEAGUE] Pekan 11: Persita Tangerang vs PERSIB Bandung (Minggu, 29 Nov 19:00 WIB di Indomilk Arena) pasca mengantongi 19 poin di peringkat 4 klasemen papan atas. 🌏 [SHOPEE CUP ASEAN] Puncak klasemen Grup B dengan surplus fantastis +8 gol dari 2 kemenangan beruntun bersiap melawat ke markas Lion City Sailors Singapura!'
   );
+  const [multiCompetitionFeeds, setMultiCompetitionFeeds] = useState<FeedNewsItem[]>([
+    {
+      id: 'feed-acl2',
+      competition: 'ACL Two',
+      badge: '⭐ ACL TWO 2026/27 GRUP E',
+      title: 'PERSIB Bandung Tumbangkan FC Seoul 3-1, Rekor Sempurna 15 Poin Juara Grup E & Tiket 16 Besar',
+      detail:
+        'Kemenangan bersejarah Maung Bandung di Stadion GBLA tercipta lewat gol pembuka kilat Mariano Peralta (6\'), sontekan kemelut Luka Menalo (41\'), dan penyelesaian sudut sempit Beckham Putra (78\'). FC Seoul hanya mampu membalas lewat Leonardo Ruiz (37\') sebelum Moon Seon-min dikartu merah menit ke-70. Rekor 100% sapu bersih 5 kemenangan memastikan PERSIB mengunci gelar Juara Grup E dan melangkah mantap ke Babak 16 Besar Asia!',
+      stats: '5 Laga • 5 Menang • 15 Poin • Gol 8-2 (+6) • Juara Grup E',
+      timestamp: 'Live WIB',
+      tag: 'Full Time Laga Asia',
+    },
+    {
+      id: 'feed-super-league',
+      competition: 'Super League',
+      badge: '🇮🇩 BRI SUPER LEAGUE 2026/27',
+      title: 'Pekan 11 Menanti di Indomilk Arena: PERSIB Bidik Puncak Klasemen Kontra Persita Tangerang',
+      detail:
+        'Setelah kemenangan dramatis 2-1 atas Bali United dan mengemas 19 poin di peringkat 4 klasemen sementara, armada Bojan Hodak mempersiapkan strategi rotasi skuad menghadapi Persita di Tangerang pada Minggu, 29 November 2026 pukul 19:00 WIB. Poros Thom Haye (raja assist liga dengan 7 assist) bersama Marc Klok siap menjadi motor pengatur tempo serangan untuk merangsek ke puncak klasemen.',
+      stats: 'Pekan 10 • 19 Poin • Peringkat 4 • Top Assist Thom Haye (7)',
+      timestamp: 'Live WIB',
+      tag: 'Jadwal Laga Domestik',
+    },
+    {
+      id: 'feed-shopee-cup',
+      competition: 'Shopee Cup',
+      badge: '🌏 SHOPEE CUP ASEAN 2026/27',
+      title: 'PERSIB Kokoh di Puncak Grup B dengan Surplus 8 Gol, Bersiap Hadapi Lion City Sailors di Singapura',
+      detail:
+        'Dominasi Maung Bandung di turnamen antarklub Asia Tenggara berlanjut impresif dengan 2 kemenangan meyakinkan (6 poin, selisih gol 9-1). Produktivitas Balša Sekulić (3 gol) menjadi momok menakutkan pertahanan lawan. Laga berikutnya dijadwalkan bertandang ke Stadion Jalan Besar Singapura menghadapi Lion City Sailors pada 10 Desember 2026.',
+      stats: '2 Laga • 6 Poin • Selisih Gol +8 • Peringkat 1 Grup B',
+      timestamp: 'Live WIB',
+      tag: 'Klasemen ASEAN',
+    },
+  ]);
 
   const lastVerifiedDate = 'AFC Live Center & Google Sports (Real-Time)';
 
@@ -178,6 +215,9 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
           if (payload.summaryBulletin) {
             setGroqBulletin(payload.summaryBulletin);
           }
+          if (payload.multiCompetitionFeeds && payload.multiCompetitionFeeds.length > 0) {
+            setMultiCompetitionFeeds(payload.multiCompetitionFeeds);
+          }
 
           const nowTime =
             payload.lastUpdated ||
@@ -237,6 +277,9 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
             }
             if (payload.summaryBulletin) {
               setGroqBulletin(payload.summaryBulletin);
+            }
+            if (payload.multiCompetitionFeeds && payload.multiCompetitionFeeds.length > 0) {
+              setMultiCompetitionFeeds(payload.multiCompetitionFeeds);
             }
             if (payload.lastUpdated) {
               setLastSyncedAt(payload.lastUpdated);
@@ -435,6 +478,7 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         isGroqSyncing,
         lastSyncedAt,
         groqBulletin,
+        multiCompetitionFeeds,
         triggerGroqDataSync,
         syncFeedback,
         isStandalone,
