@@ -147,7 +147,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       role="dialog"
       aria-label="Layar Pembuka Sinematik PERSIB"
       style={{
-        backgroundColor: '#030712',
+        backgroundColor: '#000000',
         touchAction: 'none',
         userSelect: 'none',
         overscrollBehavior: 'none',
@@ -159,35 +159,8 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           : 'opacity-100 scale-100 filter blur-0'
       }`}
     >
-      {/* 1. Backdrop Visual Seketika (Zero Black Screen - Instant Aura & Logo) */}
-      <div className="absolute inset-0 z-0 flex flex-col items-center justify-center bg-gradient-to-b from-[#030712] via-[#05112c] to-[#02050e] pointer-events-none select-none">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-blue-600/30 via-slate-950/70 to-black pointer-events-none" />
-
-        <div className={`relative flex flex-col items-center justify-center text-center px-4 transition-all duration-700 ${
-          isVideoPlaying ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-        }`}>
-          <div className="relative w-28 h-28 rounded-3xl p-1.5 bg-gradient-to-b from-amber-400/50 via-blue-600/40 to-transparent shadow-[0_0_60px_rgba(37,99,235,0.5)] mb-4">
-            <img
-              src="/new_persib_logo.jpeg"
-              alt="PERSIB Bandung"
-              className="w-full h-full object-contain rounded-2xl drop-shadow-2xl animate-pulse"
-            />
-          </div>
-          <h2 className="text-xl font-black tracking-wider text-white drop-shadow-md">
-            PERSIB BANDUNG
-          </h2>
-          <span className="text-[10px] font-mono tracking-widest text-cyan-400 mt-1 uppercase font-bold">
-            Gelora Bandung Lautan Api
-          </span>
-          <div className="flex items-center gap-1.5 mt-4 px-3 py-1 rounded-full bg-blue-950/90 border border-cyan-400/40 text-[10px] font-mono text-cyan-200 shadow-md">
-            <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-ping" />
-            <span>Memulai Tayangan Stadion...</span>
-          </div>
-        </div>
-      </div>
-
-      {/* 2. Video Sinematik Layar Penuh Default Formasi Layar (Fixed Fullscreen, Non-Draggable, Non-Scrollable) */}
-      <div className="absolute inset-0 z-1 w-full h-full overflow-hidden pointer-events-none select-none touch-none overscroll-none">
+      {/* Video Sinematik Layar Penuh Langsung Murni Stadium_scene_logo_animation_6f37cafb.mp4 */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none touch-none overscroll-none bg-black">
         <video
           ref={videoRef}
           src="/Stadium_scene_logo_animation_6f37cafb.mp4"
@@ -202,9 +175,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           onPlaying={() => setIsVideoPlaying(true)}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
-          className={`w-full h-full object-cover object-center select-none pointer-events-none transition-opacity duration-700 ${
-            isVideoPlaying ? 'opacity-100' : 'opacity-0'
-          }`}
+          className="w-full h-full object-cover object-center select-none pointer-events-none opacity-100"
         />
       </div>
 
