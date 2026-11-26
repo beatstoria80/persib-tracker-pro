@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { OFFICIAL_SQUAD_2026_2027, getPlayerAvatar } from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
+import { SPLASH_SESSION_KEY } from '@/components/VideoLoadingSplash';
 import {
   ArrowLeft,
   ShieldCheck,
@@ -90,6 +91,11 @@ export default function PlayerVideoProfilePage() {
       e.stopPropagation();
     }
     try {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem(SPLASH_SESSION_KEY, 'seen');
+      }
+    } catch {}
+    try {
       if (typeof window !== 'undefined' && window.history.length > 1) {
         router.back();
       } else {
@@ -150,16 +156,14 @@ export default function PlayerVideoProfilePage() {
     video.defaultMuted = true;
     video.muted = true;
     video.playsInline = true;
+    video.loop = true;
     video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', 'true');
     video.setAttribute('x5-playsinline', 'true');
 
-    try {
-      video.load();
-    } catch {}
-
     const tryPlay = () => {
+      if (!video) return;
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise
@@ -192,7 +196,6 @@ export default function PlayerVideoProfilePage() {
     window.addEventListener('click', resumeOnInteraction, { once: true, passive: true });
 
     return () => {
-      video.removeEventListener('loadedmetadata', tryPlay);
       video.removeEventListener('loadeddata', tryPlay);
       video.removeEventListener('canplay', tryPlay);
       video.removeEventListener('playing', onPlaying);
@@ -224,12 +227,9 @@ export default function PlayerVideoProfilePage() {
             preload="auto"
             disablePictureInPicture
             disableRemotePlayback
-            className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
-              isVideoPlaying ? 'opacity-100' : 'opacity-95'
-            }`}
-          >
-            <source src={videoSource} type="video/mp4" />
-          </video>
+            onPlaying={() => setIsVideoPlaying(true)}
+            className="w-full h-full object-cover object-center opacity-100"
+          />
 
           {/* Subtle Top & Bottom Gradient (Unobtrusive, Keeps Video Crisp & Unblurred) */}
           <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />

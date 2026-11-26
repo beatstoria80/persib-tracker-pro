@@ -162,7 +162,6 @@ export function RosterDeepDive() {
             key={player.id}
             href={`/player/${player.id}`}
             prefetch={true}
-            onClick={() => handleNavigatePlayer(player.id)}
             className={`block rounded-[28px] border p-4 cursor-pointer active:scale-[0.98] transition-all shadow-md group ${
               isPro
                 ? 'bg-[#121620] border-slate-800 hover:border-cyan-400/50 shadow-[0_4px_20px_rgba(0,0,0,0.3)]'

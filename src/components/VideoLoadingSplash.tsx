@@ -10,7 +10,11 @@ interface VideoLoadingSplashProps {
 export const SPLASH_SESSION_KEY = 'persib_opening_splash_v8';
 
 export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
-  const [isVisible, setIsVisible] = useState<boolean>(true);
+  // Check session storage on mount (lazy init)
+  const [isVisible, setIsVisible] = useState<boolean>(() => {
+    if (typeof window === 'undefined') return true;
+    return !sessionStorage.getItem(SPLASH_SESSION_KEY);
+  });
   const [isFading, setIsFading] = useState<boolean>(false);
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
@@ -23,6 +27,11 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const handleDismiss = useCallback(() => {
     if (isFading) return;
     setIsFading(true);
+    try {
+      if (typeof window !== 'undefined') {
+        sessionStorage.setItem(SPLASH_SESSION_KEY, 'seen');
+      }
+    } catch {}
     if (onFinishRef.current) onFinishRef.current();
     setTimeout(() => {
       setIsVisible(false);
@@ -34,8 +43,19 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     handleDismissRef.current = handleDismiss;
   }, [handleDismiss]);
 
-  // REFACTOR: Putar video Stadium_scene_logo_animation_6f37cafb.mp4 tepat satu kali saat mount (tanpa re-trigger loop)
+  // If already seen in this session, immediately trigger onFinish and hide
   useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && sessionStorage.getItem(SPLASH_SESSION_KEY)) {
+        setIsVisible(false);
+        if (onFinishRef.current) onFinishRef.current();
+      }
+    } catch {}
+  }, []);
+
+  // REFACTOR: Putar video Stadium_scene_logo_animation_6f37cafb.mp4 tepat satu kali saat splash aktif
+  useEffect(() => {
+    if (!isVisible) return;
     const video = videoRef.current;
     if (!video) return;
 
@@ -78,7 +98,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     return () => {
       clearTimeout(safetyTimer);
     };
-  }, []); // Dependensi kosong: berjalan tepat SATU KALI saat komponen pertama kali di-mount
+  }, [isVisible]);
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
@@ -96,12 +116,10 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
 
   const handleScreenTouch = () => {
     const v = videoRef.current;
-    if (v && v.paused) {
+    if (!v) return;
+    if (v.paused) {
       v.muted = true;
-      v.play().catch(() => handleDismiss());
-    } else if (v && v.currentTime > 1.0) {
-      // Lewati dengan sentuhan layar jika video sudah berputar minimal 1 detik
-      handleDismiss();
+      v.play().catch(() => {});
     }
   };
 
