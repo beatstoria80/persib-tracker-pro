@@ -490,54 +490,111 @@ export function verifyAndHealAllFixtures(
       fixture.venue = 'Stadion Indomilk Arena, Tangerang';
     }
 
-    // 4. Deteksi Waktu Dinamis (Time-aware dynamic state)
+    // 4. Verifikasi Status Laga Berbasis Live Feed Resmi (Bukan Asumsi Jam Dinding Hardcode)
+    // Sesuai aturan: Kick-off lapangan bisa tertunda 5-15 menit karena faktor cuaca, seremoni, atau VAR.
+    // Menit laga dan status LIVE HARUS mengikuti feed resmi yang divalidasi, BUKAN perhitungan jam komputer.
     if (fixture.status !== 'FINISHED') {
-      const parsedDate = parseIndonesianFixtureDate(fixture.date, fixture.time);
-      if (parsedDate) {
-        const diffMs = nowDate.getTime() - parsedDate.getTime();
-        const diffMinutes = Math.floor(diffMs / 60000);
-
-        if (diffMinutes >= 0 && diffMinutes <= 115) {
-          let liveMinute = `${diffMinutes + 1}'`;
-          if (diffMinutes >= 45 && diffMinutes < 60) {
-            liveMinute = 'HT (Jeda)';
-          } else if (diffMinutes >= 60 && diffMinutes <= 105) {
-            liveMinute = `${diffMinutes - 15}'`;
-          } else if (diffMinutes > 105) {
-            liveMinute = `90+${diffMinutes - 105}'`;
-          }
-          fixture.status = 'LIVE';
-          fixture.time = liveMinute;
-        } else if (diffMinutes > 115) {
-          fixture.status = 'FINISHED';
-          fixture.time = 'Full Time (FT)';
-        }
-      }
-    }
-
-    // 5. Pengecekan RSS Headlines untuk mendeteksi update skor laga yang sedang atau baru selesai
-    if (fixture.status === 'LIVE' || fixture.status === 'SCHEDULED') {
       const homeKeyword = fixture.homeTeam.split(' ')[0].toLowerCase();
       const awayKeyword = fixture.awayTeam.split(' ')[0].toLowerCase();
-      if (
-        headlinesCombined.includes(homeKeyword) &&
-        headlinesCombined.includes(awayKeyword)
-      ) {
-        // Cek apakah ada pola skor "Persib X - Y Lawan"
+      const matchMentionedInRss =
+        headlinesCombined.includes(homeKeyword) && headlinesCombined.includes(awayKeyword);
+
+      // A. Deteksi Penundaan Kick-Off (Delayed Kick-Off di Lapangan)
+      const hasDelayKeywords =
+        headlinesCombined.includes('ditunda') ||
+        headlinesCombined.includes('tertunda') ||
+        headlinesCombined.includes('diundur') ||
+        headlinesCombined.includes('delay') ||
+        headlinesCombined.includes('menunggu kick-off') ||
+        headlinesCombined.includes('pemanasan');
+
+      if (matchMentionedInRss && hasDelayKeywords) {
+        fixture.status = 'SCHEDULED';
+        fixture.time = 'Kick-off Diundur / Menunggu Lapangan';
+        return fixture;
+      }
+
+      // B. Deteksi Konfirmasi Selesai (Full Time / FT Resmi)
+      const hasFinishedKeywords =
+        headlinesCombined.includes('full time') ||
+        headlinesCombined.includes('ft') ||
+        headlinesCombined.includes('selesai') ||
+        headlinesCombined.includes('skor akhir') ||
+        headlinesCombined.includes('usai') ||
+        headlinesCombined.includes('peluit panjang');
+
+      if (matchMentionedInRss && hasFinishedKeywords) {
+        fixture.status = 'FINISHED';
+        fixture.time = 'Full Time (FT)';
+        // Cek pola skor
         const scoreMatch = headlinesCombined.match(
           new RegExp(`${homeKeyword}\\s*(\\d+)\\s*[-–:]\\s*(\\d+)\\s*${awayKeyword}`)
         );
         if (scoreMatch) {
           fixture.homeScore = parseInt(scoreMatch[1], 10);
           fixture.awayScore = parseInt(scoreMatch[2], 10);
-          if (
-            headlinesCombined.includes('full time') ||
-            headlinesCombined.includes('ft') ||
-            headlinesCombined.includes('selesai')
-          ) {
-            fixture.status = 'FINISHED';
-            fixture.time = 'Full Time (FT)';
-          }
+        }
+        return fixture;
+      }
+
+      // C. Deteksi Konfirmasi Kick-Off Resmi di Lapangan (Official Live Confirmation)
+      const hasLiveMatchKeywords =
+        headlinesCombined.includes('sedang berlangsung') ||
+        headlinesCombined.includes('babak pertama') ||
+        headlinesCombined.includes('babak kedua') ||
+        headlinesCombined.includes('live score') ||
+        headlinesCombined.includes('kick-off') ||
+        headlinesCombined.includes('menit ke-') ||
+        headlinesCombined.includes('ht') ||
+        headlinesCombined.includes('jeda');
+
+      if (matchMentionedInRss && hasLiveMatchKeywords) {
+        fixture.status = 'LIVE';
+
+        // Ekstraksi menit resmi yang dilaporkan siaran/feed berita (bukan tebakan jam komputer)
+        const minuteMatch = headlinesCombined.match(/menit\s*(?:ke-)?\s*(\d{1,2})/);
+        const aposMinuteMatch = headlinesCombined.match(/\b(\d{1,2})'/);
+        const isHt = headlinesCombined.includes('ht') || headlinesCombined.includes('jeda babak');
+        const isSecondHalf = headlinesCombined.includes('babak kedua');
+
+        if (minuteMatch) {
+          fixture.time = `${minuteMatch[1]}'`;
+        } else if (aposMinuteMatch) {
+          fixture.time = `${aposMinuteMatch[1]}'`;
+        } else if (isHt) {
+          fixture.time = 'HT (Jeda)';
+        } else if (isSecondHalf) {
+          fixture.time = '46\' (Babak 2)';
+        } else {
+          fixture.time = 'LIVE';
+        }
+
+        // Cek apakah ada update skor terkini
+        const scoreMatch = headlinesCombined.match(
+          new RegExp(`${homeKeyword}\\s*(\\d+)\\s*[-–:]\\s*(\\d+)\\s*${awayKeyword}`)
+        );
+        if (scoreMatch) {
+          fixture.homeScore = parseInt(scoreMatch[1], 10);
+          fixture.awayScore = parseInt(scoreMatch[2], 10);
+        }
+        return fixture;
+      }
+
+      // D. Evaluasi Jadwal Hari Ini Jika Feed Belum Melaporkan Peluit Kick-off
+      const parsedDate = parseIndonesianFixtureDate(fixture.date, fixture.time);
+      if (parsedDate) {
+        const diffMs = nowDate.getTime() - parsedDate.getTime();
+        const diffMinutes = Math.floor(diffMs / 60000);
+
+        // Jika jam dinding telah melewati jam jadwal (misal lewat 19:00 WIB), tetapi feed BELUM
+        // mengonfirmasi peluit kick-off ditiup di stadion, pertahankan status SCHEDULED
+        // dengan label siaga/menunggu kick-off nyata. JANGAN melompat ke menit 5', 10', dst!
+        if (diffMinutes >= 0 && diffMinutes < 30) {
+          fixture.status = 'SCHEDULED';
+          fixture.time = 'Kick-off Segera / Menunggu Peluit';
+        } else if (diffMinutes < 0) {
+          // Laga masih di masa depan
+          fixture.status = 'SCHEDULED';
         }
       }
     }
@@ -950,11 +1007,18 @@ export async function supplyLiveClubData(): Promise<GroqSuppliedData> {
   if (apiKey && apiKey.length > 20 && !apiKey.includes('placeholder')) {
     try {
       const collectorSystemPrompt = `Kamu adalah Groq Autonomous Live Collector Agent resmi PERSIB Bandung musim 2026/2027.
-TUGAS UTAMA: Mengekstrak skor real-time, status laga (LIVE / FINISHED / SCHEDULED), menit pertandingan, dan validasi seluruh laga dan top scorer dari Google News RSS Feed.
+TUGAS UTAMA: Mengekstrak status resmi pertandingan (LIVE / FINISHED / SCHEDULED), menit resmi, skor real-time, dan memverifikasi kick-off di lapangan dari Google News RSS Feed.
 
-Laga Aktif: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} (${currentHeroMatch.tournament} - ${currentHeroMatch.roundOrWeek})
-Waktu Lokal WIB: ${nowWibDateStr}, ${nowWib}
-Skor Dasar: ${currentHeroMatch.homeScore ?? 0} - ${currentHeroMatch.awayScore ?? 0}
+ATURAN KRUSIAL KICK-OFF & MENIT LAGA (WAJIB DIPATUHI SECARA KETAT):
+1. DILARANG KERAS menghitung menit pertandingan berdasarkan jam dinding komputer/jadwal! Kick-off di stadion nyata sering tertunda (5-15 menit) karena cuaca, seremoni, atau kendala teknis lapangan.
+2. Jika kick-off diundur/tertunda atau peluit babak pertama belum ditiup di lapangan, status WAJIB "SCHEDULED", dan liveMinute adalah "Menunggu Kick-off" atau "Kick-off Segera".
+3. Status HANYA boleh "LIVE" jika berita/feed resmi mengonfirmasi peluit kick-off telah ditiup resmi di lapangan (misal: 'sedang berlangsung', 'babak pertama dimulai', 'live score', 'menit ke-X').
+4. Nilai liveMinute HARUS persis mengikuti menit resmi yang dilaporkan siaran/feed berita (contoh: "1'", "14'", "HT", "45+2'", "78'", "90+4'"), BUKAN perhitungan matematika jam komputer.
+5. Status HANYA boleh "FINISHED" jika ada laporan peluit panjang akhir laga (FT / Selesai / Usai).
+
+Laga Sasaran: ${currentHeroMatch.homeTeam} vs ${currentHeroMatch.awayTeam} (${currentHeroMatch.tournament} - ${currentHeroMatch.roundOrWeek})
+Waktu Lokal WIB Saat Ini: ${nowWibDateStr}, ${nowWib}
+Skor Awal: ${currentHeroMatch.homeScore ?? 0} - ${currentHeroMatch.awayScore ?? 0}
 Status Awal: ${currentHeroMatch.status} (${currentHeroMatch.time})
 
 Headline Google News Live Terkini (Multi-Event & Top Scorer):

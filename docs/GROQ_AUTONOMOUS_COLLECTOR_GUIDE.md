@@ -186,7 +186,10 @@ export async function fetchGoogleSearchLiveMatch(
   return harvestedHeadlines;
 }
 
-// 3. Mesin Self-Healing Fixtures (Koreksi Skor & Deteksi Kick-off Dinamis)
+// 3. Mesin Self-Healing Fixtures (Verifikasi Kick-Off Lapangan & Menit Resmi)
+// CATATAN KRUSIAL: Jangan mengandalkan selisih jam dinding statis! Kick-off di lapangan
+// bisa tertunda 5-15 menit (cuaca, seremoni, VAR). Status LIVE dan menit laga HARUS mengikuti
+// konfirmasi resmi siaran/feed, bukan jam lokal komputer.
 export function verifyAndHealAllFixtures(
   baseFixtures: MatchFixture[],
   rssHeadlines: string[],
@@ -196,26 +199,65 @@ export function verifyAndHealAllFixtures(
 
   return baseFixtures.map((f) => {
     const fixture = { ...f };
+    const homeKey = fixture.homeTeam.split(' ')[0].toLowerCase();
+    const awayKey = fixture.awayTeam.split(' ')[0].toLowerCase();
+    const matchMentioned = combined.includes(homeKey) && combined.includes(awayKey);
 
-    // Evaluasi waktu kick-off otomatis
     if (fixture.status !== 'FINISHED') {
-      const parsedDate = new Date(fixture.date + ' ' + fixture.time);
-      if (!isNaN(parsedDate.getTime())) {
-        const diffMinutes = Math.floor((nowDate.getTime() - parsedDate.getTime()) / 60000);
-        if (diffMinutes >= 0 && diffMinutes <= 115) {
-          fixture.status = 'LIVE';
-          fixture.time = `${diffMinutes + 1}'`;
-        } else if (diffMinutes > 115) {
-          fixture.status = 'FINISHED';
-          fixture.time = 'Full Time (FT)';
+      // A. Deteksi Kick-Off Ditunda / Delayed
+      const isDelayed =
+        combined.includes('ditunda') ||
+        combined.includes('tertunda') ||
+        combined.includes('diundur') ||
+        combined.includes('delay') ||
+        combined.includes('menunggu kick-off');
+
+      if (matchMentioned && isDelayed) {
+        fixture.status = 'SCHEDULED';
+        fixture.time = 'Kick-off Diundur / Menunggu Lapangan';
+        return fixture;
+      }
+
+      // B. Deteksi Konfirmasi Kick-Off Resmi di Lapangan
+      const isLiveActive =
+        combined.includes('sedang berlangsung') ||
+        combined.includes('babak pertama') ||
+        combined.includes('babak kedua') ||
+        combined.includes('live score') ||
+        combined.includes('kick-off') ||
+        combined.includes('menit ke-') ||
+        combined.includes('ht');
+
+      if (matchMentioned && isLiveActive) {
+        fixture.status = 'LIVE';
+        const minuteMatch = combined.match(/menit\s*(?:ke-)?\s*(\d{1,2})/);
+        const aposMatch = combined.match(/\b(\d{1,2})'/);
+        if (minuteMatch) {
+          fixture.time = `${minuteMatch[1]}'`;
+        } else if (aposMatch) {
+          fixture.time = `${aposMatch[1]}'`;
+        } else if (combined.includes('ht')) {
+          fixture.time = 'HT (Jeda)';
+        } else {
+          fixture.time = 'LIVE';
         }
+      }
+
+      // C. Deteksi Laga Selesai (Full Time)
+      const isFinished =
+        combined.includes('full time') ||
+        combined.includes('ft') ||
+        combined.includes('selesai') ||
+        combined.includes('skor akhir');
+
+      if (matchMentioned && isFinished) {
+        fixture.status = 'FINISHED';
+        fixture.time = 'Full Time (FT)';
       }
     }
 
     // Koreksi skor dari headline berita
-    const homeKey = fixture.homeTeam.split(' ')[0].toLowerCase();
-    const awayKey = fixture.awayTeam.split(' ')[0].toLowerCase();
-    if (combined.includes(homeKey) && combined.includes(awayKey)) {
+    if (matchMentioned) {
       const scoreMatch = combined.match(new RegExp(`${homeKey}\\s*(\\d+)\\s*[-–:]\\s*(\\d+)\\s*${awayKey}`));
       if (scoreMatch) {
         fixture.homeScore = parseInt(scoreMatch[1], 10);

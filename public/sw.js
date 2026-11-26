@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v88 (Automated Google Search News RSS Scraper for All Fixtures & Dynamic Top Scorers)
-const CACHE_NAME = 'persib-tracker-pwa-v88';
+// PERSIB TRACKER - PWA Service Worker v89 (Live Official Kick-off & Match Minute Grounding)
+const CACHE_NAME = 'persib-tracker-pwa-v89';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
