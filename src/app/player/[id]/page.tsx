@@ -227,7 +227,9 @@ export default function PlayerVideoProfilePage() {
             className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
               isVideoPlaying ? 'opacity-100' : 'opacity-95'
             }`}
-          />
+          >
+            <source src={videoSource} type="video/mp4" />
+          </video>
 
           {/* Subtle Top & Bottom Gradient (Unobtrusive, Keeps Video Crisp & Unblurred) */}
           <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
