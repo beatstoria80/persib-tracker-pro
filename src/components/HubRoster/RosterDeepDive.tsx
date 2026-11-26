@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useClubTracker } from '@/context/ClubTrackerContext';
 import { PlayerCategory, Position, SquadRole, Player } from '@/types/club';
@@ -198,11 +199,13 @@ export function RosterDeepDive() {
       {/* 4. Player Cards Stack (Rounded [28px], Spacious, High Visual Punch) */}
       <div className="space-y-3">
         {filteredPlayers.map((player: Player) => (
-          <div
+          <Link
             key={player.id}
+            href={`/player/${player.id}`}
+            prefetch={true}
             onMouseEnter={() => prefetchPlayerVideo(player)}
-            onClick={() => router.push(`/player/${player.id}`)}
-            className={`rounded-[28px] border p-4 cursor-pointer active:scale-[0.98] transition-all shadow-md ${
+            onTouchStart={() => prefetchPlayerVideo(player)}
+            className={`block rounded-[28px] border p-4 cursor-pointer active:scale-[0.98] transition-all shadow-md group ${
               isPro
                 ? 'bg-[#121620] border-slate-800 hover:border-cyan-400/50 shadow-[0_4px_20px_rgba(0,0,0,0.3)]'
                 : 'bg-white border-slate-200 hover:border-blue-600 shadow-[0_4px_15px_rgba(0,0,0,0.04)]'
@@ -220,7 +223,7 @@ export function RosterDeepDive() {
                 />
                 <div>
                   <div className="flex items-center gap-2">
-                    <h4 className={`font-black text-sm tracking-tight ${isPro ? 'text-white' : 'text-slate-950'}`}>
+                    <h4 className={`font-black text-sm tracking-tight group-hover:text-cyan-400 transition-colors ${isPro ? 'text-white' : 'text-slate-950'}`}>
                       {player.name}
                     </h4>
                     {player.squadRole === 'starting' && (
@@ -248,16 +251,20 @@ export function RosterDeepDive() {
                 isPro={isPro}
               />
 
-              <div className="flex items-center gap-3 font-mono">
+              <div className="flex items-center gap-2.5 font-mono">
                 <span className={`text-[10.5px] ${isPro ? 'text-slate-300' : 'text-slate-500'}`}>
                   G: {player.stats.goals} | A: {player.stats.assists}
                 </span>
-                <span className={`font-black flex items-center text-xs ${isPro ? 'text-cyan-400' : 'text-blue-600'}`}>
-                  Detail <ChevronRight className="w-3.5 h-3.5" />
+                <span className={`font-black flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-all ${
+                  isPro
+                    ? 'text-cyan-300 bg-cyan-950/40 border-cyan-800/60 group-hover:bg-cyan-900/80 group-hover:border-cyan-400/80 shadow-[0_0_10px_rgba(34,211,238,0.2)]'
+                    : 'text-blue-700 bg-blue-50 border-blue-200 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600'
+                }`}>
+                  Detail <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
                 </span>
               </div>
             </div>
-          </div>
+          </Link>
         ))}
       </div>
     </div>

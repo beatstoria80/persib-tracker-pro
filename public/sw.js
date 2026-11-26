@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v85 (Fix Player Profile Back Button Trigger & Navigation)
-const CACHE_NAME = 'persib-tracker-pwa-v85';
+// PERSIB TRACKER - PWA Service Worker v86 (Fix Squad Card Detail Navigation Trigger to Player Profile)
+const CACHE_NAME = 'persib-tracker-pwa-v86';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
