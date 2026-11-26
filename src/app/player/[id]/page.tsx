@@ -150,8 +150,14 @@ export default function PlayerVideoProfilePage() {
     video.defaultMuted = true;
     video.muted = true;
     video.playsInline = true;
+    video.setAttribute('muted', '');
     video.setAttribute('playsinline', '');
-    video.setAttribute('webkit-playsinline', '');
+    video.setAttribute('webkit-playsinline', 'true');
+    video.setAttribute('x5-playsinline', 'true');
+
+    try {
+      video.load();
+    } catch {}
 
     const tryPlay = () => {
       const playPromise = video.play();
@@ -168,13 +174,9 @@ export default function PlayerVideoProfilePage() {
       }
     };
 
-    if (video.readyState >= 1) {
-      tryPlay();
-    } else {
-      video.addEventListener('loadedmetadata', tryPlay, { once: true });
-      video.addEventListener('loadeddata', tryPlay, { once: true });
-      video.addEventListener('canplay', tryPlay, { once: true });
-    }
+    tryPlay();
+    video.addEventListener('loadeddata', tryPlay, { once: true });
+    video.addEventListener('canplay', tryPlay, { once: true });
 
     const onPlaying = () => setIsVideoPlaying(true);
     video.addEventListener('playing', onPlaying, { once: true });

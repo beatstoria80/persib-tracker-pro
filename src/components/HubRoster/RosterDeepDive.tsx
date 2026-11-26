@@ -31,53 +31,10 @@ export function RosterDeepDive() {
     (p: Player) => p.category === activeCategory && p.fitness.status !== 'fit'
   ).length;
 
-  const prefetchPlayerVideo = (player: Player) => {
-    if (typeof document === 'undefined') return;
-    const vSrc =
-      player.videoUrl ||
-      (player.id.includes('beckham') || player.id.includes('beckam')
-        ? '/Beckam.mp4'
-        : player.id.includes('kakang')
-        ? '/Kakang.mp4'
-        : player.id.includes('teja')
-        ? '/paku_alam.mp4'
-        : player.id.includes('adam')
-        ? '/adam_alis.mp4'
-        : player.id.includes('uilliam')
-        ? '/uilliam.mp4'
-        : player.id.includes('menalo')
-        ? '/menalo.mp4'
-        : player.id.includes('reijnders')
-        ? '/Reijnders.mp4'
-        : player.id.includes('klok')
-        ? '/Klok.mp4'
-        : player.id.includes('haye')
-        ? '/haye.mp4'
-        : player.id.includes('ragnar')
-        ? '/Ragnar.mp4'
-        : player.id.includes('walsh')
-        ? '/Sandy_Walsh.mp4'
-        : player.id.includes('peralta')
-        ? '/peralta.mp4'
-        : player.id.includes('loncar')
-        ? '/Loncar.mp4'
-        : player.id.includes('cesar') || player.id.includes('caesar')
-        ? '/Cesar.mp4'
-        : player.id.includes('matricardi')
-        ? '/Matricardi.mp4'
-        : player.id.includes('mutombo')
-        ? '/Mutombo.mp4'
-        : player.id.includes('notsuda')
-        ? '/Gatuko.mp4'
-        : '/Stadium_scene_logo_animation_6f37cafb.mp4');
-
-    if (!document.querySelector(`link[href="${vSrc}"]`)) {
-      const link = document.createElement('link');
-      link.rel = 'prefetch';
-      link.as = 'video';
-      link.href = vSrc;
-      document.head.appendChild(link);
-    }
+  const handleNavigatePlayer = (e: React.MouseEvent, playerId: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+    router.push(`/player/${playerId}`);
   };
 
   return (
@@ -199,12 +156,11 @@ export function RosterDeepDive() {
       {/* 4. Player Cards Stack (Rounded [28px], Spacious, High Visual Punch) */}
       <div className="space-y-3">
         {filteredPlayers.map((player: Player) => (
-          <Link
+          <div
             key={player.id}
-            href={`/player/${player.id}`}
-            prefetch={true}
-            onMouseEnter={() => prefetchPlayerVideo(player)}
-            onTouchStart={() => prefetchPlayerVideo(player)}
+            onClick={(e) => handleNavigatePlayer(e, player.id)}
+            role="button"
+            tabIndex={0}
             className={`block rounded-[28px] border p-4 cursor-pointer active:scale-[0.98] transition-all shadow-md group ${
               isPro
                 ? 'bg-[#121620] border-slate-800 hover:border-cyan-400/50 shadow-[0_4px_20px_rgba(0,0,0,0.3)]'
@@ -255,16 +211,20 @@ export function RosterDeepDive() {
                 <span className={`text-[10.5px] ${isPro ? 'text-slate-300' : 'text-slate-500'}`}>
                   G: {player.stats.goals} | A: {player.stats.assists}
                 </span>
-                <span className={`font-black flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-all ${
-                  isPro
-                    ? 'text-cyan-300 bg-cyan-950/40 border-cyan-800/60 group-hover:bg-cyan-900/80 group-hover:border-cyan-400/80 shadow-[0_0_10px_rgba(34,211,238,0.2)]'
-                    : 'text-blue-700 bg-blue-50 border-blue-200 group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600'
-                }`}>
+                <button
+                  type="button"
+                  onClick={(e) => handleNavigatePlayer(e, player.id)}
+                  className={`font-black flex items-center gap-1 text-xs px-2.5 py-1 rounded-full border transition-all cursor-pointer ${
+                    isPro
+                      ? 'text-cyan-300 bg-cyan-950/40 border-cyan-800/60 hover:bg-cyan-900/80 hover:border-cyan-400/80 shadow-[0_0_10px_rgba(34,211,238,0.2)]'
+                      : 'text-blue-700 bg-blue-50 border-blue-200 hover:bg-blue-600 hover:text-white hover:border-blue-600'
+                  }`}
+                >
                   Detail <ChevronRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-                </span>
+                </button>
               </div>
             </div>
-          </Link>
+          </div>
         ))}
       </div>
     </div>

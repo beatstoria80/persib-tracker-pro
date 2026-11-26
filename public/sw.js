@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v93 (Fix Video Splash Buffer Deadlock & Visual Aura)
-const CACHE_NAME = 'persib-tracker-pwa-v93';
+// PERSIB TRACKER - PWA Service Worker v94 (Direct Splash Video Opening & Responsive Roster Navigation)
+const CACHE_NAME = 'persib-tracker-pwa-v94';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

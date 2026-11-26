@@ -1,17 +1,16 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ArrowRight, Play, Shield, Loader2 } from 'lucide-react';
+import { ArrowRight, Shield } from 'lucide-react';
 
 interface VideoLoadingSplashProps {
   onFinish?: () => void;
 }
 
-// REFACTOR: Bump session key to v6 to reset any stale dismiss states
-export const SPLASH_SESSION_KEY = 'persib_opening_splash_v6';
+// REFACTOR: Bump session key to v7 to ensure immediate video opening across fresh reloads
+export const SPLASH_SESSION_KEY = 'persib_opening_splash_v7';
 
 export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
-  // Cek apakah sudah pernah dilihat dalam sesi aktif saat ini
   const [alreadyShown] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       try {
@@ -25,8 +24,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
 
   const [isVisible, setIsVisible] = useState<boolean>(!alreadyShown);
   const [isFading, setIsFading] = useState<boolean>(false);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [autoplayBlocked, setAutoplayBlocked] = useState<boolean>(false);
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -36,7 +33,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
       }
     } catch {
-      // Abaikan error storage pada mode private
+      // Mode private fallback
     }
     if (isFading) return;
     setIsFading(true);
@@ -46,20 +43,19 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     }, 450);
   }, [isFading, onFinish]);
 
-  // Jika sudah ditampilkan sebelumnya dalam sesi tab ini, panggil onFinish segera
+  // Selesaikan splash jika sudah dilihat sebelumnya
   useEffect(() => {
     if (alreadyShown && onFinish) {
       onFinish();
     }
   }, [alreadyShown, onFinish]);
 
-  // REFACTOR: Autoplay imperatif langsung tanpa deadlock loadedmetadata
+  // REFACTOR: Langsung putar video Stadium_scene_logo_animation_6f37cafb.mp4 seketika
   useEffect(() => {
     if (alreadyShown) return;
     const video = videoRef.current;
     if (!video) return;
 
-    // Set seluruh atribut DOM esensial agar video lolos kebijakan autoplay mobile browser
     video.defaultMuted = true;
     video.muted = true;
     video.playsInline = true;
@@ -69,49 +65,45 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     video.setAttribute('webkit-playsinline', 'true');
     video.setAttribute('x5-playsinline', 'true');
 
-    // Paksa browser memuat buffer video segera
+    // Trigger video load & play langsung tanpa menunggu metadata
     try {
       video.load();
     } catch {}
 
-    const handlePlaySuccess = () => {
-      setIsPlaying(true);
-      setAutoplayBlocked(false);
-    };
-
-    // Jalankan play secara langsung (browser modern mengizinkan play untuk muted + playsinline)
-    const playPromise = video.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .then(handlePlaySuccess)
-        .catch(() => {
-          // Jika kebijakan browser memblokir autoplay otomatis, tampilkan tombol play manual
-          setAutoplayBlocked(true);
+    const playVideo = () => {
+      if (!video) return;
+      const playPromise = video.play();
+      if (playPromise !== undefined) {
+        playPromise.catch(() => {
+          // Jika browser membatasi autoplay, dengarkan sentuhan pertama pengguna di layar
+          const onFirstInteraction = () => {
+            if (video) {
+              video.muted = true;
+              video.play().catch(() => {});
+            }
+            window.removeEventListener('touchstart', onFirstInteraction);
+            window.removeEventListener('click', onFirstInteraction);
+          };
+          window.addEventListener('touchstart', onFirstInteraction, { once: true, passive: true });
+          window.addEventListener('click', onFirstInteraction, { once: true, passive: true });
         });
-    }
-
-    const onCanPlay = () => {
-      const p = video.play();
-      if (p !== undefined) {
-        p.then(handlePlaySuccess).catch(() => setAutoplayBlocked(true));
       }
     };
 
-    video.addEventListener('playing', handlePlaySuccess);
-    video.addEventListener('canplay', onCanPlay);
+    playVideo();
+    video.addEventListener('canplay', playVideo, { once: true });
+    video.addEventListener('loadeddata', playVideo, { once: true });
 
-    // Safety fallback: maksimal 6 detik jika media tidak dapat dimainkan
+    // Fallback otomatis jika video macet atau selesai (maksimal durasi video ~6 detik)
     const safetyTimer = setTimeout(() => {
-      if (!video.currentTime || video.paused) {
-        handleDismiss();
-      }
+      handleDismiss();
     }, 6000);
 
     return () => {
       clearTimeout(safetyTimer);
       if (video) {
-        video.removeEventListener('playing', handlePlaySuccess);
-        video.removeEventListener('canplay', onCanPlay);
+        video.removeEventListener('canplay', playVideo);
+        video.removeEventListener('loadeddata', playVideo);
       }
     };
   }, [alreadyShown, handleDismiss]);
@@ -124,25 +116,17 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     const dur = v.duration;
     setProgressPercent(Math.min(100, Math.round((current / dur) * 100)));
 
-    // Selesaikan splash tepat sebelum video habis (0.2s sebelum akhir)
-    if (dur > 0.5 && current >= dur - 0.2) {
+    // Selesai otomatis saat video mencapai ujung akhir (0.15 detik sebelum tuntas)
+    if (dur > 0.5 && current >= dur - 0.15) {
       handleDismiss();
     }
   };
 
-  const handleManualPlayTap = (e?: React.MouseEvent) => {
-    if (e) e.stopPropagation();
+  const handleScreenTouch = () => {
     const v = videoRef.current;
-    if (v) {
+    if (v && v.paused) {
       v.muted = true;
-      v.play()
-        .then(() => {
-          setIsPlaying(true);
-          setAutoplayBlocked(false);
-        })
-        .catch(() => {
-          handleDismiss();
-        });
+      v.play().catch(() => handleDismiss());
     } else {
       handleDismiss();
     }
@@ -154,82 +138,26 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     <div
       role="dialog"
       aria-label="Layar Pembuka Sinematik PERSIB"
-      onClick={autoplayBlocked ? () => handleManualPlayTap() : handleDismiss}
-      style={{ backgroundColor: '#040711' }}
+      onClick={handleScreenTouch}
       className={`fixed inset-0 z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer transition-all duration-450 ease-out ${
         isFading
           ? 'opacity-0 scale-105 filter blur-sm pointer-events-none'
           : 'opacity-100 scale-100 filter blur-0'
       }`}
     >
-      {/* Visual Placeholder & Loading Aura: Mencegah layar hitam kosong saat video sedang memuat buffer */}
-      {!isPlaying && (
-        <div className="absolute inset-0 z-0 flex flex-col items-center justify-center p-6 text-center pointer-events-none">
-          <div className="relative flex items-center justify-center mb-6">
-            <div className="absolute -inset-6 rounded-full bg-blue-600/25 blur-2xl animate-pulse" />
-            <img
-              src="/new_persib_logo.jpeg"
-              alt="PERSIB Official Logo"
-              className="w-24 h-24 sm:w-28 sm:h-28 object-contain rounded-full shadow-2xl border-2 border-cyan-400/40 relative z-10"
-            />
-          </div>
-
-          <h3 className="text-white font-black text-sm tracking-widest uppercase mb-1">
-            PERSIB BANDUNG
-          </h3>
-          <p className="text-cyan-300/80 font-mono text-[11px] font-semibold mb-4">
-            Official Club Tracker 2026/2027
-          </p>
-
-          {!autoplayBlocked ? (
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/60 backdrop-blur-md">
-              <Loader2 className="w-3.5 h-3.5 text-cyan-400 animate-spin" />
-              <span className="text-[10px] font-mono font-bold text-cyan-300">
-                Memuat Animasi Sinematik...
-              </span>
-            </div>
-          ) : (
-            <div className="relative z-30 pointer-events-auto mt-2">
-              <button
-                type="button"
-                onClick={(e) => handleManualPlayTap(e)}
-                className="flex items-center gap-2 px-6 py-3 rounded-2xl bg-gradient-to-r from-blue-600 via-cyan-500 to-blue-500 text-slate-950 font-black text-xs shadow-2xl hover:scale-105 active:scale-95 transition-all"
-              >
-                <Play className="w-4 h-4 fill-current text-slate-950" />
-                <span>Putar Video Pembuka</span>
-              </button>
-              <span className="block text-[10px] text-slate-400 mt-2 font-medium">
-                Ketuk untuk menyaksikan animasi stadion GBLA
-              </span>
-            </div>
-          )}
-        </div>
-      )}
-
-      {/* Container Video Sinematik Layar Penuh */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden bg-black pointer-events-none">
+      {/* Container Video Sinematik Layar Penuh Langsung Tanpa Latar Hitam / Copy Teks Tambahan */}
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none">
         <video
           ref={videoRef}
           src="/Stadium_scene_logo_animation_6f37cafb.mp4"
-          poster="/new_persib_logo.jpeg"
           autoPlay
           muted
           playsInline
           preload="auto"
-          onPlaying={() => {
-            setIsPlaying(true);
-            setAutoplayBlocked(false);
-          }}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
-          onError={() => {
-            // Jika browser gagal membaca video, segera dismiss tanpa menggantung di layar hitam
-            handleDismiss();
-          }}
-          style={{ backgroundColor: '#000000' }}
-          className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
-            isPlaying ? 'opacity-100' : 'opacity-0'
-          }`}
+          onError={handleDismiss}
+          className="w-full h-full object-cover object-center"
         />
       </div>
 
@@ -253,17 +181,17 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         </button>
       </div>
 
-      {/* Bagian Bawah: Progress Bar Halus & Petunjuk Ketuk */}
+      {/* Bagian Bawah: Progress Bar Halus & Petunjuk Sentuh */}
       <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 pb-6 space-y-2">
         {/* Progress Bar Video */}
-        <div className="w-full h-1 bg-white/10 rounded-full overflow-hidden backdrop-blur-xs">
+        <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden backdrop-blur-xs">
           <div
             className="h-full bg-gradient-to-r from-blue-500 to-cyan-400 transition-all duration-100 ease-linear rounded-full"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
 
-        <div className="flex items-center justify-between text-[9px] font-mono text-slate-400/70 px-0.5">
+        <div className="flex items-center justify-between text-[9px] font-mono text-white/80 px-0.5 drop-shadow-sm">
           <span>Stadion GBLA Sinematik</span>
           <span>Ketuk di mana saja untuk lewati</span>
         </div>
