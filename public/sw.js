@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v92 (Fix Scheduled Match Full Time False Trigger Guard)
-const CACHE_NAME = 'persib-tracker-pwa-v92';
+// PERSIB TRACKER - PWA Service Worker v93 (Fix Video Splash Buffer Deadlock & Visual Aura)
+const CACHE_NAME = 'persib-tracker-pwa-v93';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
