@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v84 (Dynamic Real-Time Google News RSS Grounding for Chat AI)
-const CACHE_NAME = 'persib-tracker-pwa-v84';
+// PERSIB TRACKER - PWA Service Worker v85 (Fix Player Profile Back Button Trigger & Navigation)
+const CACHE_NAME = 'persib-tracker-pwa-v85';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

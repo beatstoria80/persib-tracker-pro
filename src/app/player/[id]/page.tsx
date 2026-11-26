@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useRef, useEffect } from 'react';
+import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
 import { OFFICIAL_SQUAD_2026_2027, getPlayerAvatar } from '@/data/persib-data';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
@@ -80,6 +81,24 @@ export default function PlayerVideoProfilePage() {
       await navigator.clipboard.writeText(url);
       setCopiedToast('Link profil berhasil disalin!');
       setTimeout(() => setCopiedToast(null), 2500);
+    }
+  };
+
+  const handleBackToDashboard = (e?: React.MouseEvent) => {
+    if (e) {
+      e.preventDefault();
+      e.stopPropagation();
+    }
+    try {
+      if (typeof window !== 'undefined' && window.history.length > 1) {
+        router.back();
+      } else {
+        router.push('/');
+      }
+    } catch {
+      if (typeof window !== 'undefined') {
+        window.location.href = '/';
+      }
     }
   };
 
@@ -221,18 +240,20 @@ export default function PlayerVideoProfilePage() {
         )}
 
         {/* REFACTOR: Ultra-minimalist top navigation header */}
-        <header className="relative z-20 px-4 pt-5 pb-3 flex items-center justify-between">
-          <button
-            onClick={() => router.push('/')}
-            className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/80 transition-all active:scale-95"
+        <header className="relative z-40 px-4 pt-5 pb-3 flex items-center justify-between pointer-events-auto">
+          <Link
+            href="/"
+            onClick={handleBackToDashboard}
+            className="w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 active:scale-90 border border-white/25 backdrop-blur-md flex items-center justify-center text-white hover:text-cyan-300 transition-all cursor-pointer shadow-lg z-50 pointer-events-auto"
             aria-label="Kembali ke Dashboard"
           >
             <ArrowLeft className="w-5 h-5" />
-          </button>
+          </Link>
 
           <button
+            type="button"
             onClick={handleShare}
-            className="w-10 h-10 rounded-full bg-black/50 backdrop-blur-md border border-white/20 flex items-center justify-center text-white hover:bg-black/80 transition-all active:scale-95"
+            className="w-10 h-10 rounded-full bg-black/60 hover:bg-black/90 active:scale-90 border border-white/25 backdrop-blur-md flex items-center justify-center text-white hover:text-cyan-300 transition-all cursor-pointer shadow-lg z-50 pointer-events-auto"
             aria-label="Bagikan Profil"
           >
             <Share2 className="w-4 h-4" />
