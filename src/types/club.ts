@@ -338,4 +338,6 @@ export interface FeedNewsItem {
   stats?: string;
   timestamp: string;
   tag: string;
+  source?: string;
+  link?: string;
 }

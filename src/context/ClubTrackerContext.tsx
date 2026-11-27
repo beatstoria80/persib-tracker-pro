@@ -119,41 +119,55 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [groqBulletin, setGroqBulletin] = useState<string>(
     '⭐ [ACL TWO GRUP E] Kemenangan Bersejarah! PERSIB Bandung 3 - 1 FC Seoul (Full Time di GBLA). Gol Mariano Peralta (6\'), Luka Menalo (41\'), dan Beckham Putra (78\') membawa Maung Bandung sapu bersih 5 laga dengan 15 poin sempurna resmi mengunci status Juara Grup E & tiket 16 Besar Asia! 🇮🇩 [BRI SUPER LEAGUE] Pekan 11: Persita Tangerang vs PERSIB Bandung (Minggu, 29 Nov 19:00 WIB di Indomilk Arena) pasca mengantongi 19 poin di peringkat 4 klasemen papan atas. 🌏 [SHOPEE CUP ASEAN] Puncak klasemen Grup B dengan surplus fantastis +8 gol dari 2 kemenangan beruntun bersiap melawat ke markas Lion City Sailors Singapura!'
   );
-  const [multiCompetitionFeeds, setMultiCompetitionFeeds] = useState<FeedNewsItem[]>([
-    {
-      id: 'feed-acl2',
-      competition: 'ACL Two',
-      badge: '⭐ ACL TWO 2026/27 GRUP E',
-      title: 'PERSIB Bandung Tumbangkan FC Seoul 3-1, Rekor Sempurna 15 Poin Juara Grup E & Tiket 16 Besar',
-      detail:
-        'Kemenangan bersejarah Maung Bandung di Stadion GBLA tercipta lewat gol pembuka kilat Mariano Peralta (6\'), sontekan kemelut Luka Menalo (41\'), dan penyelesaian sudut sempit Beckham Putra (78\'). FC Seoul hanya mampu membalas lewat Leonardo Ruiz (37\') sebelum Moon Seon-min dikartu merah menit ke-70. Rekor 100% sapu bersih 5 kemenangan memastikan PERSIB mengunci gelar Juara Grup E dan melangkah mantap ke Babak 16 Besar Asia!',
-      stats: '5 Laga • 5 Menang • 15 Poin • Gol 8-2 (+6) • Juara Grup E',
-      timestamp: 'Live WIB',
-      tag: 'Full Time Laga Asia',
-    },
-    {
-      id: 'feed-super-league',
-      competition: 'Super League',
-      badge: '🇮🇩 BRI SUPER LEAGUE 2026/27',
-      title: 'Pekan 11 Menanti di Indomilk Arena: PERSIB Bidik Puncak Klasemen Kontra Persita Tangerang',
-      detail:
-        'Setelah kemenangan dramatis 2-1 atas Bali United dan mengemas 19 poin di peringkat 4 klasemen sementara, armada Bojan Hodak mempersiapkan strategi rotasi skuad menghadapi Persita di Tangerang pada Minggu, 29 November 2026 pukul 19:00 WIB. Poros Thom Haye (raja assist liga dengan 7 assist) bersama Marc Klok siap menjadi motor pengatur tempo serangan untuk merangsek ke puncak klasemen.',
-      stats: 'Pekan 10 • 19 Poin • Peringkat 4 • Top Assist Thom Haye (7)',
-      timestamp: 'Live WIB',
-      tag: 'Jadwal Laga Domestik',
-    },
-    {
-      id: 'feed-shopee-cup',
-      competition: 'Shopee Cup',
-      badge: '🌏 SHOPEE CUP ASEAN 2026/27',
-      title: 'PERSIB Kokoh di Puncak Grup B dengan Surplus 8 Gol, Bersiap Hadapi Lion City Sailors di Singapura',
-      detail:
-        'Dominasi Maung Bandung di turnamen antarklub Asia Tenggara berlanjut impresif dengan 2 kemenangan meyakinkan (6 poin, selisih gol 9-1). Produktivitas Balša Sekulić (3 gol) menjadi momok menakutkan pertahanan lawan. Laga berikutnya dijadwalkan bertandang ke Stadion Jalan Besar Singapura menghadapi Lion City Sailors pada 10 Desember 2026.',
-      stats: '2 Laga • 6 Poin • Selisih Gol +8 • Peringkat 1 Grup B',
-      timestamp: 'Live WIB',
-      tag: 'Klasemen ASEAN',
-    },
-  ]);
+  const [multiCompetitionFeeds, setMultiCompetitionFeeds] = useState<FeedNewsItem[]>(() => {
+    if (typeof window !== 'undefined') {
+      try {
+        const cached = localStorage.getItem('persib_live_feeds_cache_v2');
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        }
+      } catch {}
+    }
+    return [
+      {
+        id: 'feed-acl2',
+        competition: 'ACL Two',
+        badge: '🏆 AFC Champions League Two',
+        title: 'PERSIB Kunci Puncak Klasemen Grup E AFC Champions League Two',
+        detail:
+          'PERSIB Bandung mencatatkan performa gemilang di ajang AFC Champions League Two 2026/2027 Grup E. Taktik disiplin Bojan Hodak serta efektivitas transisi bertahan-ke-menyerang menjadi kunci kekuatan Maung Bandung bersaing di kancah antarklub bergengsi Asia.',
+        stats: 'Grup E Asia • Rekor Sempurna 100% • Status Lolos Babak 16 Besar',
+        timestamp: 'Live Feed',
+        tag: 'ACL Two',
+        source: 'AFC Official',
+      },
+      {
+        id: 'feed-super-league',
+        competition: 'Super League',
+        badge: '🇮🇩 BRI Super League',
+        title: 'Persaingan Papan Atas BRI Super League 2026/2027',
+        detail:
+          'Skuad Pangeran Biru terus menjaga fokus tinggi dan kesiapan fisik dalam persaingan ketat klasemen papan atas BRI Super League 2026/2027. Rotasi pemain dan kematangan strategi disiapkan guna mengamankan target poin maksimal di setiap pertandingan.',
+        stats: 'Papan Atas Klasemen • Target Juara Bertahan',
+        timestamp: 'Live Feed',
+        tag: 'Super League',
+        source: 'Liga Indonesia',
+      },
+      {
+        id: 'feed-shopee-cup',
+        competition: 'Shopee Cup',
+        badge: '🌏 Shopee Cup ASEAN',
+        title: 'PERSIB Tampil Produktif di Shopee Cup ASEAN Club Championship',
+        detail:
+          'Di panggung Shopee Cup ASEAN Club Championship 2026/2027, PERSIB Bandung memimpin persaingan Grup B dengan agresivitas lini serang dan pertahanan solid. Armada Bojan Hodak mempertahankan momentum positif menyongsong laga lanjutan antarklub Asia Tenggara.',
+        stats: 'Puncak Grup B • Selisih Gol Positif',
+        timestamp: 'Live Feed',
+        tag: 'Shopee Cup',
+        source: 'ASEAN United FC',
+      },
+    ];
+  });
 
   const lastVerifiedDate = 'AFC Live Center & Google Sports (Real-Time)';
 
@@ -225,6 +239,12 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
           }
           if (payload.multiCompetitionFeeds && payload.multiCompetitionFeeds.length > 0) {
             setMultiCompetitionFeeds(payload.multiCompetitionFeeds);
+            try {
+              localStorage.setItem(
+                'persib_live_feeds_cache_v2',
+                JSON.stringify(payload.multiCompetitionFeeds)
+              );
+            } catch {}
           }
 
           const nowTime =
@@ -291,6 +311,12 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
             }
             if (payload.multiCompetitionFeeds && payload.multiCompetitionFeeds.length > 0) {
               setMultiCompetitionFeeds(payload.multiCompetitionFeeds);
+              try {
+                localStorage.setItem(
+                  'persib_live_feeds_cache_v2',
+                  JSON.stringify(payload.multiCompetitionFeeds)
+                );
+              } catch {}
             }
             if (payload.lastUpdated) {
               setLastSyncedAt(payload.lastUpdated);
@@ -301,6 +327,19 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
         console.warn('Groq backend data sync error:', e);
       }
     };
+
+    // Fast initial fetch for dedicated live Persib feeds from Google News RSS
+    fetch(`/api/feeds?t=${Date.now()}`)
+      .then((r) => r.json())
+      .then((res) => {
+        if (res?.success && Array.isArray(res.feeds) && res.feeds.length > 0 && isSubscribed) {
+          setMultiCompetitionFeeds(res.feeds);
+          try {
+            localStorage.setItem('persib_live_feeds_cache_v2', JSON.stringify(res.feeds));
+          } catch {}
+        }
+      })
+      .catch(() => {});
 
     // Trigger initial background fetch asynchronously & poll every 5s for live match updates (backed by 8s server cache)
     const timeout = setTimeout(() => {

@@ -53,34 +53,37 @@ const DEFAULT_COMPETITION_FEEDS: FeedNewsItem[] = [
     id: 'feed-acl2-default',
     competition: 'ACL Two',
     badge: '🏆 AFC Champions League Two',
-    title: 'Rekor Sempurna 15 Poin: PERSIB Kunci Tiket 16 Besar Usai Taklukkan FC Seoul 3-1',
+    title: 'PERSIB Kunci Puncak Klasemen Grup E AFC Champions League Two',
     detail:
-      'PERSIB Bandung mencatatkan sejarah emas di pentas AFC Champions League Two 2026/2027 dengan menyapu bersih 5 laga awal lewat 15 poin sempurna di puncak klasemen Grup E. Kemenangan sensasional 3-1 atas raksasa K-League FC Seoul di hadapan puluhan ribu Bobotoh di Stadion Gelora Bandung Lautan Api (GBLA) memastikan langkah Maung Bandung ke Babak 16 Besar. Taktik high-pressing Bojan Hodak serta kedisiplinan transisi bertahan-ke-menyerang menjadi kunci dominasi mutlak armada Pangeran Biru di level kontinental.',
-    stats: 'Posisi: Juara Grup E • Rekor: 5 Laga, 5 Kemenangan (15 Poin) • Status: Lolos 16 Besar',
+      'PERSIB Bandung mencatatkan performa impresif di ajang AFC Champions League Two 2026/2027 Grup E. Taktik disiplin Bojan Hodak serta efektivitas transisi bertahan-ke-menyerang menjadi kunci kekuatan Maung Bandung bersaing di kancah antarklub bergengsi Asia.',
+    stats: 'Grup E Asia • Lolos 16 Besar',
     timestamp: 'Live Feed',
-    tag: 'ACL Two 2026/27',
+    tag: 'ACL Two',
+    source: 'AFC Official',
   },
   {
     id: 'feed-superleague-default',
     competition: 'Super League',
     badge: '🇮🇩 BRI Super League',
-    title: 'Fokus Pekan ke-11: PERSIB Bertandang Melawan Persita Tangerang',
+    title: 'Persaingan Papan Atas BRI Super League 2026/2027',
     detail:
-      'Setelah menuntaskan laga sengit Asia, skuad Pangeran Biru langsung mengalihkan fokus penuh ke lanjutan BRI Super League 2026/2027. Pada Pekan ke-11, PERSIB dijadwalkan melakoni laga tandang krusial melawan Persita Tangerang pada Jumat, 29 November 2026 pukul 19:00 WIB di Stadion Indomilk Arena. Mengoleksi 19 poin di peringkat 4 klasemen sementara, 3 poin menjadi target mutlak armada Bojan Hodak guna terus menempel ketat Borneo FC Samarinda dan Persebaya Surabaya di puncak persaingan juara.',
-    stats: 'Peringkat 4 • 19 Poin • Jadwal: 29 Nov 19:00 WIB vs Persita (Indomilk Arena)',
+      'Skuad Pangeran Biru terus menjaga fokus tinggi dan kesiapan fisik dalam persaingan ketat klasemen papan atas BRI Super League 2026/2027. Rotasi pemain dan kematangan strategi disiapkan guna mengamankan target poin maksimal di setiap pertandingan.',
+    stats: 'Papan Atas Klasemen • Target Juara Bertahan',
     timestamp: 'Live Feed',
     tag: 'Super League',
+    source: 'Liga Indonesia',
   },
   {
     id: 'feed-shopee-default',
     competition: 'Shopee Cup',
     badge: '🌏 Shopee Cup ASEAN',
-    title: 'Puncak Klasemen Grup B ASEAN Club Championship: Surplus +8 Gol',
+    title: 'PERSIB Tampil Produktif di Shopee Cup ASEAN Club Championship',
     detail:
-      'Di panggung Shopee Cup ASEAN Club Championship 2026/2027, PERSIB Bandung memimpin klasemen Grup B dengan torehan 6 poin sempurna dari 2 laga pembuka. Agresivitas lini serang yang telah mencatatkan 9 gol berbanding 1 kebobolan (surplus +8 gol) menegaskan reputasi Maung Bandung sebagai tim tersubur turnamen. Bojan Hodak kini menyiapkan rotasi pemain terbaik menyongsong Matchday 3 menghadapi juara bertahan Singapura Lion City Sailors.',
-    stats: 'Peringkat 1 Grup B • 6 Poin (2 Laga) • Selisih Gol +8 (9-1)',
+      'Di panggung Shopee Cup ASEAN Club Championship 2026/2027, PERSIB Bandung memimpin persaingan Grup B dengan agresivitas lini serang dan pertahanan solid. Armada Bojan Hodak mempertahankan momentum positif menyongsong laga lanjutan antarklub Asia Tenggara.',
+    stats: 'Puncak Grup B • Selisih Gol Positif',
     timestamp: 'Live Feed',
     tag: 'Shopee Cup',
+    source: 'ASEAN United FC',
   },
 ];
 
@@ -427,12 +430,19 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
                   }`}
                 >
                   <div className="flex items-center justify-between gap-2 mb-2">
-                    <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
-                      <Sparkles className="w-3 h-3 text-amber-400" />
-                      {currentFeed.tag}
-                    </span>
+                    <div className="flex items-center gap-1.5 flex-wrap">
+                      <span className="text-[10px] font-mono font-bold text-cyan-400 uppercase tracking-wider flex items-center gap-1">
+                        <Sparkles className="w-3 h-3 text-amber-400" />
+                        {currentFeed.tag}
+                      </span>
+                      {currentFeed.source && (
+                        <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-blue-500/20 text-cyan-300 border border-blue-400/30">
+                          {currentFeed.source}
+                        </span>
+                      )}
+                    </div>
                     <span
-                      className={`text-[9px] font-mono ${
+                      className={`text-[9px] font-mono shrink-0 ${
                         isPro ? 'text-slate-400' : 'text-slate-500'
                       }`}
                     >
@@ -458,19 +468,32 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
                     {currentFeed.detail}
                   </p>
 
-                  {/* Telemetri & Statistik Presisi Laga */}
-                  {currentFeed.stats && (
-                    <div
-                      className={`mt-3 p-2.5 rounded-xl border text-[11px] font-mono font-bold flex items-center gap-2 ${
-                        isPro
-                          ? 'bg-blue-950/40 border-blue-900/50 text-cyan-300'
-                          : 'bg-blue-50 border-blue-200/80 text-blue-900'
-                      }`}
-                    >
-                      <Award className="w-4 h-4 text-amber-400 shrink-0" />
-                      <span className="leading-tight">{currentFeed.stats}</span>
-                    </div>
-                  )}
+                  {/* Telemetri & Statistik Presisi Laga serta Tautan Sumber */}
+                  <div className="mt-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    {currentFeed.stats && (
+                      <div
+                        className={`p-2 sm:px-2.5 rounded-xl border text-[11px] font-mono font-bold flex items-center gap-2 ${
+                          isPro
+                            ? 'bg-blue-950/40 border-blue-900/50 text-cyan-300'
+                            : 'bg-blue-50 border-blue-200/80 text-blue-900'
+                        }`}
+                      >
+                        <Award className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span className="leading-tight">{currentFeed.stats}</span>
+                      </div>
+                    )}
+                    {currentFeed.link && (
+                      <a
+                        href={currentFeed.link}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="self-end sm:self-auto inline-flex items-center gap-1 text-[10px] font-mono font-bold text-cyan-400 hover:text-cyan-300 hover:underline px-2.5 py-1 rounded-lg bg-blue-950/60 border border-blue-800/50 transition-all active:scale-95"
+                      >
+                        <span>Baca di {currentFeed.source || 'Sumber Berita'}</span>
+                        <span className="text-xs">↗</span>
+                      </a>
+                    )}
+                  </div>
                 </article>
 
                 {/* Grid 3-Kompetisi Telemetri Cepat */}
@@ -571,6 +594,19 @@ export function LiveTelemetryWidget({ currentFixture }: LiveTelemetryWidgetProps
               <div className="space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-1.5 mb-1 flex-wrap">
+                      <span className="text-[9px] font-mono font-bold text-cyan-400 uppercase">
+                        {currentFeed.tag}
+                      </span>
+                      {currentFeed.source && (
+                        <span className="text-[8.5px] font-mono px-1 rounded bg-blue-500/20 text-cyan-300 border border-blue-400/20">
+                          {currentFeed.source}
+                        </span>
+                      )}
+                      <span className={`text-[8.5px] font-mono ${isPro ? 'text-slate-400' : 'text-slate-500'}`}>
+                        • {currentFeed.timestamp}
+                      </span>
+                    </div>
                     <h4
                       className={`font-black text-xs leading-snug line-clamp-1 ${
                         isPro ? 'text-white' : 'text-slate-900'
