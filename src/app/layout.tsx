@@ -47,6 +47,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="id" style={{ backgroundColor: "#050811" }} className={`${plusJakarta.variable} font-sans`}>
+      <head>
+        <link
+          rel="preload"
+          href="/Stadium_scene_logo_animation_6f37cafb.mp4"
+          as="video"
+          type="video/mp4"
+        />
+      </head>
       <body
         style={{ backgroundColor: "#050811", margin: 0, padding: 0 }}
         className="antialiased min-h-screen bg-[#050811]"

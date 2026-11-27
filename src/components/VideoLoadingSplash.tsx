@@ -1,6 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import Image from 'next/image';
 import { ArrowRight } from 'lucide-react';
 
 interface VideoLoadingSplashProps {
@@ -10,12 +11,11 @@ interface VideoLoadingSplashProps {
 export const SPLASH_SESSION_KEY = 'persib_nav_from_player';
 
 export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
-  // REFACTOR: Hydration-safe client mounting state to eliminate SSR/CSR DOM mismatches
   const [isMounted, setIsMounted] = useState<boolean>(false);
-  // REFACTOR: Default to false during initial SSR to guarantee pristine hydration consistency
   const [alreadyShown, setAlreadyShown] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const [isFading, setIsFading] = useState<boolean>(false);
+  const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -24,7 +24,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     onFinishRef.current = onFinish;
   }, [onFinish]);
 
-  // REFACTOR: Relocate sessionStorage inspection and mutative cleanup strictly inside useEffect to avoid impure render side-effects
+  // Session storage check to skip splash when returning from player page
   useEffect(() => {
     setIsMounted(true);
     try {
@@ -45,14 +45,13 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const handleDismiss = useCallback(() => {
     if (isFading) return;
     setIsFading(true);
-    // Trigger onFinish synchronously with fade-out
     if (onFinishRef.current) onFinishRef.current();
     setTimeout(() => {
       setIsVisible(false);
-    }, 400);
+    }, 350);
   }, [isFading]);
 
-  // Lock body scroll and prevent touch bounce / drag while opening splash is active
+  // Lock body scroll and prevent touch bounce while opening splash is active
   useEffect(() => {
     if (!isVisible || alreadyShown || !isMounted) return;
     const prevOverflow = document.body.style.overflow;
@@ -68,8 +67,18 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     };
   }, [isVisible, alreadyShown, isMounted]);
 
-  // Imperative Autoplay with hardware acceleration attributes
-  const attemptPlay = useCallback(() => {
+  // Safe timeout: Dismiss automatically after 5.5 seconds if video stalls
+  useEffect(() => {
+    if (!isVisible || alreadyShown || !isMounted) return;
+    const fallbackTimer = setTimeout(() => {
+      handleDismiss();
+    }, 5500);
+
+    return () => clearTimeout(fallbackTimer);
+  }, [isVisible, alreadyShown, isMounted, handleDismiss]);
+
+  // Instant Autoplay without calling v.load() to avoid resetting media decoder
+  useEffect(() => {
     if (alreadyShown || !isMounted) return;
     const v = videoRef.current;
     if (!v) return;
@@ -77,67 +86,35 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     v.muted = true;
     v.defaultMuted = true;
     v.playsInline = true;
-    v.playbackRate = 1.0;
-    v.setAttribute('muted', '');
-    v.setAttribute('playsinline', '');
-    v.setAttribute('webkit-playsinline', 'true');
-    v.setAttribute('x5-playsinline', 'true');
 
-    try {
-      v.load();
-    } catch {}
+    const playVideo = () => {
+      if (v && v.paused) {
+        v.muted = true;
+        v.play().catch(() => {});
+      }
+    };
 
-    const playPromise = v.play();
-    if (playPromise !== undefined) {
-      playPromise
-        .catch(() => {
-          if (v) {
-            v.muted = true;
-            v.play().catch(() => {});
-          }
-        });
-    }
-  }, [alreadyShown, isMounted]);
+    // Immediate attempt
+    playVideo();
 
-  // Tap anywhere on the screen to directly start or resume video playback
-  const handleScreenTap = useCallback(() => {
-    const v = videoRef.current;
-    if (v) {
-      v.muted = true;
-      v.defaultMuted = true;
-      v.play().catch(() => {});
-    }
-  }, []);
+    // Event listeners to start as soon as first frames are ready
+    v.addEventListener('canplay', playVideo, { once: true });
+    v.addEventListener('loadeddata', playVideo, { once: true });
 
-  useEffect(() => {
-    if (alreadyShown || !isMounted) return;
-    const v = videoRef.current;
-    if (!v) return;
-
-    if (v.readyState >= 1) {
-      attemptPlay();
-    } else {
-      v.addEventListener('loadedmetadata', attemptPlay, { once: true });
-      v.addEventListener('canplay', attemptPlay, { once: true });
-    }
-
-    attemptPlay();
-
+    // One-time interaction fallback in case mobile OS requires user gesture
     const onUserInteraction = () => {
-      handleScreenTap();
+      playVideo();
     };
     window.addEventListener('touchstart', onUserInteraction, { once: true, passive: true });
     window.addEventListener('click', onUserInteraction, { once: true, passive: true });
 
     return () => {
-      if (v) {
-        v.removeEventListener('loadedmetadata', attemptPlay);
-        v.removeEventListener('canplay', attemptPlay);
-      }
+      v.removeEventListener('canplay', playVideo);
+      v.removeEventListener('loadeddata', playVideo);
       window.removeEventListener('touchstart', onUserInteraction);
       window.removeEventListener('click', onUserInteraction);
     };
-  }, [alreadyShown, isMounted, attemptPlay, handleScreenTap]);
+  }, [alreadyShown, isMounted]);
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
@@ -153,7 +130,15 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     }
   };
 
-  // REFACTOR: Guard return during pre-hydration and dismissal to preserve zero-overhead component unmounting
+  const handleScreenTap = () => {
+    const v = videoRef.current;
+    if (v && v.paused) {
+      v.muted = true;
+      v.defaultMuted = true;
+      v.play().catch(() => {});
+    }
+  };
+
   if (!isMounted || alreadyShown || !isVisible) return null;
 
   return (
@@ -167,12 +152,39 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         overscrollBehavior: 'none',
         WebkitUserSelect: 'none',
       }}
-      className={`fixed inset-0 w-screen h-screen z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer touch-none overscroll-none transition-all duration-400 ease-out bg-gradient-to-b from-[#091b38] via-[#050f22] to-[#020510] ${
+      className={`fixed inset-0 w-screen h-screen z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer touch-none overscroll-none transition-all duration-400 ease-out bg-[#040914] ${
         isFading
           ? 'opacity-0 scale-105 filter blur-xs pointer-events-none'
           : 'opacity-100 scale-100 filter blur-0'
       }`}
     >
+      {/* Background Ambient Poster to eliminate any black screen while video initializes */}
+      <div
+        className={`absolute inset-0 w-full h-full flex flex-col items-center justify-center pointer-events-none transition-opacity duration-500 ease-out ${
+          isVideoPlaying ? 'opacity-0' : 'opacity-100'
+        }`}
+      >
+        <div className="relative flex flex-col items-center gap-4">
+          <div className="relative w-24 h-24 rounded-full overflow-hidden border-2 border-cyan-400/50 shadow-[0_0_40px_rgba(6,182,212,0.4)] animate-pulse">
+            <Image
+              src="/new_persib_logo.jpeg"
+              alt="PERSIB Logo"
+              fill
+              priority
+              className="object-cover"
+            />
+          </div>
+          <div className="flex flex-col items-center text-center">
+            <span className="text-white font-black tracking-widest text-sm uppercase drop-shadow">
+              PERSIB BANDUNG
+            </span>
+            <span className="text-cyan-400 text-[10px] font-bold tracking-wider">
+              1933 • JUARA INDONESIA
+            </span>
+          </div>
+        </div>
+      </div>
+
       {/* Video Sinematik Layar Penuh Stadium_scene_logo_animation_6f37cafb.mp4 */}
       <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none touch-none overscroll-none flex items-center justify-center">
         <video
@@ -186,13 +198,14 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           disableRemotePlayback
           controls={false}
           draggable={false}
+          onPlaying={() => setIsVideoPlaying(true)}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
           onError={handleDismiss}
-          className="w-full h-full object-cover object-center select-none pointer-events-none"
-        >
-          <source src="/Stadium_scene_logo_animation_6f37cafb.mp4" type="video/mp4" />
-        </video>
+          className={`w-full h-full object-cover object-center select-none pointer-events-none transition-opacity duration-300 ${
+            isVideoPlaying ? 'opacity-100' : 'opacity-0'
+          }`}
+        />
       </div>
 
       {/* Top Header: Lewati Button */}
@@ -200,7 +213,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         <button
           type="button"
           onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-            // REFACTOR: Strongly typed click event handler for skip button
             e.stopPropagation();
             handleDismiss();
           }}

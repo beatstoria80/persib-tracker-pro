@@ -45,7 +45,20 @@ const nextConfig: NextConfig = {
       ],
     },
     {
-      source: "/((?!api|_next/static|_next/image|favicon.ico|manifest.json|sw.js).*)",
+      source: "/:path*.mp4",
+      headers: [
+        {
+          key: "Cache-Control",
+          value: "public, max-age=31536000, immutable",
+        },
+        {
+          key: "Accept-Ranges",
+          value: "bytes",
+        },
+      ],
+    },
+    {
+      source: "/((?!api|_next/static|_next/image|favicon.ico|manifest.json|sw.js|.*\\.mp4$).*)",
       headers: [
         {
           key: "Cache-Control",
