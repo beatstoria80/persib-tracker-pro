@@ -245,34 +245,20 @@ export default function PlayerVideoProfilePage() {
     <div className="min-h-screen w-full bg-[#050811] text-white flex justify-center items-start overflow-hidden">
       {/* 430px Mobile-First App Canvas */}
       <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-[#060c18]">
-        {/* Background Looping Video Stream with Instant Crisp Visual Poster (Zero Black Screen Delay) */}
-        <div className="absolute inset-0 z-0 overflow-hidden bg-gradient-to-b from-[#09162e] via-[#050e20] to-[#03060f] flex items-center justify-center">
+        {/* Background Looping Video Stream - Authentic Player Video Only (Zero Photo Blockers) */}
+        <div 
+          onClick={() => {
+            const v = videoRef.current;
+            if (v) {
+              v.muted = true;
+              v.defaultMuted = true;
+              v.play().catch(() => {});
+            }
+          }}
+          className="absolute inset-0 z-0 overflow-hidden bg-gradient-to-b from-[#09162e] via-[#050e20] to-[#03060f] flex items-center justify-center cursor-pointer"
+        >
           {/* Ambient stadium lighting gradient */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/35 via-slate-950/80 to-black pointer-events-none" />
-
-          {/* Ambient Blurred Aura from player avatar */}
-          {activePlayer.avatarUrl && (
-            <img
-              src={activePlayer.avatarUrl}
-              alt=""
-              className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-25 scale-125 select-none pointer-events-none"
-            />
-          )}
-
-          {/* Instant High-Resolution Player Visual Poster (Displays at 0ms so user NEVER sees black void) */}
-          {activePlayer.avatarUrl && (
-            <div
-              className={`absolute inset-0 z-0 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${
-                isVideoPlaying ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
-              }`}
-            >
-              <img
-                src={activePlayer.avatarUrl}
-                alt={activePlayer.name}
-                className="w-full h-full object-contain filter drop-shadow-[0_0_35px_rgba(37,99,235,0.4)] scale-90"
-              />
-            </div>
-          )}
 
           <video
             ref={videoRef}
@@ -285,10 +271,10 @@ export default function PlayerVideoProfilePage() {
             preload="auto"
             disablePictureInPicture
             disableRemotePlayback
-            className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
-              isVideoPlaying ? 'opacity-100' : 'opacity-90'
-            }`}
-          />
+            className="w-full h-full object-cover object-center"
+          >
+            <source src={videoSource} type="video/mp4" />
+          </video>
 
           {/* Subtle Top & Bottom Gradient (Unobtrusive, Keeps Video Crisp & Unblurred) */}
           <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />

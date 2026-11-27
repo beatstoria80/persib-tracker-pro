@@ -110,6 +110,21 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     }
   }, [alreadyShown]);
 
+  // Tap anywhere on the screen to directly start or resume video playback
+  const handleScreenTap = useCallback(() => {
+    const v = videoRef.current;
+    if (v) {
+      v.muted = true;
+      v.defaultMuted = true;
+      v.play()
+        .then(() => {
+          setIsPlaying(true);
+          setAutoplayBlocked(false);
+        })
+        .catch(() => {});
+    }
+  }, []);
+
   useEffect(() => {
     if (alreadyShown) return;
     const v = videoRef.current;
@@ -124,22 +139,21 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
 
     attemptPlay();
 
-    // Safety fallback: only if video is neither playing nor user prompted
-    let fallbackTimer: NodeJS.Timeout | null = null;
-    if (!isPlaying && !autoplayBlocked) {
-      fallbackTimer = setTimeout(() => {
-        handleDismissRef.current();
-      }, 7000);
-    }
+    const onUserInteraction = () => {
+      handleScreenTap();
+    };
+    window.addEventListener('touchstart', onUserInteraction, { once: true, passive: true });
+    window.addEventListener('click', onUserInteraction, { once: true, passive: true });
 
     return () => {
-      if (fallbackTimer) clearTimeout(fallbackTimer);
       if (v) {
         v.removeEventListener('loadedmetadata', attemptPlay);
         v.removeEventListener('canplay', attemptPlay);
       }
+      window.removeEventListener('touchstart', onUserInteraction);
+      window.removeEventListener('click', onUserInteraction);
     };
-  }, [alreadyShown, attemptPlay, isPlaying, autoplayBlocked]);
+  }, [alreadyShown, attemptPlay, handleScreenTap]);
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
@@ -162,20 +176,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
 
   const handleManualPlayTap = (e: React.MouseEvent) => {
     e.stopPropagation();
-    const v = videoRef.current;
-    if (v) {
-      v.muted = true;
-      v.play()
-        .then(() => {
-          setIsPlaying(true);
-          setAutoplayBlocked(false);
-        })
-        .catch(() => {
-          handleDismiss();
-        });
-    } else {
-      handleDismiss();
-    }
+    handleScreenTap();
   };
 
   if (alreadyShown || !isVisible) return null;
@@ -184,22 +185,21 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     <div
       role="dialog"
       aria-label="Layar Pembuka Sinematik PERSIB"
-      onClick={handleDismiss}
+      onClick={handleScreenTap}
       style={{
-        backgroundColor: '#000000',
         touchAction: 'none',
         userSelect: 'none',
         overscrollBehavior: 'none',
         WebkitUserSelect: 'none',
       }}
-      className={`fixed inset-0 w-screen h-screen z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer touch-none overscroll-none transition-all duration-400 ease-out ${
+      className={`fixed inset-0 w-screen h-screen z-[99999] flex flex-col justify-between overflow-hidden select-none cursor-pointer touch-none overscroll-none transition-all duration-400 ease-out bg-gradient-to-b from-[#091b38] via-[#050f22] to-[#020510] ${
         isFading
           ? 'opacity-0 scale-105 filter blur-xs pointer-events-none'
           : 'opacity-100 scale-100 filter blur-0'
       }`}
     >
       {/* Video Sinematik Layar Penuh Stadium_scene_logo_animation_6f37cafb.mp4 */}
-      <div className="absolute inset-0 w-full h-full overflow-hidden bg-black pointer-events-none select-none touch-none overscroll-none">
+      <div className="absolute inset-0 w-full h-full overflow-hidden pointer-events-none select-none touch-none overscroll-none flex items-center justify-center">
         <video
           ref={videoRef}
           src="/Stadium_scene_logo_animation_6f37cafb.mp4"
@@ -215,7 +215,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
           onError={handleDismiss}
-          style={{ backgroundColor: '#000000' }}
           className="w-full h-full object-cover object-center select-none pointer-events-none"
         >
           <source src="/Stadium_scene_logo_animation_6f37cafb.mp4" type="video/mp4" />
@@ -237,16 +236,16 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         </button>
       </div>
 
-      {/* Center Action: Fallback Button if Autoplay was restricted by mobile OS */}
-      {autoplayBlocked && !isPlaying && (
+      {/* Center Action: Play button if video not yet playing */}
+      {!isPlaying && (
         <div className="relative z-20 flex flex-col items-center justify-center p-4 pointer-events-auto">
           <button
             type="button"
             onClick={handleManualPlayTap}
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-cyan-400 text-blue-950 font-black text-xs shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer"
+            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-cyan-400 text-blue-950 font-black text-xs shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer animate-pulse"
           >
             <Play className="w-4 h-4 fill-current" />
-            <span>Putar Video Pembuka</span>
+            <span>Putar Video Sinematik</span>
           </button>
         </div>
       )}
@@ -261,7 +260,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         </div>
         <div className="flex justify-between items-center text-[10px] text-slate-400/70 font-medium px-0.5">
           <span>Stadion GBLA Sinematik</span>
-          <span>Ketuk di mana saja untuk lanjut</span>
+          <span>Ketuk layar untuk memutar video</span>
         </div>
       </div>
     </div>
