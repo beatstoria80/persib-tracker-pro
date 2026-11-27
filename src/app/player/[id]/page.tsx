@@ -176,66 +176,40 @@ export default function PlayerVideoProfilePage() {
   // Direct authentic player video resolution from persib-data without hardcoded branch chains
   const videoSource = activePlayer.videoUrl || '/Stadium_scene_logo_animation_6f37cafb.mp4';
 
-  // Imperative Autoplay & Immediate Video Rendering Trigger (Zero Delay on Page Navigation)
+  // Instant Autoplay without calling video.load() to prevent media pipeline reset
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
 
-    // Enforce hardware-accelerated muted inline autoplay for mobile WebView / Safari / Chrome
     video.defaultMuted = true;
     video.muted = true;
     video.playsInline = true;
     video.loop = true;
-    video.setAttribute('muted', '');
-    video.setAttribute('playsinline', '');
-    video.setAttribute('webkit-playsinline', 'true');
-    video.setAttribute('x5-playsinline', 'true');
-
-    try {
-      video.load();
-    } catch {}
 
     const tryPlay = () => {
-      const playPromise = video.play();
-      if (playPromise !== undefined) {
-        playPromise
-          .then(() => setIsVideoPlaying(true))
-          .catch(() => {
-            // Retry muted playback if browser queued or throttled background play
-            if (video) {
-              video.muted = true;
-              video.play().then(() => setIsVideoPlaying(true)).catch(() => {});
-            }
-          });
+      if (video && video.paused) {
+        video.muted = true;
+        video.defaultMuted = true;
+        video.play().then(() => setIsVideoPlaying(true)).catch(() => {});
       }
     };
 
-    if (video.readyState >= 1) {
-      tryPlay();
-    } else {
-      video.addEventListener('loadedmetadata', tryPlay, { once: true });
-      video.addEventListener('loadeddata', tryPlay, { once: true });
-      video.addEventListener('canplay', tryPlay, { once: true });
-    }
+    tryPlay();
 
-    const onPlaying = () => setIsVideoPlaying(true);
-    video.addEventListener('playing', onPlaying, { once: true });
+    video.addEventListener('canplay', tryPlay, { once: true });
+    video.addEventListener('loadeddata', tryPlay, { once: true });
+    video.addEventListener('playing', () => setIsVideoPlaying(true), { once: true });
 
     // Passive touch fallback in case aggressive OS battery saving mode requires first touch
     const resumeOnInteraction = () => {
-      if (video && video.paused) {
-        video.muted = true;
-        video.play().then(() => setIsVideoPlaying(true)).catch(() => {});
-      }
+      tryPlay();
     };
     window.addEventListener('touchstart', resumeOnInteraction, { once: true, passive: true });
     window.addEventListener('click', resumeOnInteraction, { once: true, passive: true });
 
     return () => {
-      video.removeEventListener('loadedmetadata', tryPlay);
-      video.removeEventListener('loadeddata', tryPlay);
       video.removeEventListener('canplay', tryPlay);
-      video.removeEventListener('playing', onPlaying);
+      video.removeEventListener('loadeddata', tryPlay);
       window.removeEventListener('touchstart', resumeOnInteraction);
       window.removeEventListener('click', resumeOnInteraction);
     };
@@ -272,9 +246,7 @@ export default function PlayerVideoProfilePage() {
             disablePictureInPicture
             disableRemotePlayback
             className="w-full h-full object-cover object-center"
-          >
-            <source src={videoSource} type="video/mp4" />
-          </video>
+          />
 
           {/* Subtle Top & Bottom Gradient (Unobtrusive, Keeps Video Crisp & Unblurred) */}
           <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-black/60 to-transparent pointer-events-none" />
@@ -390,14 +362,14 @@ export default function PlayerVideoProfilePage() {
               {/* Row 1: Player Number + Full Name + Verified Badge on left, Contract Pill on right */}
               <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/10">
                 <div className="flex items-center gap-2 min-w-0 flex-1">
-                  <span className="font-mono font-black text-2xl sm:text-3xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0">
+                  <span className="font-mono font-black text-2xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0">
                     #{activePlayer.number}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5 min-w-0">
+                    <h1 className="text-lg sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5 min-w-0">
                       <span className="truncate">{activePlayer.name}</span>
                       {activePlayer.verifiedData && (
-                        <ShieldCheck className="w-4.5 h-4.5 text-cyan-400 shrink-0" />
+                        <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
                       )}
                     </h1>
                   </div>
@@ -411,7 +383,7 @@ export default function PlayerVideoProfilePage() {
                 </div>
               </div>
 
-              {/* Row 2: Position Pill, Asal Negara (Nationality), and Age */}
+              {/* Row 2: Position Pill, Asal Negara (Nationality), and Age (Clean single-line, zero wrap overflow) */}
               <div className="flex items-center gap-1.5 flex-wrap text-xs text-slate-100 font-semibold">
                 <span className="px-2 py-0.5 rounded-md text-[10.5px] font-black uppercase tracking-wider bg-blue-600 text-white font-mono shadow-xs">
                   {activePlayer.position}
@@ -422,21 +394,13 @@ export default function PlayerVideoProfilePage() {
                 </span>
                 <span className="text-white/30">•</span>
                 <span className="text-slate-300 text-[11px] font-medium">Usia {activePlayer.age} Tahun</span>
-                {activePlayer.fullName && activePlayer.fullName !== activePlayer.name && (
-                  <>
-                    <span className="text-white/30">•</span>
-                    <span className="text-slate-400 text-[11px] font-normal truncate max-w-[130px]">
-                      {activePlayer.fullName}
-                    </span>
-                  </>
-                )}
               </div>
 
-              {/* Row 3: Nilai Pasar Terverifikasi (Dedicated Clean Cardlet - No Text Wrapping Collision) */}
+              {/* Row 3: Nilai Pasar Terverifikasi (Compact label, zero collision) */}
               <div className="flex items-center justify-between gap-2 p-2.5 px-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
-                <div className="flex items-center gap-2">
-                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
-                  <span className="text-xs text-slate-300 font-medium">Nilai Pasar Transfermarkt:</span>
+                <div className="flex items-center gap-2 min-w-0">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)] shrink-0" />
+                  <span className="text-xs text-slate-300 font-medium truncate">Nilai Pasar:</span>
                 </div>
                 <div className="shrink-0 text-right">
                   <span className="inline-block px-3 py-1 rounded-xl bg-emerald-500/15 border border-emerald-400/35 text-emerald-300 font-mono font-black text-xs sm:text-sm tracking-tight whitespace-nowrap shadow-xs">
@@ -446,14 +410,14 @@ export default function PlayerVideoProfilePage() {
               </div>
 
               {/* Row 4: Multi-Competition Selector & Dynamic Statistics Grid */}
-              <div className="space-y-2.5 pt-1">
+              <div className="space-y-2 pt-0.5">
                 <div className="flex items-center justify-between gap-2">
-                  <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-cyan-300">
+                  <div className="flex items-center gap-1.5 text-xs font-mono font-bold text-cyan-300 min-w-0">
                     <Trophy className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                     <span className="truncate">Statistik Resmi 2026/2027</span>
                   </div>
-                  <span className="text-[10px] text-slate-300 font-mono bg-white/10 px-2 py-0.5 rounded-md shrink-0">
-                    {activeStats.badge}
+                  <span className="text-[10px] text-cyan-300 font-mono font-bold bg-cyan-950/60 border border-cyan-500/30 px-2 py-0.5 rounded-md shrink-0">
+                    {activeStats.appearances} Laga
                   </span>
                 </div>
 
