@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v101 (Pure Direct Video Opening & Faststart)
-const CACHE_NAME = 'persib-tracker-pwa-v101';
+// PERSIB TRACKER - PWA Service Worker v102 (Pure Direct Video Opening & Faststart)
+const CACHE_NAME = 'persib-tracker-pwa-v102';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',

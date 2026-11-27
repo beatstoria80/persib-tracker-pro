@@ -92,7 +92,7 @@ export default function PlayerVideoProfilePage() {
     }
     try {
       if (typeof window !== 'undefined') {
-        sessionStorage.setItem(SPLASH_SESSION_KEY, 'seen');
+        sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
       }
     } catch {}
     try {
@@ -163,7 +163,6 @@ export default function PlayerVideoProfilePage() {
     video.setAttribute('x5-playsinline', 'true');
 
     const tryPlay = () => {
-      if (!video) return;
       const playPromise = video.play();
       if (playPromise !== undefined) {
         playPromise
@@ -178,9 +177,13 @@ export default function PlayerVideoProfilePage() {
       }
     };
 
-    tryPlay();
-    video.addEventListener('loadeddata', tryPlay, { once: true });
-    video.addEventListener('canplay', tryPlay, { once: true });
+    if (video.readyState >= 1) {
+      tryPlay();
+    } else {
+      video.addEventListener('loadedmetadata', tryPlay, { once: true });
+      video.addEventListener('loadeddata', tryPlay, { once: true });
+      video.addEventListener('canplay', tryPlay, { once: true });
+    }
 
     const onPlaying = () => setIsVideoPlaying(true);
     video.addEventListener('playing', onPlaying, { once: true });
@@ -196,6 +199,7 @@ export default function PlayerVideoProfilePage() {
     window.addEventListener('click', resumeOnInteraction, { once: true, passive: true });
 
     return () => {
+      video.removeEventListener('loadedmetadata', tryPlay);
       video.removeEventListener('loadeddata', tryPlay);
       video.removeEventListener('canplay', tryPlay);
       video.removeEventListener('playing', onPlaying);
@@ -206,9 +210,6 @@ export default function PlayerVideoProfilePage() {
 
   return (
     <div className="min-h-screen w-full bg-[#050811] text-white flex justify-center items-start overflow-hidden">
-      {/* Native React 19 Head Video Preloading for Zero-Delay Startup */}
-      <link rel="preload" as="video" type="video/mp4" href={videoSource} />
-
       {/* 430px Mobile-First App Canvas */}
       <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-[#060c18]">
         {/* Background Looping Video Stream (Direct Looping Video - Zero Generic Void) */}
@@ -236,14 +237,9 @@ export default function PlayerVideoProfilePage() {
             preload="auto"
             disablePictureInPicture
             disableRemotePlayback
-            onPlaying={() => setIsVideoPlaying(true)}
-            onLoadedData={() => {
-              if (videoRef.current && videoRef.current.paused) {
-                videoRef.current.muted = true;
-                videoRef.current.play().catch(() => {});
-              }
-            }}
-            className="w-full h-full object-cover object-center opacity-100"
+            className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
+              isVideoPlaying ? 'opacity-100' : 'opacity-95'
+            }`}
           />
 
           {/* Subtle Top & Bottom Gradient (Unobtrusive, Keeps Video Crisp & Unblurred) */}
