@@ -1073,7 +1073,7 @@ export function MatchCenter() {
                     className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'events'
                         ? 'bg-blue-600 text-white shadow-sm'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     <span>⚽ Gol & Kartu</span>
@@ -1084,7 +1084,7 @@ export function MatchCenter() {
                     className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'lineups'
                         ? 'bg-blue-600 text-white shadow-sm'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     <span>👥 Skuad & XI</span>
@@ -1095,7 +1095,7 @@ export function MatchCenter() {
                     className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'duels'
                         ? 'bg-blue-600 text-white shadow-sm'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     <span>⚔️ Duel 1v1</span>
@@ -1106,7 +1106,7 @@ export function MatchCenter() {
                     className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'pitch'
                         ? 'bg-blue-600 text-white shadow-sm'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     <span>🗺️ Formasi 2D</span>
@@ -1117,7 +1117,7 @@ export function MatchCenter() {
                     className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'stats'
                         ? 'bg-blue-600 text-white shadow-sm'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     <span>📊 Statistik</span>
@@ -1128,7 +1128,7 @@ export function MatchCenter() {
                     className={`shrink-0 px-3 py-1.5 rounded-xl text-[10.5px] font-black transition-all flex items-center justify-center gap-1 whitespace-nowrap ${
                       heroDetailTab === 'highlights'
                         ? 'bg-blue-600 text-white shadow-sm'
-                        : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                        : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                     }`}
                   >
                     <span>💡 Catatan</span>
@@ -1323,7 +1323,7 @@ export function MatchCenter() {
                         className={`flex-1 py-1 px-2 rounded-lg text-[10px] font-black transition-all ${
                           heroLineupFilter === 'all'
                             ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                            : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
                         Semua Skuad
@@ -1334,7 +1334,7 @@ export function MatchCenter() {
                         className={`flex-1 py-1 px-2 rounded-lg text-[10px] font-black transition-all ${
                           heroLineupFilter === 'persib'
                             ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                            : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
                         🔵 Persib
@@ -1345,7 +1345,7 @@ export function MatchCenter() {
                         className={`flex-1 py-1 px-2 rounded-lg text-[10px] font-black transition-all truncate ${
                           heroLineupFilter === 'opponent'
                             ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                            : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
                         🔴 {opponentTeamName}
@@ -1705,7 +1705,7 @@ export function MatchCenter() {
                         className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all ${
                           taktikClashMode === 'dual'
                             ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                            : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
                         ⚡ Dual Bentrok
@@ -1716,7 +1716,7 @@ export function MatchCenter() {
                         className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all ${
                           taktikClashMode === 'persib'
                             ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                            : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
                         🔵 Formasi Persib
@@ -1727,7 +1727,7 @@ export function MatchCenter() {
                         className={`py-1.5 px-1 rounded-xl text-[10px] font-black transition-all truncate ${
                           taktikClashMode === 'opponent'
                             ? 'bg-blue-600 text-white shadow-sm'
-                            : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                            : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                         }`}
                       >
                         🔴 {opponentTeamName}
@@ -3206,7 +3206,7 @@ export function MatchCenter() {
                 className={`py-2 px-1 rounded-xl text-[10px] font-black transition-all ${
                   taktikClashMode === 'dual'
                     ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
                 ⚡ Bentrok Dual Formasi
@@ -3217,7 +3217,7 @@ export function MatchCenter() {
                 className={`py-2 px-1 rounded-xl text-[10px] font-black transition-all ${
                   taktikClashMode === 'persib'
                     ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
                 🔵 Persib 4-2-3-1
@@ -3228,7 +3228,7 @@ export function MatchCenter() {
                 className={`py-2 px-1 rounded-xl text-[10px] font-black transition-all truncate ${
                   taktikClashMode === 'opponent'
                     ? 'bg-blue-600 text-white shadow-sm'
-                    : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+                    : 'text-slate-700 dark:text-slate-200 hover:text-slate-950 dark:hover:text-white'
                 }`}
               >
                 🔴 {opponentTeamName}
