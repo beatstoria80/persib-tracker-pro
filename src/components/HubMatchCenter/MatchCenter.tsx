@@ -1763,11 +1763,11 @@ export function MatchCenter() {
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-20 h-8 border-t border-x border-white/30" />
                       </div>
 
-                      {/* Team Name Watermarks */}
-                      <div className="absolute top-4 left-4 text-[10px] font-mono font-black text-white/40 tracking-wider uppercase pointer-events-none">
+                      {/* Team Name Watermarks - Anchored cleanly in corners to prevent overlap */}
+                      <div className="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-xs border border-white/10 text-[9px] font-mono font-bold text-white/70 tracking-wider uppercase max-w-[140px] truncate pointer-events-none z-0">
                         {opponentTeamName} ({opponentProfile.preferredFormation})
                       </div>
-                      <div className="absolute bottom-4 right-4 text-[10px] font-mono font-black text-cyan-300/40 tracking-wider uppercase pointer-events-none">
+                      <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-xs border border-cyan-400/20 text-[9px] font-mono font-bold text-cyan-300/70 tracking-wider uppercase max-w-[140px] truncate pointer-events-none z-0">
                         PERSIB BANDUNG (4-2-3-1)
                       </div>
 
@@ -1778,13 +1778,21 @@ export function MatchCenter() {
                         </span>
                       </div>
 
-                      {/* Dual Bentrok Mode: Renders Both Persib & Opponent XI */}
+                      {/* Dual Bentrok & Opponent Mode: Balanced Spacing & Zero Frame Clipping */}
                       {(taktikClashMode === 'dual' || taktikClashMode === 'opponent') &&
                         opponentSquadData.startingXI.map((opp) => {
                           const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
-                          // Calculate position on upper half (bottom: 54% to 92%)
-                          const posX = opp.pitchX !== undefined ? opp.pitchX : 75;
+                          const rawX = opp.pitchX !== undefined ? opp.pitchX : 75;
                           const posY = opp.pitchY !== undefined ? opp.pitchY : 50;
+
+                          // REFACTOR: Lower opponent coins downward to eliminate top frame clipping and balance formation
+                          // In dual: map rawX [35..90] to [43..80] so GK sits safely at 80% with ample headroom
+                          // In solo opponent: map rawX [35..90] to [20..80] to evenly utilize pitch without empty voids
+                          const posX =
+                            taktikClashMode === 'dual'
+                              ? Math.round(43 + ((rawX - 35) / 55) * 37)
+                              : Math.round(20 + ((rawX - 35) / 55) * 60);
+
                           const oppHasScored = playerMatchesScorer(opp.name, matchScorers);
 
                           return (
@@ -3333,12 +3341,12 @@ export function MatchCenter() {
                 <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-20 h-8 border-t border-x border-white/30" />
               </div>
 
-              {/* Watermarks */}
-              <div className="absolute top-4 left-4 text-[10px] font-mono font-black text-white/40 tracking-wider uppercase pointer-events-none">
+              {/* Watermarks - Anchored cleanly in corners to prevent overlap */}
+              <div className="absolute top-3 left-3 px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-xs border border-white/10 text-[9px] font-mono font-bold text-white/70 tracking-wider uppercase max-w-[140px] truncate pointer-events-none z-0">
                 {opponentTeamName} ({opponentProfile.preferredFormation})
               </div>
-              <div className="absolute bottom-4 right-4 text-[10px] font-mono font-black text-cyan-300/40 tracking-wider uppercase pointer-events-none">
-                PERSIB BANDUNG (4-2-3-1)
+              <div className="absolute bottom-3 right-3 px-2 py-0.5 rounded-md bg-black/50 backdrop-blur-xs border border-cyan-400/20 text-[9px] font-mono font-bold text-cyan-300/70 tracking-wider uppercase max-w-[140px] truncate pointer-events-none z-0">
+                PERSIB (4-2-3-1)
               </div>
 
               {/* Animated or Centered Football ⚽ */}
@@ -3354,12 +3362,19 @@ export function MatchCenter() {
                 </span>
               </div>
 
-              {/* Opponent Starting XI Nodes (Upper Half) */}
+              {/* Opponent Starting XI Nodes: Balanced Spacing & Zero Frame Clipping */}
               {(taktikClashMode === 'dual' || taktikClashMode === 'opponent') &&
                 opponentSquadData.startingXI.map((opp) => {
                   const oppAsPlayer = convertOpponentPlayerToPlayer(opp, opponentTeamName);
-                  const posX = opp.pitchX !== undefined ? opp.pitchX : 75;
+                  const rawX = opp.pitchX !== undefined ? opp.pitchX : 75;
                   const posY = opp.pitchY !== undefined ? opp.pitchY : 50;
+
+                  // REFACTOR: Lower opponent coins downward to eliminate top frame clipping and balance formation
+                  const posX =
+                    taktikClashMode === 'dual'
+                      ? Math.round(43 + ((rawX - 35) / 55) * 37)
+                      : Math.round(20 + ((rawX - 35) / 55) * 60);
+
                   const oppHasScored = playerMatchesScorer(opp.name, matchScorers);
 
                   return (
