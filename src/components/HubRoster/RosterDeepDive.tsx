@@ -161,7 +161,33 @@ export function RosterDeepDive() {
           <Link
             key={player.id}
             href={`/player/${player.id}`}
-            prefetch={true}
+            prefetch={false}
+            onClick={(e) => {
+              if (e.metaKey || e.ctrlKey || e.shiftKey) return;
+              e.preventDefault();
+              try {
+                sessionStorage.setItem('persib_nav_from_player', 'true');
+              } catch {}
+              router.push(`/player/${player.id}`);
+            }}
+            onMouseEnter={() => {
+              if (player.videoUrl && typeof document !== 'undefined') {
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = 'video';
+                link.href = player.videoUrl;
+                document.head.appendChild(link);
+              }
+            }}
+            onTouchStart={() => {
+              if (player.videoUrl && typeof document !== 'undefined') {
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.as = 'video';
+                link.href = player.videoUrl;
+                document.head.appendChild(link);
+              }
+            }}
             className={`block rounded-[28px] border p-4 cursor-pointer active:scale-[0.98] transition-all shadow-md group ${
               isPro
                 ? 'bg-[#121620] border-slate-800 hover:border-cyan-400/50 shadow-[0_4px_20px_rgba(0,0,0,0.3)]'

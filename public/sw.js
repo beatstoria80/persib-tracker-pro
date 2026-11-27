@@ -1,5 +1,5 @@
-// PERSIB TRACKER - PWA Service Worker v103 (Live Dynamic Persib News Feeds)
-const CACHE_NAME = 'persib-tracker-pwa-v103';
+// PERSIB TRACKER - PWA Service Worker v104 (Zero Stutter & Smooth Navigation)
+const CACHE_NAME = 'persib-tracker-pwa-v104';
 const PRECACHE_ASSETS = [
   '/',
   '/manifest.json',
@@ -41,9 +41,15 @@ self.addEventListener('message', (event) => {
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
 
-  // REFACTOR: Completely bypass Service Worker for video streams & byte-range requests
-  // Prevents heavy memory buffer allocation and UI stutter on mobile devices
-  if (event.request.url.includes('.mp4') || event.request.headers.get('range')) {
+  // Completely bypass Service Worker for video streams, byte-range requests, and Next.js RSC router chunks
+  if (
+    event.request.url.includes('.mp4') ||
+    event.request.headers.get('range') ||
+    event.request.headers.get('RSC') ||
+    event.request.headers.get('Next-Router-State-Tree') ||
+    event.request.headers.get('Next-Router-Prefetch') ||
+    event.request.url.includes('_next/')
+  ) {
     return;
   }
 
@@ -68,7 +74,14 @@ self.addEventListener('fetch', (event) => {
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
       return fetch(event.request).then((response) => {
-        if (response.status === 200 && (event.request.url.includes('.png') || event.request.url.includes('.jpg') || event.request.url.includes('.svg') || event.request.url.includes('.json'))) {
+        if (
+          response.status === 200 &&
+          (event.request.url.includes('.png') ||
+            event.request.url.includes('.jpg') ||
+            event.request.url.includes('.jpeg') ||
+            event.request.url.includes('.svg') ||
+            event.request.url.includes('.json'))
+        ) {
           const clone = response.clone();
           caches.open(CACHE_NAME).then((cache) => cache.put(event.request, clone));
         }

@@ -92,7 +92,7 @@ export default function PlayerVideoProfilePage() {
     }
     try {
       if (typeof window !== 'undefined') {
-        sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
+        sessionStorage.setItem('persib_nav_from_player', 'true');
       }
     } catch {}
     try {
@@ -108,44 +108,8 @@ export default function PlayerVideoProfilePage() {
     }
   };
 
-  // REFACTOR: Authentic player video resolution with cinematic stadium fallback
-  const videoSource =
-    activePlayer.videoUrl ||
-    (activePlayer.id.includes('beckham') || activePlayer.id.includes('beckam')
-      ? '/Beckam.mp4'
-      : activePlayer.id.includes('kakang')
-      ? '/Kakang.mp4'
-      : activePlayer.id.includes('teja')
-      ? '/paku_alam.mp4'
-      : activePlayer.id.includes('adam')
-      ? '/adam_alis.mp4'
-      : activePlayer.id.includes('uilliam')
-      ? '/uilliam.mp4'
-      : activePlayer.id.includes('menalo')
-      ? '/menalo.mp4'
-      : activePlayer.id.includes('reijnders')
-      ? '/Reijnders.mp4'
-      : activePlayer.id.includes('klok')
-      ? '/Klok.mp4'
-      : activePlayer.id.includes('haye')
-      ? '/haye.mp4'
-      : activePlayer.id.includes('ragnar')
-      ? '/Ragnar.mp4'
-      : activePlayer.id.includes('walsh')
-      ? '/Sandy_Walsh.mp4'
-      : activePlayer.id.includes('peralta')
-      ? '/peralta.mp4'
-      : activePlayer.id.includes('loncar')
-      ? '/Loncar.mp4'
-      : activePlayer.id.includes('cesar') || activePlayer.id.includes('caesar')
-      ? '/Cesar.mp4'
-      : activePlayer.id.includes('matricardi')
-      ? '/Matricardi.mp4'
-      : activePlayer.id.includes('mutombo')
-      ? '/Mutombo.mp4'
-      : activePlayer.id.includes('notsuda') || activePlayer.id.includes('gatuko') || activePlayer.id.includes('gakuto')
-      ? '/Gatuko.mp4'
-      : '/Stadium_scene_logo_animation_6f37cafb.mp4') || '/Stadium_scene_logo_animation_6f37cafb.mp4';
+  // Direct authentic player video resolution from persib-data without hardcoded branch chains
+  const videoSource = activePlayer.videoUrl || '/Stadium_scene_logo_animation_6f37cafb.mp4';
 
   // Imperative Autoplay & Immediate Video Rendering Trigger (Zero Delay on Page Navigation)
   useEffect(() => {
@@ -161,6 +125,10 @@ export default function PlayerVideoProfilePage() {
     video.setAttribute('playsinline', '');
     video.setAttribute('webkit-playsinline', 'true');
     video.setAttribute('x5-playsinline', 'true');
+
+    try {
+      video.load();
+    } catch {}
 
     const tryPlay = () => {
       const playPromise = video.play();
@@ -212,7 +180,7 @@ export default function PlayerVideoProfilePage() {
     <div className="min-h-screen w-full bg-[#050811] text-white flex justify-center items-start overflow-hidden">
       {/* 430px Mobile-First App Canvas */}
       <div className="w-full max-w-[430px] h-screen max-h-screen relative flex flex-col justify-between overflow-hidden shadow-2xl bg-[#060c18]">
-        {/* Background Looping Video Stream (Direct Looping Video - Zero Generic Void) */}
+        {/* Background Looping Video Stream with Instant Crisp Visual Poster (Zero Black Screen Delay) */}
         <div className="absolute inset-0 z-0 overflow-hidden bg-gradient-to-b from-[#09162e] via-[#050e20] to-[#03060f] flex items-center justify-center">
           {/* Ambient stadium lighting gradient */}
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-blue-900/35 via-slate-950/80 to-black pointer-events-none" />
@@ -224,6 +192,21 @@ export default function PlayerVideoProfilePage() {
               alt=""
               className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-25 scale-125 select-none pointer-events-none"
             />
+          )}
+
+          {/* Instant High-Resolution Player Visual Poster (Displays at 0ms so user NEVER sees black void) */}
+          {activePlayer.avatarUrl && (
+            <div
+              className={`absolute inset-0 z-0 flex items-center justify-center pointer-events-none transition-opacity duration-500 ${
+                isVideoPlaying ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+              }`}
+            >
+              <img
+                src={activePlayer.avatarUrl}
+                alt={activePlayer.name}
+                className="w-full h-full object-contain filter drop-shadow-[0_0_35px_rgba(37,99,235,0.4)] scale-90"
+              />
+            </div>
           )}
 
           <video
@@ -238,7 +221,7 @@ export default function PlayerVideoProfilePage() {
             disablePictureInPicture
             disableRemotePlayback
             className={`w-full h-full object-cover object-center transition-opacity duration-300 ${
-              isVideoPlaying ? 'opacity-100' : 'opacity-95'
+              isVideoPlaying ? 'opacity-100' : 'opacity-90'
             }`}
           />
 

@@ -7,15 +7,19 @@ interface VideoLoadingSplashProps {
   onFinish?: () => void;
 }
 
-export const SPLASH_SESSION_KEY = 'persib_opening_splash_v102';
+export const SPLASH_SESSION_KEY = 'persib_nav_from_player';
 
 export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
-  // Check sessionStorage so mobile refresh or in-app navigation does not loop opening video
+  // Check if returning from inside the app (e.g. back button from player profile)
   const [alreadyShown] = useState<boolean>(() => {
     if (typeof window !== 'undefined') {
       try {
-        const val = sessionStorage.getItem(SPLASH_SESSION_KEY);
-        return val === 'true' || val === 'seen';
+        const isFromPlayer = sessionStorage.getItem(SPLASH_SESSION_KEY) === 'true';
+        if (isFromPlayer) {
+          sessionStorage.removeItem(SPLASH_SESSION_KEY);
+          return true;
+        }
+        return false;
       } catch {
         return false;
       }
@@ -36,13 +40,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   }, [onFinish]);
 
   const handleDismiss = useCallback(() => {
-    try {
-      if (typeof window !== 'undefined') {
-        sessionStorage.setItem(SPLASH_SESSION_KEY, 'true');
-      }
-    } catch {
-      // Ignore storage errors in private browsing
-    }
     if (isFading) return;
     setIsFading(true);
     // Trigger onFinish synchronously with fade-out
@@ -57,7 +54,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     handleDismissRef.current = handleDismiss;
   }, [handleDismiss]);
 
-  // If already shown in session, notify parent immediately on mount
+  // If returning from inside the app, notify parent immediately on mount
   useEffect(() => {
     if (alreadyShown && onFinishRef.current) {
       onFinishRef.current();
@@ -94,6 +91,10 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     v.setAttribute('playsinline', '');
     v.setAttribute('webkit-playsinline', 'true');
     v.setAttribute('x5-playsinline', 'true');
+
+    try {
+      v.load();
+    } catch {}
 
     const playPromise = v.play();
     if (playPromise !== undefined) {
