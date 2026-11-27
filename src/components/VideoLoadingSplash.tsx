@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState, useEffect, useRef, useCallback } from 'react';
-import { ArrowRight, Play } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 
 interface VideoLoadingSplashProps {
   onFinish?: () => void;
@@ -16,8 +16,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   const [alreadyShown, setAlreadyShown] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(true);
   const [isFading, setIsFading] = useState<boolean>(false);
-  const [isPlaying, setIsPlaying] = useState<boolean>(false);
-  const [autoplayBlocked, setAutoplayBlocked] = useState<boolean>(false);
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const videoRef = useRef<HTMLVideoElement | null>(null);
 
@@ -92,13 +90,11 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     const playPromise = v.play();
     if (playPromise !== undefined) {
       playPromise
-        .then(() => {
-          setIsPlaying(true);
-          setAutoplayBlocked(false);
-        })
         .catch(() => {
-          // Autoplay restricted by mobile OS battery saver / user gesture requirement
-          setAutoplayBlocked(true);
+          if (v) {
+            v.muted = true;
+            v.play().catch(() => {});
+          }
         });
     }
   }, [alreadyShown, isMounted]);
@@ -109,12 +105,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     if (v) {
       v.muted = true;
       v.defaultMuted = true;
-      v.play()
-        .then(() => {
-          setIsPlaying(true);
-          setAutoplayBlocked(false);
-        })
-        .catch(() => {});
+      v.play().catch(() => {});
     }
   }, []);
 
@@ -162,17 +153,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     }
   };
 
-  const handleVideoPlaying = () => {
-    setIsPlaying(true);
-    setAutoplayBlocked(false);
-  };
-
-  const handleManualPlayTap = (e: React.MouseEvent<HTMLButtonElement>) => {
-    // REFACTOR: Explicit React.MouseEvent<HTMLButtonElement> typing to prevent event bubbling and enforce strict type safety
-    e.stopPropagation();
-    handleScreenTap();
-  };
-
   // REFACTOR: Guard return during pre-hydration and dismissal to preserve zero-overhead component unmounting
   if (!isMounted || alreadyShown || !isVisible) return null;
 
@@ -206,7 +186,6 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           disableRemotePlayback
           controls={false}
           draggable={false}
-          onPlaying={handleVideoPlaying}
           onTimeUpdate={handleTimeUpdate}
           onEnded={handleDismiss}
           onError={handleDismiss}
@@ -232,21 +211,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         </button>
       </div>
 
-      {/* Center Action: Play button if video not yet playing */}
-      {!isPlaying && (
-        <div className="relative z-20 flex flex-col items-center justify-center p-4 pointer-events-auto">
-          <button
-            type="button"
-            onClick={handleManualPlayTap}
-            className="flex items-center gap-2 px-5 py-3 rounded-2xl bg-cyan-400 text-blue-950 font-black text-xs shadow-2xl hover:scale-105 active:scale-95 transition-all cursor-pointer animate-pulse"
-          >
-            <Play className="w-4 h-4 fill-current" />
-            <span>Putar Video Sinematik</span>
-          </button>
-        </div>
-      )}
-
-      {/* Bottom Area: Progress Bar & Hint */}
+      {/* Bottom Area: Progress Bar & Brand Tagline */}
       <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 pb-6 space-y-2 pointer-events-none">
         <div className="w-full h-1 bg-white/20 rounded-full overflow-hidden">
           <div
@@ -256,7 +221,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
         </div>
         <div className="flex justify-between items-center text-[10px] text-slate-400/70 font-medium px-0.5">
           <span>Stadion GBLA Sinematik</span>
-          <span>Ketuk layar untuk memutar video</span>
+          <span>PERSIB Bandung 2026/2027</span>
         </div>
       </div>
     </div>
