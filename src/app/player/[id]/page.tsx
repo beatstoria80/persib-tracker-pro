@@ -361,26 +361,28 @@ export default function PlayerVideoProfilePage() {
             <div className="p-5 rounded-[28px] bg-slate-950/80 backdrop-blur-xl border border-white/20 shadow-2xl space-y-4">
               {/* Row 1: Player Number + Full Name + Verified Badge on left, Contract Pill on right */}
               <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-white/10">
-                <div className="flex items-start gap-2.5 min-w-0 flex-1">
-                  <span className="font-mono font-black text-2xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0 mt-0.5">
+                <div className="flex items-start gap-2 min-w-0 flex-1">
+                  <span className="font-mono font-black text-xl sm:text-2xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0 mt-0.5">
                     #{activePlayer.number}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <h1 className="text-lg sm:text-xl font-black tracking-tight text-white flex items-center gap-1.5 min-w-0">
-                      <span className="truncate">{activePlayer.name}</span>
+                    <h1 className="text-sm sm:text-base font-black tracking-tight text-white flex items-center gap-1.5 flex-wrap">
+                      <span>{activePlayer.name}</span>
                       {activePlayer.verifiedData && (
-                        <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
+                        <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                       )}
                     </h1>
-                    <p className="text-[11.5px] font-semibold text-cyan-200/90 leading-snug mt-0.5">
-                      {activePlayer.fullName || activePlayer.name}
-                    </p>
+                    {activePlayer.fullName && activePlayer.fullName !== activePlayer.name && (
+                      <p className="text-[11px] font-medium text-cyan-200/80 leading-snug mt-0.5">
+                        {activePlayer.fullName}
+                      </p>
+                    )}
                   </div>
                 </div>
 
                 {/* Contract Badge with High-Contrast Pill */}
-                <div className="shrink-0 text-right mt-1">
-                  <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-200 border border-cyan-400/35 whitespace-nowrap shadow-xs">
+                <div className="shrink-0 text-right mt-0.5">
+                  <span className="inline-block px-2 py-0.5 rounded-full text-[9.5px] font-mono font-bold bg-cyan-500/15 text-cyan-200 border border-cyan-400/35 whitespace-nowrap shadow-xs">
                     s.d. {activePlayer.contractUntil}
                   </span>
                 </div>
