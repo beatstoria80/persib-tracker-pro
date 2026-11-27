@@ -387,17 +387,17 @@ export default function PlayerVideoProfilePage() {
 
             {/* Main Player Identification Card (High-Contrast Frosted Glass - Zero Collisions) */}
             <div className="p-5 rounded-[28px] bg-slate-950/80 backdrop-blur-xl border border-white/20 shadow-2xl space-y-4">
-              {/* Row 1: Player Number + Name + Verified Badge on left, Contract Pill on right */}
-              <div className="flex items-center justify-between gap-3 pb-3 border-b border-white/10">
-                <div className="flex items-center gap-2.5 min-w-0">
+              {/* Row 1: Player Number + Full Name + Verified Badge on left, Contract Pill on right */}
+              <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/10">
+                <div className="flex items-center gap-2 min-w-0 flex-1">
                   <span className="font-mono font-black text-2xl sm:text-3xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0">
                     #{activePlayer.number}
                   </span>
-                  <div className="min-w-0">
-                    <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5 truncate">
+                  <div className="min-w-0 flex-1">
+                    <h1 className="text-xl sm:text-2xl font-black tracking-tight text-white flex items-center gap-1.5 min-w-0">
                       <span className="truncate">{activePlayer.name}</span>
                       {activePlayer.verifiedData && (
-                        <ShieldCheck className="w-5 h-5 text-cyan-400 shrink-0" />
+                        <ShieldCheck className="w-4.5 h-4.5 text-cyan-400 shrink-0" />
                       )}
                     </h1>
                   </div>
@@ -405,36 +405,43 @@ export default function PlayerVideoProfilePage() {
 
                 {/* Contract Badge with High-Contrast Pill */}
                 <div className="shrink-0 text-right">
-                  <span className="inline-block px-2.5 py-1 rounded-full text-[10.5px] font-mono font-bold bg-cyan-500/15 text-cyan-200 border border-cyan-400/35 whitespace-nowrap shadow-xs">
+                  <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-200 border border-cyan-400/35 whitespace-nowrap shadow-xs">
                     s.d. {activePlayer.contractUntil}
                   </span>
                 </div>
               </div>
 
-              {/* Row 2: Full Name, Position Pill, Asal Negara (Nationality), and Age */}
-              <div className="flex items-center gap-2 flex-wrap text-xs text-slate-100 font-semibold">
-                <span className="text-slate-200 font-bold">{activePlayer.fullName}</span>
-                <span className="text-white/40">•</span>
-                <span className="px-2.5 py-0.5 rounded-md text-[10.5px] font-black uppercase tracking-wider bg-blue-600 text-white font-mono shadow-xs">
+              {/* Row 2: Position Pill, Asal Negara (Nationality), and Age */}
+              <div className="flex items-center gap-1.5 flex-wrap text-xs text-slate-100 font-semibold">
+                <span className="px-2 py-0.5 rounded-md text-[10.5px] font-black uppercase tracking-wider bg-blue-600 text-white font-mono shadow-xs">
                   {activePlayer.position}
                 </span>
-                <span className="text-white/40">•</span>
-                <span className="px-2 py-0.5 rounded-md text-[10.5px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 flex items-center gap-1">
-                  <span>Asal:</span>
-                  <span className="text-white font-black">{activePlayer.nationality}</span>
+                <span className="text-white/30">•</span>
+                <span className="px-2 py-0.5 rounded-md text-[10.5px] font-bold bg-emerald-500/20 text-emerald-300 border border-emerald-400/30">
+                  {activePlayer.nationality}
                 </span>
-                <span className="text-white/40">•</span>
-                <span className="text-slate-200 font-medium">Usia {activePlayer.age} Tahun</span>
+                <span className="text-white/30">•</span>
+                <span className="text-slate-300 text-[11px] font-medium">Usia {activePlayer.age} Tahun</span>
+                {activePlayer.fullName && activePlayer.fullName !== activePlayer.name && (
+                  <>
+                    <span className="text-white/30">•</span>
+                    <span className="text-slate-400 text-[11px] font-normal truncate max-w-[130px]">
+                      {activePlayer.fullName}
+                    </span>
+                  </>
+                )}
               </div>
 
-              {/* Row 3: Nationality & Market Value */}
-              <div className="flex items-center justify-between gap-2 text-xs text-slate-200 flex-wrap pt-1 border-t border-white/10">
-                <div className="flex items-center gap-1.5">
-                  <span className="text-slate-400">Kewarganegaraan:</span>
-                  <span className="text-emerald-300 font-extrabold">{activePlayer.nationality}</span>
-                  <span className="text-white/30">•</span>
-                  <span className="text-slate-400">Nilai Pasar:</span>
-                  <strong className="text-emerald-300 font-extrabold text-sm">{activePlayer.marketValue}</strong>
+              {/* Row 3: Nilai Pasar Terverifikasi (Dedicated Clean Cardlet - No Text Wrapping Collision) */}
+              <div className="flex items-center justify-between gap-2 p-2.5 px-3 rounded-2xl bg-white/5 border border-white/10 backdrop-blur-md">
+                <div className="flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_rgba(52,211,153,0.8)]" />
+                  <span className="text-xs text-slate-300 font-medium">Nilai Pasar Transfermarkt:</span>
+                </div>
+                <div className="shrink-0 text-right">
+                  <span className="inline-block px-3 py-1 rounded-xl bg-emerald-500/15 border border-emerald-400/35 text-emerald-300 font-mono font-black text-xs sm:text-sm tracking-tight whitespace-nowrap shadow-xs">
+                    {activePlayer.marketValue}
+                  </span>
                 </div>
               </div>
 
@@ -450,50 +457,50 @@ export default function PlayerVideoProfilePage() {
                   </span>
                 </div>
 
-                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                <div className="grid grid-cols-4 gap-1.5 py-0.5">
                   <button
                     type="button"
                     onClick={() => setStatScope('all')}
-                    className={`px-2.5 py-1 rounded-xl text-[10.5px] font-mono font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`py-1.5 px-1 rounded-xl text-[10px] sm:text-[10.5px] font-mono font-bold transition-all text-center cursor-pointer ${
                       statScope === 'all'
                         ? 'bg-cyan-400 text-slate-950 font-black shadow-md'
                         : 'bg-white/10 text-slate-300 hover:bg-white/15'
                     }`}
                   >
-                    Semua Laga (17)
+                    Semua (17)
                   </button>
                   <button
                     type="button"
                     onClick={() => setStatScope('liga1')}
-                    className={`px-2.5 py-1 rounded-xl text-[10.5px] font-mono font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`py-1.5 px-1 rounded-xl text-[10px] sm:text-[10.5px] font-mono font-bold transition-all text-center cursor-pointer ${
                       statScope === 'liga1'
                         ? 'bg-blue-600 text-white font-black shadow-md'
                         : 'bg-white/10 text-slate-300 hover:bg-white/15'
                     }`}
                   >
-                    Super League (10)
+                    Liga 1 (10)
                   </button>
                   <button
                     type="button"
                     onClick={() => setStatScope('acl2')}
-                    className={`px-2.5 py-1 rounded-xl text-[10.5px] font-mono font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`py-1.5 px-1 rounded-xl text-[10px] sm:text-[10.5px] font-mono font-bold transition-all text-center cursor-pointer ${
                       statScope === 'acl2'
                         ? 'bg-amber-400 text-slate-950 font-black shadow-md'
                         : 'bg-white/10 text-slate-300 hover:bg-white/15'
                     }`}
                   >
-                    ACL Two (5)
+                    ACL 2 (5)
                   </button>
                   <button
                     type="button"
                     onClick={() => setStatScope('shopee')}
-                    className={`px-2.5 py-1 rounded-xl text-[10.5px] font-mono font-bold transition-all shrink-0 cursor-pointer ${
+                    className={`py-1.5 px-1 rounded-xl text-[10px] sm:text-[10.5px] font-mono font-bold transition-all text-center cursor-pointer ${
                       statScope === 'shopee'
                         ? 'bg-orange-500 text-white font-black shadow-md'
                         : 'bg-white/10 text-slate-300 hover:bg-white/15'
                     }`}
                   >
-                    Shopee Cup (2)
+                    Shopee (2)
                   </button>
                 </div>
 
