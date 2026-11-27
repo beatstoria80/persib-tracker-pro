@@ -23,6 +23,7 @@ import {
   TOP_SCORERS_2026_2027,
 } from '@/data/persib-data';
 import { isFixtureTodayWib, parseIndonesianFixtureDate } from '@/lib/groq';
+import { computeDynamicPlayerStats } from '@/lib/groq-collector';
 
 export type AppThemeState = 'minimal' | 'pro';
 export type ActiveHub = 'match-center' | 'roster' | 'transparency' | 'ai-chat';
@@ -90,7 +91,9 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
     return matchToday?.tournamentKey || 'liga1';
   });
   const [matchDisplayMode, setMatchDisplayMode] = useState<MatchDisplayMode>('official_result');
-  const [players, setPlayers] = useState<Player[]>(OFFICIAL_SQUAD_2026_2027);
+  const [players, setPlayers] = useState<Player[]>(() =>
+    computeDynamicPlayerStats(OFFICIAL_SQUAD_2026_2027, VERIFIED_FIXTURES_2026_2027, TOP_SCORERS_2026_2027)
+  );
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [fixtures, setFixtures] = useState<MatchFixture[]>(VERIFIED_FIXTURES_2026_2027);
   const [liga1Standings, setLiga1Standings] = useState<LeagueStandingRow[]>(BRI_LIGA_1_STANDINGS_2026_2027);

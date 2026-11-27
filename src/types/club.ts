@@ -29,6 +29,12 @@ export interface PlayerStats {
   shotsOnTarget: number;
   rating: number;
   heatmapCoords: Array<{ x: number; y: number; intensity: number }>;
+  competitionBreakdown?: {
+    total?: { matches: number; goals: number; assists: number; minutes: number; rating: number };
+    liga1?: { matches: number; goals: number; assists: number; minutes: number; rating: number };
+    acl2?: { matches: number; goals: number; assists: number; minutes: number; rating: number };
+    shopee?: { matches: number; goals: number; assists: number; minutes: number; rating: number };
+  };
 }
 
 export interface Player {

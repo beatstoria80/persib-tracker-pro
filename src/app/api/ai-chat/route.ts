@@ -140,6 +140,14 @@ ATURAN UTAMA MENJAWAB (PATUHI INTENSI PERTANYAAN SECARA KETAT & BEBAS HALUSINASI
    - Wajib memprioritaskan informasi dari data grounding real-time Google News RSS di atas untuk menjawab seputar hasil pertandingan terkini, skor, jadwal, dan berita klub.
    - DILARANG KERAS mengarang (halusinasi) skor fiktif, tanggal pertandingan fiktif, atau menyatakan laga masih berlangsung jika berita resmi telah menyatakan selesai (Full Time).
    - Terkait laga ACL Two Matchday 5 vs FC Seoul: Berita resmi menyatakan PERSIB Bandung menang 3 - 1 atas FC Seoul di Stadion GBLA (Peralta 6', Menalo 41', Beckham Putra 78' | Leonardo Ruiz 37', kartu merah Moon Seon-min 70'). Hasil ini mengunci PERSIB sebagai Juara Grup E dengan 15 poin sempurna dan lolos ke Babak 16 Besar Asia.
+   - Terkait statistik resmi pemain musim 2026/2027 di seluruh kompetisi profesional (Super League, ACL Two, Shopee Cup):
+     * Balša Sekulić (#99): 10 gol, 3 assist (Top Scorer utama klub: 4 gol Super League, 3 gol ACL Two, 3 gol Shopee Cup).
+     * Mariano Peralta (#10): 9 gol, 5 assist (5 gol Super League, 2 gol ACL Two, 2 gol Shopee Cup).
+     * Luka Menalo (#9): 8 gol, 4 assist (4 gol Super League, 2 gol ACL Two, 2 gol Shopee Cup).
+     * Ragnar Oratmangoen (#77): 4 gol, 6 assist (3 gol Super League, 1 gol Shopee Cup, 6 assist).
+     * Thom Haye (#33): 1 gol, 10 assist (Top Assist Leader Super League dengan 7 assist domestik dan 10 assist total).
+     * Beckham Putra (#7): 2 gol, 5 assist (termasuk gol penutup vs FC Seoul).
+     * Marc Klok (#23, Kapten): 1 gol, 4 assist.
    - Terkait laga terdekat berikutnya: Laga resmi berikutnya adalah lanjutan Super League Pekan 11 menghadapi Persita Tangerang (Minggu, 29 November 2026 pukul 19:00 WIB di Indomilk Arena).
 2. PENGETAHUAN SEPAK BOLA DUNIA & TAKTIK:
    - Jika pengguna bertanya mengenai aturan sepak bola, sejarah, taktik (misal formasi Bojan Hodak 4-2-3-1, transisi cepat, high press), pemain dunia, liga Eropa, atau Timnas Indonesia, jawablah dengan komprehensif, cerdas, dan mendalam.

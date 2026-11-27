@@ -1,17 +1,18 @@
 'use client';
 
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { useParams, useRouter } from 'next/navigation';
-import { OFFICIAL_SQUAD_2026_2027, getPlayerAvatar } from '@/data/persib-data';
+import { OFFICIAL_SQUAD_2026_2027 } from '@/data/persib-data';
+import { useClubTracker } from '@/context/ClubTrackerContext';
 import { PlayerAvatar } from '@/components/PlayerAvatar';
-import { SPLASH_SESSION_KEY } from '@/components/VideoLoadingSplash';
 import {
   ArrowLeft,
   ShieldCheck,
   Share2,
   ChevronUp,
   ChevronDown,
+  Trophy,
 } from 'lucide-react';
 
 function SquadThumbnailAvatar({
@@ -36,11 +37,14 @@ export default function PlayerVideoProfilePage() {
   const router = useRouter();
   const routeId = (params?.id as string) || 'peralta-10';
 
+  const { players } = useClubTracker();
+  const squadList = players && players.length > 0 ? players : OFFICIAL_SQUAD_2026_2027;
+
   const normalizedRoute = routeId.toLowerCase().replace('caesar', 'cesar');
 
-  // REFACTOR: Derive active player directly from routeId without setState-in-effect
+  // Derive active player directly from dynamic squad state with fallbacks
   const activePlayer =
-    OFFICIAL_SQUAD_2026_2027.find(
+    squadList.find(
       (p) =>
         p.id.toLowerCase() === routeId.toLowerCase() ||
         p.id.toLowerCase() === normalizedRoute ||
@@ -58,13 +62,74 @@ export default function PlayerVideoProfilePage() {
         (routeId.toLowerCase().includes('suyatna') && p.id.includes('adam')) ||
         (routeId.toLowerCase().includes('fitrah') && p.id.includes('fitrah'))
     ) ||
-    OFFICIAL_SQUAD_2026_2027.find((p) => p.id === 'peralta-10') ||
-    OFFICIAL_SQUAD_2026_2027[0];
+    squadList.find((p) => p.id === 'peralta-10') ||
+    squadList[0];
 
   const [copiedToast, setCopiedToast] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
+  const [statScope, setStatScope] = useState<'all' | 'liga1' | 'acl2' | 'shopee'>('all');
   const [isVideoPlaying, setIsVideoPlaying] = useState<boolean>(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
+
+  // Dynamic statistics computation across 2026/2027 official competitions
+  const activeStats = useMemo(() => {
+    const breakdown = activePlayer.stats.competitionBreakdown;
+    if (!breakdown) {
+      return {
+        label: 'Musim 2026/2027 (Semua Kompetisi Resmi)',
+        badge: 'Semua Laga Resmi',
+        appearances: activePlayer.stats.appearances,
+        goals: activePlayer.stats.goals,
+        assists: activePlayer.stats.assists,
+        rating: activePlayer.stats.rating,
+        minutes: activePlayer.stats.minutesPlayed,
+      };
+    }
+
+    if (statScope === 'liga1' && breakdown.liga1) {
+      return {
+        label: 'BRI Super League 2026/2027',
+        badge: 'Super League (10 Laga)',
+        appearances: breakdown.liga1.matches,
+        goals: breakdown.liga1.goals,
+        assists: breakdown.liga1.assists,
+        rating: breakdown.liga1.rating,
+        minutes: breakdown.liga1.minutes,
+      };
+    }
+    if (statScope === 'acl2' && breakdown.acl2) {
+      return {
+        label: 'AFC Champions League Two 2026/2027 (Grup E)',
+        badge: 'ACL Two (5 Laga)',
+        appearances: breakdown.acl2.matches,
+        goals: breakdown.acl2.goals,
+        assists: breakdown.acl2.assists,
+        rating: breakdown.acl2.rating,
+        minutes: breakdown.acl2.minutes,
+      };
+    }
+    if (statScope === 'shopee' && breakdown.shopee) {
+      return {
+        label: 'Shopee Cup ASEAN Club Championship (Grup B)',
+        badge: 'Shopee Cup (2 Laga)',
+        appearances: breakdown.shopee.matches,
+        goals: breakdown.shopee.goals,
+        assists: breakdown.shopee.assists,
+        rating: breakdown.shopee.rating,
+        minutes: breakdown.shopee.minutes,
+      };
+    }
+
+    return {
+      label: 'Musim 2026/2027 (17 Laga Resmi Seluruh Ajang)',
+      badge: 'Semua Laga Resmi (17 Laga)',
+      appearances: breakdown.total?.matches ?? activePlayer.stats.appearances,
+      goals: breakdown.total?.goals ?? activePlayer.stats.goals,
+      assists: breakdown.total?.assists ?? activePlayer.stats.assists,
+      rating: breakdown.total?.rating ?? activePlayer.stats.rating,
+      minutes: breakdown.total?.minutes ?? activePlayer.stats.minutesPlayed,
+    };
+  }, [activePlayer, statScope]);
 
   const handleShare = async () => {
     const url = typeof window !== 'undefined' ? window.location.href : '';
@@ -299,11 +364,11 @@ export default function PlayerVideoProfilePage() {
                     <span className="text-white/40">•</span>
                     {activePlayer.position === 'GK' ? (
                       <span className="truncate">
-                        <span className="text-amber-300 font-black">{activePlayer.position}</span> • {activePlayer.stats.appearances} Laga • {activePlayer.stats.interceptions} Penyelamatan • Rating <strong className="text-amber-400 font-black">{activePlayer.stats.rating}</strong>
+                        <span className="text-amber-300 font-black">{activePlayer.position}</span> • {activeStats.appearances} Laga • {activePlayer.stats.interceptions} Penyelamatan • Rating <strong className="text-amber-400 font-black">{activeStats.rating}</strong>
                       </span>
                     ) : (
                       <span className="truncate">
-                        <span className="text-cyan-300 font-black">{activePlayer.position}</span> • {activePlayer.stats.goals} Gol • {activePlayer.stats.assists} Ast • Rating <strong className="text-amber-400 font-black">{activePlayer.stats.rating}</strong>
+                        <span className="text-cyan-300 font-black">{activePlayer.position}</span> • {activeStats.appearances} Laga • {activeStats.goals} Gol • {activeStats.assists} Ast • Rating <strong className="text-amber-400 font-black">{activeStats.rating}</strong>
                       </span>
                     )}
                   </div>
@@ -387,47 +452,107 @@ export default function PlayerVideoProfilePage() {
                 </div>
               </div>
 
-              {/* Row 4: Quick Performance Indicators Grid (High Contrast & Legible) */}
-              <div className="grid grid-cols-4 gap-2.5 pt-2 text-center font-mono">
-                {activePlayer.position === 'GK' ? (
-                  <>
-                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Save</span>
-                      <span className="text-lg sm:text-xl font-black text-amber-300">{activePlayer.stats.interceptions}</span>
-                    </div>
-                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Umpan</span>
-                      <span className="text-lg sm:text-xl font-black text-cyan-300">{activePlayer.stats.passAccuracy}%</span>
-                    </div>
-                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Main</span>
-                      <span className="text-lg sm:text-xl font-black text-white">{activePlayer.stats.appearances}</span>
-                    </div>
-                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Rating</span>
-                      <span className="text-lg sm:text-xl font-black text-amber-300">{activePlayer.stats.rating}</span>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Gol</span>
-                      <span className="text-lg sm:text-xl font-black text-cyan-300">{activePlayer.stats.goals}</span>
-                    </div>
-                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Assist</span>
-                      <span className="text-lg sm:text-xl font-black text-blue-300">{activePlayer.stats.assists}</span>
-                    </div>
-                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Main</span>
-                      <span className="text-lg sm:text-xl font-black text-white">{activePlayer.stats.appearances}</span>
-                    </div>
-                    <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
-                      <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Rating</span>
-                      <span className="text-lg sm:text-xl font-black text-amber-300">{activePlayer.stats.rating}</span>
-                    </div>
-                  </>
-                )}
+              {/* Row 4: Multi-Competition Selector & Dynamic Statistics Grid */}
+              <div className="space-y-2.5 pt-1">
+                <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center gap-1.5 text-[11px] font-mono font-bold text-cyan-300">
+                    <Trophy className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
+                    <span className="truncate">Statistik Resmi 2026/2027</span>
+                  </div>
+                  <span className="text-[10px] text-slate-300 font-mono bg-white/10 px-2 py-0.5 rounded-md shrink-0">
+                    {activeStats.badge}
+                  </span>
+                </div>
+
+                <div className="flex items-center gap-1.5 overflow-x-auto no-scrollbar py-0.5">
+                  <button
+                    type="button"
+                    onClick={() => setStatScope('all')}
+                    className={`px-2.5 py-1 rounded-xl text-[10.5px] font-mono font-bold transition-all shrink-0 cursor-pointer ${
+                      statScope === 'all'
+                        ? 'bg-cyan-400 text-slate-950 font-black shadow-md'
+                        : 'bg-white/10 text-slate-300 hover:bg-white/15'
+                    }`}
+                  >
+                    Semua Laga (17)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStatScope('liga1')}
+                    className={`px-2.5 py-1 rounded-xl text-[10.5px] font-mono font-bold transition-all shrink-0 cursor-pointer ${
+                      statScope === 'liga1'
+                        ? 'bg-blue-600 text-white font-black shadow-md'
+                        : 'bg-white/10 text-slate-300 hover:bg-white/15'
+                    }`}
+                  >
+                    Super League (10)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStatScope('acl2')}
+                    className={`px-2.5 py-1 rounded-xl text-[10.5px] font-mono font-bold transition-all shrink-0 cursor-pointer ${
+                      statScope === 'acl2'
+                        ? 'bg-amber-400 text-slate-950 font-black shadow-md'
+                        : 'bg-white/10 text-slate-300 hover:bg-white/15'
+                    }`}
+                  >
+                    ACL Two (5)
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setStatScope('shopee')}
+                    className={`px-2.5 py-1 rounded-xl text-[10.5px] font-mono font-bold transition-all shrink-0 cursor-pointer ${
+                      statScope === 'shopee'
+                        ? 'bg-orange-500 text-white font-black shadow-md'
+                        : 'bg-white/10 text-slate-300 hover:bg-white/15'
+                    }`}
+                  >
+                    Shopee Cup (2)
+                  </button>
+                </div>
+
+                {/* Quick Performance Indicators Grid (High Contrast & Legible) */}
+                <div className="grid grid-cols-4 gap-2 text-center font-mono pt-0.5">
+                  {activePlayer.position === 'GK' ? (
+                    <>
+                      <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                        <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Save</span>
+                        <span className="text-lg sm:text-xl font-black text-amber-300">{activePlayer.stats.interceptions}</span>
+                      </div>
+                      <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                        <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Umpan</span>
+                        <span className="text-lg sm:text-xl font-black text-cyan-300">{activePlayer.stats.passAccuracy}%</span>
+                      </div>
+                      <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                        <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Main</span>
+                        <span className="text-lg sm:text-xl font-black text-white">{activeStats.appearances}</span>
+                      </div>
+                      <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                        <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Rating</span>
+                        <span className="text-lg sm:text-xl font-black text-amber-300">{activeStats.rating}</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                        <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Gol</span>
+                        <span className="text-lg sm:text-xl font-black text-cyan-300">{activeStats.goals}</span>
+                      </div>
+                      <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                        <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Assist</span>
+                        <span className="text-lg sm:text-xl font-black text-blue-300">{activeStats.assists}</span>
+                      </div>
+                      <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                        <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Main</span>
+                        <span className="text-lg sm:text-xl font-black text-white">{activeStats.appearances}</span>
+                      </div>
+                      <div className="p-2.5 rounded-2xl bg-white/10 border border-white/15 shadow-xs">
+                        <span className="text-[10px] text-slate-200 block font-sans font-extrabold uppercase tracking-wider">Rating</span>
+                        <span className="text-lg sm:text-xl font-black text-amber-300">{activeStats.rating}</span>
+                      </div>
+                    </>
+                  )}
+                </div>
               </div>
 
               {/* Row 5: Tactical Brief Box with Vibrant Contrast */}
@@ -473,12 +598,12 @@ export default function PlayerVideoProfilePage() {
                   Pilih Pemain Skuad Lainnya
                 </span>
                 <span className="text-[11px] text-cyan-300 font-extrabold bg-cyan-500/15 border border-cyan-400/30 px-2 py-0.5 rounded-full font-mono">
-                  {OFFICIAL_SQUAD_2026_2027.length} Pemain
+                  {squadList.length} Pemain
                 </span>
               </div>
 
               <div className="flex items-center gap-2 overflow-x-auto no-scrollbar py-1">
-                {OFFICIAL_SQUAD_2026_2027.map((player) => {
+                {squadList.map((player) => {
                   const isSelected = player.id === activePlayer.id;
                   return (
                     <button
