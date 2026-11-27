@@ -10,24 +10,11 @@ interface VideoLoadingSplashProps {
 export const SPLASH_SESSION_KEY = 'persib_nav_from_player';
 
 export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
-  // Check if returning from inside the app (e.g. back button from player profile)
-  const [alreadyShown] = useState<boolean>(() => {
-    if (typeof window !== 'undefined') {
-      try {
-        const isFromPlayer = sessionStorage.getItem(SPLASH_SESSION_KEY) === 'true';
-        if (isFromPlayer) {
-          sessionStorage.removeItem(SPLASH_SESSION_KEY);
-          return true;
-        }
-        return false;
-      } catch {
-        return false;
-      }
-    }
-    return false;
-  });
-
-  const [isVisible, setIsVisible] = useState<boolean>(!alreadyShown);
+  // REFACTOR: Hydration-safe client mounting state to eliminate SSR/CSR DOM mismatches
+  const [isMounted, setIsMounted] = useState<boolean>(false);
+  // REFACTOR: Default to false during initial SSR to guarantee pristine hydration consistency
+  const [alreadyShown, setAlreadyShown] = useState<boolean>(false);
+  const [isVisible, setIsVisible] = useState<boolean>(true);
   const [isFading, setIsFading] = useState<boolean>(false);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const [autoplayBlocked, setAutoplayBlocked] = useState<boolean>(false);
@@ -39,6 +26,24 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     onFinishRef.current = onFinish;
   }, [onFinish]);
 
+  // REFACTOR: Relocate sessionStorage inspection and mutative cleanup strictly inside useEffect to avoid impure render side-effects
+  useEffect(() => {
+    setIsMounted(true);
+    try {
+      const isFromPlayer = sessionStorage.getItem(SPLASH_SESSION_KEY) === 'true';
+      if (isFromPlayer) {
+        sessionStorage.removeItem(SPLASH_SESSION_KEY);
+        setAlreadyShown(true);
+        setIsVisible(false);
+        if (onFinishRef.current) {
+          onFinishRef.current();
+        }
+      }
+    } catch {
+      // Graceful fallback for sandboxed storage environments
+    }
+  }, []);
+
   const handleDismiss = useCallback(() => {
     if (isFading) return;
     setIsFading(true);
@@ -49,21 +54,9 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     }, 400);
   }, [isFading]);
 
-  const handleDismissRef = useRef(handleDismiss);
-  useEffect(() => {
-    handleDismissRef.current = handleDismiss;
-  }, [handleDismiss]);
-
-  // If returning from inside the app, notify parent immediately on mount
-  useEffect(() => {
-    if (alreadyShown && onFinishRef.current) {
-      onFinishRef.current();
-    }
-  }, [alreadyShown]);
-
   // Lock body scroll and prevent touch bounce / drag while opening splash is active
   useEffect(() => {
-    if (!isVisible) return;
+    if (!isVisible || alreadyShown || !isMounted) return;
     const prevOverflow = document.body.style.overflow;
     const prevTouchAction = document.body.style.touchAction;
     const prevUserSelect = document.body.style.userSelect;
@@ -75,11 +68,11 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       document.body.style.touchAction = prevTouchAction;
       document.body.style.userSelect = prevUserSelect;
     };
-  }, [isVisible]);
+  }, [isVisible, alreadyShown, isMounted]);
 
   // Imperative Autoplay with hardware acceleration attributes
   const attemptPlay = useCallback(() => {
-    if (alreadyShown) return;
+    if (alreadyShown || !isMounted) return;
     const v = videoRef.current;
     if (!v) return;
 
@@ -108,7 +101,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
           setAutoplayBlocked(true);
         });
     }
-  }, [alreadyShown]);
+  }, [alreadyShown, isMounted]);
 
   // Tap anywhere on the screen to directly start or resume video playback
   const handleScreenTap = useCallback(() => {
@@ -126,7 +119,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
   }, []);
 
   useEffect(() => {
-    if (alreadyShown) return;
+    if (alreadyShown || !isMounted) return;
     const v = videoRef.current;
     if (!v) return;
 
@@ -153,7 +146,7 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       window.removeEventListener('touchstart', onUserInteraction);
       window.removeEventListener('click', onUserInteraction);
     };
-  }, [alreadyShown, attemptPlay, handleScreenTap]);
+  }, [alreadyShown, isMounted, attemptPlay, handleScreenTap]);
 
   const handleTimeUpdate = () => {
     const v = videoRef.current;
@@ -174,12 +167,14 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
     setAutoplayBlocked(false);
   };
 
-  const handleManualPlayTap = (e: React.MouseEvent) => {
+  const handleManualPlayTap = (e: React.MouseEvent<HTMLButtonElement>) => {
+    // REFACTOR: Explicit React.MouseEvent<HTMLButtonElement> typing to prevent event bubbling and enforce strict type safety
     e.stopPropagation();
     handleScreenTap();
   };
 
-  if (alreadyShown || !isVisible) return null;
+  // REFACTOR: Guard return during pre-hydration and dismissal to preserve zero-overhead component unmounting
+  if (!isMounted || alreadyShown || !isVisible) return null;
 
   return (
     <div
@@ -225,7 +220,8 @@ export function VideoLoadingSplash({ onFinish }: VideoLoadingSplashProps) {
       <div className="relative z-10 w-full max-w-[430px] mx-auto p-4 pt-6 flex items-center justify-end pointer-events-auto">
         <button
           type="button"
-          onClick={(e) => {
+          onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
+            // REFACTOR: Strongly typed click event handler for skip button
             e.stopPropagation();
             handleDismiss();
           }}
