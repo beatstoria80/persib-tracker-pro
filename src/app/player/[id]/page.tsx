@@ -360,9 +360,9 @@ export default function PlayerVideoProfilePage() {
             {/* Main Player Identification Card (High-Contrast Frosted Glass - Zero Collisions) */}
             <div className="p-5 rounded-[28px] bg-slate-950/80 backdrop-blur-xl border border-white/20 shadow-2xl space-y-4">
               {/* Row 1: Player Number + Full Name + Verified Badge on left, Contract Pill on right */}
-              <div className="flex items-center justify-between gap-2 pb-2.5 border-b border-white/10">
-                <div className="flex items-center gap-2 min-w-0 flex-1">
-                  <span className="font-mono font-black text-2xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0">
+              <div className="flex items-start justify-between gap-2 pb-2.5 border-b border-white/10">
+                <div className="flex items-start gap-2.5 min-w-0 flex-1">
+                  <span className="font-mono font-black text-2xl text-cyan-300 drop-shadow-[0_0_12px_rgba(34,211,238,0.5)] shrink-0 mt-0.5">
                     #{activePlayer.number}
                   </span>
                   <div className="min-w-0 flex-1">
@@ -372,11 +372,14 @@ export default function PlayerVideoProfilePage() {
                         <ShieldCheck className="w-4 h-4 text-cyan-400 shrink-0" />
                       )}
                     </h1>
+                    <p className="text-[11.5px] font-semibold text-cyan-200/90 leading-snug mt-0.5">
+                      {activePlayer.fullName || activePlayer.name}
+                    </p>
                   </div>
                 </div>
 
                 {/* Contract Badge with High-Contrast Pill */}
-                <div className="shrink-0 text-right">
+                <div className="shrink-0 text-right mt-1">
                   <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold bg-cyan-500/15 text-cyan-200 border border-cyan-400/35 whitespace-nowrap shadow-xs">
                     s.d. {activePlayer.contractUntil}
                   </span>
