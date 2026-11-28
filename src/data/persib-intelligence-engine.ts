@@ -291,7 +291,7 @@ Mariano Peralta menerima kartu merah langsung pada menit ke-86 saat laga dramati
 - Mariano Peralta (PERSIB Bandung): 5 Gol (Top Scorer Utama PERSIB di Super League)
 - Balša Sekulić (PERSIB Bandung): 4 Gol
 - Luka Menalo (PERSIB Bandung): 4 Gol
-- Ragnar Oratmangoen (PERSIB Bandung): 3 Gol
+- Ragnar Oratmangoen (PERSIB Bandung): 0 Gol, 4 Assist
 
 2. RAJA ASSIST SUPER LEAGUE 2026/2027:
 - Thom Haye (PERSIB Bandung): 7 Assist (Pemimpin Assist Terbanyak Liga 1)
@@ -304,7 +304,6 @@ Mariano Peralta menerima kartu merah langsung pada menit ke-86 saat laga dramati
 - Mariano Peralta: 5 Gol
 - Balša Sekulić: 4 Gol
 - Luka Menalo: 4 Gol
-- Ragnar Oratmangoen: 3 Gol
 - Thom Haye: 1 Gol, 7 Assist
 - Marc Klok: 1 Gol, 2 Assist
 
@@ -649,8 +648,8 @@ Maung Bandung mencetak sejarah baru sebagai klub Indonesia dengan performa palin
 
 3. **Ragnar Oratmangoen (#77 - Winger Kilat "Wak Haji")**:
    - *Nilai Pasar*: €500K (Rp 8.69 Miliar)
-   - *Statistik*: 10 Laga, 5 Gol, 5 Assist, Rating 8.7
-   - *Peran*: Penyerang sayap modern berkecepatan tinggi dengan naluri gol tajam dan dribel menusuk.
+   - *Statistik*: 14 Laga, 0 Gol, 5 Assist, Rating 8.7
+   - *Peran*: Penyerang sayap modern berkecepatan tinggi dengan keahlian dribel menusuk dan kreator peluang matang.
 
 4. **Mariano Peralta (#10 - Penyerang Sayap Argentina)**:
    - *Nilai Pasar*: €450K (Rp 7.82 Miliar)

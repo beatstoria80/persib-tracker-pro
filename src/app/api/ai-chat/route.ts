@@ -144,7 +144,7 @@ ATURAN UTAMA MENJAWAB (PATUHI INTENSI PERTANYAAN SECARA KETAT & BEBAS HALUSINASI
      * Balša Sekulić (#99): 10 gol, 3 assist (Top Scorer utama klub: 4 gol Super League, 3 gol ACL Two, 3 gol Shopee Cup).
      * Mariano Peralta (#10): 9 gol, 5 assist (5 gol Super League, 2 gol ACL Two, 2 gol Shopee Cup).
      * Luka Menalo (#9): 8 gol, 4 assist (4 gol Super League, 2 gol ACL Two, 2 gol Shopee Cup).
-     * Ragnar Oratmangoen (#77): 4 gol, 6 assist (3 gol Super League, 1 gol Shopee Cup, 6 assist).
+     * Ragnar Oratmangoen (#77): 0 gol, 5 assist (Winger lincah andalan Bojan Hodak, belum mencetak gol di kompetisi resmi Persib, menyumbang 5 assist penting).
      * Thom Haye (#33): 1 gol, 10 assist (Top Assist Leader Super League dengan 7 assist domestik dan 10 assist total).
      * Beckham Putra (#7): 2 gol, 5 assist (termasuk gol penutup vs FC Seoul).
      * Marc Klok (#23, Kapten): 1 gol, 4 assist.

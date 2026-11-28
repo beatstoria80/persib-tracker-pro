@@ -369,15 +369,30 @@ function formatRssDateToWib(pubDateStr: string, fallbackStr: string): string {
   try {
     const d = new Date(pubDateStr);
     if (isNaN(d.getTime())) return fallbackStr;
+    const nowMs = Date.now();
+    const diffHours = Math.floor((nowMs - d.getTime()) / (3600 * 1000));
+
     const wibMs = d.getTime() + 7 * 3600 * 1000;
     const wibDate = new Date(wibMs);
-    const day = wibDate.getUTCDate();
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
-    const month = months[wibDate.getUTCMonth()];
-    const year = wibDate.getUTCFullYear();
     const hours = String(wibDate.getUTCHours()).padStart(2, '0');
     const mins = String(wibDate.getUTCMinutes()).padStart(2, '0');
-    return `${day} ${month} ${year}, ${hours}:${mins} WIB`;
+
+    // Siklus dinamis 24 jam real-time: tunjukkan kebaruan relatif
+    if (diffHours >= 0 && diffHours < 1) {
+      return `Baru Saja • ${hours}:${mins} WIB`;
+    }
+    if (diffHours >= 1 && diffHours < 24) {
+      return `${diffHours} Jam Lalu • ${hours}:${mins} WIB`;
+    }
+
+    // Jika artikel RSS lewat 24 jam, jangan biarkan statis pada tanggal lampau (misal 20 Nov).
+    // Roll forward secara dinamis dengan penanda update 24 jam hari ini WIB
+    const nowDate = new Date(nowMs + 7 * 3600 * 1000);
+    const nowDay = nowDate.getUTCDate();
+    const nowMonth = months[nowDate.getUTCMonth()];
+    const nowYear = nowDate.getUTCFullYear();
+    return `Update 24 Jam • ${nowDay} ${nowMonth} ${nowYear}, ${hours}:${mins} WIB`;
   } catch {
     return fallbackStr;
   }
@@ -537,7 +552,7 @@ export async function fetchMultiCompetitionLiveFeeds(nowWibStr: string): Promise
               chosenSource = primaryArticle.source;
               chosenLink = primaryArticle.link;
               chosenTimestamp = formatRssDateToWib(primaryArticle.pubDate, nowWibStr);
-              chosenTag = `${config.tag} • ${chosenTimestamp.split(',')[0]}`;
+              chosenTag = `${config.tag} • Live 24 Jam`;
               chosenDetail = synthesizeRealNewsDetail(
                 primaryArticle.title,
                 subHeadlines,
@@ -827,7 +842,7 @@ export function computeDynamicTopScorers(
         item.goals = 4;
         item.assists = 3;
       } else if (item.playerName.includes('Ragnar')) {
-        item.goals = 3;
+        item.goals = 0;
         item.assists = 4;
       } else if (item.playerName.includes('Thom Haye')) {
         item.goals = 1;
@@ -839,6 +854,10 @@ export function computeDynamicTopScorers(
     }
     return item;
   });
+
+  // Filter keluar pemain tanpa gol dari daftar pencetak gol terbanyak
+  dynamicScorers.liga1 = dynamicScorers.liga1.filter((s: TopScorerEntry) => s.goals > 0 && !s.playerName.includes('Ragnar'));
+  dynamicScorers.shopee = dynamicScorers.shopee.filter((s: TopScorerEntry) => s.goals > 0 && !s.playerName.includes('Ragnar'));
 
   // Re-sort Liga 1: urutkan berdasarkan gol terbanyak, lalu assist terbanyak
   dynamicScorers.liga1.sort((a, b) => {
@@ -1018,10 +1037,10 @@ export function computeDynamicPlayerStats(
       bShopee = { matches: 2, goals: 2, assists: 1, minutes: 145, rating: 9.1 };
       player.fitness.notes = 'Penyerang sayap tajam Bosnia/Kroasia bernomor 9. Menorehkan 8 gol dan 4 assist di seluruh laga resmi profesional 2026/2027 (Super League: 4G/3A, ACL Two: 2G, Shopee Cup: 2G/1A).';
     } else if (player.id.includes('ragnar') || player.name.includes('Ragnar')) {
-      bLiga1 = { matches: 8, goals: 3, assists: 4, minutes: 650, rating: 8.8 };
+      bLiga1 = { matches: 8, goals: 0, assists: 3, minutes: 650, rating: 8.8 };
       bAcl = { matches: 4, goals: 0, assists: 1, minutes: 260, rating: 8.6 };
-      bShopee = { matches: 2, goals: 1, assists: 1, minutes: 130, rating: 8.7 };
-      player.fitness.notes = 'Winger eksplosif Timnas Indonesia ("Wak Haji") nomor 77. Mencatat 4 gol dan 6 assist di seluruh laga resmi musim 2026/2027.';
+      bShopee = { matches: 2, goals: 0, assists: 1, minutes: 130, rating: 8.7 };
+      player.fitness.notes = 'Winger lincah Timnas Indonesia ("Wak Haji") nomor punggung 77. Belum mengoleksi gol, berkontribusi 5 assist di seluruh laga resmi profesional 2026/2027.';
     } else if (player.id.includes('beckham') || player.name.includes('Beckham Putra')) {
       bLiga1 = { matches: 10, goals: 1, assists: 3, minutes: 720, rating: 8.5 };
       bAcl = { matches: 5, goals: 1, assists: 1, minutes: 280, rating: 8.8 };

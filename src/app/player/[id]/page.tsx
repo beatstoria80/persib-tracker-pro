@@ -372,7 +372,7 @@ export default function PlayerVideoProfilePage() {
                         <ShieldCheck className="w-3.5 h-3.5 text-cyan-400 shrink-0" />
                       )}
                     </h1>
-                    {activePlayer.fullName && activePlayer.fullName !== activePlayer.name && (
+                    {activePlayer.fullName && (
                       <p className="text-[11px] font-medium text-cyan-200/80 leading-snug mt-0.5">
                         {activePlayer.fullName}
                       </p>

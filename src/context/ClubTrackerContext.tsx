@@ -125,10 +125,24 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
   const [multiCompetitionFeeds, setMultiCompetitionFeeds] = useState<FeedNewsItem[]>(() => {
     if (typeof window !== 'undefined') {
       try {
-        const cached = localStorage.getItem('persib_live_feeds_cache_v2');
-        if (cached) {
-          const parsed = JSON.parse(cached);
-          if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+        // Bersihkan cache v2 lama yang statis
+        localStorage.removeItem('persib_live_feeds_cache_v2');
+
+        const cachedRaw = localStorage.getItem('persib_live_feeds_cache_v3');
+        if (cachedRaw) {
+          const parsed = JSON.parse(cachedRaw);
+          const now = Date.now();
+          // Validasi kedaluwarsa 24 jam (TTL: 24 jam = 86400000 ms)
+          if (
+            parsed &&
+            typeof parsed === 'object' &&
+            parsed.timestamp &&
+            now - parsed.timestamp < 24 * 60 * 60 * 1000 &&
+            Array.isArray(parsed.feeds) &&
+            parsed.feeds.length > 0
+          ) {
+            return parsed.feeds;
+          }
         }
       } catch {}
     }
@@ -243,9 +257,13 @@ export function ClubTrackerProvider({ children }: { children: ReactNode }) {
           if (payload.multiCompetitionFeeds && payload.multiCompetitionFeeds.length > 0) {
             setMultiCompetitionFeeds(payload.multiCompetitionFeeds);
             try {
+              localStorage.removeItem('persib_live_feeds_cache_v2');
               localStorage.setItem(
-                'persib_live_feeds_cache_v2',
-                JSON.stringify(payload.multiCompetitionFeeds)
+                'persib_live_feeds_cache_v3',
+                JSON.stringify({
+                  timestamp: Date.now(),
+                  feeds: payload.multiCompetitionFeeds,
+                })
               );
             } catch {}
           }
